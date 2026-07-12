@@ -1,0 +1,2462 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>👑 إدارة الشروحات - منصة ارتقاء</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+        /* ============================================================
+           المتغيرات
+           ============================================================ */
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --primary-light: #8B5CF6;
+            --secondary: #EC4899;
+            --secondary-dark: #DB2777;
+            --accent: #F59E0B;
+            --accent-light: #FBBF24;
+            --dark: #0F172A;
+            --dark-light: #1E293B;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --white: #FFFFFF;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.2);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --radius: 20px;
+            --bg-body: #F1F5F9;
+            --bg-card: #FFFFFF;
+            --text-color: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --gradient-main: linear-gradient(135deg, #7C3AED, #EC4899);
+            --gradient-secondary: linear-gradient(135deg, #F59E0B, #EC4899);
+            --success: #10B981;
+            --danger: #EF4444;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0F172A;
+            --bg-card: #1E293B;
+            --text-color: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-color);
+            transition: var(--transition);
+            direction: rtl;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 25px;
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-main);
+            border-radius: 10px;
+        }
+
+        /* ============================================================
+           الهيدر
+           ============================================================ */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-icon {
+            background: var(--gradient-main);
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        .logo-text {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--text-color);
+        }
+        .logo-text span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header-actions .btn-back {
+            background: var(--bg-body);
+            color: var(--text-color);
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        .header-actions .btn-back:hover {
+            background: var(--gradient-main);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .header-actions .btn-admin {
+            background: var(--gradient-secondary);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .header-actions .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 999;
+            background: var(--bg-card);
+            color: var(--text-color);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
+            box-shadow: var(--shadow-hover);
+            background: var(--gradient-main);
+            color: #fff;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 95px;
+            left: 30px;
+            z-index: 999;
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-to-top.visible {
+            display: flex;
+        }
+        .back-to-top:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* ============================================================
+           التبويبات
+           ============================================================ */
+        .page-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--text-color);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-title i {
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        .admin-tabs .tab-btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 50px;
+            background: var(--bg-body);
+            color: var(--text-color);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-tabs .tab-btn:hover {
+            background: var(--border-color);
+            transform: translateY(-2px);
+        }
+        .admin-tabs .tab-btn.active {
+            background: var(--gradient-main);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        /* ============================================================
+           نموذج الإضافة
+           ============================================================ */
+        .form-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 30px 35px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            display: none;
+        }
+        .form-card.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .form-card .form-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        .form-card .form-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        .form-group label .required {
+            color: var(--danger);
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            background: var(--bg-body);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-group .helper-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-body);
+            position: relative;
+        }
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.05);
+        }
+        .upload-area.dragover {
+            border-color: var(--secondary);
+            background: rgba(236, 72, 153, 0.05);
+        }
+        .upload-area .upload-icon {
+            font-size: 3rem;
+            display: block;
+            color: var(--primary);
+            opacity: 0.5;
+            margin-bottom: 10px;
+        }
+        .upload-area h4 {
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        .upload-area p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-info {
+            display: none;
+            margin-top: 10px;
+            padding: 12px 18px;
+            background: var(--bg-body);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            align-items: center;
+            gap: 12px;
+        }
+        .file-info.show {
+            display: flex;
+        }
+        .file-info i {
+            font-size: 1.5rem;
+            color: var(--danger);
+        }
+        .file-info .file-name {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .file-info .file-size {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+        .file-info .btn-remove-file {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-right: auto;
+            transition: var(--transition);
+        }
+        .file-info .btn-remove-file:hover {
+            transform: scale(1.2);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .btn-submit {
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+        .btn-submit-success {
+            background: var(--success);
+            color: #fff;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-submit-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+        .btn-reset {
+            background: var(--bg-body);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 12px 35px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+        }
+        .btn-reset:hover {
+            background: var(--border-color);
+        }
+
+        /* ============================================================
+           قائمة المحتوى
+           ============================================================ */
+        .content-list {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .content-list-header {
+            display: grid;
+            grid-template-columns: 3fr 2fr 2fr 1.5fr 1fr;
+            gap: 10px;
+            padding: 15px 22px;
+            background: var(--gradient-main);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .content-list-item {
+            display: grid;
+            grid-template-columns: 3fr 2fr 2fr 1.5fr 1fr;
+            gap: 10px;
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: var(--transition);
+        }
+        .content-list-item:hover {
+            background: rgba(124, 58, 237, 0.03);
+        }
+        .content-list-item:last-child {
+            border-bottom: none;
+        }
+        .content-list-item .item-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .content-list-item .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .content-list-item .item-actions button {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-edit {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-edit:hover {
+            transform: scale(1.05);
+        }
+        .btn-delete {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-delete:hover {
+            transform: scale(1.05);
+        }
+        .btn-view {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-view:hover {
+            transform: scale(1.05);
+        }
+        .btn-download {
+            background: var(--success);
+            color: #fff;
+        }
+        .btn-download:hover {
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state i {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+        .empty-state h3 {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .alert.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+        .alert-success {
+            background: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+        .alert-danger {
+            background: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FCA5A5;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading-center {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        .loading-center i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* ============================================================
+           صفحة تسجيل الدخول
+           ============================================================ */
+        .login-container {
+            max-width: 440px;
+            margin: 80px auto;
+            background: var(--bg-card);
+            padding: 45px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-main);
+        }
+
+        .login-container .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-container .login-logo i {
+            font-size: 3rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-container .login-logo h2 {
+            color: var(--text-color);
+            margin-top: 10px;
+            font-size: 1.8rem;
+        }
+
+        .login-container .login-logo h2 span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-container .login-logo p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .login-container .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-container .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .login-container .form-group label i {
+            color: var(--primary);
+            margin-left: 8px;
+        }
+
+        .login-container .form-group input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: var(--transition);
+            background: var(--bg-body);
+            color: var(--text-color);
+        }
+
+        .login-container .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+        }
+
+        .login-container .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .login-container .btn-login:hover::before {
+            left: 100%;
+        }
+
+        .login-container .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .login-container .btn-login:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .login-container .error-msg {
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #FCA5A5;
+        }
+
+        .login-container .error-msg.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .login-container .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ============================================================
+           التجاوب
+           ============================================================ */
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px 15px;
+            }
+            .main-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                padding: 12px 15px;
+            }
+            .logo-area {
+                justify-content: center;
+            }
+            .header-actions {
+                justify-content: center;
+            }
+            .logo-text {
+                font-size: 20px;
+            }
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            .page-title {
+                font-size: 1.6rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            .content-list-header,
+            .content-list-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                padding: 12px 16px;
+            }
+            .content-list-header {
+                display: none;
+            }
+            .content-list-item {
+                border-bottom: 2px solid var(--border-color);
+            }
+            .content-list-item .item-actions {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .admin-tabs .tab-btn {
+                font-size: 0.85rem;
+                padding: 10px 18px;
+            }
+            .theme-toggle,
+            .back-to-top {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                bottom: 20px;
+                left: 20px;
+            }
+            .back-to-top {
+                bottom: 75px;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .form-actions button {
+                width: 100%;
+                justify-content: center;
+            }
+            .upload-area {
+                padding: 20px 15px;
+            }
+            .upload-area .upload-icon {
+                font-size: 2.5rem;
+            }
+            .file-info {
+                flex-wrap: wrap;
+            }
+            .file-info .btn-remove-file {
+                margin-right: 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 20px 15px;
+            }
+            .admin-tabs .tab-btn {
+                font-size: 0.75rem;
+                padding: 8px 12px;
+            }
+            .upload-area h4 {
+                font-size: 1rem;
+            }
+            .content-list-header,
+            .content-list-item {
+                grid-template-columns: 1fr;
+            }
+            .login-container {
+                margin: 40px 15px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== زر تبديل الوضع ====== -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(80, 73, 80)" d="M0 256c0-141.4 114.6-256 256-256 33 0 64.6 6.3 93.6 17.7 7.4 2.9 11.5 10.7 9.8 18.4s-8.8 13-16.7 12.4c-4.8-.3-9.7-.5-14.6-.5-114.9 0-208 93.1-208 208s93.1 208 208 208c4.9 0 9.8-.2 14.6-.5 7.9-.5 15 4.7 16.7 12.4s-2.4 15.5-9.8 18.4C320.6 505.7 289 512 256 512 114.6 512 0 397.4 0 256zM375.4 137.4c3.5-7.1 13.7-7.1 17.2 0l31.5 63.8c1.4 2.8 4.1 4.8 7.2 5.3l70.4 10.2c7.9 1.1 11 10.8 5.3 16.4l-50.9 49.6c-2.3 2.2-3.3 5.4-2.8 8.5l12 70.1c1.3 7.8-6.9 13.8-13.9 10.1l-63-33.1c-2.8-1.5-6.1-1.5-8.9 0l-63 33.1c-7 3.7-15.3-2.3-13.9-10.1l12-70.1c.5-3.1-.5-6.3-2.8-8.5L261 233.1c-5.7-5.6-2.6-15.2 5.3-16.4l70.4-10.2c3.1-.5 5.8-2.4 7.2-5.3l31.5-63.8z"/></svg>
+    </button>
+
+    <!-- ====== زر العودة للأعلى ====== -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(177, 151, 252)" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM377 271c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-87-87-87 87c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 167c9.4-9.4 24.6-9.4 33.9 0L377 271z"/></svg>
+    </button>
+
+    <div class="container">
+
+        <!-- ============================================================
+        الهيدر
+        ============================================================ -->
+        <header class="main-header" id="adminHeader" style="display:none;">
+            <a href="index.html" class="logo-area">
+                <div class="logo-icon"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="40" viewBox="0 0 640 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(177, 151, 252)" d="M493.9 295.6c-50.3 0-83.5-38.9-92.8-53.9 11.9-95.3 46.8-125.4 92.8-125.4 45.5 0 80.9 36.4 80.9 89.7s-35.4 89.7-80.9 89.7l0-.1zm0-237.8c-81.9 0-127.8 53.4-141 108.4-14.9-28-25.9-65.5-34.5-100.3l-113.2 0 0 141c0 51.1-23.3 89-68.8 89s-71.6-37.8-71.6-89l.5-141-65.3 0 0 141c0 41.1 13.3 78.4 37.6 105.1 25 27.5 59.2 41.8 98.8 41.8 78.8 0 133.8-60.4 133.8-146.9l0-94.8c8.2 31.2 27.8 91.1 65.3 143.6l-35 199.4 66.4 0 23.1-141.3c7.6 6.3 15.7 12 24.2 17 22.2 14 47.7 21.9 73.9 22.8 0 0 4 .2 6.1 .2 81.2 0 145.9-62.9 145.9-147.8S575.3 57.9 494.1 57.9l-.2-.1z"/></svg></div>
+                <div class="logo-text">منصة <span>ارتقاء</span></div>
+            </a>
+            <div class="header-actions">
+                <a href="index.html" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(255, 212, 59)" d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg> العودة للرئيسية
+                </a>
+                <a href="explanations.html" class="btn-admin" style="background:var(--gradient-main);">
+                    <i class="fas fa-book-open"></i> عرض الشروحات
+                </a>
+                <a href="dashboard.html" class="btn-admin" style="background:var(--gradient-main);">
+                    <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                </a>
+                <div class="user-info" style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.05); padding:6px 16px; border-radius:50px; border:1px solid rgba(255,255,255,0.05);">
+                    <div class="user-avatar" id="userAvatar" style="width:35px; height:35px; border-radius:50%; background:var(--gradient-main); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1rem; color:#fff;">أ</div>
+                    <span id="userName" style="font-weight:600; color:#fff;">المدير</span>
+                </div>
+                <button onclick="logout()" style="background:#EF4444; color:#fff; padding:8px 20px; border-radius:50px; border:none; font-weight:600; cursor:pointer; transition:var(--transition); font-family:'Cairo', sans-serif;">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+        </header>
+
+        <!-- ============================================================
+        صفحة تسجيل الدخول
+        ============================================================ -->
+        <div class="login-container" id="loginContainer">
+            <div class="login-logo">
+                <i class="fas fa-user-cog"></i>
+                <h2>🔐 <span>تسجيل الدخول</span></h2>
+                <p>الدخول إلى لوحة تحكم المدير</p>
+            </div>
+            <div class="error-msg" id="loginError">❌ بيانات الدخول غير صحيحة</div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" placeholder="admin@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label><svg xmlns="http://www.w3.org/2000/svg" height="32" width="24" viewBox="0 0 384 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(99, 230, 190)" d="M128 96l0 64 128 0 0-64c0-35.3-28.7-64-64-64s-64 28.7-64 64zM64 160l0-64C64 25.3 121.3-32 192-32S320 25.3 320 96l0 64c35.3 0 64 28.7 64 64l0 224c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 224c0-35.3 28.7-64 64-64z"/></svg> كلمة المرور</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                </button>
+            </form>
+            <div class="login-footer">
+                <i class="fas fa-shield-alt" style="color:var(--primary);"></i>
+                بيئة آمنة ومشفرة
+            </div>
+        </div>
+
+        <!-- ============================================================
+        العنوان (يظهر بعد تسجيل الدخول)
+        ============================================================ -->
+        <div id="dashboardContent" style="display:none;">
+            <div class="page-title">
+                <i class="fas fa-crown"></i>
+                إدارة الشروحات الأكاديمية
+            </div>
+            <p class="page-subtitle">
+                أضف، عدّل، أو احذف المحتوى الأكاديمي في منصة ارتقاء
+            </p>
+
+            <!-- رسائل التنبيه -->
+            <div id="alertMessage" class="alert"></div>
+
+            <!-- ============================================================
+            تبويبات الإدارة
+            ============================================================ -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="universities" onclick="switchTab('universities')">
+                    <i class="fas fa-university"></i> الجامعات
+                </button>
+                <button class="tab-btn" data-tab="materials" onclick="switchTab('materials')">
+                    <i class="fas fa-book"></i> المواد
+                </button>
+                <button class="tab-btn" data-tab="videos" onclick="switchTab('videos')">
+                    <i class="fas fa-video"></i> الفيديوهات
+                </button>
+                <button class="tab-btn" data-tab="summaries" onclick="switchTab('summaries')">
+                    <i class="fas fa-file-pdf"></i> الملخصات
+                </button>
+            </div>
+
+            <!-- ============================================================
+            تبويب الجامعات
+            ============================================================ -->
+            <div id="tab-universities">
+                <div class="form-card active" id="universityForm">
+                    <div class="form-title"><i class="fas fa-plus-circle" style="color:var(--accent);"></i> إضافة جامعة جديدة</div>
+                    <div class="form-subtitle">أدخل بيانات الجامعة لإضافتها إلى قائمة الجامعات</div>
+                    <form id="addUniversityForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>اسم الجامعة <span class="required">*</span></label>
+                                <input type="text" id="uniName" placeholder="مثال: جامعة الملك سعود" required />
+                            </div>
+                            <div class="form-group">
+                                <label>أيقونة الجامعة <span class="required">*</span></label>
+                                <select id="uniIcon" required>
+                                    <option value="fa-university">🏛️ fa-university</option>
+                                    <option value="fa-industry">🏭 fa-industry</option>
+                                    <option value="fa-female">👩 fa-female</option>
+                                    <option value="fa-flask">🧪 fa-flask</option>
+                                    <option value="fa-hospital">🏥 fa-hospital</option>
+                                    <option value="fa-mosque">🕌 fa-mosque</option>
+                                    <option value="fa-kaaba">🕋 fa-kaaba</option>
+                                    <option value="fa-laptop">💻 fa-laptop</option>
+                                    <option value="fa-building">🏢 fa-building</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>عدد المواد</label>
+                            <input type="number" id="uniCount" placeholder="مثال: 24" value="0" />
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit" style="background:var(--gradient-secondary);"><i class="fas fa-save"></i> إضافة الجامعة</button>
+                            <button type="reset" class="btn-reset"><i class="fas fa-undo"></i> إعادة تعيين</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="content-list" id="universitiesList">
+                    <div class="content-list-header">
+                        <span>الجامعة</span>
+                        <span>الأيقونة</span>
+                        <span>عدد المواد</span>
+                        <span>الإجراءات</span>
+                    </div>
+                    <div class="loading-center">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        جاري تحميل الجامعات...
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            تبويب المواد
+            ============================================================ -->
+            <div id="tab-materials" style="display:none;">
+                <div class="form-card active" id="materialForm">
+                    <div class="form-title"><i class="fas fa-plus-circle" style="color:var(--primary);"></i> إضافة مادة جديدة</div>
+                    <div class="form-subtitle">أدخل بيانات المادة لإضافتها إلى مكتبة الشروحات</div>
+                    <form id="addMaterialForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>عنوان المادة <span class="required">*</span></label>
+                                <input type="text" id="matTitle" placeholder="مثال: رياضيات ١" required />
+                            </div>
+                            <div class="form-group">
+                                <label>كود المادة <span class="required">*</span></label>
+                                <input type="text" id="matCode" placeholder="مثال: MATH-101" required />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>اسم المحاضر <span class="required">*</span></label>
+                                <input type="text" id="matInstructor" placeholder="مثال: د. خالد المنصور" required />
+                            </div>
+                            <div class="form-group">
+                                <label>الجامعة <span class="required">*</span></label>
+                                <select id="matUniversity" required>
+                                    <option value="">اختر الجامعة</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>أيقونة المادة <span class="required">*</span></label>
+                                <select id="matIcon" required>
+                                    <option value="fa-calculator">🧮 fa-calculator</option>
+                                    <option value="fa-atom">⚛️ fa-atom</option>
+                                    <option value="fa-flask">🧪 fa-flask</option>
+                                    <option value="fa-water">💧 fa-water</option>
+                                    <option value="fa-bolt">⚡ fa-bolt</option>
+                                    <option value="fa-heart">❤️ fa-heart</option>
+                                    <option value="fa-code">💻 fa-code</option>
+                                    <option value="fa-chart-pie">📊 fa-chart-pie</option>
+                                    <option value="fa-balance-scale">⚖️ fa-balance-scale</option>
+                                    <option value="fa-oil-well">🛢️ fa-oil-well</option>
+                                    <option value="fa-pills">💊 fa-pills</option>
+                                    <option value="fa-brain">🧠 fa-brain</option>
+                                    <option value="fa-microscope">🔬 fa-microscope</option>
+                                    <option value="fa-robot">🤖 fa-robot</option>
+                                    <option value="fa-database">🗄️ fa-database</option>
+                                    <option value="fa-laptop-code">💻 fa-laptop-code</option>
+                                    <option value="fa-drafting-compass">📐 fa-drafting-compass</option>
+                                    <option value="fa-cubes">🧊 fa-cubes</option>
+                                    <option value="fa-bullhorn">📢 fa-bullhorn</option>
+                                    <option value="fa-rocket">🚀 fa-rocket</option>
+                                    <option value="fa-shield-alt">🛡️ fa-shield-alt</option>
+                                    <option value="fa-stethoscope">🩺 fa-stethoscope</option>
+                                    <option value="fa-tooth">🦷 fa-tooth</option>
+                                    <option value="fa-kaaba">🕋 fa-kaaba</option>
+                                    <option value="fa-mosque">🕌 fa-mosque</option>
+                                    <option value="fa-leaf">🌿 fa-leaf</option>
+                                    <option value="fa-tree">🌳 fa-tree</option>
+                                    <option value="fa-globe">🌍 fa-globe</option>
+                                    <option value="fa-stars">⭐ fa-stars</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>عدد الفيديوهات</label>
+                                <input type="number" id="matVideos" placeholder="مثال: 24" value="10" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>وصف المادة <span class="required">*</span></label>
+                                <textarea id="matDescription" placeholder="وصف مختصر للمادة..." rows="2" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><input type="checkbox" id="matFeatured" /> <strong>جعل المادة مميزة</strong></label>
+                                <div class="helper-text">المواد المميزة تظهر في قسم "المواد المميزة"</div>
+                            </div>
+                            <div class="form-group">
+                                <label>سعر الاشتراك <span class="required">*</span></label>
+                                <input type="number" id="matPrice" placeholder="مثال: 99" value="99" required min="1" />
+                                <div class="helper-text">سعر الاشتراك في هذه المادة بالريال</div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit"><i class="fas fa-save"></i> إضافة المادة</button>
+                            <button type="reset" class="btn-reset"><i class="fas fa-undo"></i> إعادة تعيين</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="content-list" id="materialsList">
+                    <div class="content-list-header">
+                        <span>المادة</span>
+                        <span>المحاضر / الجامعة</span>
+                        <span>البيانات</span>
+                        <span>السعر</span>
+                        <span>الإجراءات</span>
+                    </div>
+                    <div class="loading-center">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        جاري تحميل المواد...
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            تبويب الفيديوهات - مع إضافة الجامعة والمادة
+            ============================================================ -->
+            <div id="tab-videos" style="display:none;">
+                <div class="form-card active" id="videoForm">
+                    <div class="form-title"><i class="fas fa-plus-circle" style="color:#3B82F6;"></i> رفع فيديو جديد</div>
+                    <div class="form-subtitle">أدخل بيانات الفيديو وارفع الملف لإضافته إلى المادة المختارة</div>
+                    <form id="addVideoForm" enctype="multipart/form-data">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>عنوان الفيديو <span class="required">*</span></label>
+                                <input type="text" id="videoTitle" placeholder="مثال: مقدمة في التفاضل" required />
+                            </div>
+                            <div class="form-group">
+                                <label>الجامعة <span class="required">*</span></label>
+                                <select id="videoUniversity" required>
+                                    <option value="">اختر الجامعة</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>المادة <span class="required">*</span></label>
+                                <select id="videoMaterial" required>
+                                    <option value="">اختر المادة</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>التخصص</label>
+                                <input type="text" id="videoSpecialty" placeholder="مثال: الهندسة" />
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>وصف الفيديو</label>
+                            <textarea id="videoDescription" placeholder="وصف مختصر للفيديو..." rows="2"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>رفع ملف الفيديو <span class="required">*</span></label>
+                            <div class="upload-area" id="videoUploadArea">
+                                <span class="upload-icon"><i class="fas fa-video"></i></span>
+                                <h4>اسحب ملف الفيديو هنا أو انقر للاختيار</h4>
+                                <p>يدعم ملفات MP4, AVI, MOV, WEBM (الحد الأقصى 100MB)</p>
+                                <input type="file" id="videoFile" accept=".mp4,.avi,.mov,.webm,.mkv" required />
+                            </div>
+                            <div class="file-info" id="videoFileInfo">
+                                <i class="fas fa-video"></i>
+                                <span class="file-name" id="videoFileName">ملف</span>
+                                <span class="file-size" id="videoFileSize">0 MB</span>
+                                <button type="button" class="btn-remove-file" onclick="removeVideoFile()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="helper-text">يرجى اختيار ملف فيديو من جهازك</div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit" style="background:#3B82F6;"><i class="fas fa-upload"></i> رفع الفيديو</button>
+                            <button type="reset" class="btn-reset"><i class="fas fa-undo"></i> إعادة تعيين</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="content-list" id="videosList">
+                    <div class="content-list-header">
+                        <span>الفيديو</span>
+                        <span>المادة</span>
+                        <span>البيانات</span>
+                        <span>المشاهدات</span>
+                        <span>الإجراءات</span>
+                    </div>
+                    <div class="loading-center">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        جاري تحميل الفيديوهات...
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            تبويب الملخصات
+            ============================================================ -->
+            <div id="tab-summaries" style="display:none;">
+                <div class="form-card active" id="summaryForm">
+                    <div class="form-title"><i class="fas fa-plus-circle" style="color:var(--success);"></i> إضافة ملخص جديد</div>
+                    <div class="form-subtitle">أدخل بيانات الملخص وارفع ملف PDF لإضافته إلى مكتبة الملخصات</div>
+                    <form id="addSummaryForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>عنوان الملخص <span class="required">*</span></label>
+                                <input type="text" id="sumTitle" placeholder="مثال: ملخص رياضيات 1" required />
+                            </div>
+                            <div class="form-group">
+                                <label>المادة <span class="required">*</span></label>
+                                <select id="sumSubject" required>
+                                    <option value="">اختر المادة</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>عدد الصفحات <span class="required">*</span></label>
+                                <input type="number" id="sumPages" placeholder="مثال: 45" required />
+                            </div>
+                            <div class="form-group">
+                                <label>سعر الاشتراك <span class="required">*</span></label>
+                                <input type="number" id="sumPrice" placeholder="مثال: 49" value="49" required min="1" />
+                                <div class="helper-text">سعر الاشتراك في هذا الملخص بالريال</div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>حجم الملف التقريبي <span class="required">*</span></label>
+                                <input type="text" id="sumSize" placeholder="مثال: 2.4 MB" required />
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>رفع ملف الملخص (PDF) <span class="required">*</span></label>
+                            <div class="upload-area" id="summaryUploadArea">
+                                <span class="upload-icon"><i class="fas fa-file-pdf"></i></span>
+                                <h4>اسحب ملف PDF هنا أو انقر للاختيار</h4>
+                                <p>يدعم ملفات PDF فقط (الحد الأقصى 10MB)</p>
+                                <input type="file" id="summaryFile" accept=".pdf" required />
+                            </div>
+                            <div class="file-info" id="summaryFileInfo">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="file-name" id="summaryFileName">ملف</span>
+                                <span class="file-size" id="summaryFileSize">0 KB</span>
+                                <button type="button" class="btn-remove-file" onclick="removeSummaryFile()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="helper-text">يرجى اختيار ملف PDF من جهازك</div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit-success"><i class="fas fa-save"></i> إضافة الملخص</button>
+                            <button type="reset" class="btn-reset"><i class="fas fa-undo"></i> إعادة تعيين</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="content-list" id="summariesList">
+                    <div class="content-list-header">
+                        <span>الملخص</span>
+                        <span>المادة</span>
+                        <span>البيانات</span>
+                        <span>السعر</span>
+                        <span>الإجراءات</span>
+                    </div>
+                    <div class="loading-center">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        جاري تحميل الملخصات...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ====== جافا سكريبت ======
+    ============================================================ -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+    </script>
+    <script>
+        // ============================================================
+        // 1. API URL
+        // ============================================================
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000' 
+            : 'https://irteqa-eduhub.onrender.com';
+
+        // ============================================================
+        // 2. المتغيرات
+        // ============================================================
+        let universities = [];
+        let materials = [];
+        let videos = [];
+        let summaries = [];
+        let uploadedVideoFile = null;
+        let uploadedSummaryFile = null;
+        let currentToken = localStorage.getItem('token') || '';
+        let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+
+        // ============================================================
+        // 3. التحقق من صلاحية المدير
+        // ============================================================
+        function isAdmin() {
+            return currentUser && currentUser.role === 'admin';
+        }
+
+        // ============================================================
+        // 4. عرض رسائل التنبيه
+        // ============================================================
+        function showAlert(message, type = 'success') {
+            const alertEl = document.getElementById('alertMessage');
+            alertEl.textContent = message;
+            alertEl.className = `alert alert-${type} show`;
+            setTimeout(() => {
+                alertEl.classList.remove('show');
+            }, 5000);
+        }
+
+        // ============================================================
+        // 5. تبديل التبويبات
+        // ============================================================
+        function switchTab(tab) {
+            console.log('🔄 تبديل التبويب إلى:', tab);
+            
+            document.querySelectorAll('.admin-tabs .tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+            });
+            
+            document.getElementById('tab-universities').style.display = tab === 'universities' ? 'block' : 'none';
+            document.getElementById('tab-materials').style.display = tab === 'materials' ? 'block' : 'none';
+            document.getElementById('tab-videos').style.display = tab === 'videos' ? 'block' : 'none';
+            document.getElementById('tab-summaries').style.display = tab === 'summaries' ? 'block' : 'none';
+
+            if (tab === 'videos') fetchVideos();
+            if (tab === 'summaries') fetchSummaries();
+        }
+
+        // ============================================================
+        // 6. التحقق من تسجيل الدخول
+        // ============================================================
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const userData = localStorage.getItem('user');
+
+            if (!token || !userData) {
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('dashboardContent').style.display = 'none';
+                document.getElementById('adminHeader').style.display = 'none';
+                return false;
+            }
+
+            try {
+                const user = JSON.parse(userData);
+                if (user.role !== 'admin') {
+                    alert('⚠️ هذه الصفحة مخصصة للمديرين فقط');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    document.getElementById('loginContainer').style.display = 'block';
+                    document.getElementById('dashboardContent').style.display = 'none';
+                    document.getElementById('adminHeader').style.display = 'none';
+                    return false;
+                }
+
+                currentToken = token;
+                currentUser = user;
+                document.getElementById('userName').textContent = user.name || 'المدير';
+                document.getElementById('userAvatar').textContent = (user.name || 'أ').charAt(0);
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+                document.getElementById('adminHeader').style.display = 'flex';
+                
+                // تحميل البيانات
+                fetchUniversities();
+                fetchMaterials();
+                fetchVideos();
+                fetchSummaries();
+                return true;
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('dashboardContent').style.display = 'none';
+                document.getElementById('adminHeader').style.display = 'none';
+                return false;
+            }
+        }
+
+        // ============================================================
+        // 7. تسجيل الخروج
+        // ============================================================
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            currentToken = '';
+            currentUser = null;
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('dashboardContent').style.display = 'none';
+            document.getElementById('adminHeader').style.display = 'none';
+            showAlert('✅ تم تسجيل الخروج بنجاح', 'success');
+        }
+
+        // ============================================================
+        // 8. معالجة تسجيل الدخول
+        // ============================================================
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const errorEl = document.getElementById('loginError');
+            const btn = document.getElementById('loginBtn');
+
+            errorEl.classList.remove('show');
+
+            if (!email || !password) {
+                errorEl.textContent = '❌ يرجى إدخال البريد الإلكتروني وكلمة المرور';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    if (data.user.role !== 'admin') {
+                        errorEl.textContent = '❌ هذا المستخدم ليس لديه صلاحية المدير';
+                        errorEl.classList.add('show');
+                        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
+                        btn.disabled = false;
+                        return;
+                    }
+
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    currentToken = data.token;
+                    currentUser = data.user;
+
+                    showAlert('✅ تم تسجيل الدخول بنجاح!', 'success');
+                    checkAuth();
+                    document.getElementById('loginForm').reset();
+
+                } else {
+                    errorEl.textContent = '❌ ' + (data.message || 'بيانات الدخول غير صحيحة');
+                    errorEl.classList.add('show');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                errorEl.textContent = '❌ حدث خطأ في الاتصال بالخادم';
+                errorEl.classList.add('show');
+            } finally {
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
+                btn.disabled = false;
+            }
+        });
+
+        // ============================================================
+        // 9. جلب الجامعات
+        // ============================================================
+        async function fetchUniversities() {
+            try {
+                const response = await fetch(`${API_URL}/api/universities`);
+                const data = await response.json();
+                if (data.success) {
+                    universities = data.data;
+                    renderUniversities();
+                    populateUniversitySelects();
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+            }
+        }
+
+        // ============================================================
+        // 10. جلب المواد
+        // ============================================================
+        async function fetchMaterials() {
+            try {
+                const response = await fetch(`${API_URL}/api/explanations/materials`);
+                const data = await response.json();
+                if (data.success) {
+                    materials = data.data;
+                    renderMaterials();
+                    populateMaterialSelects();
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+            }
+        }
+
+        // ============================================================
+        // 11. جلب الفيديوهات
+        // ============================================================
+        async function fetchVideos() {
+            const container = document.getElementById('videosList');
+            container.innerHTML = `
+                <div class="loading-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    جاري تحميل الفيديوهات...
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${API_URL}/api/videos/all`);
+                const data = await response.json();
+
+                if (data.success) {
+                    videos = data.data || [];
+                    renderVideos();
+                } else {
+                    showAlert('❌ خطأ في جلب الفيديوهات: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            }
+        }
+
+        // ============================================================
+        // 12. جلب الملخصات
+        // ============================================================
+        async function fetchSummaries() {
+            const container = document.getElementById('summariesList');
+            container.innerHTML = `
+                <div class="loading-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    جاري تحميل الملخصات...
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${API_URL}/api/summaries/all`);
+                const data = await response.json();
+
+                if (data.success) {
+                    summaries = data.data || [];
+                    renderSummaries();
+                } else {
+                    showAlert('❌ خطأ في جلب الملخصات: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            }
+        }
+
+        // ============================================================
+        // 13. تعبئة القوائم المنسدلة
+        // ============================================================
+        function populateUniversitySelects() {
+            // للجامعة في نموذج المادة
+            const matSelect = document.getElementById('matUniversity');
+            matSelect.innerHTML = '<option value="">اختر الجامعة</option>';
+            universities.forEach(uni => {
+                matSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
+            });
+
+            // للجامعة في نموذج الفيديو
+            const videoUniSelect = document.getElementById('videoUniversity');
+            videoUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
+            universities.forEach(uni => {
+                videoUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
+            });
+        }
+
+        function populateMaterialSelects() {
+            // للمواد في نموذج الفيديو
+            const videoSelect = document.getElementById('videoMaterial');
+            videoSelect.innerHTML = '<option value="">اختر المادة</option>';
+            materials.forEach(mat => {
+                const uni = universities.find(u => u._id === mat.universityId);
+                videoSelect.innerHTML += `<option value="${mat._id}">${mat.title} (${mat.code}) - ${uni ? uni.name : ''}</option>`;
+            });
+
+            // للمواد في نموذج الملخص
+            const summarySelect = document.getElementById('sumSubject');
+            summarySelect.innerHTML = '<option value="">اختر المادة</option>';
+            materials.forEach(mat => {
+                summarySelect.innerHTML += `<option value="${mat.title}">${mat.title}</option>`;
+            });
+        }
+
+        // ============================================================
+        // 14. عرض الجامعات
+        // ============================================================
+        function renderUniversities() {
+            const container = document.getElementById('universitiesList');
+            if (universities.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-university"></i>
+                        <h3>لا توجد جامعات</h3>
+                        <p>أضف جامعة جديدة باستخدام النموذج أعلاه</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="content-list-header">
+                    <span>الجامعة</span>
+                    <span>الأيقونة</span>
+                    <span>عدد المواد</span>
+                    <span>الإجراءات</span>
+                </div>
+            `;
+
+            universities.forEach((uni, index) => {
+                html += `
+                    <div class="content-list-item" data-aos="fade-up" data-aos-delay="${index * 50}">
+                        <div>
+                            <div class="item-title"><i class="fas ${uni.icon}"></i> ${uni.name}</div>
+                        </div>
+                        <div style="font-size:1.5rem;"><i class="fas ${uni.icon}"></i></div>
+                        <div style="font-size:0.9rem;color:var(--text-muted);">${uni.count || 0} مادة</div>
+                        <div class="item-actions">
+                            <button class="btn-delete" onclick="deleteUniversity('${uni._id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            if (typeof AOS !== 'undefined') AOS.refresh();
+        }
+
+        // ============================================================
+        // 15. عرض المواد
+        // ============================================================
+        function renderMaterials() {
+            const container = document.getElementById('materialsList');
+            if (materials.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <h3>لا توجد مواد</h3>
+                        <p>أضف مادة جديدة باستخدام النموذج أعلاه</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="content-list-header">
+                    <span>المادة</span>
+                    <span>المحاضر / الجامعة</span>
+                    <span>البيانات</span>
+                    <span>السعر</span>
+                    <span>الإجراءات</span>
+                </div>
+            `;
+
+            materials.forEach((mat, index) => {
+                const uni = universities.find(u => u._id === mat.universityId);
+                html += `
+                    <div class="content-list-item" data-aos="fade-up" data-aos-delay="${index * 50}">
+                        <div>
+                            <div class="item-title"><i class="fas ${mat.icon}"></i> ${mat.title}</div>
+                            <div style="font-size:0.8rem;color:var(--text-muted);">${mat.code}</div>
+                        </div>
+                        <div>
+                            <div style="font-weight:600;">${mat.instructor}</div>
+                            <div style="font-size:0.8rem;color:var(--text-muted);"><i class="fas fa-university"></i> ${uni ? uni.name : 'غير محددة'}</div>
+                        </div>
+                        <div>
+                            <span style="font-size:0.85rem;color:var(--text-muted);">
+                                <i class="fas fa-video"></i> ${mat.videos || 0} فيديو
+                                ${mat.isFeatured ? '<br><span style="color:var(--accent);"><i class="fas fa-star"></i> مميز</span>' : ''}
+                            </span>
+                        </div>
+                        <div>
+                            <span style="font-size:0.85rem;color:var(--primary);font-weight:700;">
+                                ${mat.price || 99} ريال
+                            </span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-delete" onclick="deleteMaterial('${mat._id}')"><i class="fas fa-trash"></i></button>
+                            <button class="btn-view" onclick="viewMaterial('${mat._id}')"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            if (typeof AOS !== 'undefined') AOS.refresh();
+        }
+
+  // ============================================================
+  // 16. عرض الفيديوهات
+  // ============================================================
+ function renderVideos() {
+    const container = document.getElementById('videosList');
+    if (videos.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-video"></i>
+                <h3>لا توجد فيديوهات</h3>
+                <p>قم برفع فيديو جديد باستخدام النموذج أعلاه</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = `
+        <div class="content-list-header">
+            <span>الفيديو</span>
+            <span>المادة</span>
+            <span>البيانات</span>
+            <span>المشاهدات</span>
+            <span>الإجراءات</span>
+        </div>
+    `;
+
+    videos.forEach((video, index) => {
+        const material = materials.find(m => String(m._id) === String(video.subjectId));
+        html += `
+            <div class="content-list-item" data-aos="fade-up" data-aos-delay="${index * 50}">
+                <div>
+                    <div class="item-title"><i class="fas fa-video" style="color:#3B82F6;"></i> ${video.title}</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="24" viewBox="0 0 384 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(255, 212, 59)" d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64l0 11c0 42.4 16.9 83.1 46.9 113.1l67.9 67.9-67.9 67.9C48.9 353.9 32 394.6 32 437l0 11c-17.7 0-32 14.3-32 32s14.3 32 32 32l320 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-11c0-42.4-16.9-83.1-46.9-113.1l-67.9-67.9 67.9-67.9c30-30 46.9-70.7 46.9-113.1l0-11c17.7 0 32-14.3 32-32S369.7 0 352 0L32 0zM288 437l0 11-192 0 0-11c0-25.5 10.1-49.9 28.1-67.9l67.9-67.9 67.9 67.9c18 18 28.1 42.4 28.1 67.9z"/></svg> ${video.duration || '00:00'}
+                    </div>
+                </div>
+                <div style="font-size:0.9rem;color:var(--text-muted);">${material ? material.title : video.subjectName || 'غير محددة'}</div>
+                <div>
+                    <span style="font-size:0.85rem;color:var(--text-muted);">
+                        <i class="fas fa-calendar-alt"></i> ${new Date(video.uploadDate || video.createdAt).toLocaleDateString('ar-SA')}
+                        <br><i class="fas fa-weight-hanging"></i> ${video.fileSize || 'غير معروف'}
+                    </span>
+                </div>
+                <div style="font-size:0.9rem;font-weight:600;color:#3B82F6;">${video.views || 0} 👁️</div>
+                <div class="item-actions">
+                    <button class="btn-view" onclick="viewVideo('${video._id}')"><i class="fas fa-eye"></i></button>
+                    <button class="btn-delete" onclick="deleteVideo('${video._id}')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+    if (typeof AOS !== 'undefined') AOS.refresh();
+}
+        // ============================================================
+        // 17. عرض الملخصات
+        // ============================================================
+        function renderSummaries() {
+            const container = document.getElementById('summariesList');
+            if (summaries.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-pdf"></i>
+                        <h3>لا توجد ملخصات</h3>
+                        <p>أضف ملخصاً جديداً باستخدام النموذج أعلاه</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="content-list-header">
+                    <span>الملخص</span>
+                    <span>المادة</span>
+                    <span>البيانات</span>
+                    <span>السعر</span>
+                    <span>الإجراءات</span>
+                </div>
+            `;
+
+            summaries.forEach((sum, index) => {
+                html += `
+                    <div class="content-list-item" data-aos="fade-up" data-aos-delay="${index * 50}">
+                        <div>
+                            <div class="item-title"><i class="fas fa-file-pdf" style="color:var(--success);"></i> ${sum.title}</div>
+                        </div>
+                        <div style="font-size:0.9rem;color:var(--text-muted);">${sum.subject}</div>
+                        <div>
+                            <span style="font-size:0.85rem;color:var(--text-muted);">
+                                <i class="fas fa-file-alt"></i> ${sum.pages} صفحة
+                                <br><i class="fas fa-weight-hanging"></i> ${sum.size}
+                                <br><i class="fas fa-download"></i> ${sum.downloads || 0}
+                            </span>
+                        </div>
+                        <div>
+                            <span style="font-size:0.85rem;color:var(--primary);font-weight:700;">
+                                ${sum.price || 49} ريال
+                            </span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-download" onclick="downloadSummaryFile('${sum._id}')"><i class="fas fa-download"></i></button>
+                            <button class="btn-delete" onclick="deleteSummary('${sum._id}')"><i class="fas fa-trash"></i></button>
+                            <button class="btn-view" onclick="viewSummary('${sum._id}')"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            if (typeof AOS !== 'undefined') AOS.refresh();
+        }
+
+        // ============================================================
+        // 18. إضافة جامعة
+        // ============================================================
+        document.getElementById('addUniversityForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('uniName').value.trim();
+            const icon = document.getElementById('uniIcon').value;
+            const count = parseInt(document.getElementById('uniCount').value) || 0;
+
+            if (!name) {
+                showAlert('❌ يرجى إدخال اسم الجامعة', 'danger');
+                return;
+            }
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/api/universities`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, icon, count })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('✅ تم إضافة الجامعة "' + name + '" بنجاح!', 'success');
+                    this.reset();
+                    await fetchUniversities();
+                } else {
+                    showAlert('❌ خطأ: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // ============================================================
+        // 19. إضافة مادة
+        // ============================================================
+        document.getElementById('addMaterialForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('matTitle').value.trim();
+            const code = document.getElementById('matCode').value.trim();
+            const instructor = document.getElementById('matInstructor').value.trim();
+            const universityId = document.getElementById('matUniversity').value;
+            const icon = document.getElementById('matIcon').value;
+            const videos = parseInt(document.getElementById('matVideos').value) || 10;
+            const description = document.getElementById('matDescription').value.trim();
+            const isFeatured = document.getElementById('matFeatured').checked;
+            const price = parseInt(document.getElementById('matPrice').value) || 99;
+
+            if (!title || !code || !instructor || !universityId || !description) {
+                showAlert('❌ يرجى ملء جميع الحقول المطلوبة', 'danger');
+                return;
+            }
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/api/explanations/materials`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title,
+                        code,
+                        instructor,
+                        universityId,
+                        icon,
+                        videos,
+                        description,
+                        isFeatured,
+                        price
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('✅ تم إضافة المادة "' + title + '" بنجاح!', 'success');
+                    this.reset();
+                    document.getElementById('matVideos').value = 10;
+                    document.getElementById('matPrice').value = 99;
+                    await fetchMaterials();
+                    await fetchUniversities();
+                } else {
+                    showAlert('❌ خطأ: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // ============================================================
+        // 20. رفع فيديو - مع ربطه بالمادة والجامعة
+        // ============================================================
+        document.getElementById('videoFile').addEventListener('change', function() {
+            if (this.files.length) {
+                handleVideoFile(this.files[0]);
+            }
+        });
+
+        const videoUploadArea = document.getElementById('videoUploadArea');
+        videoUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--primary)';
+            this.style.background = 'rgba(124, 58, 237, 0.05)';
+        });
+        videoUploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--border-color)';
+            this.style.background = 'var(--bg-body)';
+        });
+        videoUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--border-color)';
+            this.style.background = 'var(--bg-body)';
+            if (e.dataTransfer.files.length) {
+                document.getElementById('videoFile').files = e.dataTransfer.files;
+                handleVideoFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleVideoFile(file) {
+            const allowedTypes = ['video/mp4', 'video/avi', 'video/quicktime', 'video/x-msvideo', 'video/webm', 'video/x-matroska'];
+            const validExtensions = ['.mp4', '.avi', '.mov', '.webm', '.mkv'];
+            const ext = '.' + file.name.split('.').pop().toLowerCase();
+
+            if (!allowedTypes.includes(file.type) && !validExtensions.includes(ext)) {
+                showAlert('❌ نوع الملف غير مدعوم. يرجى رفع فيديو بصيغة MP4, AVI, MOV, WEBM أو MKV', 'danger');
+                document.getElementById('videoFile').value = '';
+                return;
+            }
+
+            if (file.size > 100 * 1024 * 1024) {
+                showAlert('❌ حجم الملف كبير جداً. الحد الأقصى 100MB', 'danger');
+                document.getElementById('videoFile').value = '';
+                return;
+            }
+
+            uploadedVideoFile = file;
+            document.getElementById('videoFileName').textContent = file.name;
+            document.getElementById('videoFileSize').textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+            document.getElementById('videoFileInfo').classList.add('show');
+
+            const uploadArea = document.getElementById('videoUploadArea');
+            uploadArea.querySelector('h4').textContent = `🎬 ${file.name}`;
+            uploadArea.querySelector('p').textContent = `حجم الملف: ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+        }
+
+        function removeVideoFile() {
+            uploadedVideoFile = null;
+            document.getElementById('videoFile').value = '';
+            document.getElementById('videoFileInfo').classList.remove('show');
+
+            const uploadArea = document.getElementById('videoUploadArea');
+            uploadArea.querySelector('h4').textContent = 'اسحب ملف الفيديو هنا أو انقر للاختيار';
+            uploadArea.querySelector('p').textContent = 'يدعم ملفات MP4, AVI, MOV, WEBM (الحد الأقصى 100MB)';
+        }
+
+        // تحديث قائمة المواد عند اختيار الجامعة
+        document.getElementById('videoUniversity').addEventListener('change', function() {
+            const universityId = this.value;
+            const videoSelect = document.getElementById('videoMaterial');
+            
+            videoSelect.innerHTML = '<option value="">اختر المادة</option>';
+            
+            const filteredMaterials = materials.filter(m => m.universityId === universityId);
+            filteredMaterials.forEach(mat => {
+                videoSelect.innerHTML += `<option value="${mat._id}">${mat.title} (${mat.code})</option>`;
+            });
+            
+            if (filteredMaterials.length === 0) {
+                videoSelect.innerHTML = '<option value="">لا توجد مواد في هذه الجامعة</option>';
+            }
+        });
+
+        document.getElementById('addVideoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('videoTitle').value.trim();
+            const universityId = document.getElementById('videoUniversity').value;
+            const materialId = document.getElementById('videoMaterial').value;
+            const specialtyName = document.getElementById('videoSpecialty').value.trim();
+            const description = document.getElementById('videoDescription').value.trim();
+            const file = uploadedVideoFile;
+
+            if (!title || !universityId || !materialId) {
+                showAlert('❌ يرجى إدخال عنوان الفيديو واختيار الجامعة والمادة', 'danger');
+                return;
+            }
+
+            if (!file) {
+                showAlert('❌ يرجى اختيار ملف فيديو', 'danger');
+                return;
+            }
+
+            const material = materials.find(m => m._id === materialId);
+            const university = universities.find(u => u._id === universityId);
+            
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('subjectId', materialId);
+            formData.append('subjectName', material ? material.title : '');
+            formData.append('specialtyName', specialtyName);
+            formData.append('universityName', university ? university.name : '');
+            formData.append('description', description);
+            formData.append('video', file);
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/api/videos/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('✅ تم رفع الفيديو "' + title + '" بنجاح!', 'success');
+                    this.reset();
+                    removeVideoFile();
+                    await fetchVideos();
+                } else {
+                    showAlert('❌ خطأ: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // ============================================================
+        // 21. عرض فيديو
+        // ============================================================
+        function viewVideo(id) {
+            const video = videos.find(v => v._id === id);
+            if (video) {
+                if (video.filePath) {
+                    window.open(video.filePath, '_blank');
+                } else {
+                    alert(`🎬 ${video.title}\n\n📝 ${video.description || 'لا يوجد وصف'}\n👁️ ${video.views || 0} مشاهدة`);
+                }
+            }
+        }
+
+        // ============================================================
+        // 22. حذف فيديو
+        // ============================================================
+        async function deleteVideo(id) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذا الفيديو؟')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/videos/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('🗑️ تم حذف الفيديو بنجاح', 'success');
+                    await fetchVideos();
+                } else {
+                    showAlert('❌ خطأ: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            }
+        }
+
+        // ============================================================
+        // 23. إضافة ملخص
+        // ============================================================
+        document.getElementById('summaryFile').addEventListener('change', function() {
+            if (this.files.length) {
+                handleSummaryFile(this.files[0]);
+            }
+        });
+
+        const summaryUploadArea = document.getElementById('summaryUploadArea');
+        summaryUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--primary)';
+            this.style.background = 'rgba(124, 58, 237, 0.05)';
+        });
+        summaryUploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--border-color)';
+            this.style.background = 'var(--bg-body)';
+        });
+        summaryUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--border-color)';
+            this.style.background = 'var(--bg-body)';
+            if (e.dataTransfer.files.length) {
+                document.getElementById('summaryFile').files = e.dataTransfer.files;
+                handleSummaryFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleSummaryFile(file) {
+            if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                showAlert('❌ يرجى رفع ملف PDF فقط', 'danger');
+                document.getElementById('summaryFile').value = '';
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showAlert('❌ حجم الملف كبير جداً. الحد الأقصى 10MB', 'danger');
+                document.getElementById('summaryFile').value = '';
+                return;
+            }
+
+            uploadedSummaryFile = file;
+            document.getElementById('summaryFileName').textContent = file.name;
+            document.getElementById('summaryFileSize').textContent = (file.size / 1024).toFixed(2) + ' KB';
+            document.getElementById('summaryFileInfo').classList.add('show');
+
+            const uploadArea = document.getElementById('summaryUploadArea');
+            uploadArea.querySelector('h4').textContent = `📄 ${file.name}`;
+            uploadArea.querySelector('p').textContent = `حجم الملف: ${(file.size / 1024).toFixed(2)} KB`;
+        }
+
+        function removeSummaryFile() {
+            uploadedSummaryFile = null;
+            document.getElementById('summaryFile').value = '';
+            document.getElementById('summaryFileInfo').classList.remove('show');
+
+            const uploadArea = document.getElementById('summaryUploadArea');
+            uploadArea.querySelector('h4').textContent = 'اسحب ملف PDF هنا أو انقر للاختيار';
+            uploadArea.querySelector('p').textContent = 'يدعم ملفات PDF فقط (الحد الأقصى 10MB)';
+        }
+
+        document.getElementById('addSummaryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('sumTitle').value.trim();
+            const subject = document.getElementById('sumSubject').value;
+            const pages = parseInt(document.getElementById('sumPages').value);
+            const size = document.getElementById('sumSize').value.trim();
+            const price = parseInt(document.getElementById('sumPrice').value) || 49;
+            const file = uploadedSummaryFile;
+
+            if (!title || !subject || !pages || !size) {
+                showAlert('❌ يرجى ملء جميع الحقول المطلوبة', 'danger');
+                return;
+            }
+
+            if (!file) {
+                showAlert('❌ يرجى رفع ملف PDF', 'danger');
+                return;
+            }
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
+            btn.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                try {
+                    const response = await fetch(`${API_URL}/api/summaries/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${currentToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            title,
+                            subject,
+                            pages,
+                            size,
+                            price,
+                            fileName: file.name,
+                            fileSize: (file.size / 1024).toFixed(2) + ' KB',
+                            fileType: file.type,
+                            fileData: event.target.result
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        showAlert('✅ تم إضافة الملخص "' + title + '" بنجاح!', 'success');
+                        removeSummaryFile();
+                        this.reset();
+                        document.getElementById('sumPrice').value = 49;
+                        await fetchSummaries();
+                    } else {
+                        showAlert('❌ خطأ: ' + data.message, 'danger');
+                    }
+                } catch (error) {
+                    console.error('❌ خطأ:', error);
+                    showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // ============================================================
+        // 24. حذف ملخص
+        // ============================================================
+        async function deleteSummary(id) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذا الملخص؟')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/summaries/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('🗑️ تم حذف الملخص بنجاح', 'success');
+                    await fetchSummaries();
+                } else {
+                    showAlert('❌ خطأ: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            }
+        }
+
+        // ============================================================
+        // 25. تحميل ملف الملخص
+        // ============================================================
+        async function downloadSummaryFile(id) {
+            try {
+                const response = await fetch(`${API_URL}/api/summaries/download/${id}`);
+                const data = await response.json();
+
+                if (data.success && data.data.fileData) {
+                    const link = document.createElement('a');
+                    link.href = data.data.fileData;
+                    link.download = data.data.fileName || 'ملخص.pdf';
+                    link.click();
+                    showAlert('✅ بدء تحميل الملف', 'success');
+                } else {
+                    showAlert('❌ تعذر تحميل الملف', 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في تحميل الملف', 'danger');
+            }
+        }
+
+        // ============================================================
+        // 26. عرض ملخص
+        // ============================================================
+        function viewSummary(id) {
+            const summary = summaries.find(s => s._id === id);
+            if (summary) {
+                alert(`📄 ${summary.title}\n📚 ${summary.subject}\n📄 ${summary.pages} صفحة\n📦 ${summary.size}\n💰 ${summary.price || 49} ريال\n📥 ${summary.downloads || 0} تحميل`);
+            }
+        }
+
+        // ============================================================
+        // 27. عرض مادة
+        // ============================================================
+        function viewMaterial(id) {
+            const material = materials.find(m => m._id === id);
+            if (material) {
+                alert(`📚 ${material.title}\n📖 ${material.code}\n👨‍🏫 ${material.instructor}\n📝 ${material.description}\n🎬 ${material.videos} فيديو\n💰 ${material.price || 99} ريال`);
+            }
+        }
+
+        // ============================================================
+        // 28. حذف جامعة
+        // ============================================================
+        async function deleteUniversity(id) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذه الجامعة؟')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/universities/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('🗑️ تم حذف الجامعة بنجاح', 'success');
+                    await fetchUniversities();
+                } else {
+                    showAlert('❌ خطأ: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            }
+        }
+
+        // ============================================================
+        // 29. حذف مادة
+        // ============================================================
+        async function deleteMaterial(id) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذه المادة؟')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/explanations/materials/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('🗑️ تم حذف المادة بنجاح', 'success');
+                    await fetchMaterials();
+                } else {
+                    showAlert('❌ خطأ: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+            }
+        }
+
+        // ============================================================
+        // 30. تبديل الوضع
+        // ============================================================
+        let isDark = false;
+
+        function toggleTheme() {
+            isDark = !isDark;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            document.querySelector('.theme-toggle i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('theme') === 'dark') {
+            isDark = true;
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+        }
+
+        // ============================================================
+        // 31. زر العودة للأعلى
+        // ============================================================
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            btn.classList.toggle('visible', window.scrollY > 500);
+        });
+
+        // ============================================================
+        // 32. التشغيل الابتدائي
+        // ============================================================
+        checkAuth();
+    </script>
+
+</body>
+</html>
