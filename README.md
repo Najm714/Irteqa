@@ -1,2 +1,2 @@
-"# Irteqa-Eduhub" 
+"# Irteqa 
 "# Irteqa" 
