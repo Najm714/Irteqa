@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب - منصة ارتقاء</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --secondary: #EC4899;
+            --dark: #0F172A;
+            --bg-body: #F1F5F9;
+            --bg-card: #FFFFFF;
+            --text-color: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+            --gradient-main: linear-gradient(135deg, #7C3AED, #EC4899);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-color);
+            direction: rtl;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-container {
+            max-width: 440px;
+            width: 100%;
+            background: var(--bg-card);
+            padding: 45px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-main);
+        }
+
+        .register-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .register-logo .logo-icon {
+            font-size: 3rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .register-logo h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--text-color);
+            margin-top: 10px;
+        }
+
+        .register-logo h1 span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .register-logo p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .register-logo .user-badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            padding: 4px 20px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .form-group label i {
+            color: var(--primary);
+            margin-left: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.3s;
+            background: var(--bg-body);
+            color: var(--text-color);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-group .helper-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-register:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .error-msg {
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #FCA5A5;
+        }
+
+        .error-msg.show { display: block; }
+
+        .success-msg {
+            background: #D1FAE5;
+            color: #065F46;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #A7F3D0;
+        }
+
+        .success-msg.show { display: block; }
+
+        .register-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .register-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-footer a:hover { text-decoration: underline; }
+
+        .info-box {
+            background: var(--bg-body);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-right: 4px solid var(--primary);
+        }
+
+        .info-box p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .info-box i {
+            color: var(--primary);
+            margin-left: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <div class="register-logo">
+            <div class="logo-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="32" width="40" viewBox="0 0 640 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(220, 196, 220)" d="M493.9 295.6c-50.3 0-83.5-38.9-92.8-53.9 11.9-95.3 46.8-125.4 92.8-125.4 45.5 0 80.9 36.4 80.9 89.7s-35.4 89.7-80.9 89.7l0-.1zm0-237.8c-81.9 0-127.8 53.4-141 108.4-14.9-28-25.9-65.5-34.5-100.3l-113.2 0 0 141c0 51.1-23.3 89-68.8 89s-71.6-37.8-71.6-89l.5-141-65.3 0 0 141c0 41.1 13.3 78.4 37.6 105.1 25 27.5 59.2 41.8 98.8 41.8 78.8 0 133.8-60.4 133.8-146.9l0-94.8c8.2 31.2 27.8 91.1 65.3 143.6l-35 199.4 66.4 0 23.1-141.3c7.6 6.3 15.7 12 24.2 17 22.2 14 47.7 21.9 73.9 22.8 0 0 4 .2 6.1 .2 81.2 0 145.9-62.9 145.9-147.8S575.3 57.9 494.1 57.9l-.2-.1z"/></svg>
+            </div>
+            <h1>منصة <span>ارتقاء</span></h1>
+            <p>إنشاء حساب جديد</p>
+            <span class="user-badge"><i class="fas fa-user"></i> تسجيل كمستخدم عادي</span>
+        </div>
+
+        <!-- رسائل التنبيه -->
+        <div class="error-msg" id="registerError">❌ حدث خطأ في التسجيل</div>
+        <div class="success-msg" id="registerSuccess">✅ تم إنشاء الحساب بنجاح!</div>
+
+        <!-- معلومات مهمة -->
+        <div class="info-box">
+            <p>
+                <i class="fas fa-info-circle"></i>
+                يمكنك التسجيل كمستخدم عادي فقط. إذا كنت بحاجة إلى صلاحيات مدير أو خبير، 
+                يرجى التواصل مع إدارة المنصة.
+            </p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> الاسم الكامل <span style="color:#EF4444;">*</span></label>
+                <input type="text" id="registerName" placeholder="أدخل اسمك الكامل" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> البريد الإلكتروني <span style="color:#EF4444;">*</span></label>
+                <input type="email" id="registerEmail" placeholder="example@email.com" required>
+                <div class="helper-text">📧 سيتم استخدام هذا البريد لتسجيل الدخول</div>
+            </div>
+            <div class="form-group">
+                <label><svg xmlns="http://www.w3.org/2000/svg" height="32" width="24" viewBox="0 0 384 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(99, 230, 190)" d="M128 96l0 64 128 0 0-64c0-35.3-28.7-64-64-64s-64 28.7-64 64zM64 160l0-64C64 25.3 121.3-32 192-32S320 25.3 320 96l0 64c35.3 0 64 28.7 64 64l0 224c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 224c0-35.3 28.7-64 64-64z"/></svg> كلمة المرور <span style="color:#EF4444;">*</span></label>
+                <input type="password" id="registerPassword" placeholder="•••••••• (6 أحرف على الأقل)" required minlength="6">
+                <div class="helper-text">🔒 يجب أن تكون 6 أحرف على الأقل</div>
+            </div>
+            <button type="submit" class="btn-register" id="registerBtn">
+                <i class="fas fa-user-plus"></i> إنشاء حساب
+            </button>
+        </form>
+
+        <div class="register-footer">
+            لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>
+            <br>
+            <span style="font-size:0.8rem; color:var(--text-muted);">
+                <i class="fas fa-shield-alt" style="color:var(--primary);"></i>
+                بيئة آمنة ومشفرة
+            </span>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // تسجيل مستخدم جديد - مستخدم عادي فقط
+        // ============================================================
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+
+            const errorEl = document.getElementById('registerError');
+            const successEl = document.getElementById('registerSuccess');
+            const btn = document.getElementById('registerBtn');
+
+            // إخفاء الرسائل السابقة
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+
+            // التحقق من الحقول
+            if (!name || !email || !password) {
+                errorEl.textContent = '❌ يرجى ملء جميع الحقول المطلوبة';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password.length < 6) {
+                errorEl.textContent = '❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري إنشاء الحساب...';
+            btn.disabled = true;
+
+            try {
+                // ✅ تحديد الرابط حسب البيئة
+                const API_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : 'https://irteqa-eduhub.onrender.com';
+
+                // ✅ إرسال طلب التسجيل مع role = 'user' فقط
+                const response = await fetch(`${API_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        role: 'user'  // ✅ مستخدم عادي فقط
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    successEl.textContent = '✅ ' + data.message;
+                    successEl.classList.add('show');
+                    document.getElementById('registerForm').reset();
+                    
+                    // الانتقال إلى صفحة تسجيل الدخول بعد 2 ثانية
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    errorEl.textContent = '❌ ' + (data.message || 'حدث خطأ في التسجيل');
+                    errorEl.classList.add('show');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                errorEl.textContent = '❌ حدث خطأ في الاتصال بالخادم';
+                errorEl.classList.add('show');
+            } finally {
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> إنشاء حساب';
+                btn.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+</html>

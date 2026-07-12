@@ -1,0 +1,12 @@
+### 1. تسجيل الدخول (استخدم بيانات المستخدم الصحيحة)
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "alqadynjm088@gmail.com",
+    "password": "miaiLDGxIe5Wk0WH"
+}
+
+### 2. جلب جميع الطلبات (يحتاج صلاحية Admin)
+GET http://localhost:5000/api/orders/admin/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNDEzNTRmZjc5NTJmY2ZiZjMzMWEwZiIsImlhdCI6MTc4Mjc1ODkwOSwiZXhwIjoxNzg1MzUwOTA5fQ.3u7XK2JwQP5rJNZ-r2WZiqnVHxJ_FsBWrKBRZV_g5Rs

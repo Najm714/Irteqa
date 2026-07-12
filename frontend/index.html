@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منصة ارتقاء</title>
+    <meta http-equiv="refresh" content="0; url=gateway.html" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #0F172A;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #7C3AED;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        a {
+            color: #8B5CF6;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <h1>🔄 جاري التوجيه...</h1>
+    <p>إذا لم يتم التوجيه تلقائياً، <a href="gateway.html">اضغط هنا</a></p>
+    <script>
+        // توجيه مباشر
+        window.location.href = 'gateway.html';
+    </script>
+</body>
+</html>

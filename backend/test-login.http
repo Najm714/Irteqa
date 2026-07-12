@@ -1,0 +1,17 @@
+### تسجيل الدخول
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "alqadynjm088@gmail.com",
+    "password": "miaiLDGxIe5Wk0WH"
+}
+
+### تسجيل الدخول
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "123456789"
+}

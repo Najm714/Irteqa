@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>اختيار البوابة - منصة ارتقاء</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --secondary: #EC4899;
+            --accent: #F59E0B;
+            --dark: #0F172A;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--dark);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-5%, -5%) rotate(5deg); }
+        }
+        .gateway-container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .gateway-logo { margin-bottom: 50px; }
+        .gateway-logo .icon { font-size: 4rem; background: linear-gradient(135deg, #7C3AED, #EC4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; margin-bottom: 10px; }
+        .gateway-logo h1 { font-size: 2.8rem; font-weight: 900; }
+        .gateway-logo h1 span { background: linear-gradient(135deg, #7C3AED, #EC4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gateway-logo p { color: rgba(255,255,255,0.5); font-size: 1.1rem; margin-top: 5px; }
+
+        .gateway-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .gateway-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        .gateway-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #7C3AED, #EC4899);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 0;
+        }
+        .gateway-card:hover::before { opacity: 0.1; }
+        .gateway-card:hover { transform: translateY(-10px); box-shadow: 0 20px 60px rgba(124, 58, 237, 0.2); border-color: rgba(124, 58, 237, 0.3); }
+        .gateway-card .card-content { position: relative; z-index: 1; }
+        .gateway-card .card-icon { font-size: 3.5rem; margin-bottom: 20px; display: inline-block; }
+        .gateway-card.academic .card-icon { color: #8B5CF6; }
+        .gateway-card.admin .card-icon { color: #F59E0B; }
+        .gateway-card .card-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; }
+        .gateway-card .card-desc { color: rgba(255,255,255,0.6); font-size: 1rem; line-height: 1.8; }
+        .gateway-card .card-features { list-style: none; margin-top: 15px; text-align: right; }
+        .gateway-card .card-features li { padding: 6px 0; color: rgba(255,255,255,0.5); font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+        .gateway-card .card-features li i { color: var(--primary); font-size: 0.8rem; }
+        .gateway-card .card-badge { display: inline-block; padding: 4px 16px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; margin-top: 15px; }
+        .gateway-card.academic .card-badge { background: rgba(124,58,237,0.2); color: #8B5CF6; }
+        .gateway-card.admin .card-badge { background: rgba(245,158,11,0.2); color: #F59E0B; }
+        .gateway-card .card-arrow { position: absolute; bottom: 20px; left: 25px; font-size: 1.5rem; color: rgba(255,255,255,0.2); transition: all 0.3s ease; }
+        .gateway-card:hover .card-arrow { color: #fff; transform: translateX(10px); }
+
+        .gateway-footer { margin-top: 50px; color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+
+        /* جسيمات */
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden; }
+        .particle { position: absolute; width: 4px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 50%; animation: particleFloat 15s linear infinite; }
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 12s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 18s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 14s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 16s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 20s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 13s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 17s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 15s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 19s; }
+        .particle:nth-child(10) { left: 95%; animation-delay: 3s; animation-duration: 11s; }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .gateway-container { padding: 20px; }
+            .gateway-logo h1 { font-size: 2rem; }
+            .gateway-grid { grid-template-columns: 1fr; gap: 20px; }
+            .gateway-card { padding: 30px 20px; }
+            .gateway-card .card-icon { font-size: 2.5rem; }
+            .gateway-card .card-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particles">
+        <div class="particle"></div><div class="particle"></div>
+        <div class="particle"></div><div class="particle"></div>
+        <div class="particle"></div><div class="particle"></div>
+        <div class="particle"></div><div class="particle"></div>
+        <div class="particle"></div><div class="particle"></div>
+    </div>
+
+    <div class="gateway-container">
+        <div class="gateway-logo">
+            <span class="icon"><i class="fas fa-graduation-cap"></i></span>
+            <h1>منصة <span>ارتقاء</span></h1>
+            <p>اختر البوابة المناسبة لاحتياجاتك</p>
+        </div>
+
+        <div class="gateway-grid">
+            <!-- ✅ البوابة الأكاديمية -->
+            <a href="gateway/academic/index.html" class="gateway-card academic">
+                <div class="card-content">
+                    <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+                    <h2 class="card-title">البوابة الأكاديمية</h2>
+                    <p class="card-desc">منصة متكاملة للطلاب والباحثين للوصول إلى الخدمات الأكاديمية والاستشارات</p>
+                    <ul class="card-features">
+                        <li><i class="fas fa-circle"></i> خدمات البحث العلمي والترجمة</li>
+                        <li><i class="fas fa-circle"></i> خدمات كلية الأعمال والاقتصاد</li>
+                        <li><i class="fas fa-circle"></i> المكتبة الإلكترونية والفيديوهات</li>
+                        <li><i class="fas fa-circle"></i> النماذج والملخصات والانفوجرافيك</li>
+                        <li><i class="fas fa-circle"></i> الدردشة مع الدعم الفني</li>
+                    </ul>
+                    <span class="card-badge"><i class="fas fa-users"></i> للطلاب والباحثين</span>
+                </div>
+                <div class="card-arrow"><i class="fas fa-arrow-left"></i></div>
+            </a>
+
+            <!-- ✅ بوابة الإدارة -->
+            <a href="gateway/admin/index.html" class="gateway-card admin">
+                <div class="card-content">
+                    <div class="card-icon"><i class="fas fa-user-tie"></i></div>
+                    <h2 class="card-title">بوابة الإدارة</h2>
+                    <p class="card-desc">لوحة تحكم متكاملة للمديرين والمشرفين لإدارة المنصة والخدمات</p>
+                    <ul class="card-features">
+                        <li><i class="fas fa-circle"></i> لوحة تحكم شاملة مع إحصائيات</li>
+                        <li><i class="fas fa-circle"></i> إدارة الطلبات والخدمات</li>
+                        <li><i class="fas fa-circle"></i> إدارة المستخدمين والخبراء</li>
+                        <li><i class="fas fa-circle"></i> إدارة المحتوى والملخصات</li>
+                        <li><i class="fas fa-circle"></i> الدردشة مع العملاء</li>
+                    </ul>
+                    <span class="card-badge"><i class="fas fa-user-shield"></i> للمديرين والمشرفين</span>
+                </div>
+                <div class="card-arrow"><i class="fas fa-arrow-left"></i></div>
+            </a>
+        </div>
+
+        <div class="gateway-footer">
+            <p>© 2026 منصة ارتقاء. جميع الحقوق محفوظة.</p>
+        </div>
+    </div>
+
+    <script>
+        // تسجيل الدخول التلقائي (اختياري)
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            if (user && user.role === 'admin') {
+                console.log('👤 مرحباً مدير:', user.name);
+            }
+            console.log('🚀 منصة ارتقاء - بوابة الاختيار');
+        });
+    </script>
+</body>
+</html>

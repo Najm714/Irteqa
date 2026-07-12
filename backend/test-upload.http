@@ -1,0 +1,38 @@
+### تسجيل الدخول
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "123456789"
+}
+
+### 2. إنشاء طلب جديد
+POST http://localhost:5000/api/orders
+Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNDE3MTdkMDE5MGJmNDk1NjFlYTdlZiIsImlhdCI6MTc4MjY3NTgyOCwiZXhwIjoxNzg1MjY3ODI4fQ.OrRPuFQvvULabVJvJ7Ml-rh7CCDITd1CkXHRLLS_9mA",
+Content-Type: application/json
+
+{
+    "serviceType": "translation",
+    "title": "ترجمة مقال علمي مع ملفات",
+    "description": "أحتاج ترجمة مقال مع الملفات المرفقة",
+    "deadline": "2026-07-15T00:00:00.000Z",
+    "budget": 500
+}
+
+### 3. رفع ملفات للطلب (استخدم معرّف الطلب من الخطوة السابقة)
+POST http://localhost:5000/api/orders/ORDER_ID_HERE/upload
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="files"; filename="document.pdf"
+Content-Type: application/pdf
+
+< ./path/to/your/document.pdf
+------WebKitFormBoundary
+Content-Disposition: form-data; name="files"; filename="data.xlsx"
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+< ./path/to/your/data.xlsx
+------WebKitFormBoundary--

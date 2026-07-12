@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📚 الشروحات الأكاديمية - منصة ارتقاء</title>
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <style>
+        /* ============================================================
+           المتغيرات - نفس ألوان الصفحة الرئيسية
+           ============================================================ */
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --primary-light: #8B5CF6;
+            --secondary: #EC4899;
+            --secondary-dark: #DB2777;
+            --accent: #F59E0B;
+            --accent-light: #FBBF24;
+            --dark: #0F172A;
+            --dark-light: #1E293B;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --white: #FFFFFF;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.2);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --radius: 20px;
+            --bg-body: #F1F5F9;
+            --bg-card: #FFFFFF;
+            --text-color: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --gradient-main: linear-gradient(135deg, #7C3AED, #EC4899);
+            --gradient-secondary: linear-gradient(135deg, #F59E0B, #EC4899);
+            --gold: #F59E0B;
+            --success: #10B981;
+            --danger: #EF4444;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0F172A;
+            --bg-card: #1E293B;
+            --text-color: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-color);
+            transition: var(--transition);
+            direction: rtl;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 25px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-main);
+            border-radius: 10px;
+        }
+
+        /* ============================================================
+           الهيدر
+           ============================================================ */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--gradient-main);
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--text-color);
+        }
+
+        .logo-text span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .header-actions .btn-back {
+            background: var(--bg-body);
+            color: var(--text-color);
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .header-actions .btn-back:hover {
+            background: var(--gradient-main);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .header-actions .btn-admin {
+            background: var(--gradient-secondary);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .header-actions .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        /* ============================================================
+           زر تبديل الوضع
+           ============================================================ */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 999;
+            background: var(--bg-card);
+            color: var(--text-color);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
+            box-shadow: var(--shadow-hover);
+            background: var(--gradient-main);
+            color: #fff;
+        }
+
+        /* ============================================================
+           زر العودة للأعلى
+           ============================================================ */
+        .back-to-top {
+            position: fixed;
+            bottom: 95px;
+            left: 30px;
+            z-index: 999;
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* ============================================================
+           أقسام الصفحة
+           ============================================================ */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .section-title .badge-count {
+            background: var(--gradient-main);
+            color: #fff;
+            padding: 2px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .section-divider {
+            height: 2px;
+            background: var(--gradient-main);
+            margin: 40px 0 30px;
+            opacity: 0.3;
+        }
+
+        /* ============================================================
+           قسم أبرز الجامعات
+           ============================================================ */
+        .universities-section {
+            margin-bottom: 40px;
+        }
+
+        .universities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .university-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px 18px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .university-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .university-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .university-card.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        .university-card .uni-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .university-card .uni-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .university-card .uni-count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .university-card .uni-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--gradient-secondary);
+            color: #fff;
+            padding: 1px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           قسم أبرز المواد التعليمية
+           ============================================================ */
+        .materials-section {
+            margin-bottom: 40px;
+        }
+
+        .materials-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .materials-tabs .tab-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            background: var(--bg-body);
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .materials-tabs .tab-btn:hover {
+            background: var(--border-color);
+            transform: translateY(-2px);
+        }
+
+        .materials-tabs .tab-btn.active {
+            background: var(--gradient-main);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .material-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 22px 22px 18px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .material-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-secondary);
+        }
+
+        .material-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .material-card .material-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .material-card .material-header .material-code {
+            font-size: 0.75rem;
+            color: var(--gold);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .material-card .material-header .material-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .material-card .material-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .material-card .material-instructor {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .material-card .material-instructor i {
+            color: var(--primary);
+            margin-left: 6px;
+        }
+
+        .material-card .material-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .material-card .material-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .material-card .material-footer .material-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .material-card .material-footer .material-stats i {
+            color: var(--primary);
+            margin-left: 4px;
+        }
+
+        .material-card .material-footer .material-price {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .material-card .btn-subscribe {
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .material-card .btn-subscribe:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .material-card .btn-open-material {
+            background: var(--success);
+            color: #fff;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .material-card .btn-open-material:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .material-card .featured-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--gradient-secondary);
+            color: #fff;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+/* زر تفاصيل المادة */
+.btn-detail-material {
+    background: var(--primary-light);
+    color: #fff;
+    border: none;
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Cairo', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-detail-material:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+}
+        .material-card .university-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            padding: 1px 12px;
+            border-radius: 12px;
+            margin-top: 4px;
+        }
+
+        .material-card .subscribed-badge {
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: var(--success);
+        }
+
+        .material-card .subscribed-badge i {
+            margin-left: 4px;
+        }
+
+        /* ============================================================
+           قسم الملخصات
+           ============================================================ */
+        .summaries-section {
+            margin-bottom: 40px;
+        }
+
+        .summaries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .summary-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 22px 22px 18px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .summary-card .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .summary-card .summary-header .summary-type {
+            font-size: 0.7rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .summary-card .summary-header .summary-icon {
+            font-size: 1.8rem;
+            color: var(--success);
+        }
+
+        .summary-card .summary-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .summary-card .summary-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .summary-card .summary-meta i {
+            color: var(--primary);
+            margin-left: 4px;
+        }
+
+        .summary-card .summary-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .summary-card .summary-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .summary-card .summary-footer .summary-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .summary-card .summary-footer .summary-stats i {
+            color: var(--primary);
+            margin-left: 4px;
+        }
+
+        .summary-card .summary-footer .summary-price {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .summary-card .btn-subscribe-summary {
+            background: var(--gradient-secondary);
+            color: #fff;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-card .btn-subscribe-summary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        /* ============================================================
+           حالة عدم وجود نتائج
+           ============================================================ */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        .no-results .btn-admin-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 30px;
+            background: var(--gradient-secondary);
+            color: #fff;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .no-results .btn-admin-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        /* ============================================================
+           مؤشر التحميل
+           ============================================================ */
+        .loading-center {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .loading-center i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* ============================================================
+           رسائل التنبيه
+           ============================================================ */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            min-width: 300px;
+            text-align: center;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .alert-success {
+            background: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+
+        .alert-danger {
+            background: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FCA5A5;
+        }
+
+        .alert-info {
+            background: #DBEAFE;
+            color: #1E40AF;
+            border: 1px solid #93C5FD;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) translateX(-50%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateX(-50%);
+            }
+        }
+
+        /* ============================================================
+           التجاوب
+           ============================================================ */
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px 15px;
+            }
+            .main-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                padding: 12px 15px;
+            }
+            .logo-area {
+                justify-content: center;
+            }
+            .header-actions {
+                justify-content: center;
+            }
+            .logo-text {
+                font-size: 20px;
+            }
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            .section-title {
+                font-size: 1.4rem;
+            }
+            .universities-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            .materials-grid,
+            .summaries-grid {
+                grid-template-columns: 1fr;
+            }
+            .materials-tabs {
+                justify-content: center;
+            }
+            .materials-tabs .tab-btn {
+                font-size: 0.8rem;
+                padding: 8px 16px;
+            }
+            .theme-toggle,
+            .back-to-top {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                bottom: 20px;
+                left: 20px;
+            }
+            .back-to-top {
+                bottom: 75px;
+            }
+            .alert {
+                min-width: 250px;
+                top: 80px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .universities-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            .university-card {
+                padding: 15px 10px;
+            }
+            .university-card .uni-name {
+                font-size: 0.8rem;
+            }
+            .material-card .material-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .material-card .btn-subscribe,
+            .material-card .btn-open-material {
+                justify-content: center;
+            }
+            .summary-card .summary-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .summary-card .btn-subscribe-summary {
+                justify-content: center;
+            }
+            .alert {
+                min-width: 200px;
+                top: 70px;
+                font-size: 0.8rem;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== زر تبديل الوضع ====== -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(80, 73, 80)" d="M0 256c0-141.4 114.6-256 256-256 33 0 64.6 6.3 93.6 17.7 7.4 2.9 11.5 10.7 9.8 18.4s-8.8 13-16.7 12.4c-4.8-.3-9.7-.5-14.6-.5-114.9 0-208 93.1-208 208s93.1 208 208 208c4.9 0 9.8-.2 14.6-.5 7.9-.5 15 4.7 16.7 12.4s-2.4 15.5-9.8 18.4C320.6 505.7 289 512 256 512 114.6 512 0 397.4 0 256zM375.4 137.4c3.5-7.1 13.7-7.1 17.2 0l31.5 63.8c1.4 2.8 4.1 4.8 7.2 5.3l70.4 10.2c7.9 1.1 11 10.8 5.3 16.4l-50.9 49.6c-2.3 2.2-3.3 5.4-2.8 8.5l12 70.1c1.3 7.8-6.9 13.8-13.9 10.1l-63-33.1c-2.8-1.5-6.1-1.5-8.9 0l-63 33.1c-7 3.7-15.3-2.3-13.9-10.1l12-70.1c.5-3.1-.5-6.3-2.8-8.5L261 233.1c-5.7-5.6-2.6-15.2 5.3-16.4l70.4-10.2c3.1-.5 5.8-2.4 7.2-5.3l31.5-63.8z"/></svg>
+    </button>
+
+    <!-- ====== زر العودة للأعلى ====== -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(177, 151, 252)" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM377 271c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-87-87-87 87c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 167c9.4-9.4 24.6-9.4 33.9 0L377 271z"/></svg>
+    </button>
+
+    <div class="container">
+
+        <!-- ============================================================
+        الهيدر - مع زر إدارة المحتوى
+        ============================================================ -->
+        <header class="main-header">
+            <a href="index.html" class="logo-area">
+                <div class="logo-icon"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="40" viewBox="0 0 640 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(177, 151, 252)" d="M493.9 295.6c-50.3 0-83.5-38.9-92.8-53.9 11.9-95.3 46.8-125.4 92.8-125.4 45.5 0 80.9 36.4 80.9 89.7s-35.4 89.7-80.9 89.7l0-.1zm0-237.8c-81.9 0-127.8 53.4-141 108.4-14.9-28-25.9-65.5-34.5-100.3l-113.2 0 0 141c0 51.1-23.3 89-68.8 89s-71.6-37.8-71.6-89l.5-141-65.3 0 0 141c0 41.1 13.3 78.4 37.6 105.1 25 27.5 59.2 41.8 98.8 41.8 78.8 0 133.8-60.4 133.8-146.9l0-94.8c8.2 31.2 27.8 91.1 65.3 143.6l-35 199.4 66.4 0 23.1-141.3c7.6 6.3 15.7 12 24.2 17 22.2 14 47.7 21.9 73.9 22.8 0 0 4 .2 6.1 .2 81.2 0 145.9-62.9 145.9-147.8S575.3 57.9 494.1 57.9l-.2-.1z"/></svg></div>
+                <div class="logo-text">منصة <span>ارتقاء</span></div>
+            </a>
+            <div class="header-actions">
+                <a href="index.html" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(255, 212, 59)" d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg> العودة للرئيسية
+                </a>
+                <a href="admin-explanations.html" class="btn-admin">
+                    <i class="fas fa-cog"></i> إدارة المحتوى
+                </a>
+                <a href="dashboard.html" class="btn-admin" style="background:var(--gradient-main);">
+                    <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                </a>
+            </div>
+        </header>
+
+        <!-- رسائل التنبيه -->
+        <div id="alertMessage" class="alert"></div>
+
+        <!-- ============================================================
+        1. قسم أبرز الجامعات
+        ============================================================ -->
+        <section class="universities-section">
+            <div class="section-title">
+                <i class="fas fa-university"></i>
+                أبرز الجامعات
+                <span class="badge-count" id="uniCount">0</span>
+            </div>
+            <div class="universities-grid" id="universitiesGrid">
+                <div class="loading-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    جاري تحميل الجامعات...
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ============================================================
+        2. قسم أبرز المواد التعليمية
+        ============================================================ -->
+        <section class="materials-section">
+            <div class="section-title">
+                <i class="fas fa-book-open"></i>
+                أبرز المواد التعليمية
+                <span class="badge-count" id="materialCount">0</span>
+            </div>
+
+            <div class="materials-tabs" id="materialsTabs">
+                <button class="tab-btn active" data-tab="latest" onclick="switchMaterialTab('latest')">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="32" width="24" viewBox="0 0 384 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(255, 212, 59)" d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64l0 11c0 42.4 16.9 83.1 46.9 113.1l67.9 67.9-67.9 67.9C48.9 353.9 32 394.6 32 437l0 11c-17.7 0-32 14.3-32 32s14.3 32 32 32l320 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-11c0-42.4-16.9-83.1-46.9-113.1l-67.9-67.9 67.9-67.9c30-30 46.9-70.7 46.9-113.1l0-11c17.7 0 32-14.3 32-32S369.7 0 352 0L32 0zM288 437l0 11-192 0 0-11c0-25.5 10.1-49.9 28.1-67.9l67.9-67.9 67.9 67.9c18 18 28.1 42.4 28.1 67.9z"/></svg> أحدث المواد
+                </button>
+                <button class="tab-btn" data-tab="featured" onclick="switchMaterialTab('featured')">
+                    <i class="fas fa-star"></i> المواد المميزة
+                </button>
+                <button class="tab-btn" data-tab="all-universities" onclick="switchMaterialTab('all-universities')">
+                    <i class="fas fa-university"></i> جميع الجامعات
+                </button>
+            </div>
+
+            <div class="materials-grid" id="materialsGrid">
+                <div class="loading-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    جاري تحميل المواد...
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ============================================================
+        3. قسم الملخصات
+        ============================================================ -->
+        <section class="summaries-section">
+            <div class="section-title">
+                <i class="fas fa-file-pdf"></i>
+                الملخصات
+                <span class="badge-count" id="summaryCount">0</span>
+            </div>
+            <div class="summaries-grid" id="summariesGrid">
+                <div class="loading-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    جاري تحميل الملخصات...
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ============================================================
+    ====== جافا سكريبت ======
+    ============================================================ -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+    </script>
+    <script>
+        // ============================================================
+        // 1. API URL
+        // ============================================================
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000' 
+            : 'https://irteqa-eduhub.onrender.com';
+
+        // ============================================================
+        // 2. المتغيرات العامة
+        // ============================================================
+        let universities = [];
+        let materials = [];
+        let summaries = [];
+        let currentMaterialTab = 'latest';
+        let userSubscriptions = [];
+        let isDataLoaded = false;
+
+        // ============================================================
+        // 3. عرض رسائل التنبيه
+        // ============================================================
+        function showAlert(message, type = 'success') {
+            const alertEl = document.getElementById('alertMessage');
+            alertEl.textContent = message;
+            alertEl.className = `alert alert-${type} show`;
+            setTimeout(() => {
+                alertEl.classList.remove('show');
+            }, 5000);
+        }
+
+        // ============================================================
+        // 4. جلب الجامعات من الخادم
+        // ============================================================
+        async function fetchUniversities() {
+            try {
+                const response = await fetch(`${API_URL}/api/universities`);
+                const data = await response.json();
+                if (data.success) {
+                    universities = data.data;
+                    renderUniversities();
+                } else {
+                    console.error('❌ خطأ في جلب الجامعات:', data.message);
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+            }
+        }
+
+        // ============================================================
+        // 5. جلب المواد من الخادم
+        // ============================================================
+        async function fetchMaterials() {
+            try {
+                const response = await fetch(`${API_URL}/api/explanations/materials`);
+                const data = await response.json();
+                if (data.success) {
+                    materials = data.data;
+                    renderMaterials(currentMaterialTab);
+                } else {
+                    console.error('❌ خطأ في جلب المواد:', data.message);
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+            }
+        }
+
+        // ============================================================
+        // 6. جلب الملخصات من الخادم
+        // ============================================================
+        async function fetchSummaries() {
+            try {
+                const response = await fetch(`${API_URL}/api/summaries/all`);
+                const data = await response.json();
+                if (data.success) {
+                    summaries = data.data;
+                    renderSummaries();
+                } else {
+                    console.error('❌ خطأ في جلب الملخصات:', data.message);
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+            }
+        }
+
+        // ============================================================
+        // 7. جلب اشتراكات المستخدم - ✅ النسخة المحسنة
+        // ============================================================
+        async function fetchUserSubscriptions() {
+            try {
+                const token = localStorage.getItem('token');
+                console.log('🔑 التوكن:', token ? 'موجود ✅' : 'غير موجود ❌');
+
+                if (!token) {
+                    console.log('⚠️ لا يوجد توكن، المستخدم غير مسجل');
+                    userSubscriptions = [];
+                    return;
+                }
+
+                const response = await fetch(`${API_URL}/api/subscriptions/my`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                console.log('📡 حالة الاستجابة:', response.status);
+
+                if (response.status === 401) {
+                    console.log('⚠️ انتهت صلاحية التوكن');
+                    userSubscriptions = [];
+                    return;
+                }
+
+                const data = await response.json();
+                console.log('📦 بيانات الاشتراكات من الخادم:', data);
+
+                if (data.success) {
+                    userSubscriptions = data.data || [];
+                    console.log('✅ تم جلب الاشتراكات بنجاح، العدد:', userSubscriptions.length);
+                    
+                    // طباعة تفاصيل الاشتراكات
+                    userSubscriptions.forEach((sub, index) => {
+                        console.log(`  ${index + 1}. المادة: ${sub.title}, ID: ${sub.materialId}, الحالة: ${sub.status}`);
+                    });
+                    
+                    // ✅ تحديث واجهة المستخدم بعد جلب الاشتراكات
+                    renderMaterials(currentMaterialTab);
+                } else {
+                    console.error('❌ فشل في جلب الاشتراكات:', data.message);
+                    userSubscriptions = [];
+                }
+            } catch (error) {
+                console.error('❌ خطأ في جلب اشتراكات المستخدم:', error);
+                userSubscriptions = [];
+            }
+        }
+
+        // ============================================================
+        // 8. التحقق من اشتراك المستخدم في مادة معينة - ✅ النسخة المحسنة
+        // ============================================================
+        function isUserSubscribed(materialId) {
+            if (!userSubscriptions || userSubscriptions.length === 0) {
+                return false;
+            }
+
+            const materialIdStr = String(materialId);
+
+            const found = userSubscriptions.some(sub => {
+                const subMaterialId = String(sub.materialId);
+                const isActive = sub.status === 'active';
+                return subMaterialId === materialIdStr && isActive;
+            });
+
+            return found;
+        }
+
+        // ============================================================
+        // 9. فتح صفحة محتوى المادة (للمشتركين) - ✅ النسخة المحسنة
+        // ============================================================
+        function openMaterialContent(materialId) {
+            console.log('📂 محاولة فتح المادة:', materialId);
+
+            // البحث عن المادة في قائمة المواد
+            const material = materials.find(m => m._id === materialId);
+            if (!material) {
+                console.error('❌ المادة غير موجودة');
+                showAlert('❌ المادة غير موجودة', 'danger');
+                return;
+            }
+
+            console.log('📚 المادة التي تم العثور عليها:', material);
+
+            // التحقق من الاشتراك مرة أخرى
+            const isSubscribed = isUserSubscribed(materialId);
+            console.log('✅ حالة الاشتراك:', isSubscribed);
+
+            if (!isSubscribed) {
+                console.error('❌ المستخدم غير مشترك في هذه المادة');
+                showAlert('❌ أنت غير مشترك في هذه المادة', 'danger');
+                return;
+            }
+
+            // تجهيز البيانات للانتقال
+            const uni = universities.find(u => u._id === material.universityId);
+            const encodedTitle = encodeURIComponent(material.title);
+            const encodedCode = encodeURIComponent(material.code || '');
+            const encodedInstructor = encodeURIComponent(material.instructor || '');
+            const encodedDescription = encodeURIComponent(material.description || '');
+            const encodedUniversity = encodeURIComponent(uni ? uni.name : '');
+
+            // بناء الرابط
+            const url =
+                `material-content.html?id=${materialId}&title=${encodedTitle}&code=${encodedCode}&instructor=${encodedInstructor}&description=${encodedDescription}&university=${encodedUniversity}&status=active`;
+
+            console.log('🔗 الانتقال إلى الرابط:', url);
+
+            // ✅ الانتقال إلى صفحة المحتوى
+            window.location.href = url;
+        }
+
+        // ============================================================
+        // 10. عرض الجامعات
+        // ============================================================
+        function renderUniversities() {
+            const grid = document.getElementById('universitiesGrid');
+            const countEl = document.getElementById('uniCount');
+
+            if (!universities || universities.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-university"></i>
+                        <h3>لا توجد جامعات</h3>
+                        <p>لم يتم إضافة أي جامعة بعد</p>
+                        <a href="admin-explanations.html" class="btn-admin-link">
+                            <i class="fas fa-plus-circle"></i> أضف جامعة الآن
+                        </a>
+                    </div>
+                `;
+                countEl.textContent = '0';
+                return;
+            }
+
+            countEl.textContent = universities.length;
+
+            grid.innerHTML = universities.map(uni => `
+                <div class="university-card" onclick="filterMaterialsByUniversity('${uni._id}')">
+                    <span class="uni-badge">${uni.count || 0}</span>
+                    <span class="uni-icon"><i class="fas ${uni.icon || 'fa-university'}"></i></span>
+                    <span class="uni-name">${uni.name}</span>
+                    <span class="uni-count">${uni.count || 0} مادة</span>
+                </div>
+            `).join('');
+        }
+
+        // ============================================================
+        // 11. عرض المواد حسب التبويب - مع التحقق من الاشتراك - ✅ النسخة المحسنة
+        // ============================================================
+        function renderMaterials(tab) {
+            const grid = document.getElementById('materialsGrid');
+            const countEl = document.getElementById('materialCount');
+
+            if (!materials || materials.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-book-open"></i>
+                        <h3>لا توجد مواد</h3>
+                        <p>لم يتم إضافة أي مادة بعد</p>
+                        <a href="admin-explanations.html" class="btn-admin-link">
+                            <i class="fas fa-plus-circle"></i> أضف مادة الآن
+                        </a>
+                    </div>
+                `;
+                countEl.textContent = '0';
+                return;
+            }
+
+            let filtered = [];
+
+            switch (tab) {
+                case 'latest':
+                    filtered = [...materials].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                    break;
+                case 'featured':
+                    filtered = materials.filter(m => m.isFeatured);
+                    break;
+                case 'all-universities':
+                default:
+                    filtered = [...materials];
+                    break;
+            }
+
+            countEl.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>لا توجد مواد</h3>
+                        <p>لا توجد مواد في هذا التصنيف</p>
+                    </div>
+                `;
+                return;
+            }
+grid.innerHTML = filtered.map(m => {
+    const uni = universities.find(u => u._id === m.universityId);
+    const price = m.price || 99;
+    const isSubscribed = isUserSubscribed(m._id);
+
+    return `
+        <div class="material-card">
+            ${m.isFeatured ? '<span class="featured-badge"><i class="fas fa-star"></i> مميز</span>' : ''}
+            <div class="material-header">
+                <span class="material-code">${m.code}</span>
+                <span class="material-icon"><i class="fas ${m.icon || 'fa-book'}"></i></span>
+            </div>
+            <div class="material-title">${m.title}</div>
+            <div class="material-instructor">
+                <i class="fas fa-user-graduate"></i> ${m.instructor}
+            </div>
+            <div class="material-desc">${m.description || 'لا يوجد وصف'}</div>
+            <span class="university-tag"><i class="fas fa-university"></i> ${uni ? uni.name : 'جامعة'}</span>
+            <div class="material-footer">
+                <div class="material-stats">
+                    <span><i class="fas fa-video"></i> ${m.videos || 0}</span>
+                    ${!isSubscribed ? `<span class="material-price"><i class="fas fa-tag"></i> ${price} ريال</span>` : ''}
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    ${isSubscribed ? `
+                        <button class="btn-open-material" onclick="event.stopPropagation(); openMaterialContent('${m._id}')">
+                            <i class="fas fa-play"></i> فتح المادة
+                        </button>
+                    ` : `
+                        <button class="btn-subscribe" onclick="event.stopPropagation(); openSubscription('${m._id}', 'material')">
+                            <i class="fas fa-play"></i> اشتراك
+                        </button>
+                    `}
+                    <!-- ✅ زر تفاصيل المادة -->
+                    <button class="btn-detail-material" onclick="event.stopPropagation(); openMaterialDetail('${m._id}')">
+                        <i class="fas fa-info-circle"></i> تفاصيل
+                    </button>
+                </div>
+            </div>
+            ${isSubscribed ? '<div class="subscribed-badge"><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> مشترك</div>' : ''}
+        </div>
+    `;
+}).join('');
+}
+
+        // ============================================================
+        // 12. عرض الملخصات
+        // ============================================================
+        function renderSummaries() {
+            const grid = document.getElementById('summariesGrid');
+            const countEl = document.getElementById('summaryCount');
+
+            if (!summaries || summaries.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-file-pdf"></i>
+                        <h3>لا توجد ملخصات</h3>
+                        <p>لم يتم إضافة أي ملخص بعد</p>
+                        <a href="admin-explanations.html" class="btn-admin-link">
+                            <i class="fas fa-plus-circle"></i> أضف ملخص الآن
+                        </a>
+                    </div>
+                `;
+                countEl.textContent = '0';
+                return;
+            }
+
+            countEl.textContent = summaries.length;
+
+            grid.innerHTML = summaries.map(s => {
+                const price = s.price || 49;
+                return `
+                    <div class="summary-card" onclick="openSubscription('${s._id}', 'summary')">
+                        <div class="summary-header">
+                            <span class="summary-type"><i class="fas fa-file-pdf"></i> PDF</span>
+                            <span class="summary-icon"><i class="fas fa-file-pdf"></i></span>
+                        </div>
+                        <div class="summary-title">${s.title}</div>
+                        <div class="summary-meta">
+                            <i class="fas fa-book"></i> ${s.subject} 
+                            <i class="fas fa-file-alt" style="margin-right:10px;"></i> ${s.pages} صفحة
+                        </div>
+                        <div class="summary-desc">ملخص شامل ومكثف لمادة ${s.subject} مع شرح النقاط الرئيسية.</div>
+                        <div class="summary-footer">
+                            <div class="summary-stats">
+                                <span><i class="fas fa-download"></i> ${s.downloads || 0}</span>
+                                <span><i class="fas fa-weight-hanging"></i> ${s.size}</span>
+                                <span class="summary-price"><i class="fas fa-tag"></i> ${price} ريال</span>
+                            </div>
+                            <button class="btn-subscribe-summary" onclick="event.stopPropagation(); openSubscription('${s._id}', 'summary')">
+                                <i class="fas fa-download"></i> اشتراك
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================================
+        // 13. تبديل تبويبات المواد
+        // ============================================================
+        function switchMaterialTab(tab) {
+            currentMaterialTab = tab;
+            document.querySelectorAll('.materials-tabs .tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+            });
+            renderMaterials(tab);
+        }
+
+        // ============================================================
+        // 14. فلترة المواد حسب الجامعة
+        // ============================================================
+        function filterMaterialsByUniversity(universityId) {
+            const filtered = materials.filter(m => m.universityId === universityId);
+            const grid = document.getElementById('materialsGrid');
+            const countEl = document.getElementById('materialCount');
+
+            document.querySelectorAll('.materials-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-university"></i>
+                        <h3>لا توجد مواد</h3>
+                        <p>لا توجد مواد في هذه الجامعة حالياً</p>
+                    </div>
+                `;
+                countEl.textContent = '0';
+                return;
+            }
+
+            const uni = universities.find(u => u._id === universityId);
+            countEl.textContent = filtered.length;
+
+            grid.innerHTML = filtered.map(m => {
+                const price = m.price || 99;
+                const isSubscribed = isUserSubscribed(m._id);
+
+                return `
+                    <div class="material-card">
+                        ${m.isFeatured ? '<span class="featured-badge"><i class="fas fa-star"></i> مميز</span>' : ''}
+                        <div class="material-header">
+                            <span class="material-code">${m.code}</span>
+                            <span class="material-icon"><i class="fas ${m.icon || 'fa-book'}"></i></span>
+                        </div>
+                        <div class="material-title">${m.title}</div>
+                        <div class="material-instructor">
+                            <i class="fas fa-user-graduate"></i> ${m.instructor}
+                        </div>
+                        <div class="material-desc">${m.description || 'لا يوجد وصف'}</div>
+                        <span class="university-tag"><i class="fas fa-university"></i> ${uni ? uni.name : 'جامعة'}</span>
+                        <div class="material-footer">
+                            <div class="material-stats">
+                                <span><i class="fas fa-video"></i> ${m.videos || 0}</span>
+                                ${!isSubscribed ? `<span class="material-price"><i class="fas fa-tag"></i> ${price} ريال</span>` : ''}
+                            </div>
+                            ${isSubscribed ? `
+                                <button class="btn-open-material" onclick="openMaterialContent('${m._id}')">
+                                    <i class="fas fa-play"></i> فتح المادة
+                                </button>
+                            ` : `
+                                <button class="btn-subscribe" onclick="openSubscription('${m._id}', 'material')">
+                                    <i class="fas fa-play"></i> اشتراك
+                                </button>
+                            `}
+                        </div>
+                        ${isSubscribed ? '<div class="subscribed-badge"><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> مشترك</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+
+            document.querySelector('.materials-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // 15. فتح صفحة الاشتراك
+        // ============================================================
+        function openSubscription(id, type) {
+            let title = '';
+            let code = '';
+            let instructor = '';
+            let university = '';
+            let description = '';
+            let price = '99';
+
+            if (type === 'material') {
+                const material = materials.find(m => m._id === id);
+                if (material) {
+                    title = material.title;
+                    code = material.code;
+                    instructor = material.instructor;
+                    const uni = universities.find(u => u._id === material.universityId);
+                    university = uni ? uni.name : 'جامعة';
+                    description = material.description || '';
+                    price = material.price || 99;
+                }
+            } else if (type === 'summary') {
+                const summary = summaries.find(s => s._id === id);
+                if (summary) {
+                    title = summary.title;
+                    description = `ملخص شامل لمادة ${summary.subject}`;
+                    university = summary.subject;
+                    price = summary.price || 49;
+                }
+            }
+
+            const encodedTitle = encodeURIComponent(title);
+            const encodedCode = encodeURIComponent(code || '');
+            const encodedInstructor = encodeURIComponent(instructor);
+            const encodedUniversity = encodeURIComponent(university);
+            const encodedDescription = encodeURIComponent(description);
+
+            window.location.href =
+                `subscription.html?id=${id}&type=${type}&title=${encodedTitle}&code=${encodedCode}&instructor=${encodedInstructor}&university=${encodedUniversity}&description=${encodedDescription}&price=${price}`;
+        }
+
+        // ============================================================
+        // 16. تبديل الوضع (Dark/Light)
+        // ============================================================
+        let isDark = false;
+
+        function toggleTheme() {
+            isDark = !isDark;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('theme') === 'dark') {
+            isDark = true;
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+        }
+
+        // ============================================================
+        // 17. زر العودة للأعلى
+        // ============================================================
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 500) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        // ============================================================
+        // 18. تفعيل AOS
+        // ============================================================
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 600,
+                once: true,
+                offset: 50
+            });
+        }
+
+        // ============================================================
+        // 19. التشغيل الابتدائي - جلب جميع البيانات بالترتيب الصحيح
+        // ============================================================
+        async function init() {
+            console.log('🚀 بدء تحميل صفحة الشروحات...');
+
+            // ✅ جلب البيانات بالترتيب الصحيح
+            await fetchUniversities();
+            await fetchMaterials();
+            await fetchSummaries();
+
+            // ✅ جلب اشتراكات المستخدم بعد تحميل المواد
+            await fetchUserSubscriptions();
+
+            // ✅ إعادة عرض المواد بعد جلب الاشتراكات
+            renderMaterials(currentMaterialTab);
+
+            console.log('📚 تم تحميل صفحة الشروحات بنجاح!');
+            console.log('🏛️ عدد الجامعات:', universities.length);
+            console.log('📚 عدد المواد:', materials.length);
+            console.log('📄 عدد الملخصات:', summaries.length);
+            console.log('📋 عدد الاشتراكات:', userSubscriptions.length);
+            
+            isDataLoaded = true;
+        }
+
+        // ============================================================
+        // 20. زر اختبار سريع للتأكد من عمل الاشتراكات
+        // ============================================================
+        function testSubscription() {
+            console.log('🧪 اختبار الاشتراكات...');
+            console.log('📋 الاشتراكات:', userSubscriptions);
+            console.log('📚 المواد:', materials);
+
+            const subscribedIds = userSubscriptions
+                .filter(sub => sub.status === 'active')
+                .map(sub => String(sub.materialId));
+
+            console.log('🔑 معرفات المواد المشترك فيها:', subscribedIds);
+
+            const firstSubscribed = materials.find(m =>
+                subscribedIds.includes(String(m._id))
+            );
+
+            if (firstSubscribed) {
+                console.log('✅ تم العثور على مادة مشترك فيها:', firstSubscribed);
+                showAlert(`✅ فتح المادة: ${firstSubscribed.title}`, 'success');
+                openMaterialContent(firstSubscribed._id);
+            } else {
+                console.log('❌ لا توجد مواد مشترك فيها');
+                showAlert('❌ لا توجد مواد مشترك فيها. تأكد من أن المدير قام بتفعيل الاشتراك.', 'danger');
+            }
+        }
+
+        // بدء التطبيق
+        init();
+
+        // إضافة زر اختبار في console
+        console.log('🧪 للاختبار: اكتب testSubscription() في console');
+// ============================================================
+// فتح صفحة تفاصيل المادة
+// ============================================================
+function openMaterialDetail(materialId) {
+    const material = materials.find(m => m._id === materialId);
+    if (!material) {
+        showAlert('❌ المادة غير موجودة', 'danger');
+        return;
+    }
+
+    // بناء الرابط مع بيانات المادة
+    const encodedTitle = encodeURIComponent(material.title);
+    const encodedCode = encodeURIComponent(material.code || '');
+    const encodedInstructor = encodeURIComponent(material.instructor || '');
+    const encodedDescription = encodeURIComponent(material.description || '');
+    const uni = universities.find(u => u._id === material.universityId);
+    const encodedUniversity = encodeURIComponent(uni ? uni.name : '');
+
+    window.location.href = `material-detail.html?id=${material._id}&title=${encodedTitle}&code=${encodedCode}&instructor=${encodedInstructor}&description=${encodedDescription}&university=${encodedUniversity}`;
+}
+    </script>
+
+</body>
+</html>
