@@ -1,0 +1,2 @@
+### جلب جميع النماذج
+GET http://localhost:5000/api/models
