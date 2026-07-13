@@ -441,7 +441,7 @@ admin-experts.html
             btn.disabled = true;
 
             try {
-                const response = await fetch('https://irteqa-eduhub.onrender.com/api/auth/register', {
+                const response = await fetch('https://irteqa.onrender.com/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${currentToken}`,
@@ -490,7 +490,7 @@ admin-experts.html
             `;
 
             try {
-                const response = await fetch('https://irteqa-eduhub.onrender.com/api/users/experts', {
+                const response = await fetch('https://irteqa.onrender.com/api/users/experts', {
                     headers: {
                         'Authorization': `Bearer ${currentToken}`
                     }

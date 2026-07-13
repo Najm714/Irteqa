@@ -4354,7 +4354,7 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const API_URL = window.location.hostname === 'localhost' 
                     ? 'http://localhost:5000' 
-                    : 'https://irteqa-eduhub.onrender.com';
+                    : 'https://irteqa.onrender.com';
 
                 const response = await fetch(`${API_URL}/api/auth/login`, {
                     method: 'POST',
@@ -4431,7 +4431,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     try {
         const API_URL = window.location.hostname === 'localhost' 
             ? 'http://localhost:5000' 
-            : 'https://irteqa-eduhub.onrender.com';
+            : 'https://irteqa.onrender.com';
 
         // ✅ إرسال role = 'user' فقط
         const response = await fetch(`${API_URL}/api/auth/register`, {

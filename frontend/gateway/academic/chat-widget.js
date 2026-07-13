@@ -12,7 +12,7 @@
     const CONFIG = {
         apiUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
             ? 'http://localhost:5000/api' 
-            : 'https://irteqa-eduhub.onrender.com/api',
+            : 'https://irteqa.onrender.com/api',
         maxFileSize: 20 * 1024 * 1024,
         allowedFileTypes: [
             'image/jpeg', 'image/png', 'image/gif', 'image/webp',

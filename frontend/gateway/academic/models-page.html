@@ -1712,7 +1712,7 @@
                 const fileData = event.target.result;
 
                 try {
-                    const response = await fetch('https://irteqa-eduhub.onrender.com/api/models', {
+                    const response = await fetch('https://irteqa.onrender.com/api/models', {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${currentToken}`,
@@ -1766,7 +1766,7 @@
 
             try {
                 console.log('🔄 جاري جلب النماذج...');
-                const response = await fetch('https://irteqa-eduhub.onrender.com/api/models');
+                const response = await fetch('https://irteqa.onrender.com/api/models');
                 const data = await response.json();
                 console.log('📦 الرد من الخادم:', data);
 
@@ -1894,7 +1894,7 @@
             }
 
             try {
-                const response = await fetch(`https://irteqa-eduhub.onrender.com/api/models/${id}`);
+                const response = await fetch(`https://irteqa.onrender.com/api/models/${id}`);
                 const data = await response.json();
 
                 if (data.success && data.data.fileData) {
@@ -1917,7 +1917,7 @@
         // ============================================================
         async function viewModel(id) {
             try {
-                const response = await fetch(`https://irteqa-eduhub.onrender.com/api/models/${id}`);
+                const response = await fetch(`https://irteqa.onrender.com/api/models/${id}`);
                 const data = await response.json();
 
                 if (data.success && data.data.fileData) {
@@ -1943,7 +1943,7 @@
             if (!confirm('⚠️ هل أنت متأكد من حذف هذا النموذج؟')) return;
 
             try {
-                const response = await fetch(`https://irteqa-eduhub.onrender.com/api/models/${id}`, {
+                const response = await fetch(`https://irteqa.onrender.com/api/models/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${currentToken}`
