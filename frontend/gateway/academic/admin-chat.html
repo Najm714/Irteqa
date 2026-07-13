@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دردشة المدير - منصة ارتقاء</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-light: #8B5CF6;
+            --secondary: #EC4899;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --danger: #EF4444;
+            --dark: #0F172A;
+            --dark-light: #1E293B;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --white: #FFFFFF;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.2);
+            --radius: 20px;
+            --bg-body: #F1F5F9;
+            --bg-card: #FFFFFF;
+            --text-color: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --gradient-main: linear-gradient(135deg, #7C3AED, #EC4899);
+            --gradient-success: linear-gradient(135deg, #10B981, #059669);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0F172A;
+            --bg-card: #1E293B;
+            --text-color: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg-body); color: var(--text-color); transition: all 0.3s; height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; height: 100%; }
+
+        /* ============================================================
+           الهيدر
+           ============================================================ */
+        .header {
+            background: var(--bg-card);
+            box-shadow: var(--shadow);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-color);
+        }
+        .logo i { font-size: 2rem; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo span { background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .admin-badge { background: var(--primary); color: #fff; padding: 4px 16px; border-radius: 50px; font-weight: 600; font-size: 0.75rem; }
+        .back-link { color: var(--primary); text-decoration: none; padding: 6px 16px; border-radius: 50px; border: 2px solid var(--primary); transition: all 0.3s; font-size: 0.85rem; }
+        .back-link:hover { background: var(--gradient-main); color: #fff; }
+
+        /* ============================================================
+           صفحة الدردشة
+           ============================================================ */
+        .chat-page {
+            display: flex;
+            height: calc(100vh - 80px);
+            padding: 15px 0;
+            gap: 15px;
+        }
+
+        /* ============================================================
+           قائمة العملاء (الجانب الأيمن)
+           ============================================================ */
+        .clients-sidebar {
+            width: 320px;
+            min-width: 260px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .clients-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .clients-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .clients-header h3 i { color: var(--primary); }
+        .clients-header .badge {
+            background: var(--gradient-main);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .clients-search {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .clients-search input {
+            width: 100%;
+            padding: 8px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-color);
+            outline: none;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+        .clients-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+
+        .clients-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+        .clients-list::-webkit-scrollbar { width: 4px; }
+        .clients-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .client-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-right: 3px solid transparent;
+        }
+        .client-item:hover { background: rgba(124,58,237,0.05); }
+        .client-item.active {
+            background: rgba(124,58,237,0.08);
+            border-right-color: var(--primary);
+        }
+        .client-item .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .client-item .avatar .online-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 2px solid var(--bg-card);
+        }
+        .client-item .avatar .offline-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: #94A3B8;
+            border-radius: 50%;
+            border: 2px solid var(--bg-card);
+        }
+        .client-item .info { flex: 1; min-width: 0; }
+        .client-item .info .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .client-item .info .name .time { font-size: 0.6rem; font-weight: 400; color: var(--text-muted); }
+        .client-item .info .last-msg {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .client-item .unread {
+            min-width: 20px;
+            height: 20px;
+            background: var(--danger);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.55rem;
+            font-weight: 700;
+            padding: 0 5px;
+        }
+
+        .clients-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .clients-empty i { font-size: 3rem; color: var(--border-color); display: block; margin-bottom: 10px; }
+
+        /* ============================================================
+           منطقة الدردشة الرئيسية
+           ============================================================ */
+        .chat-main {
+            flex: 1;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-main-header {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            flex-shrink: 0;
+        }
+        .chat-main-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .chat-main-header .user-info .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+        .chat-main-header .user-info .details .name { font-weight: 700; font-size: 0.95rem; }
+        .chat-main-header .user-info .details .status { font-size: 0.65rem; color: var(--text-muted); }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--bg-body);
+        }
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .message {
+            max-width: 75%;
+            padding: 10px 16px;
+            border-radius: 16px;
+            animation: slideIn 0.3s ease;
+            line-height: 1.6;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.sent {
+            align-self: flex-end;
+            background: var(--gradient-main);
+            color: #fff;
+            border-bottom-left-radius: 4px;
+        }
+        .message.received {
+            align-self: flex-start;
+            background: var(--bg-card);
+            color: var(--text-color);
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .message .msg-text { font-size: 0.9rem; }
+        .message .msg-time { font-size: 0.5rem; opacity: 0.6; display: block; margin-top: 4px; text-align: left; direction: ltr; }
+
+        .message .msg-image {
+            max-width: 200px;
+            border-radius: 10px;
+            margin-top: 6px;
+            cursor: pointer;
+        }
+        .message .msg-file {
+            margin-top: 6px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .message .msg-file:hover { background: rgba(255,255,255,0.15); }
+        .message .msg-file i { font-size: 1.5rem; }
+        .message .msg-file .file-name { font-size: 0.8rem; font-weight: 600; }
+
+        .no-chat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 40px;
+        }
+        .no-chat i { font-size: 4rem; color: var(--border-color); margin-bottom: 15px; }
+
+        /* ============================================================
+           منطقة الإدخال
+           ============================================================ */
+        .chat-input-area {
+            padding: 10px 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            flex-shrink: 0;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+            background: var(--bg-body);
+            color: var(--text-color);
+            outline: none;
+            transition: all 0.3s;
+        }
+        .chat-input-area input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+        .chat-input-area .send-btn {
+            background: var(--gradient-main);
+            border: none;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-input-area .send-btn:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(124,58,237,0.3); }
+        .chat-input-area .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .chat-input-area .attach-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .chat-input-area .attach-btn:hover { background: rgba(124,58,237,0.08); color: var(--primary); }
+
+        @media (max-width: 768px) {
+            .clients-sidebar { width: 100%; min-width: unset; max-height: 220px; }
+            .chat-page { flex-direction: column; height: auto; }
+            .chat-main { height: 500px; }
+            .message { max-width: 90%; }
+            .clients-search input { font-size: 0.8rem; padding: 6px 12px; }
+            .client-item { padding: 8px 12px; }
+            .client-item .avatar { width: 34px; height: 34px; font-size: 0.8rem; }
+            .chat-messages { padding: 12px; }
+        }
+        @media (max-width: 480px) {
+            .chat-main { height: 400px; }
+            .message { padding: 8px 12px; font-size: 0.85rem; }
+            .chat-input-area { padding: 8px 12px; flex-wrap: wrap; }
+            .chat-input-area input { font-size: 0.8rem; padding: 8px 12px; min-width: 100px; }
+            .chat-input-area .send-btn { width: 38px; height: 38px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== الهيدر ====== -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                منصة <span>ارتقاء</span>
+            </a>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                <span class="admin-badge"><i class="fas fa-user-shield"></i> المدير</span>
+                <a href="admin-dashboard.html" class="back-link"><i class="fas fa-arrow-right"></i> لوحة التحكم</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== صفحة الدردشة ====== -->
+    <div class="container" style="height: calc(100vh - 70px); padding: 0 20px;">
+        <div class="chat-page">
+
+            <!-- ====== قائمة العملاء ====== -->
+            <div class="clients-sidebar" id="clientsSidebar">
+                <div class="clients-header">
+                    <h3><i class="fas fa-users"></i> العملاء</h3>
+                    <span class="badge" id="clientsCount">0</span>
+                </div>
+                <div class="clients-search">
+                    <input type="text" id="searchClients" placeholder="ابحث عن عميل..." oninput="filterClients()" />
+                </div>
+                <div class="clients-list" id="clientsList">
+                    <div class="clients-empty">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>جاري تحميل العملاء...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== منطقة الدردشة ====== -->
+            <div class="chat-main" id="chatMain">
+                <div class="chat-main-header" id="chatHeader" style="display:none;">
+                    <div class="user-info">
+                        <div class="avatar" id="chatAvatar" style="background: var(--gradient-main);">م</div>
+                        <div class="details">
+                            <div class="name" id="chatUserName">اختر عميلاً</div>
+                            <div class="status" id="chatUserStatus">🟢 متصل</div>
+                        </div>
+                    </div>
+                    <button onclick="refreshChat()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.1rem;">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="no-chat">
+                        <i class="fas fa-comment-dots"></i>
+                        <h3>مرحباً أيها المدير</h3>
+                        <p>اختر عميلاً من القائمة الجانبية لبدء المحادثة</p>
+                    </div>
+                </div>
+
+                <div class="chat-input-area" id="chatInputArea" style="display:none;">
+                    <button class="attach-btn" onclick="document.getElementById('fileInput').click()" title="إرفاق ملف">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <input type="text" id="messageInput" placeholder="اكتب رسالتك..." 
+                           onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendMessage();}" />
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <input type="file" id="fileInput" style="display:none" multiple 
+                           accept=".jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" 
+                           onchange="handleFileUpload(event)" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============================================================
+    الجافا سكريبت
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // الإعدادات
+        // ============================================================
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000/api'
+            : 'https://irteqa.onrender.com/api';
+
+        let clients = [];
+        let currentClientId = null;
+        let messages = [];
+        let pendingFile = null;
+        let ws = null;
+        let isConnected = false;
+
+        // ============================================================
+        // التوكن والمستخدم
+        // ============================================================
+        function getToken() {
+            return localStorage.getItem('token') || '';
+        }
+
+        function getUser() {
+            try {
+                return JSON.parse(localStorage.getItem('user') || 'null');
+            } catch { return null; }
+        }
+
+        // ============================================================
+        // WebSocket الاتصال
+        // ============================================================
+        function connectWebSocket() {
+            const token = getToken();
+            if (!token) return;
+
+            const wsUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'ws://localhost:5000'
+                : 'wss://irteqa.onrender.com';
+
+            ws = new WebSocket(`${wsUrl}?userId=${getUser()?.id || 'admin'}&role=admin&token=${token}`);
+
+            ws.onopen = function() {
+                console.log('✅ WebSocket متصل');
+                isConnected = true;
+            };
+
+            ws.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log('📩 رسالة WebSocket:', data);
+                    handleWSMessage(data);
+                } catch (error) {
+                    console.error('❌ خطأ في معالجة WebSocket:', error);
+                }
+            };
+
+            ws.onclose = function() {
+                console.log('❌ WebSocket غير متصل');
+                isConnected = false;
+                setTimeout(connectWebSocket, 3000);
+            };
+
+            ws.onerror = function(error) {
+                console.error('❌ خطأ في WebSocket:', error);
+            };
+        }
+
+        // ============================================================
+        // معالجة رسائل WebSocket
+        // ============================================================
+        function handleWSMessage(data) {
+            if (data.type === 'new_message') {
+                // رسالة جديدة من عميل
+                if (data.conversationId) {
+                    // تحديث قائمة العملاء
+                    loadClients();
+                    
+                    // إذا كانت هذه المحادثة مفتوحة، عرض الرسالة
+                    if (currentClientId) {
+                        loadMessages(currentClientId);
+                    }
+                }
+            }
+
+            if (data.type === 'reply') {
+                // رد من المدير - تم إرساله بنجاح
+                if (data.message) {
+                    messages.push({
+                        id: data.message.id,
+                        senderId: 'admin',
+                        senderName: 'أنت',
+                        text: data.message.text,
+                        file: data.message.file || null,
+                        createdAt: data.message.createdAt
+                    });
+                    renderMessages();
+                    scrollToBottom();
+                }
+            }
+        }
+
+        // ============================================================
+        // جلب قائمة العملاء
+        // ============================================================
+        async function loadClients() {
+            const token = getToken();
+            if (!token) {
+                document.getElementById('clientsList').innerHTML = `
+                    <div class="clients-empty">
+                        <i class="fas fa-lock"></i>
+                        <p>يرجى تسجيل الدخول</p>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat/clients`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error(`خطأ ${response.status}`);
+
+                const data = await response.json();
+                if (data.success) {
+                    clients = data.data || [];
+                    renderClients();
+                }
+            } catch (error) {
+                console.error('❌ فشل جلب العملاء:', error);
+                document.getElementById('clientsList').innerHTML = `
+                    <div class="clients-empty">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>فشل تحميل العملاء</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ============================================================
+        // عرض العملاء
+        // ============================================================
+        function renderClients() {
+            const list = document.getElementById('clientsList');
+            const count = document.getElementById('clientsCount');
+            const search = document.getElementById('searchClients').value.toLowerCase();
+
+            let filtered = clients.filter(c => 
+                c.name.toLowerCase().includes(search) || 
+                c.email.toLowerCase().includes(search)
+            );
+
+            count.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                list.innerHTML = `
+                    <div class="clients-empty">
+                        <i class="fas fa-users-slash"></i>
+                        <p>${search ? 'لا توجد نتائج مطابقة' : 'لا يوجد عملاء مسجلين'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = '';
+            filtered.forEach(client => {
+                const div = document.createElement('div');
+                div.className = `client-item ${client.id === currentClientId ? 'active' : ''}`;
+                div.onclick = () => openChat(client.id);
+
+                const lastMsg = client.lastMessage || 'لا توجد رسائل';
+                const time = client.lastMessageTime ? new Date(client.lastMessageTime).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) : '';
+
+                div.innerHTML = `
+                    <div class="avatar" style="background: linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')});">
+                        ${client.avatar || client.name.charAt(0)}
+                        <div class="${client.isActive ? 'online-dot' : 'offline-dot'}"></div>
+                    </div>
+                    <div class="info">
+                        <div class="name">
+                            ${client.name}
+                            <span class="time">${time}</span>
+                        </div>
+                        <div class="last-msg">${lastMsg}</div>
+                    </div>
+                    ${client.unreadCount > 0 ? `<div class="unread">${client.unreadCount}</div>` : ''}
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // ============================================================
+        // فلترة العملاء
+        // ============================================================
+        function filterClients() {
+            renderClients();
+        }
+
+        // ============================================================
+        // فتح محادثة مع عميل
+        // ============================================================
+        async function openChat(clientId) {
+            currentClientId = clientId;
+            
+            // تحديث القائمة
+            renderClients();
+
+            // تحديث رأس الدردشة
+            const client = clients.find(c => c.id === clientId);
+            if (client) {
+                document.getElementById('chatHeader').style.display = 'flex';
+                document.getElementById('chatInputArea').style.display = 'flex';
+                
+                const avatar = document.getElementById('chatAvatar');
+                avatar.textContent = client.avatar || client.name.charAt(0);
+                avatar.style.background = `linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')})`;
+                
+                document.getElementById('chatUserName').textContent = client.name;
+                document.getElementById('chatUserStatus').textContent = client.isActive ? '🟢 متصل' : '🔴 غير متصل';
+            }
+
+            // تحميل الرسائل
+            await loadMessages(clientId);
+        }
+
+        // ============================================================
+        // تحميل رسائل العميل
+        // ============================================================
+        async function loadMessages(clientId) {
+            const token = getToken();
+            if (!token) return;
+
+            try {
+                // البحث عن محادثة مع هذا العميل
+                const client = clients.find(c => c.id === clientId);
+                let conversationId = client?.conversationId;
+
+                // إذا لم توجد محادثة، ننشئ واحدة
+                if (!conversationId) {
+                    const response = await fetch(`${API_BASE_URL}/chat/conversations`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ userId: clientId, userRole: 'client' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        conversationId = data.data._id;
+                        // تحديث قائمة العملاء
+                        loadClients();
+                    }
+                }
+
+                if (conversationId) {
+                    const response = await fetch(`${API_BASE_URL}/chat/conversations/${conversationId}/messages`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        messages = data.data || [];
+                        renderMessages();
+                        scrollToBottom();
+                    }
+                }
+            } catch (error) {
+                console.error('❌ فشل تحميل الرسائل:', error);
+            }
+        }
+
+        // ============================================================
+        // عرض الرسائل
+        // ============================================================
+        function renderMessages() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div class="no-chat">
+                        <i class="fas fa-comment-dots"></i>
+                        <h3>لا توجد رسائل</h3>
+                        <p>ابدأ المحادثة الآن</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const userId = getUser()?.id;
+            messages.forEach(msg => {
+                const isOwn = msg.senderId === userId || msg.senderId === 'admin';
+                const div = document.createElement('div');
+                div.className = `message ${isOwn ? 'sent' : 'received'}`;
+
+                let content = `<div class="msg-text">${msg.text || ''}</div>`;
+
+                if (msg.file) {
+                    if (msg.file.type && msg.file.type.startsWith('image/')) {
+                        const fileUrl = msg.file.path || msg.file.data || '';
+                        content += `<img src="${fileUrl}" class="msg-image" onclick="window.open('${fileUrl}')" />`;
+                    } else {
+                        const fileUrl = msg.file.path || msg.file.data || '';
+                        content += `
+                            <div class="msg-file" onclick="window.open('${fileUrl}', '_blank')">
+                                <i class="fas fa-file"></i>
+                                <span class="file-name">${msg.file.name || 'ملف'}</span>
+                            </div>
+                        `;
+                    }
+                }
+
+                const time = msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) : '';
+                content += `<span class="msg-time">${time}</span>`;
+                div.innerHTML = content;
+                container.appendChild(div);
+            });
+        }
+
+        // ============================================================
+        // إرسال رسالة
+        // ============================================================
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text && !pendingFile) return;
+
+            const token = getToken();
+            if (!token) {
+                showToast('❌ يرجى تسجيل الدخول', 'error');
+                return;
+            }
+
+            if (!currentClientId) {
+                showToast('❌ اختر عميلاً أولاً', 'error');
+                return;
+            }
+
+            // البحث عن المحادثة أو إنشاؤها
+            const client = clients.find(c => c.id === currentClientId);
+            let conversationId = client?.conversationId;
+
+            if (!conversationId) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/chat/conversations`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ userId: currentClientId, userRole: 'client' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        conversationId = data.data._id;
+                        loadClients();
+                    }
+                } catch (error) {
+                    console.error('❌ فشل إنشاء المحادثة:', error);
+                    showToast('❌ فشل إنشاء المحادثة', 'error');
+                    return;
+                }
+            }
+
+            if (!conversationId) {
+                showToast('❌ لا يمكن إنشاء المحادثة', 'error');
+                return;
+            }
+
+            let fileData = null;
+            if (pendingFile) {
+                fileData = {
+                    name: pendingFile.name,
+                    type: pendingFile.type,
+                    size: pendingFile.size,
+                    data: pendingFile.data
+                };
+            }
+
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        conversationId: conversationId,
+                        text: text || '📎 ملف مرفق',
+                        file: fileData
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // إضافة الرسالة محلياً
+                    messages.push({
+                        id: result.data.id,
+                        senderId: 'admin',
+                        senderName: 'أنت',
+                        text: result.data.text,
+                        file: result.data.file || null,
+                        createdAt: result.data.createdAt
+                    });
+                    renderMessages();
+                    scrollToBottom();
+
+                    pendingFile = null;
+                    input.value = '';
+                    document.getElementById('sendBtn').disabled = true;
+
+                    // تحديث قائمة العملاء
+                    loadClients();
+
+                    // إرسال عبر WebSocket
+                    if (ws && isConnected) {
+                        ws.send(JSON.stringify({
+                            type: 'reply',
+                            userId: currentClientId,
+                            message: result.data
+                        }));
+                    }
+
+                    showToast('✅ تم إرسال الرسالة', 'success');
+                } else {
+                    showToast(`❌ ${result.message || 'فشل الإرسال'}`, 'error');
+                }
+            } catch (error) {
+                console.error('❌ فشل إرسال الرسالة:', error);
+                showToast('❌ فشل إرسال الرسالة', 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+            }
+        }
+
+        // ============================================================
+        // معالجة رفع الملفات
+        // ============================================================
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            const file = files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                pendingFile = {
+                    name: file.name,
+                    type: file.type || 'application/octet-stream',
+                    size: file.size,
+                    data: e.target.result
+                };
+
+                document.getElementById('messageInput').value = `📎 ${file.name}`;
+                document.getElementById('messageInput').focus();
+                document.getElementById('sendBtn').disabled = false;
+                showToast(`✅ تم رفع الملف: ${file.name}`, 'success');
+            };
+
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        // ============================================================
+        // تحديث الدردشة
+        // ============================================================
+        function refreshChat() {
+            if (currentClientId) {
+                loadMessages(currentClientId);
+                loadClients();
+                showToast('🔄 تم تحديث الدردشة', 'info');
+            }
+        }
+
+        // ============================================================
+        // التمرير للأسفل
+        // ============================================================
+        function scrollToBottom() {
+            setTimeout(() => {
+                const container = document.getElementById('chatMessages');
+                container.scrollTop = container.scrollHeight;
+            }, 100);
+        }
+
+        // ============================================================
+        // Toast
+        // ============================================================
+        function showToast(message, type = 'success') {
+            const existing = document.querySelector('.chat-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'chat-toast';
+            toast.textContent = message;
+            const colors = {
+                success: 'linear-gradient(135deg, #10B981, #059669)',
+                error: 'linear-gradient(135deg, #EF4444, #DC2626)',
+                info: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+                warning: 'linear-gradient(135deg, #F59E0B, #D97706)'
+            };
+            Object.assign(toast.style, {
+                position: 'fixed',
+                bottom: '100px',
+                right: '30px',
+                padding: '10px 20px',
+                borderRadius: '12px',
+                color: '#fff',
+                fontWeight: '600',
+                zIndex: '9999',
+                fontFamily: "'Cairo', sans-serif",
+                fontSize: '0.85rem',
+                background: colors[type] || colors.info,
+                boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+                maxWidth: '350px',
+                direction: 'rtl'
+            });
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                toast.style.transition = 'all 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // ============================================================
+        // التحكم في زر الإرسال
+        // ============================================================
+        document.getElementById('messageInput').addEventListener('input', function() {
+            document.getElementById('sendBtn').disabled = !this.value.trim() && !pendingFile;
+        });
+
+        // ============================================================
+        // بدء التشغيل
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = getUser();
+            if (!user || user.role !== 'admin') {
+                document.getElementById('clientsList').innerHTML = `
+                    <div class="clients-empty">
+                        <i class="fas fa-lock"></i>
+                        <p>يجب تسجيل الدخول كمدير</p>
+                        <a href="login.html" style="color:var(--primary);text-decoration:none;font-weight:600;">تسجيل الدخول</a>
+                    </div>
+                `;
+                return;
+            }
+
+            loadClients();
+            connectWebSocket();
+
+            // تحديث تلقائي كل 10 ثوانٍ
+            setInterval(() => {
+                if (!document.hidden) {
+                    loadClients();
+                    if (currentClientId) {
+                        loadMessages(currentClientId);
+                    }
+                }
+            }, 10000);
+
+            console.log('👔 دردشة المدير - منصة ارتقاء');
+        });
+    </script>
+</body>
+</html>

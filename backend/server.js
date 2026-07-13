@@ -582,6 +582,65 @@ app.post('/api/chat/messages', protect, async (req, res) => {
         });
     }
 });
+// ============================================================
+// ✅ جلب قائمة العملاء للمدير
+// ============================================================
+app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
+    try {
+        // جلب جميع المستخدمين الذين دورهم 'client'
+        const clients = await User.find({ 
+            role: 'client',
+            isActive: true 
+        })
+        .select('_id name email avatar isActive createdAt')
+        .sort({ name: 1 });
+
+        // جلب آخر رسالة لكل عميل
+        const clientsWithLastMessage = await Promise.all(clients.map(async (client) => {
+            // البحث عن آخر محادثة بين المدير وهذا العميل
+            const conversation = await Conversation.findOne({
+                participants: { $all: [req.user.id, client._id] }
+            })
+            .populate('lastMessage')
+            .sort({ updatedAt: -1 });
+
+            const lastMessage = conversation?.lastMessage?.text || 'لا توجد رسائل';
+            const lastMessageTime = conversation?.lastMessage?.createdAt || conversation?.updatedAt || null;
+            const unreadCount = conversation?.unreadCount || 0;
+
+            return {
+                id: client._id,
+                name: client.name,
+                email: client.email,
+                avatar: client.avatar || client.name.charAt(0),
+                isActive: client.isActive,
+                lastMessage: lastMessage,
+                lastMessageTime: lastMessageTime,
+                unreadCount: unreadCount,
+                conversationId: conversation?._id || null
+            };
+        }));
+
+        // ترتيب حسب آخر رسالة (الأحدث أولاً)
+        clientsWithLastMessage.sort((a, b) => {
+            if (!a.lastMessageTime) return 1;
+            if (!b.lastMessageTime) return -1;
+            return new Date(b.lastMessageTime) - new Date(a.lastMessageTime);
+        });
+
+        res.status(200).json({
+            success: true,
+            data: clientsWithLastMessage
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في جلب العملاء:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
 
 // ============================================================
 // ============================================================
