@@ -101,6 +101,11 @@ app.use('/uploads/business-orders', express.static(businessOrdersDir));
 app.use('/uploads/chat-files', express.static(chatFilesDir));
 
 
+console.log('✅ تم تهيئة خدمة الملفات الثابتة للمجلدات:');
+console.log(`  - /uploads`);
+console.log(`  - /uploads/chat-files`);
+console.log(`  - /uploads/videos`);
+
 // ============================================================
 // مسار مباشر للفيديوهات (حل بديل)
 // ============================================================
