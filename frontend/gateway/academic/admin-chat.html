@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
     <style>
+        /* ============================================================
+           المتغيرات
+           ============================================================ */
         :root {
             --primary: #7C3AED;
             --primary-light: #8B5CF6;
@@ -29,6 +32,8 @@
             --border-color: #E2E8F0;
             --gradient-main: linear-gradient(135deg, #7C3AED, #EC4899);
             --gradient-success: linear-gradient(135deg, #10B981, #059669);
+            --gradient-client: linear-gradient(135deg, #7C3AED, #EC4899);
+            --gradient-expert: linear-gradient(135deg, #F59E0B, #D97706);
         }
 
         [data-theme="dark"] {
@@ -90,11 +95,11 @@
         }
 
         /* ============================================================
-           قائمة العملاء (الجانب الأيمن)
+           قائمة المستخدمين (الجانب الأيمن)
            ============================================================ */
-        .clients-sidebar {
-            width: 320px;
-            min-width: 260px;
+        .users-sidebar {
+            width: 340px;
+            min-width: 270px;
             background: var(--bg-card);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -104,22 +109,22 @@
             overflow: hidden;
         }
 
-        .clients-header {
+        .users-header {
             padding: 15px 20px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .clients-header h3 {
+        .users-header h3 {
             font-size: 1.1rem;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .clients-header h3 i { color: var(--primary); }
-        .clients-header .badge {
+        .users-header h3 i { color: var(--primary); }
+        .users-header .badge {
             background: var(--gradient-main);
             color: #fff;
             padding: 2px 10px;
@@ -128,11 +133,47 @@
             font-weight: 700;
         }
 
-        .clients-search {
-            padding: 12px 18px;
+        /* ✅ فلاتر الأدوار */
+        .role-filters {
+            display: flex;
+            gap: 8px;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        .role-filters .filter-btn {
+            padding: 4px 14px;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .role-filters .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .role-filters .filter-btn.active {
+            background: var(--gradient-main);
+            color: #fff;
+            border-color: transparent;
+        }
+        .role-filters .filter-btn.client.active {
+            background: var(--gradient-client);
+        }
+        .role-filters .filter-btn.expert.active {
+            background: var(--gradient-expert);
+        }
+
+        .users-search {
+            padding: 10px 16px;
             border-bottom: 1px solid var(--border-color);
         }
-        .clients-search input {
+        .users-search input {
             width: 100%;
             padding: 8px 14px;
             border: 2px solid var(--border-color);
@@ -144,17 +185,18 @@
             transition: all 0.3s;
             font-size: 0.85rem;
         }
-        .clients-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+        .users-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
 
-        .clients-list {
+        .users-list {
             flex: 1;
             overflow-y: auto;
             padding: 8px 0;
         }
-        .clients-list::-webkit-scrollbar { width: 4px; }
-        .clients-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        .users-list::-webkit-scrollbar { width: 4px; }
+        .users-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
-        .client-item {
+        /* ✅ عنصر المستخدم */
+        .user-item {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -163,12 +205,12 @@
             transition: all 0.3s;
             border-right: 3px solid transparent;
         }
-        .client-item:hover { background: rgba(124,58,237,0.05); }
-        .client-item.active {
+        .user-item:hover { background: rgba(124,58,237,0.05); }
+        .user-item.active {
             background: rgba(124,58,237,0.08);
             border-right-color: var(--primary);
         }
-        .client-item .avatar {
+        .user-item .avatar {
             width: 42px;
             height: 42px;
             border-radius: 50%;
@@ -181,7 +223,7 @@
             flex-shrink: 0;
             position: relative;
         }
-        .client-item .avatar .online-dot {
+        .user-item .avatar .online-dot {
             position: absolute;
             bottom: 0;
             right: 0;
@@ -191,7 +233,7 @@
             border-radius: 50%;
             border: 2px solid var(--bg-card);
         }
-        .client-item .avatar .offline-dot {
+        .user-item .avatar .offline-dot {
             position: absolute;
             bottom: 0;
             right: 0;
@@ -201,23 +243,38 @@
             border-radius: 50%;
             border: 2px solid var(--bg-card);
         }
-        .client-item .info { flex: 1; min-width: 0; }
-        .client-item .info .name {
+        .user-item .info { flex: 1; min-width: 0; }
+        .user-item .info .name {
             font-weight: 600;
             font-size: 0.9rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .client-item .info .name .time { font-size: 0.6rem; font-weight: 400; color: var(--text-muted); }
-        .client-item .info .last-msg {
+        .user-item .info .name .time { font-size: 0.6rem; font-weight: 400; color: var(--text-muted); }
+        .user-item .info .last-msg {
             font-size: 0.78rem;
             color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .client-item .unread {
+        .user-item .role-badge {
+            font-size: 0.55rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .user-item .role-badge.client {
+            background: rgba(124,58,237,0.12);
+            color: var(--primary);
+        }
+        .user-item .role-badge.expert {
+            background: rgba(245,158,11,0.12);
+            color: var(--accent);
+        }
+        .user-item .unread {
             min-width: 20px;
             height: 20px;
             background: var(--danger);
@@ -231,15 +288,15 @@
             padding: 0 5px;
         }
 
-        .clients-empty {
+        .users-empty {
             text-align: center;
             padding: 40px 20px;
             color: var(--text-muted);
         }
-        .clients-empty i { font-size: 3rem; color: var(--border-color); display: block; margin-bottom: 10px; }
+        .users-empty i { font-size: 3rem; color: var(--border-color); display: block; margin-bottom: 10px; }
 
         /* ============================================================
-           منطقة الدردشة الرئيسية
+           منطقة الدردشة الرئيسية (نفس الكود السابق)
            ============================================================ */
         .chat-main {
             flex: 1;
@@ -279,6 +336,7 @@
         }
         .chat-main-header .user-info .details .name { font-weight: 700; font-size: 0.95rem; }
         .chat-main-header .user-info .details .status { font-size: 0.65rem; color: var(--text-muted); }
+        .chat-main-header .user-info .details .role-label { font-size: 0.6rem; padding: 2px 10px; border-radius: 20px; font-weight: 600; }
 
         .chat-messages {
             flex: 1;
@@ -318,13 +376,7 @@
         }
         .message .msg-text { font-size: 0.9rem; }
         .message .msg-time { font-size: 0.5rem; opacity: 0.6; display: block; margin-top: 4px; text-align: left; direction: ltr; }
-
-        .message .msg-image {
-            max-width: 200px;
-            border-radius: 10px;
-            margin-top: 6px;
-            cursor: pointer;
-        }
+        .message .msg-image { max-width: 200px; border-radius: 10px; margin-top: 6px; cursor: pointer; }
         .message .msg-file {
             margin-top: 6px;
             padding: 8px 12px;
@@ -353,9 +405,6 @@
         }
         .no-chat i { font-size: 4rem; color: var(--border-color); margin-bottom: 15px; }
 
-        /* ============================================================
-           منطقة الإدخال
-           ============================================================ */
         .chat-input-area {
             padding: 10px 16px;
             border-top: 1px solid var(--border-color);
@@ -407,14 +456,12 @@
         .chat-input-area .attach-btn:hover { background: rgba(124,58,237,0.08); color: var(--primary); }
 
         @media (max-width: 768px) {
-            .clients-sidebar { width: 100%; min-width: unset; max-height: 220px; }
+            .users-sidebar { width: 100%; min-width: unset; max-height: 220px; }
             .chat-page { flex-direction: column; height: auto; }
             .chat-main { height: 500px; }
             .message { max-width: 90%; }
-            .clients-search input { font-size: 0.8rem; padding: 6px 12px; }
-            .client-item { padding: 8px 12px; }
-            .client-item .avatar { width: 34px; height: 34px; font-size: 0.8rem; }
-            .chat-messages { padding: 12px; }
+            .role-filters { justify-content: center; }
+            .user-item .role-badge { font-size: 0.5rem; padding: 1px 8px; }
         }
         @media (max-width: 480px) {
             .chat-main { height: 400px; }
@@ -445,31 +492,42 @@
     <div class="container" style="height: calc(100vh - 70px); padding: 0 20px;">
         <div class="chat-page">
 
-            <!-- ====== قائمة العملاء ====== -->
-            <div class="clients-sidebar" id="clientsSidebar">
-                <div class="clients-header">
-                    <h3><i class="fas fa-users"></i> العملاء</h3>
-                    <span class="badge" id="clientsCount">0</span>
+            <!-- ====== قائمة المستخدمين (عملاء + خبراء) ====== -->
+            <div class="users-sidebar" id="usersSidebar">
+                <div class="users-header">
+                    <h3><i class="fas fa-users"></i> المستخدمين</h3>
+                    <span class="badge" id="usersCount">0</span>
                 </div>
-                <div class="clients-search">
-                    <input type="text" id="searchClients" placeholder="ابحث عن عميل..." oninput="filterClients()" />
+                
+                <!-- ✅ فلاتر الأدوار -->
+                <div class="role-filters">
+                    <button class="filter-btn active" data-role="all" onclick="filterByRole('all')">الكل</button>
+                    <button class="filter-btn client" data-role="client" onclick="filterByRole('client')">🟣 عملاء</button>
+                    <button class="filter-btn expert" data-role="expert" onclick="filterByRole('expert')">🟡 خبراء</button>
                 </div>
-                <div class="clients-list" id="clientsList">
-                    <div class="clients-empty">
+
+                <div class="users-search">
+                    <input type="text" id="searchUsers" placeholder="ابحث عن مستخدم..." oninput="filterUsers()" />
+                </div>
+                <div class="users-list" id="usersList">
+                    <div class="users-empty">
                         <i class="fas fa-spinner fa-spin"></i>
-                        <p>جاري تحميل العملاء...</p>
+                        <p>جاري تحميل المستخدمين...</p>
                     </div>
                 </div>
             </div>
 
-            <!-- ====== منطقة الدردشة ====== -->
+            <!-- ====== منطقة الدردشة الرئيسية ====== -->
             <div class="chat-main" id="chatMain">
                 <div class="chat-main-header" id="chatHeader" style="display:none;">
                     <div class="user-info">
                         <div class="avatar" id="chatAvatar" style="background: var(--gradient-main);">م</div>
                         <div class="details">
-                            <div class="name" id="chatUserName">اختر عميلاً</div>
-                            <div class="status" id="chatUserStatus">🟢 متصل</div>
+                            <div class="name" id="chatUserName">اختر مستخدم</div>
+                            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                <span class="status" id="chatUserStatus">🟢 متصل</span>
+                                <span class="role-label" id="chatUserRole" style="background:rgba(124,58,237,0.12); color:var(--primary);">عميل</span>
+                            </div>
                         </div>
                     </div>
                     <button onclick="refreshChat()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.1rem;">
@@ -481,7 +539,10 @@
                     <div class="no-chat">
                         <i class="fas fa-comment-dots"></i>
                         <h3>مرحباً أيها المدير</h3>
-                        <p>اختر عميلاً من القائمة الجانبية لبدء المحادثة</p>
+                        <p>اختر مستخدم من القائمة الجانبية لبدء المحادثة</p>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">
+                            <i class="fas fa-users"></i> عملاء 🟣 | خبراء 🟡
+                        </p>
                     </div>
                 </div>
 
@@ -514,12 +575,13 @@
             ? 'http://localhost:5000/api'
             : 'https://irteqa.onrender.com/api';
 
-        let clients = [];
-        let currentClientId = null;
+        let users = [];
+        let currentUserId = null;
         let messages = [];
         let pendingFile = null;
         let ws = null;
         let isConnected = false;
+        let currentRoleFilter = 'all';
 
         // ============================================================
         // التوكن والمستخدم
@@ -578,20 +640,12 @@
         // ============================================================
         function handleWSMessage(data) {
             if (data.type === 'new_message') {
-                // رسالة جديدة من عميل
-                if (data.conversationId) {
-                    // تحديث قائمة العملاء
-                    loadClients();
-                    
-                    // إذا كانت هذه المحادثة مفتوحة، عرض الرسالة
-                    if (currentClientId) {
-                        loadMessages(currentClientId);
-                    }
+                loadUsers();
+                if (currentUserId) {
+                    loadMessages(currentUserId);
                 }
             }
-
             if (data.type === 'reply') {
-                // رد من المدير - تم إرساله بنجاح
                 if (data.message) {
                     messages.push({
                         id: data.message.id,
@@ -608,13 +662,13 @@
         }
 
         // ============================================================
-        // جلب قائمة العملاء
+        // جلب قائمة المستخدمين (عملاء + خبراء)
         // ============================================================
-        async function loadClients() {
+        async function loadUsers() {
             const token = getToken();
             if (!token) {
-                document.getElementById('clientsList').innerHTML = `
-                    <div class="clients-empty">
+                document.getElementById('usersList').innerHTML = `
+                    <div class="users-empty">
                         <i class="fas fa-lock"></i>
                         <p>يرجى تسجيل الدخول</p>
                     </div>
@@ -631,119 +685,147 @@
 
                 const data = await response.json();
                 if (data.success) {
-                    clients = data.data || [];
-                    renderClients();
+                    users = data.data || [];
+                    renderUsers();
                 }
             } catch (error) {
-                console.error('❌ فشل جلب العملاء:', error);
-                document.getElementById('clientsList').innerHTML = `
-                    <div class="clients-empty">
+                console.error('❌ فشل جلب المستخدمين:', error);
+                document.getElementById('usersList').innerHTML = `
+                    <div class="users-empty">
                         <i class="fas fa-exclamation-circle"></i>
-                        <p>فشل تحميل العملاء</p>
+                        <p>فشل تحميل المستخدمين</p>
                     </div>
                 `;
             }
         }
 
         // ============================================================
-        // عرض العملاء
+        // عرض المستخدمين
         // ============================================================
-        function renderClients() {
-            const list = document.getElementById('clientsList');
-            const count = document.getElementById('clientsCount');
-            const search = document.getElementById('searchClients').value.toLowerCase();
+        function renderUsers() {
+            const list = document.getElementById('usersList');
+            const count = document.getElementById('usersCount');
+            const search = document.getElementById('searchUsers').value.toLowerCase();
 
-            let filtered = clients.filter(c => 
-                c.name.toLowerCase().includes(search) || 
-                c.email.toLowerCase().includes(search)
-            );
+            let filtered = users.filter(u => {
+                const matchSearch = u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search);
+                const matchRole = currentRoleFilter === 'all' || u.role === currentRoleFilter;
+                return matchSearch && matchRole;
+            });
 
             count.textContent = filtered.length;
 
             if (filtered.length === 0) {
                 list.innerHTML = `
-                    <div class="clients-empty">
+                    <div class="users-empty">
                         <i class="fas fa-users-slash"></i>
-                        <p>${search ? 'لا توجد نتائج مطابقة' : 'لا يوجد عملاء مسجلين'}</p>
+                        <p>${search ? 'لا توجد نتائج مطابقة' : 'لا يوجد مستخدمين'}</p>
                     </div>
                 `;
                 return;
             }
 
             list.innerHTML = '';
-            filtered.forEach(client => {
+            filtered.forEach(user => {
                 const div = document.createElement('div');
-                div.className = `client-item ${client.id === currentClientId ? 'active' : ''}`;
-                div.onclick = () => openChat(client.id);
+                div.className = `user-item ${user.id === currentUserId ? 'active' : ''}`;
+                div.onclick = () => openChat(user.id);
 
-                const lastMsg = client.lastMessage || 'لا توجد رسائل';
-                const time = client.lastMessageTime ? new Date(client.lastMessageTime).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) : '';
+                const lastMsg = user.lastMessage || 'لا توجد رسائل';
+                const time = user.lastMessageTime ? new Date(user.lastMessageTime).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) : '';
+
+                const roleColors = {
+                    client: 'client',
+                    expert: 'expert'
+                };
+                const roleLabels = {
+                    client: 'عميل',
+                    expert: 'خبير'
+                };
 
                 div.innerHTML = `
                     <div class="avatar" style="background: linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')});">
-                        ${client.avatar || client.name.charAt(0)}
-                        <div class="${client.isActive ? 'online-dot' : 'offline-dot'}"></div>
+                        ${user.avatar || user.name.charAt(0)}
+                        <div class="${user.isActive ? 'online-dot' : 'offline-dot'}"></div>
                     </div>
                     <div class="info">
                         <div class="name">
-                            ${client.name}
+                            ${user.name}
                             <span class="time">${time}</span>
                         </div>
                         <div class="last-msg">${lastMsg}</div>
                     </div>
-                    ${client.unreadCount > 0 ? `<div class="unread">${client.unreadCount}</div>` : ''}
+                    <span class="role-badge ${roleColors[user.role] || 'client'}">${roleLabels[user.role] || user.role}</span>
+                    ${user.unreadCount > 0 ? `<div class="unread">${user.unreadCount}</div>` : ''}
                 `;
                 list.appendChild(div);
             });
         }
 
         // ============================================================
-        // فلترة العملاء
+        // فلترة حسب الدور
         // ============================================================
-        function filterClients() {
-            renderClients();
+        function filterByRole(role) {
+            currentRoleFilter = role;
+            
+            // تحديث الأزرار
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.role === role);
+            });
+            
+            renderUsers();
         }
 
         // ============================================================
-        // فتح محادثة مع عميل
+        // فلترة حسب البحث
         // ============================================================
-        async function openChat(clientId) {
-            currentClientId = clientId;
-            
-            // تحديث القائمة
-            renderClients();
+        function filterUsers() {
+            renderUsers();
+        }
 
-            // تحديث رأس الدردشة
-            const client = clients.find(c => c.id === clientId);
-            if (client) {
+        // ============================================================
+        // فتح محادثة مع مستخدم
+        // ============================================================
+        async function openChat(userId) {
+            currentUserId = userId;
+            
+            renderUsers();
+
+            const user = users.find(u => u.id === userId);
+            if (user) {
                 document.getElementById('chatHeader').style.display = 'flex';
                 document.getElementById('chatInputArea').style.display = 'flex';
                 
                 const avatar = document.getElementById('chatAvatar');
-                avatar.textContent = client.avatar || client.name.charAt(0);
+                avatar.textContent = user.avatar || user.name.charAt(0);
                 avatar.style.background = `linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')})`;
                 
-                document.getElementById('chatUserName').textContent = client.name;
-                document.getElementById('chatUserStatus').textContent = client.isActive ? '🟢 متصل' : '🔴 غير متصل';
+                document.getElementById('chatUserName').textContent = user.name;
+                document.getElementById('chatUserStatus').textContent = user.isActive ? '🟢 متصل' : '🔴 غير متصل';
+                
+                const roleLabels = { client: 'عميل', expert: 'خبير' };
+                const roleColors = { client: 'rgba(124,58,237,0.12)', expert: 'rgba(245,158,11,0.12)' };
+                const roleTextColors = { client: 'var(--primary)', expert: 'var(--accent)' };
+                const roleEl = document.getElementById('chatUserRole');
+                roleEl.textContent = roleLabels[user.role] || user.role;
+                roleEl.style.background = roleColors[user.role] || roleColors.client;
+                roleEl.style.color = roleTextColors[user.role] || roleTextColors.client;
             }
 
-            // تحميل الرسائل
-            await loadMessages(clientId);
+            await loadMessages(userId);
         }
 
         // ============================================================
-        // تحميل رسائل العميل
+        // تحميل رسائل المستخدم
         // ============================================================
-        async function loadMessages(clientId) {
+        async function loadMessages(userId) {
             const token = getToken();
             if (!token) return;
 
             try {
-                // البحث عن محادثة مع هذا العميل
-                const client = clients.find(c => c.id === clientId);
-                let conversationId = client?.conversationId;
+                const user = users.find(u => u.id === userId);
+                let conversationId = user?.conversationId;
 
-                // إذا لم توجد محادثة، ننشئ واحدة
                 if (!conversationId) {
                     const response = await fetch(`${API_BASE_URL}/chat/conversations`, {
                         method: 'POST',
@@ -751,13 +833,12 @@
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
                         },
-                        body: JSON.stringify({ userId: clientId, userRole: 'client' })
+                        body: JSON.stringify({ userId: userId, userRole: 'client' })
                     });
                     const data = await response.json();
                     if (data.success) {
                         conversationId = data.data._id;
-                        // تحديث قائمة العملاء
-                        loadClients();
+                        loadUsers();
                     }
                 }
 
@@ -839,14 +920,13 @@
                 return;
             }
 
-            if (!currentClientId) {
-                showToast('❌ اختر عميلاً أولاً', 'error');
+            if (!currentUserId) {
+                showToast('❌ اختر مستخدم أولاً', 'error');
                 return;
             }
 
-            // البحث عن المحادثة أو إنشاؤها
-            const client = clients.find(c => c.id === currentClientId);
-            let conversationId = client?.conversationId;
+            const user = users.find(u => u.id === currentUserId);
+            let conversationId = user?.conversationId;
 
             if (!conversationId) {
                 try {
@@ -856,12 +936,12 @@
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
                         },
-                        body: JSON.stringify({ userId: currentClientId, userRole: 'client' })
+                        body: JSON.stringify({ userId: currentUserId, userRole: 'client' })
                     });
                     const data = await response.json();
                     if (data.success) {
                         conversationId = data.data._id;
-                        loadClients();
+                        loadUsers();
                     }
                 } catch (error) {
                     console.error('❌ فشل إنشاء المحادثة:', error);
@@ -906,7 +986,6 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    // إضافة الرسالة محلياً
                     messages.push({
                         id: result.data.id,
                         senderId: 'admin',
@@ -922,14 +1001,12 @@
                     input.value = '';
                     document.getElementById('sendBtn').disabled = true;
 
-                    // تحديث قائمة العملاء
-                    loadClients();
+                    loadUsers();
 
-                    // إرسال عبر WebSocket
                     if (ws && isConnected) {
                         ws.send(JSON.stringify({
                             type: 'reply',
-                            userId: currentClientId,
+                            userId: currentUserId,
                             message: result.data
                         }));
                     }
@@ -979,9 +1056,9 @@
         // تحديث الدردشة
         // ============================================================
         function refreshChat() {
-            if (currentClientId) {
-                loadMessages(currentClientId);
-                loadClients();
+            if (currentUserId) {
+                loadMessages(currentUserId);
+                loadUsers();
                 showToast('🔄 تم تحديث الدردشة', 'info');
             }
         }
@@ -1050,8 +1127,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             const user = getUser();
             if (!user || user.role !== 'admin') {
-                document.getElementById('clientsList').innerHTML = `
-                    <div class="clients-empty">
+                document.getElementById('usersList').innerHTML = `
+                    <div class="users-empty">
                         <i class="fas fa-lock"></i>
                         <p>يجب تسجيل الدخول كمدير</p>
                         <a href="login.html" style="color:var(--primary);text-decoration:none;font-weight:600;">تسجيل الدخول</a>
@@ -1060,20 +1137,20 @@
                 return;
             }
 
-            loadClients();
+            loadUsers();
             connectWebSocket();
 
-            // تحديث تلقائي كل 10 ثوانٍ
             setInterval(() => {
                 if (!document.hidden) {
-                    loadClients();
-                    if (currentClientId) {
-                        loadMessages(currentClientId);
+                    loadUsers();
+                    if (currentUserId) {
+                        loadMessages(currentUserId);
                     }
                 }
             }, 10000);
 
             console.log('👔 دردشة المدير - منصة ارتقاء');
+            console.log('📋 عرض العملاء والخبراء معاً');
         });
     </script>
 </body>

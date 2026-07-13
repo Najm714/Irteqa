@@ -583,23 +583,27 @@ app.post('/api/chat/messages', protect, async (req, res) => {
     }
 });
 // ============================================================
-// ✅ جلب قائمة العملاء للمدير
+// ✅ جلب قائمة العملاء والخبراء للمدير
 // ============================================================
 app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
     try {
-        // جلب جميع المستخدمين الذين دورهم 'client'
-        const clients = await User.find({ 
-            role: 'client',
+        console.log('📋 جلب المستخدمين للمدير:', req.user.id);
+
+        // ✅ جلب جميع المستخدمين الذين دورهم 'client' أو 'expert'
+        const users = await User.find({ 
+            role: { $in: ['client', 'expert'] },
             isActive: true 
         })
-        .select('_id name email avatar isActive createdAt')
+        .select('_id name email role avatar isActive createdAt')
         .sort({ name: 1 });
 
-        // جلب آخر رسالة لكل عميل
-        const clientsWithLastMessage = await Promise.all(clients.map(async (client) => {
-            // البحث عن آخر محادثة بين المدير وهذا العميل
+        console.log(`📊 عدد المستخدمين: ${users.length}`);
+
+        // جلب آخر رسالة لكل مستخدم
+        const usersWithLastMessage = await Promise.all(users.map(async (user) => {
+            // البحث عن آخر محادثة بين المدير وهذا المستخدم
             const conversation = await Conversation.findOne({
-                participants: { $all: [req.user.id, client._id] }
+                participants: { $all: [req.user.id, user._id] }
             })
             .populate('lastMessage')
             .sort({ updatedAt: -1 });
@@ -608,12 +612,20 @@ app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
             const lastMessageTime = conversation?.lastMessage?.createdAt || conversation?.updatedAt || null;
             const unreadCount = conversation?.unreadCount || 0;
 
+            // ✅ تحديد نوع المستخدم بالعربية
+            const roleLabels = {
+                'client': 'عميل',
+                'expert': 'خبير'
+            };
+
             return {
-                id: client._id,
-                name: client.name,
-                email: client.email,
-                avatar: client.avatar || client.name.charAt(0),
-                isActive: client.isActive,
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                roleLabel: roleLabels[user.role] || user.role,
+                avatar: user.avatar || user.name.charAt(0),
+                isActive: user.isActive,
                 lastMessage: lastMessage,
                 lastMessageTime: lastMessageTime,
                 unreadCount: unreadCount,
@@ -621,8 +633,13 @@ app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
             };
         }));
 
-        // ترتيب حسب آخر رسالة (الأحدث أولاً)
-        clientsWithLastMessage.sort((a, b) => {
+        // ترتيب حسب الدور (العملاء أولاً ثم الخبراء) ثم حسب آخر رسالة
+        usersWithLastMessage.sort((a, b) => {
+            // العملاء أولاً
+            if (a.role === 'client' && b.role !== 'client') return -1;
+            if (a.role !== 'client' && b.role === 'client') return 1;
+            
+            // ثم حسب آخر رسالة
             if (!a.lastMessageTime) return 1;
             if (!b.lastMessageTime) return -1;
             return new Date(b.lastMessageTime) - new Date(a.lastMessageTime);
@@ -630,11 +647,11 @@ app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
 
         res.status(200).json({
             success: true,
-            data: clientsWithLastMessage
+            data: usersWithLastMessage
         });
 
     } catch (error) {
-        console.error('❌ خطأ في جلب العملاء:', error);
+        console.error('❌ خطأ في جلب المستخدمين:', error);
         res.status(500).json({
             success: false,
             message: error.message
