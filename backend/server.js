@@ -25,7 +25,6 @@ app.use(express.urlencoded({ extended: true, limit: '500mb' }));
 // خدمة الملفات الثابتة (Frontend)
 // ============================================================
 app.use(express.static(path.join(__dirname, '../frontend')));
-app.use('/uploads/chat-files', express.static(path.join(__dirname, 'uploads', 'chat-files')));
 
 // ============================================================
 // إنشاء مجلدات uploads
