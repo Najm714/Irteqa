@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: true, limit: '500mb' }));
 // خدمة الملفات الثابتة (Frontend)
 // ============================================================
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/uploads/chat-files', express.static(path.join(__dirname, 'uploads', 'chat-files')));
 
 // ============================================================
 // إنشاء مجلدات uploads
@@ -434,7 +435,7 @@ app.get('/api/chat/conversations/:id/messages', protect, async (req, res) => {
         });
     }
 });
- // 4. إرسال رسالة جديدة - مع مسار ملف صحيح
+ // 4. إرسال رسالة جديدة - مع حفظ الملفات بشكل صحيح
 app.post('/api/chat/messages', protect, async (req, res) => {
     try {
         const { conversationId, text, file } = req.body;
@@ -464,9 +465,17 @@ app.post('/api/chat/messages', protect, async (req, res) => {
 
         let fileData = null;
         
+        // ✅ معالجة الملف إذا وجد
         if (file && file.data) {
             try {
+                console.log('📁 استلام ملف:', {
+                    name: file.name,
+                    type: file.type,
+                    size: (file.size / 1024).toFixed(1) + ' KB'
+                });
+
                 // ✅ التأكد من وجود مجلد chat-files
+                const chatFilesDir = path.join(__dirname, 'uploads', 'chat-files');
                 if (!fs.existsSync(chatFilesDir)) {
                     fs.mkdirSync(chatFilesDir, { recursive: true });
                     console.log('📁 تم إنشاء مجلد chat-files');
@@ -497,7 +506,7 @@ app.post('/api/chat/messages', protect, async (req, res) => {
                 fs.writeFileSync(filePath, buffer);
                 console.log(`✅ تم حفظ الملف: ${fileName} (${(buffer.length / 1024).toFixed(1)} KB)`);
 
-                // ✅ بناء URL الملف (مسار كامل)
+                // ✅ بناء URL الملف
                 const baseUrl = req.protocol + '://' + req.get('host');
                 const fileUrl = `${baseUrl}/uploads/chat-files/${fileName}`;
 
@@ -505,8 +514,8 @@ app.post('/api/chat/messages', protect, async (req, res) => {
                     name: file.name,
                     type: file.type || 'application/octet-stream',
                     size: file.size || buffer.length,
-                    path: `/uploads/chat-files/${fileName}`, // المسار النسبي
-                    url: fileUrl, // ✅ URL كامل للوصول للملف
+                    path: `/uploads/chat-files/${fileName}`,
+                    url: fileUrl,
                     fileId: fileName
                 };
 
