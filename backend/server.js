@@ -583,15 +583,15 @@ app.post('/api/chat/messages', protect, async (req, res) => {
     }
 });
 // ============================================================
-// ✅ جلب قائمة العملاء والخبراء للمدير
+// ✅ جلب قائمة جميع المستخدمين للمدير (عملاء + خبراء + مستخدمين)
 // ============================================================
 app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
     try {
         console.log('📋 جلب المستخدمين للمدير:', req.user.id);
 
-        // ✅ جلب جميع المستخدمين الذين دورهم 'client' أو 'expert'
+        // ✅ جلب جميع المستخدمين ما عدا المديرين
         const users = await User.find({ 
-            role: { $in: ['client', 'expert'] },
+            role: { $in: ['user', 'client', 'expert'] }, // ✅ يشمل user, client, expert
             isActive: true 
         })
         .select('_id name email role avatar isActive createdAt')
@@ -614,6 +614,7 @@ app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
 
             // ✅ تحديد نوع المستخدم بالعربية
             const roleLabels = {
+                'user': 'مستخدم',
                 'client': 'عميل',
                 'expert': 'خبير'
             };
@@ -633,11 +634,13 @@ app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
             };
         }));
 
-        // ترتيب حسب الدور (العملاء أولاً ثم الخبراء) ثم حسب آخر رسالة
+        // ترتيب حسب الدور (المستخدمين أولاً ثم العملاء ثم الخبراء)
+        const roleOrder = { 'user': 0, 'client': 1, 'expert': 2 };
         usersWithLastMessage.sort((a, b) => {
-            // العملاء أولاً
-            if (a.role === 'client' && b.role !== 'client') return -1;
-            if (a.role !== 'client' && b.role === 'client') return 1;
+            // ترتيب حسب الدور
+            const orderA = roleOrder[a.role] ?? 3;
+            const orderB = roleOrder[b.role] ?? 3;
+            if (orderA !== orderB) return orderA - orderB;
             
             // ثم حسب آخر رسالة
             if (!a.lastMessageTime) return 1;
