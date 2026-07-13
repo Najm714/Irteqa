@@ -3509,7 +3509,25 @@ app.use((req, res) => {
         path: req.originalUrl
     });
 });
-
+// ============================================================
+// ✅ مسار معالجة الملفات المفقودة (إعادة توجيه)
+// ============================================================
+app.use('/uploads/chat-files/:filename', (req, res, next) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'uploads', 'chat-files', filename);
+    
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        // ✅ إذا كان الملف غير موجود، نرسل رسالة خطأ واضحة
+        res.status(404).json({
+            success: false,
+            message: 'الملف غير موجود على الخادم',
+            filename: filename,
+            suggestion: 'يرجى إعادة تحميل الملف'
+        });
+    }
+});
 // ============================================================
 // تشغيل الخادم
 // ============================================================
