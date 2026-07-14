@@ -1672,43 +1672,64 @@ app.post('/api/chat/upload', protect, async (req, res) => {
 // ============================================================
 // 🖼️ عرض ملف من GridFS
 // ============================================================
-app.get('/api/chat/files/:fileId', async (req, res) => {
+ app.get('/api/chat/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
         const ObjectId = require('mongodb').ObjectId;
 
+        // ✅ تحقق من صحة المعرف
         if (!ObjectId.isValid(fileId)) {
-            return res.status(400).json({ success: false, message: 'معرف غير صالح' });
+            return res.status(400).json({ 
+                success: false, 
+                message: 'معرف ملف غير صالح' 
+            });
         }
 
+        // ✅ جلب معلومات الملف
         const fileInfo = await getFileInfo(fileId);
         if (!fileInfo) {
-            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الملف غير موجود' 
+            });
         }
 
+        console.log('✅ عرض الملف:', fileInfo.filename);
+        console.log('📋 النوع:', fileInfo.contentType);
+        console.log('📊 الحجم:', fileInfo.length);
+
+        // ✅ إعداد رؤوس الاستجابة
         res.set('Content-Type', fileInfo.contentType || 'application/octet-stream');
         res.set('Content-Length', fileInfo.length);
-        res.set('Cache-Control', 'public, max-age=31536000');
+        res.set('Cache-Control', 'public, max-age=86400');
+        res.set('Access-Control-Allow-Origin', '*');
 
+        // ✅ بث الملف
         const bucket = getGridFSBucket();
         const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
-        downloadStream.pipe(res);
-
+        
         downloadStream.on('error', (error) => {
             console.error('❌ خطأ في بث الملف:', error);
             if (!res.headersSent) {
-                res.status(500).json({ success: false, message: 'حدث خطأ في عرض الملف' });
+                res.status(500).json({ 
+                    success: false, 
+                    message: 'حدث خطأ في عرض الملف: ' + error.message 
+                });
             }
         });
+
+        downloadStream.pipe(res);
 
     } catch (error) {
         console.error('❌ خطأ في عرض الملف:', error);
         if (!res.headersSent) {
-            res.status(500).json({ success: false, message: error.message });
+            res.status(500).json({ 
+                success: false, 
+                message: error.message 
+            });
         }
     }
 });
-
 // ============================================================
 // 🔄 ترحيل الملفات القديمة إلى GridFS
 // ============================================================

@@ -113,18 +113,42 @@ const getGridFSBucket = () => initGridFS();
 const getFileInfo = async (fileId) => {
     try {
         const ObjectId = mongoose.Types.ObjectId;
-        if (!ObjectId.isValid(fileId)) return null;
+        
+        // ✅ تحقق من صحة المعرف
+        if (!ObjectId.isValid(fileId)) {
+            console.error('❌ معرف غير صالح:', fileId);
+            return null;
+        }
+        
+        // ✅ تأكد من وجود الاتصال بقاعدة البيانات
+        if (!mongoose.connection || !mongoose.connection.db) {
+            console.error('❌ لا يوجد اتصال بقاعدة البيانات');
+            return null;
+        }
+        
+        // ✅ جلب معلومات الملف
         const bucket = initGridFS();
-        if (!bucket) return null;
+        if (!bucket) {
+            console.error('❌ GridFS غير مهيأ');
+            return null;
+        }
+        
         const cursor = bucket.find({ _id: new ObjectId(fileId) });
         const files = await cursor.toArray();
-        return files[0] || null;
+        
+        if (files.length === 0) {
+            console.error('❌ الملف غير موجود:', fileId);
+            return null;
+        }
+        
+        console.log('✅ تم العثور على الملف:', files[0].filename);
+        return files[0];
+        
     } catch (error) {
         console.error('❌ خطأ في جلب معلومات الملف:', error);
         return null;
     }
 };
-
 const deleteFile = async (fileId) => {
     try {
         const ObjectId = mongoose.Types.ObjectId;
