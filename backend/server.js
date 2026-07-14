@@ -1617,19 +1617,29 @@ app.post('/api/chat/messages', protect, async (req, res) => {
 });
 
 // 5. رفع ملف في الدردشة (من خلال API منفصل)
+ // backend/server.js - إصلاح مسار رفع الملفات
+
+// ============================================================
+// 📤 رفع ملف في الدردشة
+// ============================================================
 app.post('/api/chat/upload', protect, async (req, res) => {
     try {
         const { file } = req.body;
         if (!file || !file.data) {
-            return res.status(400).json({ success: false, message: 'الملف مطلوب' });
+            return res.status(400).json({
+                success: false,
+                message: 'الملف مطلوب'
+            });
         }
 
+        // ✅ تحويل Base64 إلى Buffer
         let base64Data = file.data;
         if (base64Data.includes(';base64,')) {
             base64Data = base64Data.split(';base64,').pop();
         }
         const buffer = Buffer.from(base64Data, 'base64');
 
+        // ✅ إنشاء كائن ملف مؤقت
         const tempFile = {
             buffer: buffer,
             originalname: file.name || 'file',
@@ -1637,6 +1647,7 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             size: file.size || buffer.length
         };
 
+        // ✅ رفع إلى GridFS
         const result = await uploadToGridFS(tempFile, {
             type: 'chat_file',
             uploadedBy: req.user.id,
@@ -1644,7 +1655,10 @@ app.post('/api/chat/upload', protect, async (req, res) => {
         });
 
         if (!result) {
-            return res.status(500).json({ success: false, message: 'فشل رفع الملف' });
+            return res.status(500).json({
+                success: false,
+                message: 'فشل رفع الملف إلى GridFS'
+            });
         }
 
         const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
@@ -1663,64 +1677,136 @@ app.post('/api/chat/upload', protect, async (req, res) => {
 
     } catch (error) {
         console.error('❌ خطأ في رفع الملف:', error);
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 });
 
 // 6. عرض صورة من GridFS
-app.get('/api/chat/files/:fileId', async (req, res) => {
+ app.get('/api/chat/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
         const ObjectId = require('mongodb').ObjectId;
 
+        console.log('📁 طلب عرض صورة من GridFS:', fileId);
+
+        // ✅ التحقق من صحة المعرف
         if (!ObjectId.isValid(fileId)) {
-            return res.status(400).json({ success: false, message: 'معرف ملف غير صالح' });
+            console.error('❌ معرف ملف غير صالح:', fileId);
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
+            });
         }
 
+        // ✅ التحقق من وجود الملف في GridFS
         const fileInfo = await getFileInfo(fileId);
         if (!fileInfo) {
-            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
+            console.error('❌ الملف غير موجود في GridFS:', fileId);
+            return res.status(404).json({
+                success: false,
+                message: 'الملف غير موجود'
+            });
         }
 
-        res.set('Content-Type', fileInfo.contentType || 'application/octet-stream');
-        res.set('Content-Length', fileInfo.length);
-        res.set('Cache-Control', 'public, max-age=31536000');
+        console.log('✅ تم العثور على الملف:', fileInfo.filename);
+        console.log('📋 نوع الملف:', fileInfo.contentType);
+        console.log('📊 حجم الملف:', fileInfo.length);
 
+        // ✅ إعداد رؤوس الاستجابة
+        res.set('Content-Type', fileInfo.contentType || 'image/jpeg');
+        res.set('Content-Length', fileInfo.length);
+        res.set('Cache-Control', 'public, max-age=86400');
+        res.set('Access-Control-Allow-Origin', '*');
+
+        // ✅ الحصول على bucket
         const bucket = getGridFSBucket();
         const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
-        downloadStream.pipe(res);
-
+        
         downloadStream.on('error', (error) => {
-            console.error('❌ خطأ في بث الملف:', error);
+            console.error('❌ خطأ في بث الصورة:', error);
             if (!res.headersSent) {
-                res.status(500).json({ success: false, message: 'حدث خطأ في عرض الملف' });
+                res.status(500).json({
+                    success: false,
+                    message: 'حدث خطأ في عرض الصورة: ' + error.message
+                });
             }
         });
 
+        downloadStream.pipe(res);
+
     } catch (error) {
-        console.error('❌ خطأ في عرض الملف:', error);
+        console.error('❌ خطأ في عرض الصورة من GridFS:', error);
         if (!res.headersSent) {
-            res.status(500).json({ success: false, message: error.message });
+            res.status(500).json({
+                success: false,
+                message: error.message || 'حدث خطأ في عرض الصورة'
+            });
         }
     }
 });
-
 // 7. عرض الصور القديمة من التخزين المحلي
+ // backend/server.js - إضافة مسار للصور القديمة
+
+// ============================================================
+// 📁 عرض الصور القديمة من التخزين المحلي
+// ============================================================
 app.get('/uploads/chat-files/:filename', (req, res) => {
     const filename = req.params.filename;
     const filePath = path.join(chatFilesDir, filename);
     
+    console.log('📁 البحث عن الصورة القديمة:', filename);
+    
     if (fs.existsSync(filePath)) {
+        console.log('✅ تم العثور على الصورة محلياً:', filename);
+        res.set('Content-Type', getMimeType(filename));
         return res.sendFile(filePath);
     }
     
+    // ✅ محاولة البحث في مجلدات أخرى
+    const altPaths = [
+        path.join(__dirname, '..', 'uploads', 'chat-files', filename),
+        path.join(uploadsDir, 'chat-files', filename),
+        path.join(__dirname, 'uploads', filename)
+    ];
+    
+    for (const altPath of altPaths) {
+        if (fs.existsSync(altPath)) {
+            console.log('✅ تم العثور على الصورة في مسار بديل:', altPath);
+            res.set('Content-Type', getMimeType(filename));
+            return res.sendFile(altPath);
+        }
+    }
+    
+    console.error('❌ الصورة غير موجودة:', filename);
     res.status(404).json({
         success: false,
         message: 'الملف غير موجود',
-        filename: filename
+        filename: filename,
+        suggestion: 'يرجى إعادة تحميل الملف'
     });
 });
 
+// ✅ دالة مساعدة لتحديد نوع الملف
+function getMimeType(filename) {
+    const ext = filename.split('.').pop().toLowerCase();
+    const mimeTypes = {
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png': 'image/png',
+        'gif': 'image/gif',
+        'webp': 'image/webp',
+        'svg': 'image/svg+xml',
+        'pdf': 'application/pdf',
+        'mp4': 'video/mp4',
+        'mov': 'video/quicktime',
+        'avi': 'video/x-msvideo',
+        'webm': 'video/webm'
+    };
+    return mimeTypes[ext] || 'application/octet-stream';
+}
 // 8. جلب قائمة المستخدمين للمدير
 app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
     try {
