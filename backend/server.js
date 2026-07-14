@@ -1669,77 +1669,48 @@ app.post('/api/chat/upload', protect, async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+ // backend/server.js
+
 // ============================================================
-// 🖼️ عرض ملفات الدردشة من GridFS - الحل النهائي
+// 🖼️ عرض ملفات الدردشة من GridFS
 // ============================================================
 app.get('/api/chat/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
         const ObjectId = require('mongodb').ObjectId;
 
-        console.log('📁 طلب عرض ملف:', fileId);
-
-        // ✅ التحقق من صحة المعرف
+        // 1. تحقق من صحة المعرف
         if (!ObjectId.isValid(fileId)) {
-            console.error('❌ معرف غير صالح:', fileId);
-            return res.status(400).json({ 
-                success: false, 
-                message: 'معرف ملف غير صالح' 
-            });
+            return res.status(400).json({ success: false, message: 'معرف غير صالح' });
         }
 
-        // ✅ جلب معلومات الملف
+        // 2. جلب معلومات الملف
         const fileInfo = await getFileInfo(fileId);
         if (!fileInfo) {
-            console.error('❌ الملف غير موجود:', fileId);
-            return res.status(404).json({ 
-                success: false, 
-                message: 'الملف غير موجود' 
-            });
+            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
         }
 
-        console.log('✅ تم العثور على الملف:', fileInfo.filename);
-        console.log('📋 النوع:', fileInfo.contentType);
-        console.log('📊 الحجم:', fileInfo.length);
-
-        // ✅ إعداد رؤوس الاستجابة
-        res.setHeader('Content-Type', fileInfo.contentType || 'application/octet-stream');
+        // 3. إعداد الاستجابة
+        res.setHeader('Content-Type', fileInfo.contentType || 'image/jpeg');
         res.setHeader('Content-Length', fileInfo.length);
         res.setHeader('Cache-Control', 'public, max-age=86400');
-        res.setHeader('Access-Control-Allow-Origin', '*');
 
-        // ✅ بث الملف
+        // 4. بث الملف
         const bucket = getGridFSBucket();
-        if (!bucket) {
-            console.error('❌ GridFS غير مهيأ');
-            return res.status(500).json({ 
-                success: false, 
-                message: 'GridFS غير مهيأ' 
-            });
-        }
-
         const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
         
         downloadStream.on('error', (error) => {
-            console.error('❌ خطأ في بث الملف:', error);
+            console.error('❌ خطأ:', error);
             if (!res.headersSent) {
-                res.status(500).json({ 
-                    success: false, 
-                    message: 'حدث خطأ في عرض الملف: ' + error.message 
-                });
+                res.status(500).json({ success: false, message: 'خطأ في البث' });
             }
         });
 
         downloadStream.pipe(res);
 
     } catch (error) {
-        console.error('❌ خطأ في عرض الملف:', error);
-        if (!res.headersSent) {
-            res.status(500).json({ 
-                success: false, 
-                message: error.message || 'حدث خطأ في عرض الملف' 
-            });
-        }
+        console.error('❌ خطأ:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 // ============================================================
