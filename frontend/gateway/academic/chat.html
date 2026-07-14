@@ -56,10 +56,6 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: 'Cairo', sans-serif;
             background: var(--bg-body);
@@ -1003,14 +999,6 @@
                 max-width: 200px;
             }
 
-            .theme-toggle {
-                width: 42px;
-                height: 42px;
-                font-size: 1.1rem;
-                bottom: 20px;
-                right: 20px;
-            }
-
             .header .container {
                 flex-direction: column;
                 align-items: stretch;
@@ -1184,7 +1172,8 @@
                         <p>اختر محادثة من القائمة الجانبية للبدء</p>
                         <p style="font-size: 0.8rem; margin-top: 5px; color: var(--text-muted);">
                             <i class="fas fa-arrow-left"></i>
-                            اختر محادثة من اليمين                        </p>
+                            اختر محادثة من اليمين
+                        </p>
                     </div>
                 </div>
 
@@ -1242,7 +1231,7 @@
     </div>
 
     <!-- ============================================================
-    الجافا سكريبت
+    الجافا سكريبت - النسخة النهائية المتكاملة
     ============================================================ -->
     <script>
         // ============================================================
@@ -1469,7 +1458,7 @@
         }
 
         // ============================================================
-        // عرض الرسائل - مع مسار ملف صحيح
+        // عرض الرسائل مع دعم GridFS
         // ============================================================
         function renderMessages() {
             const container = document.getElementById('chatMessages');
@@ -1490,6 +1479,9 @@
 
             let lastDate = '';
             const currentUserId = currentUser ? currentUser.id : null;
+            const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:5000'
+                : 'https://irteqa.onrender.com';
 
             messages.forEach((msg) => {
                 const msgDate = new Date(msg.createdAt).toLocaleDateString('ar-SA');
@@ -1505,26 +1497,32 @@
                 const div = document.createElement('div');
                 div.className = `message ${isOwn ? 'sent' : 'received'}`;
 
-                let content = `<div class="msg-text">${msg.text || ''}</div>`;
+                let content = '';
+                if (msg.text) {
+                    content += `<div class="msg-text">${msg.text}</div>`;
+                }
 
-                // ✅ عرض الملف إذا وجد
+                // ✅ عرض الملف من GridFS
                 if (msg.file && msg.file.name) {
+                    // ✅ بناء المسار الصحيح للصورة
+                    let fileUrl = msg.file.url || msg.file.path || '';
+                    
+                    // إذا كان الملف في GridFS ولدينا fileId
+                    if (msg.file.fileId && !fileUrl) {
+                        fileUrl = `${baseUrl}/api/chat/files/${msg.file.fileId}`;
+                    }
+
                     const isImage = msg.file.type && msg.file.type.startsWith('image/');
                     const isVideo = msg.file.type && msg.file.type.startsWith('video/');
 
-                    // ✅ استخدام URL الملف أو المسار
-                    const fileUrl = msg.file.url || msg.file.path || msg.file.data || '';
-
                     if (isImage) {
-                        // ✅ عرض الصورة مع منع الأخطاء
                         content += `
                             <img src="${fileUrl}" class="msg-image" 
                                  onclick="window.open('${fileUrl}', '_blank')" 
-                                 onerror="this.style.display='none'; console.error('❌ فشل تحميل الصورة:', '${fileUrl}')" 
+                                 onerror="this.style.display='none'; console.error('❌ فشل تحميل الصورة: ${fileUrl}')" 
                                  alt="${msg.file.name}" />
                         `;
                     } else if (isVideo) {
-                        // ✅ عرض الفيديو
                         content += `
                             <video controls class="msg-video" onclick="this.paused ? this.play() : this.pause()">
                                 <source src="${fileUrl}" type="${msg.file.type}" />
@@ -1532,7 +1530,6 @@
                             </video>
                         `;
                     } else {
-                        // ✅ عرض الملف
                         const iconMap = {
                             'pdf': 'fa-file-pdf',
                             'doc': 'fa-file-word',
@@ -1544,8 +1541,6 @@
                             'zip': 'fa-file-archive',
                             'rar': 'fa-file-archive',
                             'mp4': 'fa-file-video',
-                            'avi': 'fa-file-video',
-                            'mov': 'fa-file-video',
                             'txt': 'fa-file-alt'
                         };
                         const ext = msg.file.name.split('.').pop().toLowerCase();
@@ -1576,7 +1571,7 @@
         }
 
         // ============================================================
-        // إرسال رسالة مع ملفات - نسخة محسنة
+        // إرسال رسالة مع دعم GridFS
         // ============================================================
         async function sendMessage() {
             const input = document.getElementById('messageInput');
@@ -1594,44 +1589,34 @@
                 return;
             }
 
-            // ✅ تحويل الملف إلى Base64 مع التحقق
             let fileData = null;
             if (pendingFile) {
                 try {
-                    // التحقق من حجم الملف (حد أقصى 50MB)
-                    const maxSize = 50 * 1024 * 1024;
-                    if (pendingFile.size > maxSize) {
-                        showToast(`❌ حجم الملف كبير جداً. الحد الأقصى 50MB`, 'error');
-                        return;
-                    }
-
-                    // ✅ التأكد من أن البيانات صالحة
-                    if (!pendingFile.data || !pendingFile.data.startsWith('data:')) {
-                        showToast('❌ بيانات الملف غير صالحة', 'error');
-                        return;
-                    }
-
-                    fileData = {
-                        name: pendingFile.name,
-                        type: pendingFile.type || 'application/octet-stream',
-                        size: pendingFile.size,
-                        data: pendingFile.data // Base64 data
-                    };
-
-                    console.log('📤 إرسال ملف:', {
-                        name: fileData.name,
-                        type: fileData.type,
-                        size: (fileData.size / 1024).toFixed(1) + ' KB'
+                    // ✅ رفع الملف إلى GridFS أولاً عبر /api/chat/upload
+                    const uploadResponse = await fetch(`${API_BASE_URL}/chat/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ file: pendingFile })
                     });
 
+                    const uploadResult = await uploadResponse.json();
+                    if (uploadResult.success) {
+                        fileData = uploadResult.data;
+                        console.log('✅ تم رفع الملف إلى GridFS:', fileData);
+                    } else {
+                        showToast('❌ فشل رفع الملف: ' + (uploadResult.message || ''), 'error');
+                        return;
+                    }
                 } catch (error) {
-                    console.error('❌ خطأ في تحضير الملف:', error);
-                    showToast('❌ حدث خطأ في معالجة الملف', 'error');
+                    console.error('❌ فشل رفع الملف:', error);
+                    showToast('❌ فشل رفع الملف', 'error');
                     return;
                 }
             }
 
-            // تعطيل الزر
             const sendBtn = document.getElementById('sendBtn');
             sendBtn.disabled = true;
             sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -1652,20 +1637,23 @@
 
                 const result = await response.json();
 
-                if (!response.ok) {
-                    console.error('❌ استجابة الخادم:', result);
-                    throw new Error(result.message || `خطأ ${response.status}`);
-                }
-
                 if (result.success) {
-                    // إضافة الرسالة محلياً
+                    // ✅ إضافة المسار الصحيح للصورة
+                    if (result.data.file && result.data.file.fileId) {
+                        const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                            ? 'http://localhost:5000'
+                            : 'https://irteqa.onrender.com';
+                        result.data.file.url = `${baseUrl}/api/chat/files/${result.data.file.fileId}`;
+                        result.data.file.path = `/api/chat/files/${result.data.file.fileId}`;
+                    }
+
                     const newMsg = {
-                        id: result.data.id,
+                        id: result.data.id || Date.now().toString(),
                         senderId: currentUser ? currentUser.id : null,
                         senderName: currentUser ? currentUser.name : 'أنت',
-                        text: result.data.text,
+                        text: result.data.text || text,
                         file: result.data.file || null,
-                        createdAt: result.data.createdAt
+                        createdAt: result.data.createdAt || new Date().toISOString()
                     };
                     messages.push(newMsg);
                     renderMessages();
@@ -1696,7 +1684,7 @@
         }
 
         // ============================================================
-        // معالجة رفع الملفات - محسنة
+        // معالجة رفع الملفات
         // ============================================================
         function handleFileUpload(event) {
             const files = event.target.files;
@@ -1708,56 +1696,6 @@
             const maxSize = 50 * 1024 * 1024; // 50MB
             if (file.size > maxSize) {
                 showToast(`❌ حجم الملف كبير جداً. الحد الأقصى 50MB`, 'error');
-                event.target.value = '';
-                return;
-            }
-
-            // ✅ التحقق من نوع الملف
-            const allowedTypes = [
-                'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-                'video/mp4', 'video/avi', 'video/mov', 'video/webm',
-                'application/pdf',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/vnd.ms-excel',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.ms-powerpoint',
-                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'application/zip', 'application/x-zip-compressed',
-                'text/plain'
-            ];
-
-            // ✅ محاولة استنتاج النوع من الامتداد إذا لم يكن معروفاً
-            let fileType = file.type;
-            if (!fileType || fileType === '') {
-                const ext = file.name.split('.').pop().toLowerCase();
-                const typeMap = {
-                    'pdf': 'application/pdf',
-                    'doc': 'application/msword',
-                    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'xls': 'application/vnd.ms-excel',
-                    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'ppt': 'application/vnd.ms-powerpoint',
-                    'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                    'jpg': 'image/jpeg',
-                    'jpeg': 'image/jpeg',
-                    'png': 'image/png',
-                    'gif': 'image/gif',
-                    'webp': 'image/webp',
-                    'mp4': 'video/mp4',
-                    'avi': 'video/avi',
-                    'mov': 'video/mov',
-                    'webm': 'video/webm',
-                    'zip': 'application/zip',
-                    'rar': 'application/x-rar-compressed',
-                    'txt': 'text/plain'
-                };
-                fileType = typeMap[ext] || 'application/octet-stream';
-            }
-
-            // ✅ التحقق من النوع
-            if (!allowedTypes.includes(fileType)) {
-                showToast(`❌ نوع الملف غير مدعوم: ${file.name}`, 'error');
                 event.target.value = '';
                 return;
             }
@@ -1774,9 +1712,9 @@
 
                     pendingFile = {
                         name: file.name,
-                        type: fileType,
+                        type: file.type || 'application/octet-stream',
                         size: file.size,
-                        data: result // Base64 data كاملة
+                        data: result
                     };
 
                     // عرض اسم الملف في حقل الإدخال
@@ -1793,7 +1731,7 @@
                     
                     console.log('📁 ملف مرفوع:', {
                         name: file.name,
-                        type: fileType,
+                        type: file.type,
                         size: fileSize + ' KB'
                     });
 
@@ -1964,8 +1902,6 @@
         function clearChat() {
             if (!currentConversationId) return;
             if (!confirm('هل أنت متأكد من مسح جميع رسائل هذه المحادثة؟')) return;
-            
-            // يمكن إضافة مسار لحذف الرسائل
             showToast('🧹 تم مسح المحادثة', 'info');
         }
 

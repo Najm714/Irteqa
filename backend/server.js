@@ -158,7 +158,8 @@ const {
     getGridFSBucket, 
     getFileInfo, 
     deleteFile, 
-    getStreamUrl 
+    getStreamUrl,
+    getMimeType
 } = require('./config/gridfs');
 
 // ============================================================
@@ -1670,14 +1671,14 @@ app.post('/api/chat/upload', protect, async (req, res) => {
 });
 
 // ============================================================
-// 🖼️ عرض ملف من GridFS
+// 🖼️ عرض ملف من GridFS - النسخة النهائية
 // ============================================================
- app.get('/api/chat/files/:fileId', async (req, res) => {
+app.get('/api/chat/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
         const ObjectId = require('mongodb').ObjectId;
 
-        // ✅ تحقق من صحة المعرف
+        // ✅ التحقق من صحة المعرف
         if (!ObjectId.isValid(fileId)) {
             return res.status(400).json({ 
                 success: false, 
@@ -1725,149 +1726,22 @@ app.post('/api/chat/upload', protect, async (req, res) => {
         if (!res.headersSent) {
             res.status(500).json({ 
                 success: false, 
-                message: error.message 
+                message: error.message || 'حدث خطأ في عرض الملف' 
             });
         }
     }
 });
-// ============================================================
-// 🔄 ترحيل الملفات القديمة إلى GridFS
-// ============================================================
-app.post('/api/chat/migrate-files', protect, authorize('admin'), async (req, res) => {
-    try {
-        // البحث عن جميع الرسائل التي تحتوي على ملفات محلية
-        const messages = await Message.find({
-            'file.storageProvider': { $ne: 'gridfs' },
-            'file.path': { $exists: true }
-        });
-
-        let migrated = 0;
-        let failed = 0;
-
-        for (const msg of messages) {
-            try {
-                const filename = msg.file.path.split('/').pop();
-                const localPath = path.join(chatFilesDir, filename);
-
-                if (fs.existsSync(localPath)) {
-                    const buffer = fs.readFileSync(localPath);
-                    const tempFile = {
-                        buffer: buffer,
-                        originalname: msg.file.name || filename,
-                        mimetype: msg.file.type || 'application/octet-stream',
-                        size: msg.file.size || buffer.length
-                    };
-
-                    const result = await uploadToGridFS(tempFile, {
-                        type: 'chat_file_migrated',
-                        originalMessageId: msg._id
-                    });
-
-                    if (result) {
-                        const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
-                        msg.file.fileId = result.fileId;
-                        msg.file.url = `${baseUrl}/api/chat/files/${result.fileId}`;
-                        msg.file.path = `/api/chat/files/${result.fileId}`;
-                        msg.file.storageProvider = 'gridfs';
-                        await msg.save();
-                        migrated++;
-                        console.log(`✅ تم ترحيل: ${filename}`);
-                    }
-                }
-            } catch (error) {
-                failed++;
-                console.error('❌ فشل ترحيل:', error);
-            }
-        }
-
-        res.status(200).json({
-            success: true,
-            message: `تم ترحيل ${migrated} ملف، فشل ${failed}`,
-            migrated,
-            failed
-        });
-
-    } catch (error) {
-        console.error('❌ خطأ في ترحيل الملفات:', error);
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
-
-// 6. عرض صورة من GridFS
- app.get('/api/chat/files/:fileId', async (req, res) => {
-    try {
-        const { fileId } = req.params;
-        const ObjectId = require('mongodb').ObjectId;
-
-        console.log('📁 طلب عرض صورة من GridFS:', fileId);
-
-        // ✅ التحقق من صحة المعرف
-        if (!ObjectId.isValid(fileId)) {
-            console.error('❌ معرف ملف غير صالح:', fileId);
-            return res.status(400).json({
-                success: false,
-                message: 'معرف ملف غير صالح'
-            });
-        }
-
-        // ✅ التحقق من وجود الملف في GridFS
-        const fileInfo = await getFileInfo(fileId);
-        if (!fileInfo) {
-            console.error('❌ الملف غير موجود في GridFS:', fileId);
-            return res.status(404).json({
-                success: false,
-                message: 'الملف غير موجود'
-            });
-        }
-
-        console.log('✅ تم العثور على الملف:', fileInfo.filename);
-        console.log('📋 نوع الملف:', fileInfo.contentType);
-        console.log('📊 حجم الملف:', fileInfo.length);
-
-        // ✅ إعداد رؤوس الاستجابة
-        res.set('Content-Type', fileInfo.contentType || 'image/jpeg');
-        res.set('Content-Length', fileInfo.length);
-        res.set('Cache-Control', 'public, max-age=86400');
-        res.set('Access-Control-Allow-Origin', '*');
-
-        // ✅ الحصول على bucket
-        const bucket = getGridFSBucket();
-        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
-        
-        downloadStream.on('error', (error) => {
-            console.error('❌ خطأ في بث الصورة:', error);
-            if (!res.headersSent) {
-                res.status(500).json({
-                    success: false,
-                    message: 'حدث خطأ في عرض الصورة: ' + error.message
-                });
-            }
-        });
-
-        downloadStream.pipe(res);
-
-    } catch (error) {
-        console.error('❌ خطأ في عرض الصورة من GridFS:', error);
-        if (!res.headersSent) {
-            res.status(500).json({
-                success: false,
-                message: error.message || 'حدث خطأ في عرض الصورة'
-            });
-        }
-    }
-});
-// 7. عرض الصور القديمة من التخزين المحلي
- // backend/server.js - إضافة مسار للصور القديمة
 
 // ============================================================
 // 📁 عرض الصور القديمة من التخزين المحلي
 // ============================================================
-app.get('/uploads/chat-files/:filename', (req, res) => {
+app.get('/uploads/chat-files/:filename', async (req, res) => {
     const filename = req.params.filename;
     const filePath = path.join(chatFilesDir, filename);
     
     console.log('📁 البحث عن الصورة القديمة:', filename);
     
+    // ✅ البحث في التخزين المحلي
     if (fs.existsSync(filePath)) {
         console.log('✅ تم العثور على الصورة محلياً:', filename);
         res.set('Content-Type', getMimeType(filename));
@@ -1889,6 +1763,21 @@ app.get('/uploads/chat-files/:filename', (req, res) => {
         }
     }
     
+    // ✅ البحث في GridFS
+    try {
+        const files = await mongoose.connection.db.collection('uploads.files')
+            .find({ filename: { $regex: filename, $options: 'i' } })
+            .toArray();
+        
+        if (files.length > 0) {
+            const fileId = files[0]._id;
+            console.log('✅ إعادة توجيه إلى GridFS:', fileId);
+            return res.redirect(`/api/chat/files/${fileId}`);
+        }
+    } catch (error) {
+        console.error('❌ خطأ في البحث في GridFS:', error);
+    }
+    
     console.error('❌ الصورة غير موجودة:', filename);
     res.status(404).json({
         success: false,
@@ -1898,25 +1787,9 @@ app.get('/uploads/chat-files/:filename', (req, res) => {
     });
 });
 
-// ✅ دالة مساعدة لتحديد نوع الملف
-function getMimeType(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    const mimeTypes = {
-        'jpg': 'image/jpeg',
-        'jpeg': 'image/jpeg',
-        'png': 'image/png',
-        'gif': 'image/gif',
-        'webp': 'image/webp',
-        'svg': 'image/svg+xml',
-        'pdf': 'application/pdf',
-        'mp4': 'video/mp4',
-        'mov': 'video/quicktime',
-        'avi': 'video/x-msvideo',
-        'webm': 'video/webm'
-    };
-    return mimeTypes[ext] || 'application/octet-stream';
-}
+// ============================================================
 // 8. جلب قائمة المستخدمين للمدير
+// ============================================================
 app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
     try {
         const users = await User.find({ 
@@ -1967,7 +1840,9 @@ app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
     }
 });
 
-// 9. ترحيل الملفات القديمة إلى GridFS
+// ============================================================
+// 🔄 ترحيل الملفات القديمة إلى GridFS
+// ============================================================
 app.post('/api/chat/migrate-files', protect, authorize('admin'), async (req, res) => {
     try {
         const messages = await Message.find({
