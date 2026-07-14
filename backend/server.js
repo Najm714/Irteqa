@@ -1670,18 +1670,24 @@ app.post('/api/chat/upload', protect, async (req, res) => {
         });
     }
 }); 
+ // backend/server.js
+
 // ============================================================
-// 🖼️ عرض ملفات الدردشة - الحل النهائي
+// 🖼️ عرض ملفات الدردشة - دعم PDF وجميع الملفات
 // ============================================================
 app.get('/api/chat/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
         
-        // ✅ البحث عن الملف في التخزين المحلي أولاً
+        console.log('📁 طلب عرض ملف:', fileId);
+
+        // ✅ البحث عن الملف في مجلد chat-files
         const filePath = path.join(chatFilesDir, fileId);
         
         if (fs.existsSync(filePath)) {
-            console.log('✅ تم العثور على الملف محلياً:', fileId);
+            console.log('✅ تم العثور على الملف:', fileId);
+            
+            // ✅ تحديد نوع الملف من الامتداد
             const ext = path.extname(fileId).toLowerCase();
             const mimeTypes = {
                 '.jpg': 'image/jpeg',
@@ -1704,12 +1710,15 @@ app.get('/api/chat/files/:fileId', async (req, res) => {
                 '.rar': 'application/x-rar-compressed',
                 '.txt': 'text/plain'
             };
+            
             const contentType = mimeTypes[ext] || 'application/octet-stream';
             
+            // ✅ إعداد رؤوس الاستجابة
             res.setHeader('Content-Type', contentType);
             res.setHeader('Cache-Control', 'public, max-age=86400');
             res.setHeader('Access-Control-Allow-Origin', '*');
             
+            // ✅ إذا كان PDF، نضيف رأس للعرض المباشر
             if (contentType === 'application/pdf') {
                 res.setHeader('Content-Disposition', 'inline; filename="' + fileId + '"');
             }
@@ -1733,14 +1742,18 @@ app.get('/api/chat/files/:fileId', async (req, res) => {
             res.setHeader('Cache-Control', 'public, max-age=86400');
             res.setHeader('Access-Control-Allow-Origin', '*');
             
+            if (fileInfo.contentType === 'application/pdf') {
+                res.setHeader('Content-Disposition', 'inline; filename="' + fileInfo.filename + '"');
+            }
+            
             const bucket = getGridFSBucket();
             const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
             downloadStream.pipe(res);
             
             downloadStream.on('error', (error) => {
-                console.error('❌ خطأ:', error);
+                console.error('❌ خطأ في البث:', error);
                 if (!res.headersSent) {
-                    res.status(404).json({ success: false, message: 'الملف غير موجود' });
+                    res.status(500).json({ success: false, message: 'خطأ في عرض الملف' });
                 }
             });
             return;
@@ -1750,9 +1763,38 @@ app.get('/api/chat/files/:fileId', async (req, res) => {
         res.status(404).json({ success: false, message: 'الملف غير موجود' });
         
     } catch (error) {
-        console.error('❌ خطأ:', error);
-        res.status(500).json({ success: false, message: error.message });
+        console.error('❌ خطأ في عرض الملف:', error);
+        res.status(500).json({ success: false, message: error.message || 'حدث خطأ' });
     }
+});
+
+// ============================================================
+// 📁 عرض الملفات من مجلد chat-files مباشرة
+// ============================================================
+app.get('/uploads/chat-files/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(chatFilesDir, filename);
+    
+    if (fs.existsSync(filePath)) {
+        const ext = path.extname(filename).toLowerCase();
+        const mimeTypes = {
+            '.pdf': 'application/pdf',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.mp4': 'video/mp4'
+        };
+        res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+        
+        if (ext === '.pdf') {
+            res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"');
+        }
+        
+        return res.sendFile(filePath);
+    }
+    
+    res.status(404).json({ success: false, message: 'الملف غير موجود' });
 });
 // ============================================================
 // 📁 عرض الصور القديمة من التخزين المحلي
