@@ -1616,9 +1616,6 @@ app.post('/api/chat/messages', protect, async (req, res) => {
     }
 });
 
-// 5. رفع ملف في الدردشة (من خلال API منفصل)
- // backend/server.js - إصلاح مسار رفع الملفات
-
 // ============================================================
 // 📤 رفع ملف في الدردشة
 // ============================================================
@@ -1626,20 +1623,15 @@ app.post('/api/chat/upload', protect, async (req, res) => {
     try {
         const { file } = req.body;
         if (!file || !file.data) {
-            return res.status(400).json({
-                success: false,
-                message: 'الملف مطلوب'
-            });
+            return res.status(400).json({ success: false, message: 'الملف مطلوب' });
         }
 
-        // ✅ تحويل Base64 إلى Buffer
         let base64Data = file.data;
         if (base64Data.includes(';base64,')) {
             base64Data = base64Data.split(';base64,').pop();
         }
         const buffer = Buffer.from(base64Data, 'base64');
 
-        // ✅ إنشاء كائن ملف مؤقت
         const tempFile = {
             buffer: buffer,
             originalname: file.name || 'file',
@@ -1647,7 +1639,6 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             size: file.size || buffer.length
         };
 
-        // ✅ رفع إلى GridFS
         const result = await uploadToGridFS(tempFile, {
             type: 'chat_file',
             uploadedBy: req.user.id,
@@ -1655,10 +1646,7 @@ app.post('/api/chat/upload', protect, async (req, res) => {
         });
 
         if (!result) {
-            return res.status(500).json({
-                success: false,
-                message: 'فشل رفع الملف إلى GridFS'
-            });
+            return res.status(500).json({ success: false, message: 'فشل رفع الملف' });
         }
 
         const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
@@ -1677,10 +1665,110 @@ app.post('/api/chat/upload', protect, async (req, res) => {
 
     } catch (error) {
         console.error('❌ خطأ في رفع الملف:', error);
-        res.status(500).json({
-            success: false,
-            message: error.message
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 🖼️ عرض ملف من GridFS
+// ============================================================
+app.get('/api/chat/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({ success: false, message: 'معرف غير صالح' });
+        }
+
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
+        }
+
+        res.set('Content-Type', fileInfo.contentType || 'application/octet-stream');
+        res.set('Content-Length', fileInfo.length);
+        res.set('Cache-Control', 'public, max-age=31536000');
+
+        const bucket = getGridFSBucket();
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        downloadStream.pipe(res);
+
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في بث الملف:', error);
+            if (!res.headersSent) {
+                res.status(500).json({ success: false, message: 'حدث خطأ في عرض الملف' });
+            }
         });
+
+    } catch (error) {
+        console.error('❌ خطأ في عرض الملف:', error);
+        if (!res.headersSent) {
+            res.status(500).json({ success: false, message: error.message });
+        }
+    }
+});
+
+// ============================================================
+// 🔄 ترحيل الملفات القديمة إلى GridFS
+// ============================================================
+app.post('/api/chat/migrate-files', protect, authorize('admin'), async (req, res) => {
+    try {
+        // البحث عن جميع الرسائل التي تحتوي على ملفات محلية
+        const messages = await Message.find({
+            'file.storageProvider': { $ne: 'gridfs' },
+            'file.path': { $exists: true }
+        });
+
+        let migrated = 0;
+        let failed = 0;
+
+        for (const msg of messages) {
+            try {
+                const filename = msg.file.path.split('/').pop();
+                const localPath = path.join(chatFilesDir, filename);
+
+                if (fs.existsSync(localPath)) {
+                    const buffer = fs.readFileSync(localPath);
+                    const tempFile = {
+                        buffer: buffer,
+                        originalname: msg.file.name || filename,
+                        mimetype: msg.file.type || 'application/octet-stream',
+                        size: msg.file.size || buffer.length
+                    };
+
+                    const result = await uploadToGridFS(tempFile, {
+                        type: 'chat_file_migrated',
+                        originalMessageId: msg._id
+                    });
+
+                    if (result) {
+                        const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
+                        msg.file.fileId = result.fileId;
+                        msg.file.url = `${baseUrl}/api/chat/files/${result.fileId}`;
+                        msg.file.path = `/api/chat/files/${result.fileId}`;
+                        msg.file.storageProvider = 'gridfs';
+                        await msg.save();
+                        migrated++;
+                        console.log(`✅ تم ترحيل: ${filename}`);
+                    }
+                }
+            } catch (error) {
+                failed++;
+                console.error('❌ فشل ترحيل:', error);
+            }
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `تم ترحيل ${migrated} ملف، فشل ${failed}`,
+            migrated,
+            failed
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في ترحيل الملفات:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
