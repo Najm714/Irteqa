@@ -610,7 +610,7 @@
     </div>
 
     <!-- ============================================================
-    الجافا سكريبت
+    الجافا سكريبت - النسخة النهائية المتكاملة
     ============================================================ -->
     <script>
         // ============================================================
@@ -943,215 +943,244 @@
         }
 
         // ============================================================
-        // عرض الرسائل - مع دعم GridFS
+        // عرض الرسائل مع دعم GridFS
         // ============================================================
-         // admin-chat.html - تحديث renderMessages
+        function renderMessages() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
 
-function renderMessages() {
-    const container = document.getElementById('chatMessages');
-    container.innerHTML = '';
-
-    if (!messages || messages.length === 0) {
-        container.innerHTML = `
-            <div class="no-chat">
-                <i class="fas fa-comment-dots"></i>
-                <h3>لا توجد رسائل</h3>
-                <p>ابدأ المحادثة الآن</p>
-            </div>
-        `;
-        return;
-    }
-
-    const userId = getUser()?.id;
-    const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:5000'
-        : 'https://irteqa.onrender.com';
-
-    messages.forEach(msg => {
-        const isOwn = msg.senderId === userId || msg.senderId === 'admin';
-        const div = document.createElement('div');
-        div.className = `message ${isOwn ? 'sent' : 'received'}`;
-
-        let content = '';
-        if (msg.text) {
-            content += `<div class="msg-text">${msg.text}</div>`;
-        }
-
-        if (msg.file) {
-            // ✅ بناء المسار الصحيح
-            let fileUrl = msg.file.url || msg.file.path || '';
-            
-            // إذا كان الملف في GridFS
-            if (msg.file.fileId && !fileUrl) {
-                fileUrl = `${baseUrl}/api/chat/files/${msg.file.fileId}`;
-            }
-
-            if (msg.file.type && msg.file.type.startsWith('image/')) {
-                content += `
-                    <img src="${fileUrl}" class="msg-image" 
-                         onclick="window.open('${fileUrl}', '_blank')" 
-                         alt="صورة" 
-                         onerror="this.onerror=null; this.alt='صورة غير متوفرة'; this.style.display='none';" />
-                `;
-            } else if (msg.file.type && msg.file.type.startsWith('video/')) {
-                content += `
-                    <video controls class="msg-image" style="max-width:200px;max-height:200px;border-radius:10px;margin-top:6px;">
-                        <source src="${fileUrl}" type="${msg.file.type}">
-                    </video>
-                `;
-            } else {
-                const fileIcon = msg.file.type && msg.file.type.includes('pdf') ? 'fa-file-pdf' :
-                                msg.file.type && msg.file.type.includes('word') ? 'fa-file-word' :
-                                msg.file.type && msg.file.type.includes('excel') ? 'fa-file-excel' :
-                                'fa-file';
-                content += `
-                    <div class="msg-file" onclick="window.open('${fileUrl}', '_blank')">
-                        <i class="fas ${fileIcon}"></i>
-                        <span class="file-name">${msg.file.name || 'ملف'}</span>
+            if (!messages || messages.length === 0) {
+                container.innerHTML = `
+                    <div class="no-chat">
+                        <i class="fas fa-comment-dots"></i>
+                        <h3>لا توجد رسائل</h3>
+                        <p>ابدأ المحادثة الآن</p>
                     </div>
                 `;
-            }
-        }
-
-        const time = msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) : '';
-        content += `<span class="msg-time">${time}</span>`;
-        div.innerHTML = content;
-        container.appendChild(div);
-    });
-}
-
-        // ============================================================
-        // إرسال رسالة - مع دعم GridFS
-        // ============================================================
-         // admin-chat.html - تحديث sendMessage
-
-async function sendMessage() {
-    const input = document.getElementById('messageInput');
-    const text = input.value.trim();
-    if (!text && !pendingFile) return;
-
-    const token = getToken();
-    if (!token) {
-        showToast('❌ يرجى تسجيل الدخول', 'error');
-        return;
-    }
-
-    if (!currentUserId) {
-        showToast('❌ اختر مستخدم أولاً', 'error');
-        return;
-    }
-
-    const user = users.find(u => u.id === currentUserId);
-    let conversationId = user?.conversationId;
-
-    if (!conversationId) {
-        try {
-            const response = await fetch(`${API_BASE_URL}/chat/conversations`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ userId: currentUserId, userRole: 'client' })
-            });
-            const data = await response.json();
-            if (data.success) {
-                conversationId = data.data._id;
-                const userIndex = users.findIndex(u => u.id === currentUserId);
-                if (userIndex !== -1) {
-                    users[userIndex].conversationId = conversationId;
-                }
-            }
-        } catch (error) {
-            console.error('❌ فشل إنشاء المحادثة:', error);
-            showToast('❌ فشل إنشاء المحادثة', 'error');
-            return;
-        }
-    }
-
-    if (!conversationId) {
-        showToast('❌ لا يمكن إنشاء المحادثة', 'error');
-        return;
-    }
-
-    let fileData = null;
-    if (pendingFile) {
-        // ✅ رفع الملف إلى GridFS أولاً
-        try {
-            const uploadResponse = await fetch(`${API_BASE_URL}/chat/upload`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ file: pendingFile })
-            });
-            
-            const uploadResult = await uploadResponse.json();
-            if (uploadResult.success) {
-                fileData = uploadResult.data;
-                console.log('✅ تم رفع الملف إلى GridFS:', fileData);
-            } else {
-                showToast('❌ فشل رفع الملف', 'error');
                 return;
             }
-        } catch (error) {
-            console.error('❌ فشل رفع الملف:', error);
-            showToast('❌ فشل رفع الملف', 'error');
-            return;
+
+            const userId = getUser()?.id;
+            const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:5000'
+                : 'https://irteqa.onrender.com';
+
+            messages.forEach(msg => {
+                const isOwn = msg.senderId === userId || msg.senderId === 'admin';
+                const div = document.createElement('div');
+                div.className = `message ${isOwn ? 'sent' : 'received'}`;
+
+                let content = '';
+                if (msg.text) {
+                    content += `<div class="msg-text">${msg.text}</div>`;
+                }
+
+                // ✅ عرض الملف من GridFS
+                if (msg.file && msg.file.name) {
+                    // ✅ بناء المسار الصحيح للصورة
+                    let fileUrl = msg.file.url || msg.file.path || '';
+                    
+                    // إذا كان الملف في GridFS ولدينا fileId
+                    if (msg.file.fileId && !fileUrl) {
+                        fileUrl = `${baseUrl}/api/chat/files/${msg.file.fileId}`;
+                    }
+
+                    const isImage = msg.file.type && msg.file.type.startsWith('image/');
+                    const isVideo = msg.file.type && msg.file.type.startsWith('video/');
+
+                    if (isImage) {
+                        content += `
+                            <img src="${fileUrl}" class="msg-image" 
+                                 onclick="window.open('${fileUrl}', '_blank')" 
+                                 onerror="this.style.display='none'; console.error('❌ فشل تحميل الصورة: ${fileUrl}')" 
+                                 alt="${msg.file.name}" />
+                        `;
+                    } else if (isVideo) {
+                        content += `
+                            <video controls class="msg-image" style="max-width:200px;max-height:200px;border-radius:10px;margin-top:6px;">
+                                <source src="${fileUrl}" type="${msg.file.type}" />
+                                متصفحك لا يدعم تشغيل الفيديو
+                            </video>
+                        `;
+                    } else {
+                        const iconMap = {
+                            'pdf': 'fa-file-pdf',
+                            'doc': 'fa-file-word',
+                            'docx': 'fa-file-word',
+                            'xls': 'fa-file-excel',
+                            'xlsx': 'fa-file-excel',
+                            'ppt': 'fa-file-powerpoint',
+                            'pptx': 'fa-file-powerpoint',
+                            'zip': 'fa-file-archive',
+                            'rar': 'fa-file-archive',
+                            'mp4': 'fa-file-video',
+                            'txt': 'fa-file-alt'
+                        };
+                        const ext = msg.file.name.split('.').pop().toLowerCase();
+                        const icon = iconMap[ext] || 'fa-file';
+                        const fileSize = msg.file.size ? (msg.file.size / 1024).toFixed(1) : '0';
+
+                        content += `
+                            <div class="msg-file" onclick="downloadFile('${msg.file.name}', '${fileUrl}')">
+                                <i class="fas ${icon}"></i>
+                                <div class="file-info">
+                                    <div class="file-name">${msg.file.name}</div>
+                                    <div class="file-size">${fileSize} KB</div>
+                                </div>
+                                <i class="fas fa-download download-icon"></i>
+                            </div>
+                        `;
+                    }
+                }
+
+                const senderName = msg.senderName || (isOwn ? 'أنت' : 'المرسل');
+                const time = new Date(msg.createdAt).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+                content += `<span class="msg-time">${senderName} • ${time}</span>`;
+                div.innerHTML = content;
+                container.appendChild(div);
+            });
         }
-    }
 
-    const sendBtn = document.getElementById('sendBtn');
-    sendBtn.disabled = true;
-    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        // ============================================================
+        // إرسال رسالة مع دعم GridFS
+        // ============================================================
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text && !pendingFile) return;
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/chat/messages`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                conversationId: conversationId,
-                text: text || '📎 ملف مرفق',
-                file: fileData
-            })
-        });
+            const token = getToken();
+            if (!token) {
+                showToast('❌ يرجى تسجيل الدخول', 'error');
+                return;
+            }
 
-        const result = await response.json();
+            if (!currentUserId) {
+                showToast('❌ اختر مستخدم أولاً', 'error');
+                return;
+            }
 
-        if (result.success) {
-            const newMsg = {
-                id: result.data.id || Date.now().toString(),
-                senderId: 'admin',
-                senderName: 'أنت',
-                text: result.data.text || text,
-                file: result.data.file || null,
-                createdAt: result.data.createdAt || new Date().toISOString()
-            };
-            messages.push(newMsg);
-            renderMessages();
-            scrollToBottom();
+            const user = users.find(u => u.id === currentUserId);
+            let conversationId = user?.conversationId;
 
-            pendingFile = null;
-            input.value = '';
-            document.getElementById('sendBtn').disabled = true;
+            if (!conversationId) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/chat/conversations`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ userId: currentUserId, userRole: 'client' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        conversationId = data.data._id;
+                        const userIndex = users.findIndex(u => u.id === currentUserId);
+                        if (userIndex !== -1) {
+                            users[userIndex].conversationId = conversationId;
+                        }
+                    }
+                } catch (error) {
+                    console.error('❌ فشل إنشاء المحادثة:', error);
+                    showToast('❌ فشل إنشاء المحادثة', 'error');
+                    return;
+                }
+            }
 
-            loadUsers();
-            showToast('✅ تم إرسال الرسالة', 'success');
-        } else {
-            showToast(`❌ ${result.message || 'فشل الإرسال'}`, 'error');
+            if (!conversationId) {
+                showToast('❌ لا يمكن إنشاء المحادثة', 'error');
+                return;
+            }
+
+            let fileData = null;
+            if (pendingFile) {
+                try {
+                    // ✅ رفع الملف إلى GridFS أولاً عبر /api/chat/upload
+                    const uploadResponse = await fetch(`${API_BASE_URL}/chat/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ file: pendingFile })
+                    });
+
+                    const uploadResult = await uploadResponse.json();
+                    if (uploadResult.success) {
+                        fileData = uploadResult.data;
+                        console.log('✅ تم رفع الملف إلى GridFS:', fileData);
+                    } else {
+                        showToast('❌ فشل رفع الملف: ' + (uploadResult.message || ''), 'error');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('❌ فشل رفع الملف:', error);
+                    showToast('❌ فشل رفع الملف', 'error');
+                    return;
+                }
+            }
+
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        conversationId: conversationId,
+                        text: text || (fileData ? '📎 ملف مرفق' : ''),
+                        file: fileData
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // ✅ إضافة المسار الصحيح للصورة
+                    if (result.data.file && result.data.file.fileId) {
+                        const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                            ? 'http://localhost:5000'
+                            : 'https://irteqa.onrender.com';
+                        result.data.file.url = `${baseUrl}/api/chat/files/${result.data.file.fileId}`;
+                        result.data.file.path = `/api/chat/files/${result.data.file.fileId}`;
+                    }
+
+                    const newMsg = {
+                        id: result.data.id || Date.now().toString(),
+                        senderId: 'admin',
+                        senderName: 'أنت',
+                        text: result.data.text || text,
+                        file: result.data.file || null,
+                        createdAt: result.data.createdAt || new Date().toISOString()
+                    };
+                    messages.push(newMsg);
+                    renderMessages();
+                    scrollToBottom();
+
+                    pendingFile = null;
+                    input.value = '';
+                    document.getElementById('sendBtn').disabled = true;
+
+                    loadUsers();
+
+                    showToast('✅ تم إرسال الرسالة', 'success');
+                } else {
+                    showToast(`❌ ${result.message || 'فشل الإرسال'}`, 'error');
+                }
+            } catch (error) {
+                console.error('❌ فشل إرسال الرسالة:', error);
+                showToast('❌ فشل إرسال الرسالة', 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+            }
         }
-    } catch (error) {
-        console.error('❌ فشل إرسال الرسالة:', error);
-        showToast('❌ فشل إرسال الرسالة', 'error');
-    } finally {
-        sendBtn.disabled = false;
-        sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
-    }
-}
 
         // ============================================================
         // معالجة رفع الملفات
@@ -1162,9 +1191,10 @@ async function sendMessage() {
 
             const file = files[0];
             
-            // التحقق من حجم الملف (max 50MB)
-            if (file.size > 50 * 1024 * 1024) {
-                showToast('❌ حجم الملف كبير جداً (الحد الأقصى 50MB)', 'error');
+            // ✅ التحقق من حجم الملف
+            const maxSize = 50 * 1024 * 1024; // 50MB
+            if (file.size > maxSize) {
+                showToast(`❌ حجم الملف كبير جداً. الحد الأقصى 50MB`, 'error');
                 event.target.value = '';
                 return;
             }
@@ -1172,25 +1202,76 @@ async function sendMessage() {
             const reader = new FileReader();
 
             reader.onload = function(e) {
-                pendingFile = {
-                    name: file.name,
-                    type: file.type || 'application/octet-stream',
-                    size: file.size,
-                    data: e.target.result
-                };
+                try {
+                    const result = e.target.result;
+                    if (!result || !result.startsWith('data:')) {
+                        showToast('❌ فشل قراءة الملف', 'error');
+                        return;
+                    }
 
-                document.getElementById('messageInput').value = `📎 ${file.name}`;
-                document.getElementById('messageInput').focus();
-                document.getElementById('sendBtn').disabled = false;
-                showToast(`✅ تم رفع الملف: ${file.name}`, 'success');
+                    pendingFile = {
+                        name: file.name,
+                        type: file.type || 'application/octet-stream',
+                        size: file.size,
+                        data: result
+                    };
+
+                    // عرض اسم الملف في حقل الإدخال
+                    const input = document.getElementById('messageInput');
+                    const fileSize = (file.size / 1024).toFixed(1);
+                    input.value = `📎 ${file.name} (${fileSize} KB)`;
+                    input.focus();
+                    document.getElementById('sendBtn').disabled = false;
+
+                    showToast(`✅ تم رفع الملف: ${file.name} (${fileSize} KB)`, 'success');
+                    
+                    console.log('📁 ملف مرفوع:', {
+                        name: file.name,
+                        type: file.type,
+                        size: fileSize + ' KB'
+                    });
+
+                } catch (error) {
+                    console.error('❌ خطأ في قراءة الملف:', error);
+                    showToast('❌ حدث خطأ في قراءة الملف', 'error');
+                }
             };
 
-            reader.onerror = function() {
-                showToast('❌ فشل قراءة الملف', 'error');
+            reader.onerror = function(error) {
+                console.error('❌ خطأ في FileReader:', error);
+                showToast('❌ حدث خطأ في قراءة الملف', 'error');
             };
 
             reader.readAsDataURL(file);
             event.target.value = '';
+        }
+
+        // ============================================================
+        // تنزيل ملف
+        // ============================================================
+        function downloadFile(name, url) {
+            if (!url) {
+                showToast('❌ لا توجد بيانات للتحميل', 'error');
+                return;
+            }
+            
+            try {
+                if (url.startsWith('/uploads/') || url.startsWith('http')) {
+                    window.open(url, '_blank');
+                    showToast(`✅ جاري تحميل الملف: ${name}`, 'success');
+                } else {
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = name || 'ملف';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast(`✅ تم تنزيل الملف: ${name}`, 'success');
+                }
+            } catch (error) {
+                console.error('❌ خطأ في تنزيل الملف:', error);
+                showToast('❌ حدث خطأ في تنزيل الملف', 'error');
+            }
         }
 
         // ============================================================
