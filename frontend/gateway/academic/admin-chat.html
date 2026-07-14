@@ -948,6 +948,8 @@
 // ============================================================
 // عرض الرسائل مع دعم جميع أنواع الملفات
 // ============================================================
+ // admin-chat.html / chat.html
+
 function renderMessages() {
     const container = document.getElementById('chatMessages');
     container.innerHTML = '';
@@ -980,7 +982,7 @@ function renderMessages() {
 
         // ✅ عرض الملف من GridFS
         if (msg.file && msg.file.name) {
-            // ✅ بناء المسار الصحيح للصورة
+            // ✅ بناء المسار الصحيح
             let fileUrl = msg.file.url || msg.file.path || '';
             
             // إذا كان الملف في GridFS ولدينا fileId
@@ -989,120 +991,59 @@ function renderMessages() {
             }
 
             const isImage = msg.file.type && msg.file.type.startsWith('image/');
-            const isVideo = msg.file.type && msg.file.type.startsWith('video/');
-            const isPDF = msg.file.type && msg.file.type === 'application/pdf';
-            const isWord = msg.file.type && (msg.file.type.includes('word') || msg.file.type.includes('document'));
-            const isExcel = msg.file.type && (msg.file.type.includes('excel') || msg.file.type.includes('sheet'));
-            const isPowerPoint = msg.file.type && (msg.file.type.includes('powerpoint') || msg.file.type.includes('presentation'));
-            const isArchive = msg.file.type && (msg.file.type.includes('zip') || msg.file.type.includes('compressed'));
 
             if (isImage) {
+                // ✅ عرض الصورة مع معالجة الأخطاء
                 content += `
-                    <img src="${fileUrl}" class="msg-image" 
-                         onclick="window.open('${fileUrl}', '_blank')" 
-                         onerror="this.style.display='none'; console.error('❌ فشل تحميل الصورة: ${fileUrl}')" 
-                         alt="${msg.file.name}" />
-                `;
-            } else if (isVideo) {
-                content += `
-                    <video controls class="msg-image" style="max-width:200px;max-height:200px;border-radius:10px;margin-top:6px;">
-                        <source src="${fileUrl}" type="${msg.file.type}" />
-                        متصفحك لا يدعم تشغيل الفيديو
-                    </video>
-                `;
-            } else if (isPDF) {
-                // ✅ عرض PDF مع زر تحميل وعرض
-                content += `
-                    <div style="margin-top:8px;padding:12px 16px;background:rgba(239,68,68,0.08);border-radius:12px;border:1px solid rgba(239,68,68,0.15);">
-                        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                            <i class="fas fa-file-pdf" style="font-size:2rem;color:#EF4444;"></i>
-                            <div style="flex:1;min-width:0;">
-                                <div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${msg.file.name}</div>
-                                <div style="font-size:0.65rem;color:var(--text-muted);">
-                                    <i class="fas fa-file"></i> PDF • ${msg.file.size ? (msg.file.size / 1024).toFixed(1) : '0'} KB
-                                </div>
+                    <div style="position:relative;display:inline-block;max-width:100%;">
+                        <img src="${fileUrl}" class="msg-image" 
+                             onclick="window.open('${fileUrl}', '_blank')" 
+                             alt="${msg.file.name}"
+                             onerror="this.style.display='none'; 
+                                      this.parentElement.querySelector('.error-container').style.display='block'; 
+                                      console.error('❌ فشل تحميل الصورة:', '${fileUrl}');" />
+                        <div class="error-container" style="display:none;padding:10px;background:rgba(239,68,68,0.1);border-radius:12px;border:1px solid #EF4444;margin-top:6px;text-align:center;min-width:150px;">
+                            <div style="font-size:0.85rem;color:#EF4444;font-weight:600;margin-bottom:6px;">
+                                <i class="fas fa-exclamation-circle"></i> فشل تحميل الصورة
                             </div>
-                            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                                <button onclick="window.open('${fileUrl}', '_blank')" 
-                                        style="background:var(--gradient-main);color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;display:flex;align-items:center;gap:4px;">
-                                    <i class="fas fa-eye"></i> عرض
-                                </button>
-                                <button onclick="downloadFile('${msg.file.name}', '${fileUrl}')" 
-                                        style="background:var(--bg-body);color:var(--text-color);border:1px solid var(--border-color);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;display:flex;align-items:center;gap:4px;">
-                                    <i class="fas fa-download"></i> تحميل
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (isWord || isExcel || isPowerPoint) {
-                // ✅ عرض مستندات Office
-                const iconMap = {
-                    'word': 'fa-file-word',
-                    'excel': 'fa-file-excel',
-                    'powerpoint': 'fa-file-powerpoint'
-                };
-                const colorMap = {
-                    'word': '#2563EB',
-                    'excel': '#16A34A',
-                    'powerpoint': '#EA580C'
-                };
-                let fileType = 'word';
-                if (isExcel) fileType = 'excel';
-                if (isPowerPoint) fileType = 'powerpoint';
-                
-                const labelMap = {
-                    'word': 'Word',
-                    'excel': 'Excel',
-                    'powerpoint': 'PowerPoint'
-                };
-
-                content += `
-                    <div style="margin-top:8px;padding:12px 16px;background:rgba(37,99,235,0.06);border-radius:12px;border:1px solid rgba(37,99,235,0.12);">
-                        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                            <i class="fas ${iconMap[fileType]}" style="font-size:2rem;color:${colorMap[fileType]};"></i>
-                            <div style="flex:1;min-width:0;">
-                                <div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${msg.file.name}</div>
-                                <div style="font-size:0.65rem;color:var(--text-muted);">
-                                    <i class="fas fa-file"></i> ${labelMap[fileType]} • ${msg.file.size ? (msg.file.size / 1024).toFixed(1) : '0'} KB
-                                </div>
-                            </div>
-                            <button onclick="downloadFile('${msg.file.name}', '${fileUrl}')" 
-                                    style="background:var(--gradient-main);color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;display:flex;align-items:center;gap:4px;">
-                                <i class="fas fa-download"></i> تحميل
+                            <button onclick="retryLoadImage(this, '${fileUrl}')" 
+                                    style="background:var(--primary);color:#fff;border:none;padding:4px 16px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.75rem;">
+                                <i class="fas fa-redo"></i> إعادة المحاولة
                             </button>
-                        </div>
-                    </div>
-                `;
-            } else if (isArchive) {
-                // ✅ عرض الملفات المضغوطة
-                content += `
-                    <div style="margin-top:8px;padding:12px 16px;background:rgba(245,158,11,0.08);border-radius:12px;border:1px solid rgba(245,158,11,0.15);">
-                        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                            <i class="fas fa-file-archive" style="font-size:2rem;color:#F59E0B;"></i>
-                            <div style="flex:1;min-width:0;">
-                                <div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${msg.file.name}</div>
-                                <div style="font-size:0.65rem;color:var(--text-muted);">
-                                    <i class="fas fa-file"></i> مضغوط • ${msg.file.size ? (msg.file.size / 1024).toFixed(1) : '0'} KB
-                                </div>
-                            </div>
-                            <button onclick="downloadFile('${msg.file.name}', '${fileUrl}')" 
-                                    style="background:var(--gradient-main);color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;display:flex;align-items:center;gap:4px;">
-                                <i class="fas fa-download"></i> تحميل
+                            <button onclick="window.open('${fileUrl}', '_blank')" 
+                                    style="background:var(--bg-body);color:var(--text-color);border:1px solid var(--border-color);padding:4px 16px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.75rem;margin-right:6px;">
+                                <i class="fas fa-external-link-alt"></i> فتح
                             </button>
                         </div>
                     </div>
                 `;
             } else {
-                // ✅ عرض أي ملف آخر
+                // ✅ عرض الملفات الأخرى (PDF, DOC, إلخ)
+                const iconMap = {
+                    'pdf': 'fa-file-pdf',
+                    'doc': 'fa-file-word',
+                    'docx': 'fa-file-word',
+                    'xls': 'fa-file-excel',
+                    'xlsx': 'fa-file-excel',
+                    'ppt': 'fa-file-powerpoint',
+                    'pptx': 'fa-file-powerpoint',
+                    'zip': 'fa-file-archive',
+                    'rar': 'fa-file-archive',
+                    'mp4': 'fa-file-video',
+                    'txt': 'fa-file-alt'
+                };
+                const ext = msg.file.name.split('.').pop().toLowerCase();
+                const icon = iconMap[ext] || 'fa-file';
+                const fileSize = msg.file.size ? (msg.file.size / 1024).toFixed(1) : '0';
+
                 content += `
-                    <div style="margin-top:8px;padding:12px 16px;background:rgba(124,58,237,0.06);border-radius:12px;border:1px solid rgba(124,58,237,0.12);">
+                    <div style="margin-top:8px;padding:10px 14px;background:rgba(124,58,237,0.06);border-radius:12px;border:1px solid rgba(124,58,237,0.12);">
                         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                            <i class="fas fa-file" style="font-size:2rem;color:var(--primary);"></i>
+                            <i class="fas ${icon}" style="font-size:1.5rem;color:var(--primary);"></i>
                             <div style="flex:1;min-width:0;">
                                 <div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${msg.file.name}</div>
                                 <div style="font-size:0.65rem;color:var(--text-muted);">
-                                    <i class="fas fa-file"></i> ملف • ${msg.file.size ? (msg.file.size / 1024).toFixed(1) : '0'} KB
+                                    ${fileSize} KB
                                 </div>
                             </div>
                             <button onclick="downloadFile('${msg.file.name}', '${fileUrl}')" 
@@ -1123,6 +1064,51 @@ function renderMessages() {
     });
 
     scrollToBottom();
+}
+
+// ============================================================
+// إعادة محاولة تحميل الصورة
+// ============================================================
+function retryLoadImage(btn, url) {
+    // إخفاء زر إعادة المحاولة
+    const errorContainer = btn.closest('.error-container');
+    if (errorContainer) {
+        errorContainer.style.display = 'none';
+    }
+    
+    // إظهار الصورة وإعادة التحميل
+    const img = btn.closest('div').querySelector('.msg-image');
+    if (img) {
+        img.style.display = 'block';
+        // إضافة معلمة عشوائية لتجنب التخزين المؤقت
+        const newUrl = url + '?t=' + Date.now();
+        img.src = newUrl;
+        img.onerror = function() {
+            this.style.display = 'none';
+            if (errorContainer) {
+                errorContainer.style.display = 'block';
+            }
+            console.error('❌ فشل إعادة تحميل الصورة:', newUrl);
+        };
+    }
+}
+
+// ============================================================
+// تنزيل ملف
+// ============================================================
+function downloadFile(name, url) {
+    if (!url) {
+        showToast('❌ لا توجد بيانات للتحميل', 'error');
+        return;
+    }
+    
+    try {
+        window.open(url, '_blank');
+        showToast(`✅ جاري تحميل الملف: ${name}`, 'success');
+    } catch (error) {
+        console.error('❌ خطأ في تنزيل الملف:', error);
+        showToast('❌ حدث خطأ في تنزيل الملف', 'error');
+    }
 }
         // ============================================================
         // إرسال رسالة مع دعم GridFS
