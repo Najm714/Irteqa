@@ -440,52 +440,109 @@ app.get('/api/files/info/:fileId', protect, async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+// backend/server.js - إصلاح مسار عرض الصور
 
 // ============================================================
-// 🖼️ عرض صور الدردشة من GridFS
+// 🖼️ عرض صور الدردشة من GridFS (معدل)
 // ============================================================
 app.get('/api/chat/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
         const ObjectId = require('mongodb').ObjectId;
 
+        console.log('📁 طلب عرض صورة:', fileId);
+
+        // التحقق من صحة المعرف
         if (!ObjectId.isValid(fileId)) {
+            console.error('❌ معرف ملف غير صالح:', fileId);
             return res.status(400).json({
                 success: false,
                 message: 'معرف ملف غير صالح'
             });
         }
 
+        // التحقق من وجود الملف في GridFS
         const fileInfo = await getFileInfo(fileId);
         if (!fileInfo) {
+            console.error('❌ الملف غير موجود في GridFS:', fileId);
             return res.status(404).json({
                 success: false,
                 message: 'الملف غير موجود'
             });
         }
 
+        console.log('✅ تم العثور على الملف:', fileInfo.filename);
+
+        // إعداد رؤوس الاستجابة
         res.set('Content-Type', fileInfo.contentType || 'image/jpeg');
         res.set('Content-Length', fileInfo.length);
+        res.set('Cache-Control', 'public, max-age=86400'); //缓存 24 ساعة
 
+        // الحصول على bucket
         const bucket = getGridFSBucket();
         const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
-        downloadStream.pipe(res);
-
+        
         downloadStream.on('error', (error) => {
-            console.error('❌ خطأ في عرض الصورة:', error);
+            console.error('❌ خطأ في بث الصورة:', error);
             if (!res.headersSent) {
-                res.status(500).json({ success: false, message: 'حدث خطأ في عرض الصورة' });
+                res.status(500).json({
+                    success: false,
+                    message: 'حدث خطأ في عرض الصورة'
+                });
             }
         });
+
+        downloadStream.pipe(res);
 
     } catch (error) {
         console.error('❌ خطأ في عرض الصورة:', error);
         if (!res.headersSent) {
-            res.status(500).json({ success: false, message: error.message });
+            res.status(500).json({
+                success: false,
+                message: error.message || 'حدث خطأ في عرض الصورة'
+            });
         }
     }
 });
 
+// backend/server.js - إضافة مسار للصور القديمة
+
+// ============================================================
+// 📁 عرض الصور القديمة من التخزين المحلي
+// ============================================================
+app.get('/uploads/chat-files/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(chatFilesDir, filename);
+    
+    console.log('📁 محاولة تحميل صورة قديمة:', filePath);
+    
+    if (fs.existsSync(filePath)) {
+        console.log('✅ تم العثور على الصورة محلياً:', filename);
+        return res.sendFile(filePath);
+    }
+    
+    // محاولة البحث في مجلدات أخرى
+    const altPaths = [
+        path.join(__dirname, '..', 'uploads', 'chat-files', filename),
+        path.join(uploadsDir, 'chat-files', filename),
+        path.join(__dirname, 'uploads', filename)
+    ];
+    
+    for (const altPath of altPaths) {
+        if (fs.existsSync(altPath)) {
+            console.log('✅ تم العثور على الصورة في مسار بديل:', altPath);
+            return res.sendFile(altPath);
+        }
+    }
+    
+    console.error('❌ الصورة غير موجودة:', filename);
+    res.status(404).json({
+        success: false,
+        message: 'الملف غير موجود',
+        filename: filename,
+        suggestion: 'يرجى إعادة تحميل الملف'
+    });
+});
 // ============================================================
 // مسار الصحة
 // ============================================================
@@ -1019,24 +1076,34 @@ async function sendUserConversations(ws, userId) {
         console.error('❌ خطأ في إرسال المحادثات:', error);
     }
 }
+ // backend/server.js - تحديث handleNewMessage
 
 async function handleNewMessage(ws, data, userId, role) {
     try {
         const { conversationId, text, file } = data;
 
         if (!conversationId || !text) {
-            ws.send(JSON.stringify({ type: 'error', message: 'معرف المحادثة والنص مطلوبان' }));
+            ws.send(JSON.stringify({
+                type: 'error',
+                message: 'معرف المحادثة والنص مطلوبان'
+            }));
             return;
         }
 
         const conversation = await Conversation.findById(conversationId);
         if (!conversation) {
-            ws.send(JSON.stringify({ type: 'error', message: 'المحادثة غير موجودة' }));
+            ws.send(JSON.stringify({
+                type: 'error',
+                message: 'المحادثة غير موجودة'
+            }));
             return;
         }
 
         if (!conversation.participants.includes(userId)) {
-            ws.send(JSON.stringify({ type: 'error', message: 'ليس لديك صلاحية' }));
+            ws.send(JSON.stringify({
+                type: 'error',
+                message: 'ليس لديك صلاحية'
+            }));
             return;
         }
 
@@ -1044,12 +1111,17 @@ async function handleNewMessage(ws, data, userId, role) {
         
         if (file) {
             try {
+                console.log('📁 جاري رفع ملف WebSocket إلى GridFS...');
+                
+                // تحويل البيانات
                 let base64Data = file.data;
                 if (base64Data.includes(';base64,')) {
                     base64Data = base64Data.split(';base64,').pop();
                 }
+                
                 const buffer = Buffer.from(base64Data, 'base64');
 
+                // إنشاء كائن ملف مؤقت
                 const tempFile = {
                     buffer: buffer,
                     originalname: file.name || 'file',
@@ -1057,6 +1129,7 @@ async function handleNewMessage(ws, data, userId, role) {
                     size: file.size || buffer.length
                 };
 
+                // رفع الملف إلى GridFS
                 const gridfsResult = await uploadToGridFS(tempFile, {
                     type: 'chat_file_ws',
                     conversationId: conversationId,
@@ -1064,23 +1137,29 @@ async function handleNewMessage(ws, data, userId, role) {
                 });
 
                 if (gridfsResult) {
-                    const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
+                    const baseUrl = process.env.BASE_URL || `https://irteqa.onrender.com`;
+                    // ✅ استخدام المسار الصحيح لعرض الصور
+                    const fileUrl = `${baseUrl}/api/chat/files/${gridfsResult.fileId}`;
+
                     fileData = {
                         name: file.name,
                         type: file.type || 'application/octet-stream',
                         size: file.size || buffer.length,
                         path: `/api/chat/files/${gridfsResult.fileId}`,
-                        url: `${baseUrl}/api/chat/files/${gridfsResult.fileId}`,
+                        url: fileUrl,
                         fileId: gridfsResult.fileId,
                         storageProvider: 'gridfs',
                         gridfsId: gridfsResult.id
                     };
+                    console.log('✅ تم رفع ملف WebSocket إلى GridFS:', gridfsResult.filename);
+                    console.log('🔗 رابط الملف:', fileUrl);
                 }
             } catch (fileError) {
                 console.error('❌ خطأ في رفع ملف WebSocket:', fileError);
             }
         }
 
+        // إنشاء الرسالة
         const message = new Message({
             conversationId: conversationId,
             senderId: userId,
@@ -1091,15 +1170,18 @@ async function handleNewMessage(ws, data, userId, role) {
 
         await message.save();
 
+        // تحديث المحادثة
         await Conversation.findByIdAndUpdate(conversationId, {
             lastMessage: message._id,
             updatedAt: new Date(),
             $inc: { unreadCount: 1 }
         });
 
+        // جلب الرسالة مع بيانات المرسل
         const populatedMessage = await Message.findById(message._id)
             .populate('senderId', 'name email role avatar');
 
+        // إرسال تأكيد للمرسل
         ws.send(JSON.stringify({
             type: 'message_sent',
             message: {
@@ -1112,6 +1194,7 @@ async function handleNewMessage(ws, data, userId, role) {
             }
         }));
 
+        // إرسال إلى جميع المشاركين الآخرين
         const wsData = {
             type: 'new_message',
             conversationId: conversationId,
@@ -1132,6 +1215,7 @@ async function handleNewMessage(ws, data, userId, role) {
             }
         });
 
+        // إشعار للمديرين
         if (role === 'client') {
             broadcastToAdmins({
                 type: 'notification',
@@ -1145,10 +1229,12 @@ async function handleNewMessage(ws, data, userId, role) {
 
     } catch (error) {
         console.error('❌ خطأ في معالجة الرسالة الجديدة:', error);
-        ws.send(JSON.stringify({ type: 'error', message: 'حدث خطأ في إرسال الرسالة' }));
+        ws.send(JSON.stringify({
+            type: 'error',
+            message: 'حدث خطأ في إرسال الرسالة'
+        }));
     }
 }
-
 async function handleReadMessages(ws, data, userId) {
     try {
         const { conversationId } = data;
