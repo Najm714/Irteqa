@@ -1619,26 +1619,16 @@ app.post('/api/chat/messages', protect, async (req, res) => {
 // backend/server.js
 
 // ============================================================
-// 📤 رفع ملف في الدردشة
+// 📤 رفع ملف في الدردشة - الحل النهائي
 // ============================================================
 app.post('/api/chat/upload', protect, async (req, res) => {
     try {
         const { file } = req.body;
         
-        // ✅ التحقق من وجود الملف
         if (!file || !file.data) {
             return res.status(400).json({ 
                 success: false, 
                 message: 'الملف مطلوب' 
-            });
-        }
-
-        // ✅ التحقق من حجم الملف (حد أقصى 50MB)
-        const maxSize = 50 * 1024 * 1024;
-        if (file.size > maxSize) {
-            return res.status(400).json({
-                success: false,
-                message: 'حجم الملف كبير جداً. الحد الأقصى 50MB'
             });
         }
 
@@ -1647,57 +1637,28 @@ app.post('/api/chat/upload', protect, async (req, res) => {
         if (base64Data.includes(';base64,')) {
             base64Data = base64Data.split(';base64,').pop();
         }
-        
-        if (!base64Data || base64Data.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: 'بيانات الملف فارغة'
-            });
-        }
-
         const buffer = Buffer.from(base64Data, 'base64');
+
+        // ✅ حفظ الملف محلياً (الحل الأساسي)
+        const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const fileName = `chat_${Date.now()}_${cleanName}`;
+        const filePath = path.join(chatFilesDir, fileName);
         
-        if (buffer.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: 'الملف فارغ'
-            });
-        }
+        fs.writeFileSync(filePath, buffer);
+        console.log(`✅ تم حفظ الملف محلياً: ${fileName} (${(buffer.length/1024).toFixed(1)} KB)`);
 
-        // ✅ إنشاء كائن ملف مؤقت
-        const tempFile = {
-            buffer: buffer,
-            originalname: file.name || 'file',
-            mimetype: file.type || 'application/octet-stream',
-            size: file.size || buffer.length
-        };
-
-        // ✅ رفع إلى GridFS
-        const result = await uploadToGridFS(tempFile, {
-            type: 'chat_file',
-            uploadedBy: req.user.id,
-            uploadedByName: req.user.name
-        });
-
-        if (!result) {
-            return res.status(500).json({
-                success: false,
-                message: 'فشل رفع الملف إلى GridFS'
-            });
-        }
-
-        // ✅ بناء رابط الملف
         const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
         
         res.status(200).json({
             success: true,
             data: {
-                fileId: result.fileId,
-                url: `${baseUrl}/api/chat/files/${result.fileId}`,
-                path: `/api/chat/files/${result.fileId}`,
+                fileId: fileName,
+                url: `${baseUrl}/uploads/chat-files/${fileName}`,
+                path: `/uploads/chat-files/${fileName}`,
                 name: file.name,
                 type: file.type,
-                size: file.size
+                size: file.size,
+                storageProvider: 'local'
             }
         });
 
@@ -1708,45 +1669,86 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             message: error.message || 'حدث خطأ في رفع الملف'
         });
     }
-});
-
+}); 
 // ============================================================
-// 🖼️ عرض ملفات الدردشة من GridFS
+// 🖼️ عرض ملفات الدردشة - الحل النهائي
 // ============================================================
 app.get('/api/chat/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
-        const ObjectId = require('mongodb').ObjectId;
-
-        // 1. تحقق من صحة المعرف
-        if (!ObjectId.isValid(fileId)) {
-            return res.status(400).json({ success: false, message: 'معرف غير صالح' });
+        
+        // ✅ البحث عن الملف في التخزين المحلي أولاً
+        const filePath = path.join(chatFilesDir, fileId);
+        
+        if (fs.existsSync(filePath)) {
+            console.log('✅ تم العثور على الملف محلياً:', fileId);
+            const ext = path.extname(fileId).toLowerCase();
+            const mimeTypes = {
+                '.jpg': 'image/jpeg',
+                '.jpeg': 'image/jpeg',
+                '.png': 'image/png',
+                '.gif': 'image/gif',
+                '.webp': 'image/webp',
+                '.pdf': 'application/pdf',
+                '.mp4': 'video/mp4',
+                '.mov': 'video/quicktime',
+                '.avi': 'video/x-msvideo',
+                '.webm': 'video/webm',
+                '.doc': 'application/msword',
+                '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                '.xls': 'application/vnd.ms-excel',
+                '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                '.ppt': 'application/vnd.ms-powerpoint',
+                '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                '.zip': 'application/zip',
+                '.rar': 'application/x-rar-compressed',
+                '.txt': 'text/plain'
+            };
+            const contentType = mimeTypes[ext] || 'application/octet-stream';
+            
+            res.setHeader('Content-Type', contentType);
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            
+            if (contentType === 'application/pdf') {
+                res.setHeader('Content-Disposition', 'inline; filename="' + fileId + '"');
+            }
+            
+            return res.sendFile(filePath);
         }
-
-        // 2. جلب معلومات الملف
-        const fileInfo = await getFileInfo(fileId);
-        if (!fileInfo) {
+        
+        // ✅ البحث في GridFS كاحتياطي
+        console.log('📁 البحث في GridFS:', fileId);
+        const ObjectId = require('mongodb').ObjectId;
+        
+        if (!ObjectId.isValid(fileId)) {
             return res.status(404).json({ success: false, message: 'الملف غير موجود' });
         }
-
-        // 3. إعداد الاستجابة
-        res.setHeader('Content-Type', fileInfo.contentType || 'image/jpeg');
-        res.setHeader('Content-Length', fileInfo.length);
-        res.setHeader('Cache-Control', 'public, max-age=86400');
-
-        // 4. بث الملف
-        const bucket = getGridFSBucket();
-        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
         
-        downloadStream.on('error', (error) => {
-            console.error('❌ خطأ:', error);
-            if (!res.headersSent) {
-                res.status(500).json({ success: false, message: 'خطأ في البث' });
-            }
-        });
-
-        downloadStream.pipe(res);
-
+        const fileInfo = await getFileInfo(fileId);
+        if (fileInfo) {
+            console.log('✅ تم العثور على الملف في GridFS');
+            res.setHeader('Content-Type', fileInfo.contentType || 'application/octet-stream');
+            res.setHeader('Content-Length', fileInfo.length);
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            
+            const bucket = getGridFSBucket();
+            const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+            downloadStream.pipe(res);
+            
+            downloadStream.on('error', (error) => {
+                console.error('❌ خطأ:', error);
+                if (!res.headersSent) {
+                    res.status(404).json({ success: false, message: 'الملف غير موجود' });
+                }
+            });
+            return;
+        }
+        
+        console.error('❌ الملف غير موجود:', fileId);
+        res.status(404).json({ success: false, message: 'الملف غير موجود' });
+        
     } catch (error) {
         console.error('❌ خطأ:', error);
         res.status(500).json({ success: false, message: error.message });
