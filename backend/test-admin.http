@@ -3,8 +3,8 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "alqadynjm088@gmail.com",
-    "password": "miaiLDGxIe5Wk0WH"
+    "email": "shhabalqady569@gmail.com",
+    "password": "775230669"
 }
 
 ### 2. جلب جميع الطلبات (يحتاج صلاحية Admin)
