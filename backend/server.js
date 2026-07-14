@@ -1616,6 +1616,7 @@ app.post('/api/chat/messages', protect, async (req, res) => {
         res.status(500).json({ success: false, message: error.message || 'حدث خطأ في إرسال الرسالة' });
     }
 });
+// backend/server.js
 
 // ============================================================
 // 📤 رفع ملف في الدردشة
@@ -1623,16 +1624,47 @@ app.post('/api/chat/messages', protect, async (req, res) => {
 app.post('/api/chat/upload', protect, async (req, res) => {
     try {
         const { file } = req.body;
+        
+        // ✅ التحقق من وجود الملف
         if (!file || !file.data) {
-            return res.status(400).json({ success: false, message: 'الملف مطلوب' });
+            return res.status(400).json({ 
+                success: false, 
+                message: 'الملف مطلوب' 
+            });
         }
 
+        // ✅ التحقق من حجم الملف (حد أقصى 50MB)
+        const maxSize = 50 * 1024 * 1024;
+        if (file.size > maxSize) {
+            return res.status(400).json({
+                success: false,
+                message: 'حجم الملف كبير جداً. الحد الأقصى 50MB'
+            });
+        }
+
+        // ✅ تحويل Base64 إلى Buffer
         let base64Data = file.data;
         if (base64Data.includes(';base64,')) {
             base64Data = base64Data.split(';base64,').pop();
         }
-        const buffer = Buffer.from(base64Data, 'base64');
+        
+        if (!base64Data || base64Data.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'بيانات الملف فارغة'
+            });
+        }
 
+        const buffer = Buffer.from(base64Data, 'base64');
+        
+        if (buffer.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'الملف فارغ'
+            });
+        }
+
+        // ✅ إنشاء كائن ملف مؤقت
         const tempFile = {
             buffer: buffer,
             originalname: file.name || 'file',
@@ -1640,6 +1672,7 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             size: file.size || buffer.length
         };
 
+        // ✅ رفع إلى GridFS
         const result = await uploadToGridFS(tempFile, {
             type: 'chat_file',
             uploadedBy: req.user.id,
@@ -1647,9 +1680,13 @@ app.post('/api/chat/upload', protect, async (req, res) => {
         });
 
         if (!result) {
-            return res.status(500).json({ success: false, message: 'فشل رفع الملف' });
+            return res.status(500).json({
+                success: false,
+                message: 'فشل رفع الملف إلى GridFS'
+            });
         }
 
+        // ✅ بناء رابط الملف
         const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
         
         res.status(200).json({
@@ -1666,11 +1703,12 @@ app.post('/api/chat/upload', protect, async (req, res) => {
 
     } catch (error) {
         console.error('❌ خطأ في رفع الملف:', error);
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message || 'حدث خطأ في رفع الملف'
+        });
     }
 });
- // backend/server.js
-
 // ============================================================
 // 🖼️ عرض ملفات الدردشة من GridFS
 // ============================================================

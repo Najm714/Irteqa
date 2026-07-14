@@ -54,17 +54,23 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
+ // backend/config/gridfs.js
+
 const uploadToGridFS = (file, metadata = {}) => {
     return new Promise((resolve, reject) => {
         try {
             const bucket = initGridFS();
-            if (!bucket) return reject(new Error('GridFS غير مهيأ'));
+            if (!bucket) {
+                return reject(new Error('GridFS غير مهيأ'));
+            }
 
+            // ✅ توليد اسم فريد للملف
             const timestamp = Date.now();
-            const random = crypto.randomBytes(8).toString('hex');
+            const random = Math.random().toString(36).substring(7);
             const ext = path.extname(file.originalname || 'file');
             const filename = `${timestamp}_${random}${ext}`;
 
+            // ✅ إنشاء stream للرفع
             const uploadStream = bucket.openUploadStream(filename, {
                 contentType: file.mimetype || 'application/octet-stream',
                 metadata: {
@@ -80,6 +86,7 @@ const uploadToGridFS = (file, metadata = {}) => {
 
             uploadStream.on('error', (error) => {
                 errorOccurred = true;
+                console.error('❌ خطأ في رفع الملف إلى GridFS:', error);
                 reject(error);
             });
 
@@ -97,12 +104,14 @@ const uploadToGridFS = (file, metadata = {}) => {
                 }
             });
 
+            // ✅ كتابة الملف إلى GridFS
             const readableStream = new Readable();
             readableStream.push(file.buffer);
             readableStream.push(null);
             readableStream.pipe(uploadStream);
 
         } catch (error) {
+            console.error('❌ خطأ في رفع الملف:', error);
             reject(error);
         }
     });
