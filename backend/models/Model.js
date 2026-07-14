@@ -1,21 +1,65 @@
+// backend/models/Model.js
 const mongoose = require('mongoose');
 
-const modelSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    mainService: { 
-        type: String, 
-        required: true 
-        // ✅ تم حذف enum بالكامل - يقبل أي قيمة
+const ModelSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+        trim: true
     },
-    subService: { type: String, default: '' },
-    category: { type: String, required: true },
-    description: { type: String, default: '' },
-    fileName: { type: String, required: true },
-    fileSize: { type: String, required: true },
-    fileType: { type: String, required: true },
-    fileData: { type: String, required: true },
-    uploadDate: { type: Date, default: Date.now },
-    uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    category: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    description: {
+        type: String,
+        default: ''
+    },
+    fileName: {
+        type: String,
+        required: true
+    },
+    fileSize: {
+        type: String,
+        default: '0 KB'
+    },
+    fileType: {
+        type: String,
+        default: 'application/octet-stream'
+    },
+    fileData: {
+        type: String,
+        required: true
+    },
+    mainService: {
+        type: String,
+        required: true
+    },
+    subService: {
+        type: String,
+        default: 'خدمة فرعية'
+    },
+    uploadedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    fileId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'uploads.files'
+    },
+    storageProvider: {
+        type: String,
+        enum: ['local', 'gridfs'],
+        default: 'local'
+    }
+}, {
+    timestamps: true
 });
 
-module.exports = mongoose.model('Model', modelSchema);
+// فهارس للبحث
+ModelSchema.index({ title: 'text', category: 'text' });
+ModelSchema.index({ mainService: 1 });
+ModelSchema.index({ createdAt: -1 });
+
+module.exports = mongoose.model('Model', ModelSchema);

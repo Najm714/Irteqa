@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true, limit: '500mb' }));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // ============================================================
-// إنشاء مجلدات uploads (للملفات المؤقتة فقط)
+// إنشاء مجلدات uploads
 // ============================================================
 const uploadsDir = path.join(__dirname, 'uploads');
 const videosDir = path.join(uploadsDir, 'videos');
@@ -116,14 +116,6 @@ app.get('/video/:filename', (req, res) => {
 });
 
 // ============================================================
-// التحقق من وجود الملفات عند بدء التشغيل
-// ============================================================
-if (fs.existsSync(videosDir)) {
-    const files = fs.readdirSync(videosDir);
-    console.log(`📁 عدد الملفات في مجلد الفيديوهات: ${files.length}`);
-}
-
-// ============================================================
 // الاتصال بقاعدة البيانات
 // ============================================================
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/draseh_platform';
@@ -158,7 +150,7 @@ const upload = require('./middleware/upload');
 const { protect, authorize } = require('./middleware/auth');
 
 // ============================================================
-// ✅ استيراد دوال GridFS
+// استيراد دوال GridFS
 // ============================================================
 const { 
     upload: gridfsUpload,
@@ -201,74 +193,7 @@ app.get('/', (req, res) => {
 });
 
 // ============================================================
-// 📹 مسار رفع الفيديو باستخدام GridFS (معدل)
-// ============================================================
-app.post('/api/videos/upload', protect, authorize('admin'), gridfsUpload.single('video'), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                message: 'يرجى اختيار فيديو'
-            });
-        }
-
-        const { title, subjectId, subjectName, specialtyName, universityName, description } = req.body;
-
-        if (!title || !subjectId || !subjectName) {
-            return res.status(400).json({
-                success: false,
-                message: 'العنوان، معرف المادة، واسم المادة مطلوبون'
-            });
-        }
-
-        // رفع الملف إلى GridFS
-        const fileResult = await uploadToGridFS(req.file, {
-            title: title,
-            subjectId: subjectId,
-            uploadedBy: req.user.id
-        });
-
-        if (!fileResult) {
-            return res.status(500).json({
-                success: false,
-                message: 'فشل رفع الفيديو إلى GridFS'
-            });
-        }
-
-        const video = new Video({
-            title: title,
-            subjectId: String(subjectId),
-            subjectName: subjectName,
-            specialtyName: specialtyName || '',
-            universityName: universityName || '',
-            description: description || '',
-            fileName: req.file.originalname,
-            filePath: `/api/files/stream/${fileResult.fileId}`,
-            fileSize: (req.file.size / (1024 * 1024)).toFixed(2) + ' MB',
-            fileType: req.file.mimetype,
-            fileId: fileResult.id,
-            duration: '00:00',
-            uploadDate: new Date(),
-            views: 0,
-            storageProvider: 'gridfs'
-        });
-
-        await video.save();
-
-        res.status(201).json({
-            success: true,
-            message: '✅ تم رفع الفيديو بنجاح إلى قاعدة البيانات',
-            data: video
-        });
-
-    } catch (error) {
-        console.error('❌ خطأ في رفع الفيديو:', error);
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
-
-// ============================================================
-// 🎬 بث الملفات من GridFS
+// 🎬 مسار بث الملفات من GridFS
 // ============================================================
 app.get('/api/files/stream/:fileId', async (req, res) => {
     try {
@@ -276,18 +201,12 @@ app.get('/api/files/stream/:fileId', async (req, res) => {
         const ObjectId = require('mongodb').ObjectId;
 
         if (!ObjectId.isValid(fileId)) {
-            return res.status(400).json({
-                success: false,
-                message: 'معرف ملف غير صالح'
-            });
+            return res.status(400).json({ success: false, message: 'معرف ملف غير صالح' });
         }
 
         const fileInfo = await getFileInfo(fileId);
         if (!fileInfo) {
-            return res.status(404).json({
-                success: false,
-                message: 'الملف غير موجود'
-            });
+            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
         }
 
         res.set('Content-Type', fileInfo.contentType || 'application/octet-stream');
@@ -348,10 +267,7 @@ app.get('/api/files/download/:fileId', protect, async (req, res) => {
 
         const fileInfo = await getFileInfo(fileId);
         if (!fileInfo) {
-            return res.status(404).json({
-                success: false,
-                message: 'الملف غير موجود'
-            });
+            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
         }
 
         res.set('Content-Type', fileInfo.contentType || 'application/octet-stream');
@@ -375,40 +291,6 @@ app.get('/api/files/download/:fileId', protect, async (req, res) => {
 });
 
 // ============================================================
-// 🗑️ حذف فيديو من GridFS
-// ============================================================
-app.delete('/api/videos/:id', protect, authorize('admin'), async (req, res) => {
-    try {
-        const video = await Video.findById(req.params.id);
-        if (!video) {
-            return res.status(404).json({
-                success: false,
-                message: 'الفيديو غير موجود'
-            });
-        }
-
-        if (video.fileId) {
-            try {
-                await deleteFile(video.fileId);
-                console.log(`🗑️ تم حذف الملف من GridFS: ${video.fileId}`);
-            } catch (deleteError) {
-                console.error('❌ خطأ في حذف الملف من GridFS:', deleteError);
-            }
-        }
-
-        await video.deleteOne();
-        res.status(200).json({
-            success: true,
-            message: 'تم حذف الفيديو بنجاح'
-        });
-
-    } catch (error) {
-        console.error('❌ خطأ في حذف الفيديو:', error);
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
-
-// ============================================================
 // 📋 جلب معلومات ملف
 // ============================================================
 app.get('/api/files/info/:fileId', protect, async (req, res) => {
@@ -417,10 +299,7 @@ app.get('/api/files/info/:fileId', protect, async (req, res) => {
         const fileInfo = await getFileInfo(fileId);
         
         if (!fileInfo) {
-            return res.status(404).json({
-                success: false,
-                message: 'الملف غير موجود'
-            });
+            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
         }
 
         res.status(200).json({
@@ -440,127 +319,1023 @@ app.get('/api/files/info/:fileId', protect, async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
-// backend/server.js - إصلاح مسار عرض الصور
 
 // ============================================================
-// 🖼️ عرض صور الدردشة من GridFS (معدل)
+// 📹 مسارات الفيديوهات (VIDEOS)
 // ============================================================
-app.get('/api/chat/files/:fileId', async (req, res) => {
+
+// رفع فيديو باستخدام GridFS
+app.post('/api/videos/upload', protect, authorize('admin'), gridfsUpload.single('video'), async (req, res) => {
     try {
-        const { fileId } = req.params;
-        const ObjectId = require('mongodb').ObjectId;
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'يرجى اختيار فيديو' });
+        }
 
-        console.log('📁 طلب عرض صورة:', fileId);
+        const { title, subjectId, subjectName, specialtyName, universityName, description } = req.body;
 
-        // التحقق من صحة المعرف
-        if (!ObjectId.isValid(fileId)) {
-            console.error('❌ معرف ملف غير صالح:', fileId);
+        if (!title || !subjectId || !subjectName) {
             return res.status(400).json({
                 success: false,
-                message: 'معرف ملف غير صالح'
+                message: 'العنوان، معرف المادة، واسم المادة مطلوبون'
             });
         }
 
-        // التحقق من وجود الملف في GridFS
-        const fileInfo = await getFileInfo(fileId);
-        if (!fileInfo) {
-            console.error('❌ الملف غير موجود في GridFS:', fileId);
-            return res.status(404).json({
-                success: false,
-                message: 'الملف غير موجود'
-            });
-        }
-
-        console.log('✅ تم العثور على الملف:', fileInfo.filename);
-
-        // إعداد رؤوس الاستجابة
-        res.set('Content-Type', fileInfo.contentType || 'image/jpeg');
-        res.set('Content-Length', fileInfo.length);
-        res.set('Cache-Control', 'public, max-age=86400'); //缓存 24 ساعة
-
-        // الحصول على bucket
-        const bucket = getGridFSBucket();
-        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
-        
-        downloadStream.on('error', (error) => {
-            console.error('❌ خطأ في بث الصورة:', error);
-            if (!res.headersSent) {
-                res.status(500).json({
-                    success: false,
-                    message: 'حدث خطأ في عرض الصورة'
-                });
-            }
+        const fileResult = await uploadToGridFS(req.file, {
+            title: title,
+            subjectId: subjectId,
+            uploadedBy: req.user.id
         });
 
-        downloadStream.pipe(res);
+        if (!fileResult) {
+            return res.status(500).json({ success: false, message: 'فشل رفع الفيديو إلى GridFS' });
+        }
+
+        const video = new Video({
+            title: title,
+            subjectId: String(subjectId),
+            subjectName: subjectName,
+            specialtyName: specialtyName || '',
+            universityName: universityName || '',
+            description: description || '',
+            fileName: req.file.originalname,
+            filePath: `/api/files/stream/${fileResult.fileId}`,
+            fileSize: (req.file.size / (1024 * 1024)).toFixed(2) + ' MB',
+            fileType: req.file.mimetype,
+            fileId: fileResult.id,
+            duration: '00:00',
+            uploadDate: new Date(),
+            views: 0,
+            storageProvider: 'gridfs'
+        });
+
+        await video.save();
+
+        res.status(201).json({
+            success: true,
+            message: '✅ تم رفع الفيديو بنجاح إلى قاعدة البيانات',
+            data: video
+        });
 
     } catch (error) {
-        console.error('❌ خطأ في عرض الصورة:', error);
-        if (!res.headersSent) {
-            res.status(500).json({
+        console.error('❌ خطأ في رفع الفيديو:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب جميع الفيديوهات
+app.get('/api/videos/all', async (req, res) => {
+    try {
+        const videos = await Video.find().sort({ uploadDate: -1 });
+        res.status(200).json({ success: true, count: videos.length, data: videos });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الفيديوهات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب فيديوهات مادة معينة
+app.get('/api/videos/subject/:subjectId', async (req, res) => {
+    try {
+        const videos = await Video.find({ subjectId: req.params.subjectId });
+        res.status(200).json({ success: true, count: videos.length, data: videos });
+    } catch (error) {
+        console.error('❌ خطأ في جلب فيديوهات المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب فيديو محدد
+app.get('/api/videos/:id', async (req, res) => {
+    try {
+        const video = await Video.findById(req.params.id);
+        if (!video) {
+            return res.status(404).json({ success: false, message: 'الفيديو غير موجود' });
+        }
+        res.status(200).json({ success: true, data: video });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الفيديو:', error);
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            return res.status(404).json({ success: false, message: 'الفيديو غير موجود' });
+        }
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// تحديث عدد المشاهدات
+app.put('/api/videos/:id/views', async (req, res) => {
+    try {
+        const video = await Video.findByIdAndUpdate(
+            req.params.id,
+            { $inc: { views: 1 } },
+            { new: true }
+        );
+        if (!video) {
+            return res.status(404).json({ success: false, message: 'الفيديو غير موجود' });
+        }
+        res.status(200).json({ success: true, data: video });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث المشاهدات:', error);
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            return res.status(404).json({ success: false, message: 'الفيديو غير موجود' });
+        }
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// حذف فيديو
+app.delete('/api/videos/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const video = await Video.findById(req.params.id);
+        if (!video) {
+            return res.status(404).json({ success: false, message: 'الفيديو غير موجود' });
+        }
+
+        if (video.fileId) {
+            try {
+                await deleteFile(video.fileId);
+                console.log(`🗑️ تم حذف الملف من GridFS: ${video.fileId}`);
+            } catch (deleteError) {
+                console.error('❌ خطأ في حذف الملف من GridFS:', deleteError);
+            }
+        }
+
+        await video.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف الفيديو بنجاح' });
+
+    } catch (error) {
+        console.error('❌ خطأ في حذف الفيديو:', error);
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            return res.status(404).json({ success: false, message: 'الفيديو غير موجود' });
+        }
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 3. مسارات النماذج (MODELS)
+// ============================================================
+
+// جلب جميع النماذج
+app.get('/api/models', async (req, res) => {
+    try {
+        const models = await Model.find()
+            .populate('uploadedBy', 'name email')
+            .sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: models.length, data: models });
+    } catch (error) {
+        console.error('❌ خطأ في جلب النماذج:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب نموذج محدد
+app.get('/api/models/:id', async (req, res) => {
+    try {
+        const model = await Model.findById(req.params.id);
+        if (!model) {
+            return res.status(404).json({ success: false, message: 'النموذج غير موجود' });
+        }
+        res.status(200).json({ success: true, data: model });
+    } catch (error) {
+        console.error('❌ خطأ في جلب النموذج:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// رفع نموذج جديد
+app.post('/api/models', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { 
+            title, category, description, fileName, fileSize, fileType, fileData, 
+            mainService, subService 
+        } = req.body;
+
+        if (!title || !category || !fileName || !fileData || !mainService) {
+            return res.status(400).json({
                 success: false,
-                message: error.message || 'حدث خطأ في عرض الصورة'
+                message: 'يرجى إدخال جميع البيانات المطلوبة'
             });
         }
+
+        const model = new Model({
+            title,
+            category,
+            description: description || '',
+            fileName,
+            fileSize: fileSize || '0 KB',
+            fileType: fileType || 'application/octet-stream',
+            fileData,
+            mainService: mainService,
+            subService: subService || 'خدمة فرعية'
+        });
+
+        await model.save();
+        res.status(201).json({ success: true, message: 'تم رفع النموذج بنجاح', data: model });
+    } catch (error) {
+        console.error('❌ خطأ في رفع النموذج:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// backend/server.js - إضافة مسار للصور القديمة
-
-// ============================================================
-// 📁 عرض الصور القديمة من التخزين المحلي
-// ============================================================
-app.get('/uploads/chat-files/:filename', (req, res) => {
-    const filename = req.params.filename;
-    const filePath = path.join(chatFilesDir, filename);
-    
-    console.log('📁 محاولة تحميل صورة قديمة:', filePath);
-    
-    if (fs.existsSync(filePath)) {
-        console.log('✅ تم العثور على الصورة محلياً:', filename);
-        return res.sendFile(filePath);
-    }
-    
-    // محاولة البحث في مجلدات أخرى
-    const altPaths = [
-        path.join(__dirname, '..', 'uploads', 'chat-files', filename),
-        path.join(uploadsDir, 'chat-files', filename),
-        path.join(__dirname, 'uploads', filename)
-    ];
-    
-    for (const altPath of altPaths) {
-        if (fs.existsSync(altPath)) {
-            console.log('✅ تم العثور على الصورة في مسار بديل:', altPath);
-            return res.sendFile(altPath);
+// حذف نموذج
+app.delete('/api/models/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const model = await Model.findById(req.params.id);
+        if (!model) {
+            return res.status(404).json({ success: false, message: 'النموذج غير موجود' });
         }
+        await model.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف النموذج بنجاح' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف النموذج:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
-    
-    console.error('❌ الصورة غير موجودة:', filename);
-    res.status(404).json({
-        success: false,
-        message: 'الملف غير موجود',
-        filename: filename,
-        suggestion: 'يرجى إعادة تحميل الملف'
-    });
-});
-// ============================================================
-// مسار الصحة
-// ============================================================
-app.get('/api/health', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'الخادم يعمل بشكل صحيح 🚀',
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString(),
-        storage: 'GridFS (MongoDB)'
-    });
 });
 
 // ============================================================
-// 📝 باقي المسارات (Auth, Orders, Models, Users, Universities, Explanations, Summaries, Subscriptions)
+// 4. مسارات الطلبات (ORDERS)
 // ============================================================
 
-// ... [جميع مسارات Auth, Orders, Models, Users, Universities, Explanations, Summaries, Subscriptions موجودة هنا]
+// جلب جميع الطلبات للمدير
+app.get('/api/orders/admin/all', protect, authorize('admin'), async (req, res) => {
+    try {
+        const orders = await Order.find()
+            .populate('user', 'name email')
+            .populate('assignedExpert', 'name email')
+            .sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: orders.length, data: orders });
+    } catch (error) {
+        console.error('❌ خطأ في جلب جميع الطلبات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب طلبات الخبير
+app.get('/api/orders/expert', protect, authorize('expert'), async (req, res) => {
+    try {
+        const orders = await Order.find({ assignedExpert: req.user.id })
+            .populate('user', 'name email')
+            .populate('assignedExpert', 'name email')
+            .sort({ assignedAt: -1, createdAt: -1 });
+        res.status(200).json({ success: true, count: orders.length, data: orders });
+    } catch (error) {
+        console.error('❌ خطأ في جلب طلبات الخبير:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب طلبات المستخدم
+app.get('/api/orders', protect, async (req, res) => {
+    try {
+        const orders = await Order.find({ user: req.user.id })
+            .populate('user', 'name email')
+            .sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: orders.length, data: orders });
+    } catch (error) {
+        console.error('❌ خطأ في جلب طلبات المستخدم:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// إنشاء طلب جديد
+app.post('/api/orders', protect, async (req, res) => {
+    try {
+        const orderData = {
+            serviceType: req.body.serviceType || 'خدمة',
+            title: req.body.title || 'طلب جديد',
+            description: req.body.description || '',
+            deadline: req.body.deadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            budget: req.body.budget || 0,
+            status: 'pending',
+            user: req.user.id
+        };
+        const order = await Order.create(orderData);
+        res.status(201).json({ success: true, message: 'تم إنشاء الطلب بنجاح ✅', data: order });
+    } catch (error) {
+        console.error('❌ خطأ في إنشاء الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب طلب محدد
+app.get('/api/orders/:id', protect, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id)
+            .populate('user', 'name email')
+            .populate('assignedExpert', 'name email');
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        res.status(200).json({ success: true, data: order });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// تحديث طلب
+app.put('/api/orders/:id', protect, async (req, res) => {
+    try {
+        let order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        res.status(200).json({ success: true, message: 'تم تحديث الطلب بنجاح ✅', data: order });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// حذف طلب
+app.delete('/api/orders/:id', protect, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        await order.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف الطلب بنجاح 🗑️' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// تحديث حالة الطلب
+app.put('/api/orders/:id/status', protect, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'in-progress', 'completed', 'revision', 'cancelled'];
+        if (!status || !validStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'حالة غير صالحة. الحالات المتاحة: ' + validStatuses.join(', ')
+            });
+        }
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        order.status = status;
+        await order.save();
+        res.status(200).json({ success: true, message: `تم تحديث حالة الطلب إلى ${status} ✅`, data: order });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث حالة الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// تعيين خبير للطلب
+app.put('/api/orders/:id/assign-expert', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { expertId, notes } = req.body;
+        if (!expertId) {
+            return res.status(400).json({ success: false, message: 'يرجى اختيار خبير' });
+        }
+        const expert = await User.findById(expertId);
+        if (!expert || expert.role !== 'expert') {
+            return res.status(404).json({ success: false, message: 'الخبير غير موجود' });
+        }
+        const order = await Order.findByIdAndUpdate(
+            req.params.id,
+            { assignedExpert: expertId, assignedAt: new Date(), status: 'in-progress', expertNotes: notes || '' },
+            { new: true }
+        );
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        res.status(200).json({ success: true, message: `تم تعيين الخبير ${expert.name} بنجاح ✅`, data: order });
+    } catch (error) {
+        console.error('❌ خطأ في تعيين الخبير:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 4.5 مسارات طلبات كلية الأعمال (BUSINESS ORDERS)
+// ============================================================
+
+app.get('/api/business-orders', protect, authorize('admin'), async (req, res) => {
+    try {
+        const orders = await Order.find({
+            $or: [{ orderType: 'business' }, { department: { $exists: true, $ne: '' } }]
+        })
+        .populate('user', 'name email')
+        .populate('assignedExpert', 'name email')
+        .sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: orders.length, data: orders });
+    } catch (error) {
+        console.error('❌ خطأ في جلب طلبات الأعمال:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/business-orders/:id', protect, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id)
+            .populate('user', 'name email')
+            .populate('assignedExpert', 'name email');
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود' });
+        }
+        res.status(200).json({ success: true, data: order });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.post('/api/business-orders', async (req, res) => {
+    try {
+        const { name, email, phone, department, service, requestType, title, description, organization, deliveryDate, notes, termsAgreed, files } = req.body;
+        const required = { name, email, phone, department, service, requestType, title, description, deliveryDate };
+        const missing = Object.entries(required).filter(([k, v]) => !v || v.trim() === '').map(([k]) => k);
+        if (missing.length > 0) {
+            return res.status(400).json({ success: false, message: `الحقول المطلوبة غير مكتملة: ${missing.join('، ')}` });
+        }
+
+        const savedFiles = [];
+        if (files && Array.isArray(files) && files.length > 0) {
+            for (const file of files) {
+                try {
+                    if (!file.fileData || !file.fileData.includes(';base64,')) continue;
+                    const base64Data = file.fileData.split(';base64,').pop();
+                    const buffer = Buffer.from(base64Data, 'base64');
+                    if (buffer.length === 0) continue;
+                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                    const ext = path.extname(file.filename);
+                    const fileName = 'business-' + uniqueSuffix + ext;
+                    const filePath = path.join(businessOrdersDir, fileName);
+                    fs.writeFileSync(filePath, buffer);
+                    savedFiles.push({
+                        filename: file.filename,
+                        filePath: filePath,
+                        fileId: fileName,
+                        fileSize: file.fileSize || buffer.length,
+                        mimeType: file.fileType || 'application/octet-stream',
+                        uploadDate: new Date()
+                    });
+                } catch (error) {
+                    console.error(`❌ خطأ في حفظ الملف:`, error);
+                }
+            }
+        }
+
+        const order = new Order({
+            serviceType: 'خدمة كلية الأعمال',
+            title: title.trim(),
+            description: description.trim(),
+            deadline: new Date(deliveryDate),
+            budget: 0,
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            department: department.trim(),
+            service: service.trim(),
+            requestType: requestType.trim(),
+            organization: organization ? organization.trim() : '',
+            deliveryDate: deliveryDate,
+            notes: notes ? notes.trim() : '',
+            termsAgreed: termsAgreed === true || termsAgreed === 'true',
+            orderType: 'business',
+            status: 'pending',
+            files: savedFiles
+        });
+
+        await order.save();
+        res.status(201).json({ success: true, message: 'تم إرسال الطلب بنجاح ✅', data: order });
+    } catch (error) {
+        console.error('❌ خطأ في إنشاء الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/business-orders/files/:fileId', protect, async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const order = await Order.findOne({ 'files.fileId': fileId });
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
+        }
+        const filePath = path.join(businessOrdersDir, fileId);
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ success: false, message: 'الملف غير موجود على الخادم' });
+        }
+        const fileInfo = order.files.find(f => f.fileId === fileId);
+        res.download(filePath, fileInfo ? fileInfo.filename : fileId);
+    } catch (error) {
+        console.error('❌ خطأ في تحميل الملف:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.put('/api/business-orders/:id/status', protect, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'in-progress', 'completed', 'revision', 'cancelled'];
+        if (!status || !validStatuses.includes(status)) {
+            return res.status(400).json({ success: false, message: 'حالة غير صالحة' });
+        }
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        order.status = status;
+        await order.save();
+        res.status(200).json({ success: true, message: `تم تحديث حالة الطلب إلى ${status} ✅`, data: order });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث حالة الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.delete('/api/business-orders/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        if (order.files && order.files.length > 0) {
+            for (const file of order.files) {
+                const filePath = path.join(businessOrdersDir, file.fileId);
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                }
+            }
+        }
+        await order.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف الطلب بنجاح 🗑️' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 5. مسارات المستخدمين (USERS)
+// ============================================================
+
+app.get('/api/users', protect, authorize('admin'), async (req, res) => {
+    try {
+        const users = await User.find().select('-password').sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: users.length, data: users });
+    } catch (error) {
+        console.error('❌ خطأ في جلب المستخدمين:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/users/experts', protect, authorize('admin'), async (req, res) => {
+    try {
+        const experts = await User.find({ role: 'expert' }).select('-password').sort({ name: 1 });
+        res.status(200).json({ success: true, data: experts });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الخبراء:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/users/:id', protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'المستخدم غير موجود' });
+        }
+        res.status(200).json({ success: true, data: user });
+    } catch (error) {
+        console.error('❌ خطأ في جلب المستخدم:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.put('/api/users/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { isActive, expertise, bio, role } = req.body;
+        const updateData = {};
+        if (isActive !== undefined) updateData.isActive = isActive;
+        if (expertise !== undefined) updateData.expertise = expertise;
+        if (bio !== undefined) updateData.bio = bio;
+        if (role !== undefined) updateData.role = role;
+        const user = await User.findByIdAndUpdate(req.params.id, updateData, { new: true }).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'المستخدم غير موجود' });
+        }
+        res.status(200).json({ success: true, data: user });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث المستخدم:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.delete('/api/users/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'المستخدم غير موجود' });
+        }
+        res.status(200).json({ success: true, message: 'تم حذف المستخدم بنجاح' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف المستخدم:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 6. مسارات الجامعات (UNIVERSITIES)
+// ============================================================
+
+app.get('/api/universities', async (req, res) => {
+    try {
+        const universities = await University.find().sort({ name: 1 });
+        res.status(200).json({ success: true, data: universities });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الجامعات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.post('/api/universities', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { name, icon, count } = req.body;
+        if (!name) {
+            return res.status(400).json({ success: false, message: 'اسم الجامعة مطلوب' });
+        }
+        const existing = await University.findOne({ name });
+        if (existing) {
+            return res.status(400).json({ success: false, message: 'هذه الجامعة موجودة بالفعل' });
+        }
+        const university = new University({ name, icon: icon || 'fa-university', count: count || 0 });
+        await university.save();
+        res.status(201).json({ success: true, message: 'تم إضافة الجامعة بنجاح', data: university });
+    } catch (error) {
+        console.error('❌ خطأ في إضافة الجامعة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.delete('/api/universities/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const university = await University.findById(req.params.id);
+        if (!university) {
+            return res.status(404).json({ success: false, message: 'الجامعة غير موجودة' });
+        }
+        await ExplanationMaterial.deleteMany({ universityId: req.params.id });
+        await university.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف الجامعة والمواد المرتبطة بها بنجاح' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف الجامعة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 7. مسارات المواد التعليمية (EXPLANATIONS MATERIALS)
+// ============================================================
+
+app.get('/api/explanations/materials', async (req, res) => {
+    try {
+        const materials = await ExplanationMaterial.find().sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: materials });
+    } catch (error) {
+        console.error('❌ خطأ في جلب المواد:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/explanations/materials/:id', async (req, res) => {
+    try {
+        const material = await ExplanationMaterial.findById(req.params.id);
+        if (!material) {
+            return res.status(404).json({ success: false, message: 'المادة غير موجودة' });
+        }
+        res.status(200).json({ success: true, data: material });
+    } catch (error) {
+        console.error('❌ خطأ في جلب المادة:', error);
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            return res.status(404).json({ success: false, message: 'المادة غير موجودة' });
+        }
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.post('/api/explanations/materials', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { title, code, instructor, universityId, icon, videos, description, isFeatured, price } = req.body;
+        if (!title || !code || !instructor || !universityId) {
+            return res.status(400).json({ success: false, message: 'جميع الحقول المطلوبة غير مكتملة' });
+        }
+        const university = await University.findById(universityId);
+        if (!university) {
+            return res.status(404).json({ success: false, message: 'الجامعة غير موجودة' });
+        }
+        const material = new ExplanationMaterial({
+            title, code, instructor, universityId,
+            icon: icon || 'fa-book',
+            videos: videos || 0,
+            description: description || '',
+            isFeatured: isFeatured || false,
+            price: price || 99
+        });
+        await material.save();
+        await University.findByIdAndUpdate(universityId, { $inc: { count: 1 } });
+        res.status(201).json({ success: true, message: 'تم إضافة المادة بنجاح', data: material });
+    } catch (error) {
+        console.error('❌ خطأ في إضافة المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.put('/api/explanations/materials/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const material = await ExplanationMaterial.findById(req.params.id);
+        if (!material) {
+            return res.status(404).json({ success: false, message: 'المادة غير موجودة' });
+        }
+        Object.keys(req.body).forEach(key => {
+            if (req.body[key] !== undefined) {
+                material[key] = req.body[key];
+            }
+        });
+        await material.save();
+        res.status(200).json({ success: true, message: 'تم تحديث المادة بنجاح', data: material });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.delete('/api/explanations/materials/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const material = await ExplanationMaterial.findById(req.params.id);
+        if (!material) {
+            return res.status(404).json({ success: false, message: 'المادة غير موجودة' });
+        }
+        await material.deleteOne();
+        await University.findByIdAndUpdate(material.universityId, { $inc: { count: -1 } });
+        res.status(200).json({ success: true, message: 'تم حذف المادة بنجاح' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 8. مسارات الملخصات (SUMMARIES)
+// ============================================================
+
+app.get('/api/summaries/all', async (req, res) => {
+    try {
+        const summaries = await Summary.find().populate('uploader', 'name email').sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: summaries.length, data: summaries });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الملخصات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/summaries/:id', async (req, res) => {
+    try {
+        const summary = await Summary.findById(req.params.id);
+        if (!summary) {
+            return res.status(404).json({ success: false, message: 'الملخص غير موجود' });
+        }
+        res.status(200).json({ success: true, data: summary });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الملخص:', error);
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            return res.status(404).json({ success: false, message: 'الملخص غير موجود' });
+        }
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.post('/api/summaries/upload', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { title, subject, pages, size, fileName, fileSize, fileType, fileData, date, price } = req.body;
+        if (!title || !subject || !pages || !size || !fileName || !fileData) {
+            return res.status(400).json({ success: false, message: 'يرجى إدخال جميع البيانات المطلوبة' });
+        }
+        const summary = new Summary({
+            title, subject, pages: parseInt(pages), size, fileName,
+            fileSize: fileSize || (fileData.length / 1024).toFixed(2) + ' KB',
+            fileType: fileType || 'application/pdf',
+            fileData,
+            date: date || new Date().toISOString().split('T')[0],
+            downloads: 0,
+            price: price || 49,
+            uploader: req.user.id
+        });
+        await summary.save();
+        res.status(201).json({ success: true, message: 'تم رفع الملخص بنجاح', data: summary });
+    } catch (error) {
+        console.error('❌ خطأ في رفع الملخص:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/summaries/download/:id', async (req, res) => {
+    try {
+        const summary = await Summary.findById(req.params.id);
+        if (!summary) {
+            return res.status(404).json({ success: false, message: 'الملخص غير موجود' });
+        }
+        if (!summary.fileData) {
+            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
+        }
+        summary.downloads = (summary.downloads || 0) + 1;
+        await summary.save();
+        res.status(200).json({
+            success: true,
+            message: 'تم تحميل الملف بنجاح',
+            data: { fileData: summary.fileData, fileName: summary.fileName || 'ملخص.pdf' }
+        });
+    } catch (error) {
+        console.error('❌ خطأ في تحميل الملخص:', error);
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            return res.status(404).json({ success: false, message: 'الملخص غير موجود' });
+        }
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.delete('/api/summaries/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const summary = await Summary.findById(req.params.id);
+        if (!summary) {
+            return res.status(404).json({ success: false, message: 'الملخص غير موجود' });
+        }
+        await summary.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف الملخص بنجاح' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف الملخص:', error);
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            return res.status(404).json({ success: false, message: 'الملخص غير موجود' });
+        }
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 9. مسارات الاشتراكات (SUBSCRIPTIONS)
+// ============================================================
+
+app.post('/api/subscriptions', async (req, res) => {
+    try {
+        const { name, email, phone, subscriptionType, materialId, title, price, paymentMethod, notes } = req.body;
+        if (!name || !email || !phone || !subscriptionType || !materialId || !title || !price) {
+            return res.status(400).json({ success: false, message: 'جميع الحقول المطلوبة غير مكتملة' });
+        }
+        let user = await User.findOne({ email });
+        if (!user) {
+            const bcrypt = require('bcryptjs');
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash('password123', salt);
+            user = new User({ name, email, password: hashedPassword, role: 'user', isActive: true });
+            await user.save();
+        }
+        const subscription = new Subscription({
+            user: user._id, subscriptionType, materialId, title, price, phone,
+            paymentMethod: paymentMethod || 'card',
+            status: 'pending',
+            notes: notes || ''
+        });
+        await subscription.save();
+        res.status(201).json({ success: true, message: 'تم إرسال طلب الاشتراك بنجاح', data: subscription });
+    } catch (error) {
+        console.error('❌ خطأ في إنشاء طلب الاشتراك:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/subscriptions', protect, authorize('admin'), async (req, res) => {
+    try {
+        const subscriptions = await Subscription.find().populate('user', 'name email').sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: subscriptions });
+    } catch (error) {
+        console.error('❌ خطأ في جلب طلبات الاشتراك:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/subscriptions/my', protect, async (req, res) => {
+    try {
+        const subscriptions = await Subscription.find({ user: req.user.id }).sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: subscriptions });
+    } catch (error) {
+        console.error('❌ خطأ في جلب طلبات اشتراك المستخدم:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.put('/api/subscriptions/:id/status', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'active', 'cancelled'];
+        if (!status || !validStatuses.includes(status)) {
+            return res.status(400).json({ success: false, message: 'حالة غير صالحة' });
+        }
+        const subscription = await Subscription.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true }
+        ).populate('user', 'name email');
+        if (!subscription) {
+            return res.status(404).json({ success: false, message: 'طلب الاشتراك غير موجود' });
+        }
+        res.status(200).json({ success: true, message: `تم تحديث حالة الاشتراك إلى ${status}`, data: subscription });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث حالة الاشتراك:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.delete('/api/subscriptions/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const subscription = await Subscription.findById(req.params.id);
+        if (!subscription) {
+            return res.status(404).json({ success: false, message: 'طلب الاشتراك غير موجود' });
+        }
+        await subscription.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف طلب الاشتراك بنجاح' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف طلب الاشتراك:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 1. مسارات المصادقة (AUTH)
+// ============================================================
+
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        const bcrypt = require('bcryptjs');
+        const { name, email, password, role } = req.body;
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: 'البريد الإلكتروني مسجل بالفعل' });
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const user = new User({ name, email, password: hashedPassword, role: role || 'user', isActive: true });
+        await user.save();
+        res.status(201).json({
+            success: true,
+            message: 'تم إنشاء الحساب بنجاح',
+            data: { id: user._id, name: user.name, email: user.email, role: user.role }
+        });
+    } catch (error) {
+        console.error('❌ خطأ في التسجيل:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const bcrypt = require('bcryptjs');
+        const jwt = require('jsonwebtoken');
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'البريد الإلكتروني وكلمة المرور مطلوبان' });
+        }
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ success: false, message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
+        }
+        const token = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET || 'my_super_secret_key_123456',
+            { expiresIn: '30d' }
+        );
+        res.status(200).json({
+            success: true,
+            token,
+            user: { id: user._id, name: user.name, email: user.email, role: user.role, isActive: user.isActive }
+        });
+    } catch (error) {
+        console.error('❌ خطأ في تسجيل الدخول:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/auth/me', protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'المستخدم غير موجود' });
+        }
+        res.status(200).json({ success: true, data: user });
+    } catch (error) {
+        console.error('❌ خطأ في جلب بيانات المستخدم:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 // ============================================================
 // 🗨️ مسارات الدردشة (Chat Routes)
@@ -624,10 +1399,7 @@ app.post('/api/chat/conversations', protect, async (req, res) => {
         }
 
         if (!targetUserId) {
-            return res.status(400).json({
-                success: false,
-                message: 'معرف المستخدم مطلوب'
-            });
+            return res.status(400).json({ success: false, message: 'معرف المستخدم مطلوب' });
         }
 
         const targetUser = await User.findById(targetUserId);
@@ -739,61 +1511,52 @@ app.post('/api/chat/messages', protect, async (req, res) => {
 
         let fileData = null;
         
-        // ✅ تخزين الملف في GridFS بدلاً من التخزين المحلي
-        if (file && file.data) {
+        // تخزين الملف في GridFS
+        if (file && file.fileId) {
+            // الملف مرفوع بالفعل إلى GridFS عبر /api/chat/upload
+            const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+            fileData = {
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                path: `/api/chat/files/${file.fileId}`,
+                url: `${baseUrl}/api/chat/files/${file.fileId}`,
+                fileId: file.fileId,
+                storageProvider: 'gridfs'
+            };
+        } else if (file && file.data) {
+            // رفع الملف مباشرة (للتوافق مع الإصدارات القديمة)
             try {
-                console.log('📁 جاري رفع ملف الدردشة إلى GridFS...');
-                
                 let base64Data = file.data;
                 if (base64Data.includes(';base64,')) {
                     base64Data = base64Data.split(';base64,').pop();
                 }
-                
-                if (!base64Data || base64Data.length === 0) {
-                    throw new Error('بيانات الملف فارغة');
-                }
-                
                 const buffer = Buffer.from(base64Data, 'base64');
-                if (buffer.length === 0) {
-                    throw new Error('الملف فارغ');
-                }
-
                 const tempFile = {
                     buffer: buffer,
                     originalname: file.name || 'file',
                     mimetype: file.type || 'application/octet-stream',
                     size: file.size || buffer.length
                 };
-
-                const gridfsResult = await uploadToGridFS(tempFile, {
+                const result = await uploadToGridFS(tempFile, {
                     type: 'chat_file',
                     conversationId: conversationId,
-                    senderId: senderId,
-                    originalName: file.name
+                    senderId: senderId
                 });
-
-                if (gridfsResult) {
+                if (result) {
                     const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
-                    const fileUrl = `${baseUrl}/api/chat/files/${gridfsResult.fileId}`;
-
                     fileData = {
                         name: file.name,
-                        type: file.type || 'application/octet-stream',
-                        size: file.size || buffer.length,
-                        path: `/api/chat/files/${gridfsResult.fileId}`,
-                        url: fileUrl,
-                        fileId: gridfsResult.fileId,
-                        storageProvider: 'gridfs',
-                        gridfsId: gridfsResult.id
+                        type: file.type,
+                        size: file.size,
+                        path: `/api/chat/files/${result.fileId}`,
+                        url: `${baseUrl}/api/chat/files/${result.fileId}`,
+                        fileId: result.fileId,
+                        storageProvider: 'gridfs'
                     };
-                    console.log('✅ تم رفع ملف الدردشة إلى GridFS:', gridfsResult.filename);
                 }
-            } catch (fileError) {
-                console.error('❌ خطأ في رفع الملف إلى GridFS:', fileError);
-                return res.status(500).json({
-                    success: false,
-                    message: 'حدث خطأ في رفع الملف: ' + fileError.message
-                });
+            } catch (error) {
+                console.error('❌ خطأ في رفع الملف:', error);
             }
         }
 
@@ -816,6 +1579,7 @@ app.post('/api/chat/messages', protect, async (req, res) => {
         const populatedMessage = await Message.findById(message._id)
             .populate('senderId', 'name email role avatar');
 
+        // إرسال إشعار عبر WebSocket
         const wsData = {
             type: 'new_message',
             conversationId: conversationId,
@@ -852,7 +1616,112 @@ app.post('/api/chat/messages', protect, async (req, res) => {
     }
 });
 
-// 5. جلب قائمة المستخدمين للمدير
+// 5. رفع ملف في الدردشة (من خلال API منفصل)
+app.post('/api/chat/upload', protect, async (req, res) => {
+    try {
+        const { file } = req.body;
+        if (!file || !file.data) {
+            return res.status(400).json({ success: false, message: 'الملف مطلوب' });
+        }
+
+        let base64Data = file.data;
+        if (base64Data.includes(';base64,')) {
+            base64Data = base64Data.split(';base64,').pop();
+        }
+        const buffer = Buffer.from(base64Data, 'base64');
+
+        const tempFile = {
+            buffer: buffer,
+            originalname: file.name || 'file',
+            mimetype: file.type || 'application/octet-stream',
+            size: file.size || buffer.length
+        };
+
+        const result = await uploadToGridFS(tempFile, {
+            type: 'chat_file',
+            uploadedBy: req.user.id,
+            uploadedByName: req.user.name
+        });
+
+        if (!result) {
+            return res.status(500).json({ success: false, message: 'فشل رفع الملف' });
+        }
+
+        const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+        
+        res.status(200).json({
+            success: true,
+            data: {
+                fileId: result.fileId,
+                url: `${baseUrl}/api/chat/files/${result.fileId}`,
+                path: `/api/chat/files/${result.fileId}`,
+                name: file.name,
+                type: file.type,
+                size: file.size
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في رفع الملف:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 6. عرض صورة من GridFS
+app.get('/api/chat/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({ success: false, message: 'معرف ملف غير صالح' });
+        }
+
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            return res.status(404).json({ success: false, message: 'الملف غير موجود' });
+        }
+
+        res.set('Content-Type', fileInfo.contentType || 'application/octet-stream');
+        res.set('Content-Length', fileInfo.length);
+        res.set('Cache-Control', 'public, max-age=31536000');
+
+        const bucket = getGridFSBucket();
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        downloadStream.pipe(res);
+
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في بث الملف:', error);
+            if (!res.headersSent) {
+                res.status(500).json({ success: false, message: 'حدث خطأ في عرض الملف' });
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في عرض الملف:', error);
+        if (!res.headersSent) {
+            res.status(500).json({ success: false, message: error.message });
+        }
+    }
+});
+
+// 7. عرض الصور القديمة من التخزين المحلي
+app.get('/uploads/chat-files/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(chatFilesDir, filename);
+    
+    if (fs.existsSync(filePath)) {
+        return res.sendFile(filePath);
+    }
+    
+    res.status(404).json({
+        success: false,
+        message: 'الملف غير موجود',
+        filename: filename
+    });
+});
+
+// 8. جلب قائمة المستخدمين للمدير
 app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
     try {
         const users = await User.find({ 
@@ -901,6 +1770,80 @@ app.get('/api/chat/clients', protect, authorize('admin'), async (req, res) => {
         console.error('❌ خطأ في جلب المستخدمين:', error);
         res.status(500).json({ success: false, message: error.message });
     }
+});
+
+// 9. ترحيل الملفات القديمة إلى GridFS
+app.post('/api/chat/migrate-files', protect, authorize('admin'), async (req, res) => {
+    try {
+        const messages = await Message.find({
+            'file.storageProvider': { $ne: 'gridfs' },
+            'file.path': { $exists: true, $ne: null }
+        });
+
+        let migrated = 0;
+        let failed = 0;
+
+        for (const msg of messages) {
+            try {
+                const filePath = msg.file.path;
+                const filename = filePath.split('/').pop();
+                const localPath = path.join(chatFilesDir, filename);
+
+                if (fs.existsSync(localPath)) {
+                    const buffer = fs.readFileSync(localPath);
+                    const tempFile = {
+                        buffer: buffer,
+                        originalname: msg.file.name || filename,
+                        mimetype: msg.file.type || 'application/octet-stream',
+                        size: msg.file.size || buffer.length
+                    };
+
+                    const result = await uploadToGridFS(tempFile, {
+                        type: 'chat_file_migrated',
+                        originalMessageId: msg._id
+                    });
+
+                    if (result) {
+                        const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
+                        msg.file.fileId = result.fileId;
+                        msg.file.url = `${baseUrl}/api/chat/files/${result.fileId}`;
+                        msg.file.path = `/api/chat/files/${result.fileId}`;
+                        msg.file.storageProvider = 'gridfs';
+                        msg.file.gridfsId = result.id;
+                        await msg.save();
+                        migrated++;
+                    }
+                }
+            } catch (error) {
+                failed++;
+                console.error('❌ فشل ترحيل الملف:', error);
+            }
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `تم ترحيل ${migrated} ملف، فشل ${failed} ملف`,
+            migrated,
+            failed
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في ترحيل الملفات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// مسار الصحة
+// ============================================================
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'الخادم يعمل بشكل صحيح 🚀',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        storage: 'GridFS (MongoDB)'
+    });
 });
 
 // ============================================================
@@ -1076,34 +2019,24 @@ async function sendUserConversations(ws, userId) {
         console.error('❌ خطأ في إرسال المحادثات:', error);
     }
 }
- // backend/server.js - تحديث handleNewMessage
 
 async function handleNewMessage(ws, data, userId, role) {
     try {
         const { conversationId, text, file } = data;
 
         if (!conversationId || !text) {
-            ws.send(JSON.stringify({
-                type: 'error',
-                message: 'معرف المحادثة والنص مطلوبان'
-            }));
+            ws.send(JSON.stringify({ type: 'error', message: 'معرف المحادثة والنص مطلوبان' }));
             return;
         }
 
         const conversation = await Conversation.findById(conversationId);
         if (!conversation) {
-            ws.send(JSON.stringify({
-                type: 'error',
-                message: 'المحادثة غير موجودة'
-            }));
+            ws.send(JSON.stringify({ type: 'error', message: 'المحادثة غير موجودة' }));
             return;
         }
 
         if (!conversation.participants.includes(userId)) {
-            ws.send(JSON.stringify({
-                type: 'error',
-                message: 'ليس لديك صلاحية'
-            }));
+            ws.send(JSON.stringify({ type: 'error', message: 'ليس لديك صلاحية' }));
             return;
         }
 
@@ -1111,17 +2044,12 @@ async function handleNewMessage(ws, data, userId, role) {
         
         if (file) {
             try {
-                console.log('📁 جاري رفع ملف WebSocket إلى GridFS...');
-                
-                // تحويل البيانات
                 let base64Data = file.data;
                 if (base64Data.includes(';base64,')) {
                     base64Data = base64Data.split(';base64,').pop();
                 }
-                
                 const buffer = Buffer.from(base64Data, 'base64');
 
-                // إنشاء كائن ملف مؤقت
                 const tempFile = {
                     buffer: buffer,
                     originalname: file.name || 'file',
@@ -1129,37 +2057,30 @@ async function handleNewMessage(ws, data, userId, role) {
                     size: file.size || buffer.length
                 };
 
-                // رفع الملف إلى GridFS
-                const gridfsResult = await uploadToGridFS(tempFile, {
+                const result = await uploadToGridFS(tempFile, {
                     type: 'chat_file_ws',
                     conversationId: conversationId,
                     senderId: userId
                 });
 
-                if (gridfsResult) {
-                    const baseUrl = process.env.BASE_URL || `https://irteqa.onrender.com`;
-                    // ✅ استخدام المسار الصحيح لعرض الصور
-                    const fileUrl = `${baseUrl}/api/chat/files/${gridfsResult.fileId}`;
-
+                if (result) {
+                    const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
                     fileData = {
                         name: file.name,
                         type: file.type || 'application/octet-stream',
                         size: file.size || buffer.length,
-                        path: `/api/chat/files/${gridfsResult.fileId}`,
-                        url: fileUrl,
-                        fileId: gridfsResult.fileId,
+                        path: `/api/chat/files/${result.fileId}`,
+                        url: `${baseUrl}/api/chat/files/${result.fileId}`,
+                        fileId: result.fileId,
                         storageProvider: 'gridfs',
-                        gridfsId: gridfsResult.id
+                        gridfsId: result.id
                     };
-                    console.log('✅ تم رفع ملف WebSocket إلى GridFS:', gridfsResult.filename);
-                    console.log('🔗 رابط الملف:', fileUrl);
                 }
-            } catch (fileError) {
-                console.error('❌ خطأ في رفع ملف WebSocket:', fileError);
+            } catch (error) {
+                console.error('❌ خطأ في رفع ملف WebSocket:', error);
             }
         }
 
-        // إنشاء الرسالة
         const message = new Message({
             conversationId: conversationId,
             senderId: userId,
@@ -1170,18 +2091,15 @@ async function handleNewMessage(ws, data, userId, role) {
 
         await message.save();
 
-        // تحديث المحادثة
         await Conversation.findByIdAndUpdate(conversationId, {
             lastMessage: message._id,
             updatedAt: new Date(),
             $inc: { unreadCount: 1 }
         });
 
-        // جلب الرسالة مع بيانات المرسل
         const populatedMessage = await Message.findById(message._id)
             .populate('senderId', 'name email role avatar');
 
-        // إرسال تأكيد للمرسل
         ws.send(JSON.stringify({
             type: 'message_sent',
             message: {
@@ -1194,7 +2112,6 @@ async function handleNewMessage(ws, data, userId, role) {
             }
         }));
 
-        // إرسال إلى جميع المشاركين الآخرين
         const wsData = {
             type: 'new_message',
             conversationId: conversationId,
@@ -1215,7 +2132,6 @@ async function handleNewMessage(ws, data, userId, role) {
             }
         });
 
-        // إشعار للمديرين
         if (role === 'client') {
             broadcastToAdmins({
                 type: 'notification',
@@ -1229,12 +2145,10 @@ async function handleNewMessage(ws, data, userId, role) {
 
     } catch (error) {
         console.error('❌ خطأ في معالجة الرسالة الجديدة:', error);
-        ws.send(JSON.stringify({
-            type: 'error',
-            message: 'حدث خطأ في إرسال الرسالة'
-        }));
+        ws.send(JSON.stringify({ type: 'error', message: 'حدث خطأ في إرسال الرسالة' }));
     }
 }
+
 async function handleReadMessages(ws, data, userId) {
     try {
         const { conversationId } = data;
@@ -1265,11 +2179,6 @@ async function handleReadMessages(ws, data, userId) {
 }
 
 // ============================================================
-// [جميع المسارات الأخرى - Auth, Orders, Models, Users, Universities, Explanations, Summaries, Subscriptions]
-// ============================================================
-// يتم تضمينها هنا (لم يتم حذف أي مسار)
-
-// ============================================================
 // معالجة 404
 // ============================================================
 app.use((req, res) => {
@@ -1277,40 +2186,6 @@ app.use((req, res) => {
         success: false,
         message: 'المسار المطلوب غير موجود',
         path: req.originalUrl
-    });
-});
-
-// ============================================================
-// معالجة الملفات المفقودة في chat-files (للتخزين المحلي القديم)
-// ============================================================
-app.use('/uploads/chat-files/:filename', async (req, res) => {
-    const filename = req.params.filename;
-    const filePath = path.join(chatFilesDir, filename);
-    
-    if (fs.existsSync(filePath)) {
-        return res.sendFile(filePath);
-    }
-    
-    // البحث في GridFS إذا لم يكن موجوداً محلياً
-    try {
-        const ObjectId = require('mongodb').ObjectId;
-        const files = await mongoose.connection.db.collection('uploads.files')
-            .find({ filename: filename })
-            .toArray();
-        
-        if (files.length > 0) {
-            const fileId = files[0]._id;
-            return res.redirect(`/api/chat/files/${fileId}`);
-        }
-    } catch (error) {
-        console.error('❌ خطأ في البحث عن الملف في GridFS:', error);
-    }
-    
-    res.status(404).json({
-        success: false,
-        message: 'الملف غير موجود',
-        filename: filename,
-        suggestion: 'يرجى إعادة تحميل الملف'
     });
 });
 

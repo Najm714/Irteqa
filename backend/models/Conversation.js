@@ -1,3 +1,4 @@
+// backend/models/Conversation.js
 const mongoose = require('mongoose');
 
 const ConversationSchema = new mongoose.Schema({
@@ -6,6 +7,14 @@ const ConversationSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     }],
+    messages: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
+    }],
+    lastMessage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -16,18 +25,16 @@ const ConversationSchema = new mongoose.Schema({
         enum: ['direct', 'group'],
         default: 'direct'
     },
-    lastMessage: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Message'
-    },
     unreadCount: {
         type: Number,
         default: 0
-    },
-    isActive: {
-        type: Boolean,
-        default: true
     }
-}, { timestamps: true });
+}, {
+    timestamps: true
+});
+
+// فهرس للبحث السريع
+ConversationSchema.index({ participants: 1 });
+ConversationSchema.index({ updatedAt: -1 });
 
 module.exports = mongoose.model('Conversation', ConversationSchema);

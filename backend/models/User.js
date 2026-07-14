@@ -4,38 +4,52 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'الاسم مطلوب']
+        required: true,
+        trim: true
     },
     email: {
         type: String,
-        required: [true, 'البريد الإلكتروني مطلوب'],
+        required: true,
         unique: true,
-        lowercase: true,
-        trim: true
+        trim: true,
+        lowercase: true
     },
     password: {
         type: String,
-        required: [true, 'كلمة المرور مطلوبة'],
-        minlength: 6
+        required: true
     },
     role: {
         type: String,
-        enum: ['admin', 'expert', 'user'],
+        enum: ['user', 'client', 'expert', 'admin'],
         default: 'user'
+    },
+    avatar: {
+        type: String,
+        default: ''
     },
     isActive: {
         type: Boolean,
         default: true
     },
-    expertise: [{
-        type: String
-    }],
+    expertise: {
+        type: String,
+        default: ''
+    },
     bio: {
         type: String,
         default: ''
+    },
+    lastSeen: {
+        type: Date,
+        default: Date.now
     }
 }, {
     timestamps: true
 });
+
+// فهارس للبحث
+UserSchema.index({ email: 1 });
+UserSchema.index({ role: 1 });
+UserSchema.index({ name: 'text' });
 
 module.exports = mongoose.model('User', UserSchema);
