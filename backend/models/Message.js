@@ -41,18 +41,22 @@ const MessageSchema = new mongoose.Schema({
             type: String,
             default: null
         },
+        uniqueFileId: {
+            type: String,
+            default: null
+        },
         storageProvider: {
             type: String,
-            enum: ['local', 'gridfs'],
+            enum: ['local', 'gridfs', 'cloudinary'],
             default: 'gridfs'
         },
         gridfsId: {
             type: mongoose.Schema.Types.ObjectId,
             default: null
         },
-        data: {
-            type: String,
-            default: null
+        metadata: {
+            type: mongoose.Schema.Types.Mixed,
+            default: {}
         }
     },
     read: {
@@ -63,9 +67,9 @@ const MessageSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// فهارس للبحث السريع
+// ✅ فهارس للبحث السريع
 MessageSchema.index({ conversationId: 1, createdAt: -1 });
 MessageSchema.index({ senderId: 1 });
-MessageSchema.index({ read: 1 });
+MessageSchema.index({ 'file.uniqueFileId': 1 });
 
 module.exports = mongoose.model('Message', MessageSchema);

@@ -7,9 +7,7 @@ const path = require('path');
 
 let bucket = null;
 
-// ============================================================
-// تهيئة GridFS
-// ============================================================
+// ✅ تهيئة GridFS
 const initGridFS = () => {
     try {
         if (!mongoose.connection || !mongoose.connection.db) {
@@ -29,9 +27,7 @@ const initGridFS = () => {
     }
 };
 
-// ============================================================
-// تحديد نوع الملف من الامتداد
-// ============================================================
+// ✅ تحديد نوع الملف من الامتداد
 const getMimeType = (filename) => {
     const ext = filename.split('.').pop().toLowerCase();
     const mimeTypes = {
@@ -73,9 +69,7 @@ const getMimeType = (filename) => {
     return mimeTypes[ext] || 'application/octet-stream';
 };
 
-// ============================================================
-// تكوين Multer
-// ============================================================
+// ✅ تكوين Multer
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
@@ -94,7 +88,6 @@ const fileFilter = (req, file, cb) => {
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        // ✅ محاولة استنتاج النوع من الامتداد
         const ext = file.originalname.split('.').pop().toLowerCase();
         const mimeType = getMimeType(file.originalname);
         if (mimeType !== 'application/octet-stream') {
@@ -112,9 +105,7 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-// ============================================================
-// رفع ملف إلى GridFS
-// ============================================================
+// ✅ رفع ملف إلى GridFS
 const uploadToGridFS = (file, metadata = {}) => {
     return new Promise((resolve, reject) => {
         try {
@@ -124,17 +115,22 @@ const uploadToGridFS = (file, metadata = {}) => {
             }
 
             const timestamp = Date.now();
-            const random = Math.random().toString(36).substring(7);
+            const random = Math.random().toString(36).substring(2, 10);
             const ext = path.extname(file.originalname || 'file');
-            const filename = `${timestamp}_${random}${ext}`;
+            const cleanName = path.basename(file.originalname || 'file', ext).replace(/[^a-zA-Z0-9]/g, '_');
+            const filename = `${timestamp}_${random}_${cleanName}${ext}`;
 
             const uploadStream = bucket.openUploadStream(filename, {
                 contentType: file.mimetype || 'application/octet-stream',
                 metadata: {
-                    originalName: file.originalname || 'file',
+                    originalName: metadata.originalName || file.originalname || 'file',
                     mimetype: file.mimetype || 'application/octet-stream',
                     size: file.size || 0,
                     uploadedAt: new Date(),
+                    uniqueFileId: metadata.fileId || filename,
+                    uploadedBy: metadata.uploadedBy || null,
+                    uploadedByName: metadata.uploadedByName || null,
+                    type: metadata.type || 'file',
                     ...metadata
                 }
             });
@@ -153,10 +149,11 @@ const uploadToGridFS = (file, metadata = {}) => {
                         id: uploadStream.id,
                         fileId: uploadStream.id.toString(),
                         filename: filename,
-                        originalName: file.originalname || 'file',
+                        originalName: metadata.originalName || file.originalname || 'file',
                         contentType: file.mimetype || 'application/octet-stream',
                         size: file.size || 0,
-                        metadata: metadata
+                        metadata: metadata,
+                        uniqueFileId: metadata.fileId || filename
                     });
                 }
             });
@@ -173,9 +170,7 @@ const uploadToGridFS = (file, metadata = {}) => {
     });
 };
 
-// ============================================================
-// رفع ملف من Base64 إلى GridFS
-// ============================================================
+// ✅ رفع ملف من Base64 إلى GridFS
 const uploadBase64ToGridFS = async (base64Data, filename, metadata = {}) => {
     try {
         let mimeType = 'application/octet-stream';
@@ -206,14 +201,10 @@ const uploadBase64ToGridFS = async (base64Data, filename, metadata = {}) => {
     }
 };
 
-// ============================================================
-// الحصول على GridFS Bucket
-// ============================================================
+// ✅ الحصول على GridFS Bucket
 const getGridFSBucket = () => initGridFS();
 
-// ============================================================
-// جلب معلومات الملف
-// ============================================================
+// ✅ جلب معلومات الملف
 const getFileInfo = async (fileId) => {
     try {
         const ObjectId = mongoose.Types.ObjectId;
@@ -242,7 +233,6 @@ const getFileInfo = async (fileId) => {
             return null;
         }
         
-        console.log('✅ تم العثور على الملف:', files[0].filename);
         return files[0];
         
     } catch (error) {
@@ -251,9 +241,7 @@ const getFileInfo = async (fileId) => {
     }
 };
 
-// ============================================================
-// الحصول على Stream الملف
-// ============================================================
+// ✅ الحصول على Stream الملف
 const getFileStream = (fileId) => {
     try {
         const ObjectId = mongoose.Types.ObjectId;
@@ -274,9 +262,7 @@ const getFileStream = (fileId) => {
     }
 };
 
-// ============================================================
-// حذف ملف من GridFS
-// ============================================================
+// ✅ حذف ملف من GridFS
 const deleteFile = async (fileId) => {
     try {
         const ObjectId = mongoose.Types.ObjectId;
@@ -299,16 +285,11 @@ const deleteFile = async (fileId) => {
     }
 };
 
-// ============================================================
-// الحصول على رابط البث
-// ============================================================
+// ✅ الحصول على رابط البث
 const getStreamUrl = (fileId) => {
     return `/api/chat/files/${fileId}`;
 };
 
-// ============================================================
-// تصدير الدوال
-// ============================================================
 module.exports = {
     initGridFS,
     upload,
