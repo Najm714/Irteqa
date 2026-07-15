@@ -601,6 +601,93 @@ app.delete('/api/files/:fileId', protect, authorize('admin'), async (req, res) =
         res.status(500).json({ success: false, message: error.message });
     }
 });
+// backend/server.js
+
+// ============================================================
+// 🖼️ عرض ملفات الدردشة - مع معالجة الملفات المفقودة
+// ============================================================
+app.get('/api/chat/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'معرف غير صالح' 
+            });
+        }
+
+        // ✅ جلب معلومات الملف
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            // ✅ إرجاع استجابة 404 مع رسالة واضحة
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الملف غير موجود',
+                fileId: fileId,
+                suggestion: 'يرجى إعادة رفع الملف'
+            });
+        }
+
+        // ✅ عرض الملف
+        res.setHeader('Content-Type', fileInfo.contentType || 'application/octet-stream');
+        res.setHeader('Content-Length', fileInfo.length);
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        const bucket = getGridFSBucket();
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في البث:', error);
+            if (!res.headersSent) {
+                res.status(500).json({ 
+                    success: false, 
+                    message: 'خطأ في عرض الملف' 
+                });
+            }
+        });
+
+        downloadStream.pipe(res);
+
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
+    }
+});
+
+// backend/server.js
+
+// ============================================================
+// 🔍 التحقق من وجود ملف
+// ============================================================
+app.head('/api/chat/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).send();
+        }
+
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            return res.status(404).send();
+        }
+
+        res.setHeader('Content-Type', fileInfo.contentType);
+        res.setHeader('Content-Length', fileInfo.length);
+        res.status(200).send();
+
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        res.status(500).send();
+    }
+});
 // ============================================================
 // 📹 مسارات الفيديوهات (VIDEOS)
 // ============================================================

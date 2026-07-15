@@ -948,8 +948,9 @@
 // ============================================================
 // عرض الرسائل مع دعم جميع أنواع الملفات
 // ============================================================
- // admin-chat.html / chat.html
-
+ // ============================================================
+// عرض الرسائل - مع معالجة الملفات المفقودة
+// ============================================================
 function renderMessages() {
     const container = document.getElementById('chatMessages');
     container.innerHTML = '';
@@ -965,13 +966,13 @@ function renderMessages() {
         return;
     }
 
-    const userId = getUser()?.id;
+    const userId = currentUser ? currentUser.id : null;
     const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:5000'
         : 'https://irteqa.onrender.com';
 
-    messages.forEach(msg => {
-        const isOwn = msg.senderId === userId || msg.senderId === 'admin';
+    messages.forEach((msg) => {
+        const isOwn = msg.senderId === userId;
         const div = document.createElement('div');
         div.className = `message ${isOwn ? 'sent' : 'received'}`;
 
@@ -980,17 +981,18 @@ function renderMessages() {
             content += `<div class="msg-text">${msg.text}</div>`;
         }
 
-        // ✅ عرض الملف من GridFS
+        // ✅ عرض الملف
         if (msg.file && msg.file.name) {
-            // ✅ بناء المسار الصحيح
             let fileUrl = msg.file.url || msg.file.path || '';
-            
-            // إذا كان الملف في GridFS ولدينا fileId
             if (msg.file.fileId && !fileUrl) {
                 fileUrl = `${baseUrl}/api/chat/files/${msg.file.fileId}`;
             }
+            if (!fileUrl && msg.file.path) {
+                fileUrl = `${baseUrl}${msg.file.path}`;
+            }
 
             const isImage = msg.file.type && msg.file.type.startsWith('image/');
+            const isVideo = msg.file.type && msg.file.type.startsWith('video/');
 
             if (isImage) {
                 // ✅ عرض الصورة مع معالجة الأخطاء
@@ -1000,25 +1002,28 @@ function renderMessages() {
                              onclick="window.open('${fileUrl}', '_blank')" 
                              alt="${msg.file.name}"
                              onerror="this.style.display='none'; 
-                                      this.parentElement.querySelector('.error-container').style.display='block'; 
-                                      console.error('❌ فشل تحميل الصورة:', '${fileUrl}');" />
-                        <div class="error-container" style="display:none;padding:10px;background:rgba(239,68,68,0.1);border-radius:12px;border:1px solid #EF4444;margin-top:6px;text-align:center;min-width:150px;">
-                            <div style="font-size:0.85rem;color:#EF4444;font-weight:600;margin-bottom:6px;">
-                                <i class="fas fa-exclamation-circle"></i> فشل تحميل الصورة
+                                      this.parentElement.querySelector('.error-container').style.display='block';" />
+                        <div class="error-container" style="display:none;padding:10px;background:rgba(239,68,68,0.1);border-radius:12px;border:1px solid #EF4444;margin-top:6px;text-align:center;">
+                            <div style="font-size:0.85rem;color:#EF4444;font-weight:600;">
+                                <i class="fas fa-exclamation-circle"></i> الملف غير موجود
                             </div>
-                            <button onclick="retryLoadImage(this, '${fileUrl}')" 
-                                    style="background:var(--primary);color:#fff;border:none;padding:4px 16px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.75rem;">
-                                <i class="fas fa-redo"></i> إعادة المحاولة
-                            </button>
-                            <button onclick="window.open('${fileUrl}', '_blank')" 
-                                    style="background:var(--bg-body);color:var(--text-color);border:1px solid var(--border-color);padding:4px 16px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.75rem;margin-right:6px;">
-                                <i class="fas fa-external-link-alt"></i> فتح
-                            </button>
+                            <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">
+                                ${msg.file.name} • تم حذف الملف
+                            </div>
                         </div>
                     </div>
                 `;
+            } else if (isVideo) {
+                content += `
+                    <video controls class="msg-video" style="max-width:200px;max-height:200px;border-radius:10px;margin-top:6px;">
+                        <source src="${fileUrl}" type="${msg.file.type}" />
+                        <div style="padding:10px;background:rgba(239,68,68,0.1);border-radius:12px;border:1px solid #EF4444;margin-top:6px;text-align:center;font-size:0.85rem;color:#EF4444;">
+                            <i class="fas fa-exclamation-circle"></i> الفيديو غير موجود
+                        </div>
+                    </video>
+                `;
             } else {
-                // ✅ عرض الملفات الأخرى (PDF, DOC, إلخ)
+                // ✅ عرض الملفات الأخرى مع رسالة خطأ إذا لم تكن موجودة
                 const iconMap = {
                     'pdf': 'fa-file-pdf',
                     'doc': 'fa-file-word',
@@ -1028,25 +1033,21 @@ function renderMessages() {
                     'ppt': 'fa-file-powerpoint',
                     'pptx': 'fa-file-powerpoint',
                     'zip': 'fa-file-archive',
-                    'rar': 'fa-file-archive',
-                    'mp4': 'fa-file-video',
-                    'txt': 'fa-file-alt'
+                    'rar': 'fa-file-archive'
                 };
                 const ext = msg.file.name.split('.').pop().toLowerCase();
                 const icon = iconMap[ext] || 'fa-file';
                 const fileSize = msg.file.size ? (msg.file.size / 1024).toFixed(1) : '0';
 
                 content += `
-                    <div style="margin-top:8px;padding:10px 14px;background:rgba(124,58,237,0.06);border-radius:12px;border:1px solid rgba(124,58,237,0.12);">
+                    <div class="file-attachment" style="margin-top:8px;padding:10px 14px;background:rgba(124,58,237,0.06);border-radius:12px;border:1px solid rgba(124,58,237,0.12);">
                         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                             <i class="fas ${icon}" style="font-size:1.5rem;color:var(--primary);"></i>
                             <div style="flex:1;min-width:0;">
                                 <div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${msg.file.name}</div>
-                                <div style="font-size:0.65rem;color:var(--text-muted);">
-                                    ${fileSize} KB
-                                </div>
+                                <div style="font-size:0.65rem;color:var(--text-muted);">${fileSize} KB</div>
                             </div>
-                            <button onclick="downloadFile('${msg.file.name}', '${fileUrl}')" 
+                            <button onclick="window.open('${fileUrl}', '_blank')" 
                                     style="background:var(--gradient-main);color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;display:flex;align-items:center;gap:4px;">
                                 <i class="fas fa-download"></i> تحميل
                             </button>
