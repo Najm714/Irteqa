@@ -192,9 +192,11 @@ app.get('/', (req, res) => {
         }
     });
 });
+ 
+// backend/server.js
 
 // ============================================================
-// 📤 رفع ملف في الدردشة - GridFS
+// 📤 رفع ملف في الدردشة - GridFS (الحل النهائي)
 // ============================================================
 app.post('/api/chat/upload', protect, async (req, res) => {
     try {
@@ -237,11 +239,14 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             size: file.size || buffer.length
         };
 
-        // ✅ رفع إلى GridFS
+        // ✅ رفع إلى GridFS مع Metadata محسّن
         const result = await uploadToGridFS(tempFile, {
             type: 'chat_file',
             uploadedBy: req.user.id,
-            uploadedByName: req.user.name
+            uploadedByName: req.user.name,
+            originalName: file.name,
+            mimeType: file.type,
+            fileSize: file.size
         });
 
         if (!result) {
@@ -275,6 +280,87 @@ app.post('/api/chat/upload', protect, async (req, res) => {
     }
 });
 
+// ============================================================
+// 🖼️ عرض ملفات الدردشة من GridFS - دعم PDF وجميع الملفات
+// ============================================================
+app.get('/api/chat/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        console.log('📁 طلب عرض ملف:', fileId);
+
+        // ✅ التحقق من صحة المعرف
+        if (!ObjectId.isValid(fileId)) {
+            console.error('❌ معرف غير صالح:', fileId);
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
+            });
+        }
+
+        // ✅ جلب معلومات الملف
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            console.error('❌ الملف غير موجود:', fileId);
+            return res.status(404).json({
+                success: false,
+                message: 'الملف غير موجود'
+            });
+        }
+
+        console.log('✅ تم العثور على الملف:', fileInfo.filename);
+        console.log('📋 نوع الملف:', fileInfo.contentType);
+        console.log('📊 حجم الملف:', fileInfo.length);
+
+        // ✅ تحديد نوع الملف
+        const contentType = fileInfo.contentType || 'application/octet-stream';
+        
+        // ✅ إعداد رؤوس الاستجابة
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Length', fileInfo.length);
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        // ✅ إذا كان PDF، نضيف رأس للعرض المباشر
+        if (contentType === 'application/pdf') {
+            res.setHeader('Content-Disposition', 'inline; filename="' + fileInfo.filename + '"');
+        }
+
+        // ✅ بث الملف
+        const bucket = getGridFSBucket();
+        if (!bucket) {
+            console.error('❌ GridFS غير مهيأ');
+            return res.status(500).json({
+                success: false,
+                message: 'GridFS غير مهيأ'
+            });
+        }
+
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في بث الملف:', error);
+            if (!res.headersSent) {
+                res.status(500).json({
+                    success: false,
+                    message: 'حدث خطأ في عرض الملف: ' + error.message
+                });
+            }
+        });
+
+        downloadStream.pipe(res);
+
+    } catch (error) {
+        console.error('❌ خطأ في عرض الملف:', error);
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: error.message || 'حدث خطأ في عرض الملف'
+            });
+        }
+    }
+});
 // ============================================================
 // 🖼️ عرض ملفات الدردشة من GridFS - دعم PDF وجميع الملفات
 // ============================================================
