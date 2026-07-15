@@ -117,3 +117,9 @@ docs/_build/
 *.dll
 *.so
 *.dylib
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
