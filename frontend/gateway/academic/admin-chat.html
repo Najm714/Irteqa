@@ -942,14 +942,8 @@
             }
         }
 
-        // ============================================================
-        // عرض الرسائل مع دعم GridFS
-        // ============================================================ 
 // ============================================================
-// عرض الرسائل مع دعم جميع أنواع الملفات
-// ============================================================
- // ============================================================
-// عرض الرسائل - مع معالجة الملفات المفقودة
+// عرض الرسائل - مع دعم PDF والمستندات
 // ============================================================
 function renderMessages() {
     const container = document.getElementById('chatMessages');
@@ -993,37 +987,42 @@ function renderMessages() {
 
             const isImage = msg.file.type && msg.file.type.startsWith('image/');
             const isVideo = msg.file.type && msg.file.type.startsWith('video/');
+            const isPDF = msg.file.type === 'application/pdf';
+
+            // ✅ عرض الملف حسب نوعه
+            let fileContent = '';
 
             if (isImage) {
-                // ✅ عرض الصورة مع معالجة الأخطاء
-                content += `
+                fileContent = `
                     <div style="position:relative;display:inline-block;max-width:100%;">
                         <img src="${fileUrl}" class="msg-image" 
                              onclick="window.open('${fileUrl}', '_blank')" 
                              alt="${msg.file.name}"
                              onerror="this.style.display='none'; 
                                       this.parentElement.querySelector('.error-container').style.display='block';" />
-                        <div class="error-container" style="display:none;padding:10px;background:rgba(239,68,68,0.1);border-radius:12px;border:1px solid #EF4444;margin-top:6px;text-align:center;">
-                            <div style="font-size:0.85rem;color:#EF4444;font-weight:600;">
-                                <i class="fas fa-exclamation-circle"></i> الملف غير موجود
+                        <div class="error-container" style="display:none;padding:10px 14px;background:rgba(239,68,68,0.08);border-radius:10px;border:1px solid rgba(239,68,68,0.2);margin-top:6px;text-align:center;">
+                            <div style="display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;">
+                                <i class="fas fa-exclamation-circle" style="color:#EF4444;font-size:1rem;"></i>
+                                <span style="color:#EF4444;font-size:0.8rem;font-weight:600;">الصورة غير متوفرة</span>
                             </div>
-                            <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">
-                                ${msg.file.name} • تم حذف الملف
-                            </div>
+                            <button onclick="window.open('${fileUrl}', '_blank')" 
+                                    style="margin-top:6px;background:var(--primary);color:#fff;border:none;padding:4px 14px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;">
+                                <i class="fas fa-external-link-alt"></i> فتح
+                            </button>
                         </div>
                     </div>
                 `;
             } else if (isVideo) {
-                content += `
-                    <video controls class="msg-video" style="max-width:200px;max-height:200px;border-radius:10px;margin-top:6px;">
+                fileContent = `
+                    <video controls class="msg-video" style="max-width:200px;max-height:200px;border-radius:10px;margin-top:6px;background:#000;">
                         <source src="${fileUrl}" type="${msg.file.type}" />
-                        <div style="padding:10px;background:rgba(239,68,68,0.1);border-radius:12px;border:1px solid #EF4444;margin-top:6px;text-align:center;font-size:0.85rem;color:#EF4444;">
-                            <i class="fas fa-exclamation-circle"></i> الفيديو غير موجود
+                        <div style="padding:10px 14px;background:rgba(239,68,68,0.08);border-radius:10px;border:1px solid rgba(239,68,68,0.2);margin-top:6px;text-align:center;font-size:0.85rem;color:#EF4444;">
+                            <i class="fas fa-exclamation-circle"></i> الفيديو غير متوفر
                         </div>
                     </video>
                 `;
             } else {
-                // ✅ عرض الملفات الأخرى مع رسالة خطأ إذا لم تكن موجودة
+                // ✅ عرض الملفات الأخرى (PDF, DOC, إلخ)
                 const iconMap = {
                     'pdf': 'fa-file-pdf',
                     'doc': 'fa-file-word',
@@ -1038,23 +1037,46 @@ function renderMessages() {
                 const ext = msg.file.name.split('.').pop().toLowerCase();
                 const icon = iconMap[ext] || 'fa-file';
                 const fileSize = msg.file.size ? (msg.file.size / 1024).toFixed(1) : '0';
+                const colorMap = {
+                    'pdf': '#EF4444',
+                    'doc': '#2563EB',
+                    'docx': '#2563EB',
+                    'xls': '#16A34A',
+                    'xlsx': '#16A34A',
+                    'ppt': '#EA580C',
+                    'pptx': '#EA580C'
+                };
+                const iconColor = colorMap[ext] || 'var(--primary)';
 
-                content += `
-                    <div class="file-attachment" style="margin-top:8px;padding:10px 14px;background:rgba(124,58,237,0.06);border-radius:12px;border:1px solid rgba(124,58,237,0.12);">
+                // ✅ تحديد إذا كان PDF لعرض زر "عرض"
+                const isPDFFile = ext === 'pdf';
+
+                fileContent = `
+                    <div style="margin-top:8px;padding:12px 16px;background:rgba(124,58,237,0.05);border-radius:12px;border:1px solid rgba(124,58,237,0.1);">
                         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                            <i class="fas ${icon}" style="font-size:1.5rem;color:var(--primary);"></i>
+                            <i class="fas ${icon}" style="font-size:1.8rem;color:${iconColor};"></i>
                             <div style="flex:1;min-width:0;">
                                 <div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${msg.file.name}</div>
                                 <div style="font-size:0.65rem;color:var(--text-muted);">${fileSize} KB</div>
                             </div>
-                            <button onclick="window.open('${fileUrl}', '_blank')" 
-                                    style="background:var(--gradient-main);color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;display:flex;align-items:center;gap:4px;">
-                                <i class="fas fa-download"></i> تحميل
-                            </button>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                ${isPDFFile ? `
+                                    <button onclick="window.open('${fileUrl}', '_blank')" 
+                                            style="background:var(--gradient-main);color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;display:flex;align-items:center;gap:4px;">
+                                        <i class="fas fa-eye"></i> عرض
+                                    </button>
+                                ` : ''}
+                                <button onclick="window.open('${fileUrl}', '_blank')" 
+                                        style="background:var(--gradient-main);color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.7rem;display:flex;align-items:center;gap:4px;">
+                                    <i class="fas fa-download"></i> تحميل
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
             }
+
+            content += fileContent;
         }
 
         const senderName = msg.senderName || (isOwn ? 'أنت' : 'المرسل');
@@ -1066,7 +1088,6 @@ function renderMessages() {
 
     scrollToBottom();
 }
-
 // ============================================================
 // إعادة محاولة تحميل الصورة
 // ============================================================
