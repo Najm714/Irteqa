@@ -152,7 +152,7 @@ const { protect, authorize } = require('./middleware/auth');
 // ============================================================
 // استيراد دوال GridFS
 // ============================================================
-const { 
+ const { 
     upload: gridfsUpload,
     uploadToGridFS,
     getGridFSBucket, 
@@ -193,10 +193,10 @@ app.get('/', (req, res) => {
     });
 });
  
-// backend/server.js
+ // backend/server.js
 
 // ============================================================
-// 📤 رفع ملف في الدردشة - GridFS (الحل النهائي)
+// 📤 رفع ملف في الدردشة - GridFS (الحل الصحيح)
 // ============================================================
 app.post('/api/chat/upload', protect, async (req, res) => {
     try {
@@ -231,7 +231,7 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             });
         }
 
-        // ✅ إنشاء كائن ملف مؤقت
+        // ✅ إنشاء كائن ملف مؤقت للرفع إلى GridFS
         const tempFile = {
             buffer: buffer,
             originalname: file.name || 'file',
@@ -239,7 +239,7 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             size: file.size || buffer.length
         };
 
-        // ✅ رفع إلى GridFS مع Metadata محسّن
+        // ✅ رفع الملف إلى GridFS (وليس التخزين المحلي)
         const result = await uploadToGridFS(tempFile, {
             type: 'chat_file',
             uploadedBy: req.user.id,
@@ -256,7 +256,7 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             });
         }
 
-        const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+        const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
         
         res.status(200).json({
             success: true,
@@ -277,88 +277,6 @@ app.post('/api/chat/upload', protect, async (req, res) => {
             success: false,
             message: error.message || 'حدث خطأ في رفع الملف'
         });
-    }
-});
-
-// ============================================================
-// 🖼️ عرض ملفات الدردشة من GridFS - دعم PDF وجميع الملفات
-// ============================================================
-app.get('/api/chat/files/:fileId', async (req, res) => {
-    try {
-        const { fileId } = req.params;
-        const ObjectId = require('mongodb').ObjectId;
-
-        console.log('📁 طلب عرض ملف:', fileId);
-
-        // ✅ التحقق من صحة المعرف
-        if (!ObjectId.isValid(fileId)) {
-            console.error('❌ معرف غير صالح:', fileId);
-            return res.status(400).json({
-                success: false,
-                message: 'معرف ملف غير صالح'
-            });
-        }
-
-        // ✅ جلب معلومات الملف
-        const fileInfo = await getFileInfo(fileId);
-        if (!fileInfo) {
-            console.error('❌ الملف غير موجود:', fileId);
-            return res.status(404).json({
-                success: false,
-                message: 'الملف غير موجود'
-            });
-        }
-
-        console.log('✅ تم العثور على الملف:', fileInfo.filename);
-        console.log('📋 نوع الملف:', fileInfo.contentType);
-        console.log('📊 حجم الملف:', fileInfo.length);
-
-        // ✅ تحديد نوع الملف
-        const contentType = fileInfo.contentType || 'application/octet-stream';
-        
-        // ✅ إعداد رؤوس الاستجابة
-        res.setHeader('Content-Type', contentType);
-        res.setHeader('Content-Length', fileInfo.length);
-        res.setHeader('Cache-Control', 'public, max-age=86400');
-        res.setHeader('Access-Control-Allow-Origin', '*');
-
-        // ✅ إذا كان PDF، نضيف رأس للعرض المباشر
-        if (contentType === 'application/pdf') {
-            res.setHeader('Content-Disposition', 'inline; filename="' + fileInfo.filename + '"');
-        }
-
-        // ✅ بث الملف
-        const bucket = getGridFSBucket();
-        if (!bucket) {
-            console.error('❌ GridFS غير مهيأ');
-            return res.status(500).json({
-                success: false,
-                message: 'GridFS غير مهيأ'
-            });
-        }
-
-        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
-        
-        downloadStream.on('error', (error) => {
-            console.error('❌ خطأ في بث الملف:', error);
-            if (!res.headersSent) {
-                res.status(500).json({
-                    success: false,
-                    message: 'حدث خطأ في عرض الملف: ' + error.message
-                });
-            }
-        });
-
-        downloadStream.pipe(res);
-
-    } catch (error) {
-        console.error('❌ خطأ في عرض الملف:', error);
-        if (!res.headersSent) {
-            res.status(500).json({
-                success: false,
-                message: error.message || 'حدث خطأ في عرض الملف'
-            });
-        }
     }
 });
 // ============================================================
