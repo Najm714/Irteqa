@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>📋 شروط الاستخدام - منصة ارتقاء</title>
+    <title>شروط استخدام منصة ارتقاء</title>
 
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -32,7 +32,7 @@
             --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
             --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.2);
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            --radius: 20px;
+            --radius: 16px;
             --bg-body: #F1F5F9;
             --bg-card: #FFFFFF;
             --text-color: #0F172A;
@@ -73,13 +73,13 @@
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
             background: var(--bg-body);
@@ -100,10 +100,10 @@
             background: var(--bg-card);
             color: var(--text-color);
             border: none;
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             box-shadow: var(--shadow);
             cursor: pointer;
             transition: var(--transition);
@@ -128,10 +128,10 @@
             background: var(--gradient-main);
             color: #fff;
             border: none;
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             box-shadow: var(--shadow);
             cursor: pointer;
             transition: var(--transition);
@@ -150,17 +150,17 @@
         }
 
         /* ============================================================
-           الهيدر
+           الهيدر - مصغر وأنيق
            ============================================================ */
         .header {
             background: var(--bg-card);
             box-shadow: var(--shadow);
-            padding: 15px 0;
+            padding: 10px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
             transition: var(--transition);
-            border-bottom: 3px solid transparent;
+            border-bottom: 2px solid transparent;
             border-image: var(--gradient-main);
             border-image-slice: 1;
         }
@@ -170,25 +170,22 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 900;
             color: var(--text-color);
         }
 
-        .logo i {
-            font-size: 2.2rem;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: logoFloat 3s ease-in-out infinite;
+        .logo svg {
+            width: 32px;
+            height: 32px;
         }
 
         .logo span {
@@ -197,30 +194,31 @@
             -webkit-text-fill-color: transparent;
         }
 
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-5px) rotate(-5deg); }
-        }
-
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
         .btn-back {
             background: var(--bg-body);
             color: var(--text-color);
-            padding: 8px 20px;
+            padding: 6px 16px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
+            font-size: 0.8rem;
             transition: var(--transition);
             border: 1px solid var(--border-color);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+        }
+
+        .btn-back svg {
+            width: 18px;
+            height: 18px;
         }
 
         .btn-back:hover {
@@ -231,37 +229,37 @@
         }
 
         /* ============================================================
-           قسم البطل (Hero)
+           قسم البطل (Hero) - مصغر وأنيق
            ============================================================ */
-        .terms-hero {
+        .policy-hero {
             background: var(--gradient-hero);
             color: #fff;
-            padding: 70px 0 50px;
+            padding: 50px 0 35px;
             position: relative;
             overflow: hidden;
             text-align: center;
         }
 
-        .terms-hero::before {
+        .policy-hero::before {
             content: '';
             position: absolute;
             top: -50%;
             right: -20%;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.3), transparent 70%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.25), transparent 70%);
             border-radius: 50%;
             animation: float 6s ease-in-out infinite;
         }
 
-        .terms-hero::after {
+        .policy-hero::after {
             content: '';
             position: absolute;
             bottom: -30%;
             left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.15), transparent 70%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.12), transparent 70%);
             border-radius: 50%;
             animation: float 8s ease-in-out infinite reverse;
         }
@@ -272,62 +270,85 @@
             100% { transform: translate(0, 0) rotate(0deg); }
         }
 
-        .terms-hero .hero-content {
+        .policy-hero .hero-content {
             position: relative;
             z-index: 1;
         }
 
-        .terms-hero h1 {
-            font-size: 3.2rem;
-            font-weight: 900;
-            margin-bottom: 15px;
-        }
-
-        .terms-hero h1 span {
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .terms-hero .hero-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
+        .policy-hero .hero-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
             display: inline-block;
             animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.08); }
         }
 
-        .terms-hero p {
-            font-size: 1.2rem;
+        .policy-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .policy-hero h1 span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .policy-hero .hero-sub {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .policy-hero p {
+            font-size: 1.05rem;
             opacity: 0.85;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 700px;
+            margin: 10px auto 0;
             line-height: 1.8;
         }
 
-        /* ============================================================
-           المحتوى الرئيسي
-           ============================================================ */
-        .terms-content {
-            padding: 50px 0 60px;
+        .policy-hero .badge-date {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 4px 18px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.08);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(4px);
         }
 
-        .terms-content .container {
-            max-width: 1000px;
+        .policy-hero .badge-date i {
+            margin-left: 6px;
         }
 
         /* ============================================================
-           بطاقة الشروط
+           المحتوى الرئيسي - تصغير الخطوط
            ============================================================ */
-        .terms-card {
+        .policy-content {
+            padding: 35px 0 50px;
+        }
+
+        .policy-content .container {
+            max-width: 950px;
+        }
+
+        /* ============================================================
+           بطاقة الشروط - تصميم أنيق ومصغر
+           ============================================================ */
+        .policy-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 35px 40px;
-            margin-bottom: 25px;
+            padding: 22px 28px;
+            margin-bottom: 18px;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             transition: var(--transition);
@@ -335,203 +356,158 @@
             overflow: hidden;
         }
 
-        .terms-card::before {
+        .policy-card::before {
             content: '';
             position: absolute;
             top: 0;
             right: 0;
-            width: 4px;
+            width: 3px;
             height: 100%;
             background: var(--gradient-main);
+            border-radius: 0 3px 3px 0;
         }
 
-        .terms-card:hover {
+        .policy-card:hover {
             box-shadow: var(--shadow-hover);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
-        .terms-card .card-number {
+        .policy-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .policy-card .card-number {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             background: var(--gradient-main);
             color: #fff;
             border-radius: 50%;
             font-weight: 900;
-            font-size: 1.1rem;
-            margin-bottom: 12px;
+            font-size: 0.85rem;
             flex-shrink: 0;
         }
 
-        .terms-card h2 {
-            font-size: 1.4rem;
+        .policy-card .card-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .policy-card .card-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .policy-card h2 {
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--text-color);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            margin: 0;
         }
 
-        .terms-card h2 i {
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-
-        .terms-card p {
+        .policy-card h2 .sub {
+            font-weight: 400;
             color: var(--text-muted);
-            line-height: 1.9;
-            font-size: 1.05rem;
+            font-size: 0.75rem;
         }
 
-        .terms-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 10px 0 0;
-        }
-
-        .terms-card ul li {
-            padding: 6px 0;
+        .policy-card p {
             color: var(--text-muted);
             line-height: 1.8;
-            font-size: 1rem;
+            font-size: 0.92rem;
+            margin-top: 4px;
+        }
+
+        .policy-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 0;
+        }
+
+        .policy-card ul li {
+            padding: 4px 0;
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.88rem;
             display: flex;
             align-items: flex-start;
-            gap: 12px;
-        }
-
-        .terms-card ul li i {
-            color: var(--secondary);
-            font-size: 0.9rem;
-            margin-top: 5px;
-            flex-shrink: 0;
-        }
-
-        .terms-card .highlight-box {
-            background: var(--bg-body);
-            padding: 20px 25px;
-            border-radius: 12px;
-            border-right: 4px solid var(--primary);
-            margin: 15px 0 5px;
-        }
-
-        .terms-card .highlight-box p {
-            margin-bottom: 0;
-            color: var(--text-color);
-        }
-
-        .terms-card .contact-info-box {
-            background: var(--bg-body);
-            padding: 20px 25px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            margin: 15px 0 5px;
-        }
-
-        .terms-card .contact-info-box p {
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
             gap: 10px;
         }
 
-        .terms-card .contact-info-box p i {
-            color: var(--primary);
-            font-size: 1.1rem;
-            width: 25px;
+        .policy-card ul li svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            fill: var(--secondary);
         }
 
-        /* ============================================================
-           جدول المعلومات القانونية
-           ============================================================ */
-        .legal-table-wrapper {
-            overflow-x: auto;
-            margin: 15px 0;
-        }
-
-        .legal-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .legal-table thead {
-            background: var(--gradient-main);
-            color: #fff;
-        }
-
-        .legal-table th {
-            padding: 14px 18px;
-            text-align: right;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .legal-table td {
-            padding: 12px 18px;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        .legal-table tbody tr {
+        .policy-card .highlight-box {
             background: var(--bg-body);
-            transition: var(--transition);
+            padding: 14px 18px;
+            border-radius: 10px;
+            border-right: 3px solid var(--primary);
+            margin: 10px 0 0;
         }
 
-        .legal-table tbody tr:hover {
-            background: rgba(124, 58, 237, 0.05);
+        .policy-card .highlight-box p {
+            margin-bottom: 0;
+            color: var(--text-color);
+            font-size: 0.85rem;
         }
 
-        .legal-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .legal-table .flag-icon {
-            font-size: 1.5rem;
-            margin-left: 8px;
+        .policy-card .highlight-box p i {
+            color: var(--primary);
+            margin-left: 6px;
         }
 
         /* ============================================================
-           ملخص
+           ملخص الخدمة - مصغر وأنيق
            ============================================================ */
-        .terms-summary {
+        .policy-summary {
             background: var(--gradient-main);
             color: #fff;
             border-radius: var(--radius);
-            padding: 35px 40px;
-            margin-top: 30px;
+            padding: 28px 32px;
+            margin-top: 25px;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .terms-summary::before {
-            content: '📋';
+        .policy-summary::before {
+            content: '📜';
             position: absolute;
-            right: 20px;
-            top: -30px;
-            font-size: 8rem;
-            opacity: 0.1;
+            right: 10px;
+            top: -20px;
+            font-size: 6rem;
+            opacity: 0.08;
         }
 
-        .terms-summary h3 {
-            font-size: 1.6rem;
+        .policy-summary h3 {
+            font-size: 1.3rem;
             font-weight: 900;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             position: relative;
             z-index: 1;
         }
 
-        .terms-summary p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 700px;
+        .policy-summary p {
+            font-size: 0.95rem;
+            opacity: 0.92;
+            max-width: 650px;
             margin: 0 auto;
             line-height: 1.8;
             position: relative;
@@ -539,120 +515,97 @@
         }
 
         /* ============================================================
-           نبذة عنا + التواصل
+           قسم التواصل المصغر
            ============================================================ */
-        .about-section {
-            padding: 50px 0;
+        .contact-mini {
+            padding: 30px 0;
             background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
         }
 
-        .about-section .container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 40px;
-            align-items: start;
-        }
-
-        .about-section h2 {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--text-color);
-            margin-bottom: 20px;
-        }
-
-        .about-section h2 span {
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .about-section p {
-            color: var(--text-muted);
-            line-height: 1.9;
-            font-size: 1.05rem;
-        }
-
-        .about-section .contact-info {
-            background: var(--bg-body);
-            padding: 25px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-        }
-
-        .about-section .contact-info h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 15px;
-        }
-
-        .about-section .contact-info .contact-item {
+        .contact-mini .container {
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .contact-mini .info-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .contact-mini .info-text strong {
+            color: var(--text-color);
+        }
+
+        .contact-mini .contact-links {
+            display: flex;
             gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
         }
 
-        .about-section .contact-info .contact-item:last-child {
-            border-bottom: none;
+        .contact-mini .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: var(--bg-body);
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
         }
 
-        .about-section .contact-info .contact-item i {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+        .contact-mini .contact-links a:hover {
             background: var(--gradient-main);
             color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
+            border-color: transparent;
+            transform: translateY(-2px);
         }
 
-        .about-section .contact-info .contact-item .info {
-            font-size: 0.9rem;
-            color: var(--text-color);
-        }
-
-        .about-section .contact-info .contact-item .info .label {
-            font-weight: 600;
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-muted);
+        .contact-mini .contact-links a svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
         }
 
         /* ============================================================
            الخدمات السريعة
            ============================================================ */
         .quick-services {
-            padding: 30px 0;
+            padding: 25px 0;
             background: var(--bg-body);
         }
 
         .quick-services h3 {
             text-align: center;
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            color: var(--text-color);
         }
 
         .quick-services .services-tags {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .quick-services .services-tags a {
             background: var(--bg-card);
-            padding: 8px 20px;
+            padding: 5px 16px;
             border-radius: 50px;
             text-decoration: none;
             color: var(--text-color);
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             border: 1px solid var(--border-color);
             transition: var(--transition);
             font-family: 'Cairo', sans-serif;
@@ -671,21 +624,21 @@
         .footer {
             background: #0F172A;
             color: #94A3B8;
-            padding: 40px 0 25px;
+            padding: 30px 0 20px;
             text-align: center;
         }
 
         .footer .social-links {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
         .footer .social-links a {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -694,20 +647,25 @@
             border: 1px solid rgba(255,255,255,0.08);
             text-decoration: none;
             color: #94A3B8;
-            font-size: 1.2rem;
+            font-size: 1rem;
             transition: var(--transition);
+        }
+
+        .footer .social-links a svg {
+            width: 20px;
+            height: 20px;
         }
 
         .footer .social-links a:hover {
             color: #fff;
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             background: var(--gradient-main);
         }
 
         .footer .footer-brand {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 900;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .footer .footer-brand span {
@@ -719,15 +677,15 @@
         .footer .footer-links {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .footer .footer-links a {
             color: #94A3B8;
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: var(--transition);
         }
 
@@ -741,126 +699,146 @@
         }
 
         .footer .copyright {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 15px;
-            margin-top: 10px;
+            padding-top: 12px;
+            margin-top: 8px;
         }
 
         /* ============================================================
            التجاوب مع الشاشات
            ============================================================ */
         @media (max-width: 992px) {
-            .terms-hero h1 {
-                font-size: 2.5rem;
+            .policy-hero h1 {
+                font-size: 2rem;
             }
-
-            .about-section .container {
-                grid-template-columns: 1fr;
+            .policy-card {
+                padding: 18px 20px;
             }
-
-            .terms-card {
-                padding: 25px 25px;
+            .contact-mini .container {
+                flex-direction: column;
+                text-align: center;
             }
         }
 
         @media (max-width: 768px) {
-            .terms-hero {
-                padding: 50px 0 30px;
+            .policy-hero {
+                padding: 35px 0 25px;
             }
-
-            .terms-hero h1 {
-                font-size: 2rem;
+            .policy-hero h1 {
+                font-size: 1.6rem;
             }
-
-            .terms-card h2 {
-                font-size: 1.2rem;
-            }
-
-            .terms-card p {
-                font-size: 0.95rem;
-            }
-
-            .terms-card ul li {
+            .policy-hero p {
                 font-size: 0.9rem;
             }
-
-            .terms-summary {
-                padding: 25px 20px;
+            .policy-hero .hero-icon {
+                font-size: 2.2rem;
             }
-
-            .terms-summary h3 {
-                font-size: 1.3rem;
+            .policy-card h2 {
+                font-size: 0.95rem;
             }
-
-            .terms-summary p {
-                font-size: 1rem;
-            }
-
-            .legal-table th,
-            .legal-table td {
-                padding: 10px 12px;
+            .policy-card p {
                 font-size: 0.85rem;
             }
-
+            .policy-card ul li {
+                font-size: 0.82rem;
+            }
+            .policy-card .highlight-box p {
+                font-size: 0.8rem;
+            }
+            .policy-card .card-number {
+                width: 28px;
+                height: 28px;
+                font-size: 0.75rem;
+            }
+            .policy-summary {
+                padding: 20px 20px;
+            }
+            .policy-summary h3 {
+                font-size: 1.1rem;
+            }
+            .policy-summary p {
+                font-size: 0.85rem;
+            }
             .header .container {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
                 text-align: center;
             }
-
             .header-actions {
                 justify-content: center;
             }
-
             .theme-toggle,
             .back-to-top {
-                width: 45px;
-                height: 45px;
-                font-size: 1.2rem;
-                bottom: 20px;
-                left: 20px;
+                width: 42px;
+                height: 42px;
+                font-size: 1.1rem;
+                bottom: 15px;
+                left: 15px;
             }
             .back-to-top {
-                bottom: 75px;
+                bottom: 65px;
+            }
+            .contact-mini .contact-links a {
+                font-size: 0.7rem;
+                padding: 4px 12px;
+            }
+            .policy-hero .badge-date {
+                font-size: 0.65rem;
+                padding: 3px 14px;
             }
         }
 
         @media (max-width: 480px) {
-            .terms-hero h1 {
-                font-size: 1.6rem;
+            .policy-hero h1 {
+                font-size: 1.3rem;
             }
-
-            .terms-hero p {
-                font-size: 1rem;
+            .policy-hero p {
+                font-size: 0.82rem;
             }
-
-            .terms-card {
-                padding: 20px 18px;
+            .policy-card {
+                padding: 14px 14px;
             }
-
-            .terms-card h2 {
-                font-size: 1.05rem;
-            }
-
-            .terms-card .card-number {
-                width: 32px;
-                height: 32px;
-                font-size: 0.9rem;
-            }
-
-            .terms-card ul li {
+            .policy-card h2 {
                 font-size: 0.85rem;
             }
-
-            .terms-summary h3 {
+            .policy-card p {
+                font-size: 0.78rem;
+            }
+            .policy-card ul li {
+                font-size: 0.75rem;
+            }
+            .policy-card .highlight-box p {
+                font-size: 0.75rem;
+            }
+            .policy-card .highlight-box {
+                padding: 10px 12px;
+            }
+            .policy-card .card-number {
+                width: 24px;
+                height: 24px;
+                font-size: 0.65rem;
+            }
+            .policy-summary h3 {
+                font-size: 0.95rem;
+            }
+            .policy-summary p {
+                font-size: 0.78rem;
+            }
+            .logo {
                 font-size: 1.1rem;
             }
-
-            .legal-table th,
-            .legal-table td {
-                padding: 8px 10px;
-                font-size: 0.75rem;
+            .btn-back {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+            .quick-services .services-tags a {
+                font-size: 0.65rem;
+                padding: 4px 12px;
+            }
+            .policy-hero .badge-date {
+                font-size: 0.6rem;
+                padding: 3px 10px;
             }
         }
     </style>
@@ -869,12 +847,16 @@
 
     <!-- ====== زر تبديل الوضع ====== -->
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
-        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(211, 168, 211)" d="M0 256c0-141.4 114.6-256 256-256 33 0 64.6 6.3 93.6 17.7 7.4 2.9 11.5 10.7 9.8 18.4s-8.8 13-16.7 12.4c-4.8-.3-9.7-.5-14.6-.5-114.9 0-208 93.1-208 208s93.1 208 208 208c4.9 0 9.8-.2 14.6-.5 7.9-.5 15 4.7 16.7 12.4s-2.4 15.5-9.8 18.4C320.6 505.7 289 512 256 512 114.6 512 0 397.4 0 256zM375.4 137.4c3.5-7.1 13.7-7.1 17.2 0l31.5 63.8c1.4 2.8 4.1 4.8 7.2 5.3l70.4 10.2c7.9 1.1 11 10.8 5.3 16.4l-50.9 49.6c-2.3 2.2-3.3 5.4-2.8 8.5l12 70.1c1.3 7.8-6.9 13.8-13.9 10.1l-63-33.1c-2.8-1.5-6.1-1.5-8.9 0l-63 33.1c-7 3.7-15.3-2.3-13.9-10.1l12-70.1c.5-3.1-.5-6.3-2.8-8.5L261 233.1c-5.7-5.6-2.6-15.2 5.3-16.4l70.4-10.2c3.1-.5 5.8-2.4 7.2-5.3l31.5-63.8z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" height="28" width="28" viewBox="0 0 512 512">
+            <path fill="currentColor" d="M0 256c0-141.4 114.6-256 256-256 33 0 64.6 6.3 93.6 17.7 7.4 2.9 11.5 10.7 9.8 18.4s-8.8 13-16.7 12.4c-4.8-.3-9.7-.5-14.6-.5-114.9 0-208 93.1-208 208s93.1 208 208 208c4.9 0 9.8-.2 14.6-.5 7.9-.5 15 4.7 16.7 12.4s-2.4 15.5-9.8 18.4C320.6 505.7 289 512 256 512 114.6 512 0 397.4 0 256zM375.4 137.4c3.5-7.1 13.7-7.1 17.2 0l31.5 63.8c1.4 2.8 4.1 4.8 7.2 5.3l70.4 10.2c7.9 1.1 11 10.8 5.3 16.4l-50.9 49.6c-2.3 2.2-3.3 5.4-2.8 8.5l12 70.1c1.3 7.8-6.9 13.8-13.9 10.1l-63-33.1c-2.8-1.5-6.1-1.5-8.9 0l-63 33.1c-7 3.7-15.3-2.3-13.9-10.1l12-70.1c.5-3.1-.5-6.3-2.8-8.5L261 233.1c-5.7-5.6-2.6-15.2 5.3-16.4l70.4-10.2c3.1-.5 5.8-2.4 7.2-5.3l31.5-63.8z"/>
+        </svg>
     </button>
 
     <!-- ====== زر العودة للأعلى ====== -->
     <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(211, 168, 211)" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM377 271c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-87-87-87 87c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 167c9.4-9.4 24.6-9.4 33.9 0L377 271z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" height="28" width="28" viewBox="0 0 512 512">
+            <path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM377 271c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-87-87-87 87c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 167c9.4-9.4 24.6-9.4 33.9 0L377 271z"/>
+        </svg>
     </button>
 
     <!-- ============================================================
@@ -883,32 +865,44 @@
     <header class="header">
         <div class="container">
             <a href="index.html" class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" height="32" width="40" viewBox="0 0 640 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(220, 196, 220)" d="M493.9 295.6c-50.3 0-83.5-38.9-92.8-53.9 11.9-95.3 46.8-125.4 92.8-125.4 45.5 0 80.9 36.4 80.9 89.7s-35.4 89.7-80.9 89.7l0-.1zm0-237.8c-81.9 0-127.8 53.4-141 108.4-14.9-28-25.9-65.5-34.5-100.3l-113.2 0 0 141c0 51.1-23.3 89-68.8 89s-71.6-37.8-71.6-89l.5-141-65.3 0 0 141c0 41.1 13.3 78.4 37.6 105.1 25 27.5 59.2 41.8 98.8 41.8 78.8 0 133.8-60.4 133.8-146.9l0-94.8c8.2 31.2 27.8 91.1 65.3 143.6l-35 199.4 66.4 0 23.1-141.3c7.6 6.3 15.7 12 24.2 17 22.2 14 47.7 21.9 73.9 22.8 0 0 4 .2 6.1 .2 81.2 0 145.9-62.9 145.9-147.8S575.3 57.9 494.1 57.9l-.2-.1z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                    <path fill="currentColor" d="M493.9 295.6c-50.3 0-83.5-38.9-92.8-53.9 11.9-95.3 46.8-125.4 92.8-125.4 45.5 0 80.9 36.4 80.9 89.7s-35.4 89.7-80.9 89.7l0-.1zm0-237.8c-81.9 0-127.8 53.4-141 108.4-14.9-28-25.9-65.5-34.5-100.3l-113.2 0 0 141c0 51.1-23.3 89-68.8 89s-71.6-37.8-71.6-89l.5-141-65.3 0 0 141c0 41.1 13.3 78.4 37.6 105.1 25 27.5 59.2 41.8 98.8 41.8 78.8 0 133.8-60.4 133.8-146.9l0-94.8c8.2 31.2 27.8 91.1 65.3 143.6l-35 199.4 66.4 0 23.1-141.3c7.6 6.3 15.7 12 24.2 17 22.2 14 47.7 21.9 73.9 22.8 0 0 4 .2 6.1 .2 81.2 0 145.9-62.9 145.9-147.8S575.3 57.9 494.1 57.9l-.2-.1z"/>
+                </svg>
                 منصة <span>ارتقاء</span>
             </a>
             <div class="header-actions">
                 <a href="index.html" class="btn-back">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(134, 105, 134)" d="M277.8 8.6c-12.3-11.4-31.3-11.4-43.5 0l-224 208c-9.6 9-12.8 22.9-8 35.1S18.8 272 32 272l16 0 0 176c0 35.3 28.7 64 64 64l288 0c35.3 0 64-28.7 64-64l0-176 16 0c13.2 0 25-8.1 29.8-20.3s1.6-26.2-8-35.1l-224-208zM200 256a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zM144 432c0-44.2 35.8-80 80-80l64 0c44.2 0 80 35.8 80 80 0 8.8-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16z"/></svg> الرئيسية
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M277.8 8.6c-12.3-11.4-31.3-11.4-43.5 0l-224 208c-9.6 9-12.8 22.9-8 35.1S18.8 272 32 272l16 0 0 176c0 35.3 28.7 64 64 64l288 0c35.3 0 64-28.7 64-64l0-176 16 0c13.2 0 25-8.1 29.8-20.3s1.6-26.2-8-35.1l-224-208zM200 256a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zM144 432c0-44.2 35.8-80 80-80l64 0c44.2 0 80 35.8 80 80 0 8.8-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16z"/>
+                    </svg>
+                    الرئيسية
                 </a>
                 <a href="dashboard.html" class="btn-back">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="32" width="36" viewBox="0 0 576 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(134, 105, 134)" d="M96 64c-35.3 0-64 28.7-64 64l0 256c-17.7 0-32 14.3-32 32s14.3 32 32 32l512 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-256c0-35.3-28.7-64-64-64L96 64zM480 384l-64 0 0-32c0-17.7-14.3-32-32-32l-96 0c-17.7 0-32 14.3-32 32l0 32-160 0 0-256 384 0 0 256z"/></svg> لوحة التحكم
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                        <path fill="currentColor" d="M96 64c-35.3 0-64 28.7-64 64l0 256c-17.7 0-32 14.3-32 32s14.3 32 32 32l512 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-256c0-35.3-28.7-64-64-64L96 64zM480 384l-64 0 0-32c0-17.7-14.3-32-32-32l-96 0c-17.7 0-32 14.3-32 32l0 32-160 0 0-256 384 0 0 256z"/>
+                    </svg>
+                    لوحة التحكم
                 </a>
             </div>
         </div>
     </header>
 
     <!-- ============================================================
-    قسم البطل (Hero)
+    قسم البطل (Hero) - مع تاريخ متغير تلقائياً
     ============================================================ -->
-    <section class="terms-hero">
+    <section class="policy-hero">
         <div class="container">
             <div class="hero-content" data-aos="fade-up">
-                <div class="hero-icon">📋</div>
-                <h1>شروط <span>الاستخدام</span></h1>
+                <div class="hero-icon">📜</div>
+                <h1>شروط <span>استخدام منصة ارتقاء</span></h1>
+                <p class="hero-sub">Irteqa Terms of Use</p>
                 <p>
-                    مرحبًا بك في منصة ارتقاء. باستخدامك لهذا الموقع أو أي من خدماته،
-                    فإنك تقر وتوافق على الالتزام بشروط الاستخدام الواردة أدناه.
+                    تنظم هذه الشروط طريقة استخدام منصة ارتقاء والخدمات المتاحة من خلالها، وتوضح القواعد والالتزامات المتعلقة باستخدام المستخدم للمنصة.
                 </p>
+                <span class="badge-date" id="updateDate">
+                    <i class="fas fa-calendar-alt"></i> 
+                    تاريخ آخر تحديث: <span id="currentDate"></span>
+                </span>
             </div>
         </div>
     </section>
@@ -916,256 +910,422 @@
     <!-- ============================================================
     المحتوى الرئيسي
     ============================================================ -->
-    <section class="terms-content">
+    <section class="policy-content">
         <div class="container">
 
             <!-- مقدمة -->
-            <div class="terms-card" data-aos="fade-up">
-                <p style="font-size:1.1rem; line-height:1.9; color:var(--text-color);">
-                    نرجو قراءة هذه الشروط بعناية قبل استخدام الموقع أو الاستفادة من خدماته.
-                    باستخدامك للموقع، فإنك توافق على الالتزام بهذه الشروط بالإضافة إلى:
+            <div class="policy-card" data-aos="fade-up">
+                <p style="font-size:0.95rem; line-height:1.9; color:var(--text-color);">
+                    باستخدام منصة ارتقاء أو أي من خدماتها، يقر المستخدم بأنه قرأ هذه الشروط ووافق على الالتزام بها وبجميع السياسات المرتبطة بالمنصة.
                 </p>
-                <ul>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> سياسة الخصوصية.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> سياسة ملفات تعريف الارتباط (Cookies).</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> سياسة النزاهة الأكاديمية.</li>
-                </ul>
             </div>
 
-            <!-- أولاً: نطاق التطبيق -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="50">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 1. قبول شروط الاستخدام -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="50">
+                <div class="card-header">
                     <span class="card-number">١</span>
-                    <h2><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(34, 33, 30)" d="M351.9 280l-190.9 0c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zM160.9 232l190.9 0C349 167.5 334.7 108.1 314.4 64.6 303 40.2 290.7 22.8 279.3 12.2 268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4zm-48 0C116.4 146.4 138.5 66.9 170.8 14.7 78.7 47.3 10.9 131.2 1.5 232l111.4 0zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3L1.5 280zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3l-111.4 0zm111.4-48C501.9 131.2 434.1 47.3 342 14.7 374.3 66.9 396.4 146.4 399.9 232l111.4 0z"/></svg></i> نطاق التطبيق</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h2>قبول شروط الاستخدام</h2>
                 </div>
                 <p>
-                    تسري هذه الشروط على جميع زوار الموقع، والمستخدمين، والعملاء، والمستفيدين من خدمات منصة ارتقاء
-                    سواء عبر المنصة الإلكترونية أو من خلال وسائل التواصل الرسمية.
+                    تنظم هذه الشروط طريقة استخدام منصة ارتقاء والخدمات المتاحة من خلالها، وتوضح القواعد والالتزامات المتعلقة باستخدام المستخدم للمنصة.
+                </p>
+                <p>
+                    باستخدام منصة ارتقاء أو أي من خدماتها، يقر المستخدم بأنه قرأ هذه الشروط ووافق على الالتزام بها وبجميع السياسات المرتبطة بالمنصة.
                 </p>
             </div>
 
-            <!-- ثانياً: هوية الجهة المالكة -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="100">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 2. إنشاء الحساب وإدارته -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-header">
                     <span class="card-number">٢</span>
-                    <h2><svg xmlns="http://www.w3.org/2000/svg" height="32" width="36" viewBox="0 0 576 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(34, 33, 30)" d="M96 0C60.7 0 32 28.7 32 64l0 384c0 35.3 28.7 64 64 64l180 0c-10.5-14.6-19-30.7-25.1-48l-74.9 0 0-80c0-17.7 14.3-32 32-32l32 0c2 0 4 .2 5.9 .5 6-23.6 16.3-45.4 30.1-64.5l-4 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 4c27.5-19.8 60.3-32.4 96-35.4L416 64c0-35.3-28.7-64-64-64L96 0zm32 112c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zM128 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM576 400a144 144 0 1 0 -288 0 144 144 0 1 0 288 0zm-86.6-60.9c7.1 5.2 8.7 15.2 3.5 22.3l-64 88c-2.8 3.8-7 6.2-11.7 6.5s-9.3-1.3-12.6-4.6l-40-40c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0l26.8 26.8 53-72.9c5.2-7.1 15.2-8.7 22.4-3.5z"/></svg> هوية الجهة المالكة</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/>
+                        </svg>
+                    </div>
+                    <h2>إنشاء الحساب وإدارته</h2>
                 </div>
-                <div class="legal-table-wrapper">
-                    <table class="legal-table">
-                        <thead>
-                            <tr>
-                                <th>الفرع</th>
-                                <th>الاسم القانوني</th>
-                                <th>رقم التسجيل</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="flag-icon">🇸🇦</span> المملكة العربية السعودية</td>
-                                <td>شركة رقمنة الأعمال لخدمات الأعمال</td>
-                                <td>السجل التجاري: 7043223341</td>
-                            </tr>
-                            <tr>
-                                <td><span class="flag-icon">🇪🇬</span> جمهورية مصر العربية</td>
-                                <td>شركة دراسـة لخدمات البحث العلمي والترجمة</td>
-                                <td>رقم السجل: 87745</td>
-                            </tr>
-                            <tr>
-                                <td><span class="flag-icon">🇬🇧</span> المملكة المتحدة (بريطانيا)</td>
-                                <td>Wise For Trading & Investment LTD</td>
-                                <td>رقم التسجيل: 16681151</td>
-                            </tr>
-                            <tr>
-                                <td><span class="flag-icon">🇺🇸</span> الولايات المتحدة (وايومنغ)</td>
-                                <td>Wise for Trading & Investment LLC</td>
-                                <td>رقم التسجيل: 2025-001805357</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <p>قد تتطلب بعض الخدمات إنشاء حساب مستخدم للاستفادة من الخصائص المتاحة في المنصة.</p>
+                <p>يلتزم المستخدم بما يلي:</p>
+                <ul>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        تقديم معلومات صحيحة ودقيقة عند التسجيل.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        تحديث بياناته عند الحاجة.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        المحافظة على سرية معلومات الدخول.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        عدم مشاركة الحساب أو استخدام حسابات الآخرين دون تصريح.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        تحمل المسؤولية عن الأنشطة التي تتم من خلال حسابه.
+                    </li>
+                </ul>
+                <p>تحتفظ المنصة بحق اتخاذ الإجراءات المناسبة عند وجود استخدام غير مصرح به أو مخالف للشروط.</p>
             </div>
 
-            <!-- ثالثاً: الخدمات المقدّمة -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="150">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 3. التزامات المستخدم -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="card-header">
                     <span class="card-number">٣</span>
-                    <h2><i class="fas fa-concierge-bell"></i> الخدمات المقدّمة</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                            <path fill="currentColor" d="M58.9 42.1c3-6.1 9.6-9.6 16.3-8.7L320 64 564.8 33.4c6.7-.8 13.3 2.7 16.3 8.7l41.7 83.4c9 17.9-.6 39.6-19.8 45.1L439.6 217.3c-13.9 4-28.3-1.9-35.1-13.6L320 64 195.5 203.7c-6.8 11.7-21.2 17.6-35.1 13.6L37.1 170.6c-19.3-5.5-28.8-27.2-19.8-45.1L58.9 42.1zM64 128c0-35.3 28.7-64 64-64s64 28.7 64 64c0 35.3-28.7 64-64 64s-64-28.7-64-64zm232.6 32.6L320 224l23.4-63.4c1.9-5.1 6.3-8.7 11.3-9.2L480 128 354.7 95.5c-5.1-.5-9.4-4.1-11.3-9.2L320 32l-23.4 54.3c-1.9 5.1-6.3 8.7-11.3 9.2L160 128l125.3 32.5c5.1 .5 9.4 4.1 11.3 9.2zm-61 209.2c-2.9-7.8 .9-16.5 8.5-20.4l69.9-35.7c7.6-3.9 16.9-2.3 22.7 3.8L413.4 400l-205.8 0 27.9-90.2zM80 256c0-17.7 14.3-32 32-32s32 14.3 32 32-14.3 32-32 32-32-14.3-32-32zm432 32c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zM64 480c0-17.7 14.3-32 32-32s32 14.3 32 32-14.3 32-32 32-32-14.3-32-32zm128-32c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zm248-96c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zM416 480c0-17.7 14.3-32 32-32s32 14.3 32 32-14.3 32-32 32-32-14.3-32-32zm96-32c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32z"/>
+                        </svg>
+                    </div>
+                    <h2>التزامات المستخدم</h2>
                 </div>
-                <p>
-                    تقدم منصة ارتقاء خدمات أكاديمية واستشارية متنوعة، تشمل:
-                </p>
+                <p>عند استخدام منصة ارتقاء، يلتزم المستخدم بما يلي:</p>
                 <ul>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> الدعم الأكاديمي والتحليل البحثي.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> التحليل الإحصائي (الكمي والنوعي).</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> التحرير والمراجعة الأكاديمية.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> الترجمة الأكاديمية الاحترافية.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> الاستشارات والتدريب الأكاديمي.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> خدمات النشر العلمي في المجلات المحكمة.</li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        استخدام المنصة والخدمات بطريقة مسؤولة.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        الالتزام بالأنظمة واللوائح ذات العلاقة.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        تقديم المعلومات أو المتطلبات اللازمة عند طلب الخدمات.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        احترام حقوق المنصة والمستخدمين الآخرين.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        عدم استخدام الخدمات لأغراض مخالفة أو غير مشروعة.
+                    </li>
                 </ul>
-                <div class="highlight-box">
-                    <p><i class="fas fa-info-circle" style="color:var(--primary);"></i>
-                    جميع هذه الخدمات تهدف إلى الدعم والإرشاد الأكاديمي، ولا تُعد بديلًا عن الجهد الشخصي للباحث أو الطالب.</p>
-                </div>
             </div>
 
-            <!-- رابعاً: الاستخدام المشروع للموقع -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="200">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 4. طلب الخدمات واستخدامها -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-header">
                     <span class="card-number">٤</span>
-                    <h2><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> الاستخدام المشروع للموقع</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/>
+                        </svg>
+                    </div>
+                    <h2>طلب الخدمات واستخدامها</h2>
                 </div>
-                <p>
-                    يُسمح باستخدام الموقع وخدماته فقط للأغراض القانونية والمشروعة، ويُمنع على وجه الخصوص:
-                </p>
+                <p>عند طلب أي خدمة من خلال منصة ارتقاء، يلتزم المستخدم بما يلي:</p>
                 <ul>
-                    <li><i class="fas fa-times"></i> نشر أو إرسال أي محتوى غير قانوني أو منتهك للحقوق.</li>
-                    <li><i class="fas fa-times"></i> محاولة اختراق أو تعطيل أنظمة الموقع.</li>
-                    <li><i class="fas fa-times"></i> تقديم معلومات زائفة أو مضللة.</li>
-                    <li><i class="fas fa-times"></i> استخدام خدمات منصة ارتقاء لإعداد أعمال تُقدّم باسم المستخدم دون مشاركته الفعلية (مخالفة لمبادئ النزاهة الأكاديمية).</li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        الاطلاع على وصف الخدمة ومتطلباتها قبل تقديم الطلب.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        تقديم المعلومات اللازمة لإتمام الخدمة.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        استخدام الخدمة ضمن النطاق المحدد لها.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        الالتزام بأي شروط إضافية خاصة بالخدمة أو القسم.
+                    </li>
                 </ul>
+                <p>
+                    وتختلف تفاصيل وآلية تقديم الخدمات حسب طبيعة كل خدمة، ويتم توضيح المتطلبات ذات العلاقة قبل البدء.
+                </p>
             </div>
 
-            <!-- خامساً: الملكية الفكرية -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="250">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 5. الاستخدام المقبول للمنصة -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="card-header">
                     <span class="card-number">٥</span>
-                    <h2><i class="fas fa-copyright"></i> الملكية الفكرية</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M480.1 192l7.9 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2S477.9 .2 471 7L419.3 58.8C375 22.1 318 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1C79.2 135.5 159.3 64 256 64 300.4 64 341.2 79 373.7 104.3L327 151c-6.9 6.9-8.9 17.2-5.2 26.2S334.3 192 344 192l136.1 0zm29.4 100.5c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-44.4 0-85.2-15-117.7-40.3L185 361c6.9-6.9 8.9-17.2 5.2-26.2S177.7 320 168 320L24 320c-13.3 0-24 10.7-24 24L0 488c0 9.7 5.8 18.5 14.8 22.2S34.1 511.8 41 505l51.8-51.8C137 489.9 194 512 256 512 385 512 491.7 416.6 509.4 292.5z"/>
+                        </svg>
+                    </div>
+                    <h2>الاستخدام المقبول للمنصة</h2>
                 </div>
-                <p>
-                    جميع محتويات الموقع (نصوص، تصاميم، شعارات، أيقونات، رسوم، ...إلخ) هي ملك حصري لمنصة ارتقاء
-                    أو للجهات المرخصة لها. يُمنع تمامًا نسخ أو نشر أو إعادة استخدام أي جزء من الموقع دون إذن كتابي مسبق.
-                </p>
+                <p>يُحظر على المستخدم استخدام منصة ارتقاء في أي من الحالات التالية:</p>
+                <ul>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        محاولة الوصول غير المصرح به إلى أنظمة المنصة.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        تعطيل أو التأثير على أداء المنصة أو خدماتها.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        استخدام المنصة لنشر أو مشاركة محتوى مخالف للأنظمة.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        انتهاك حقوق الملكية الفكرية أو حقوق الآخرين.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        تقديم معلومات مضللة أو استخدام هوية غير صحيحة.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        استخدام الخدمات بطريقة تتعارض مع طبيعتها أو أهدافها.
+                    </li>
+                </ul>
             </div>
 
-            <!-- سادساً: التسجيل وإنشاء الحسابات -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="300">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 6. المحتوى والمواد المتاحة -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-header">
                     <span class="card-number">٦</span>
-                    <h2><i class="fas fa-user-plus"></i> التسجيل وإنشاء الحسابات</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h2>المحتوى والمواد المتاحة</h2>
                 </div>
                 <p>
-                    قد يتطلب استخدام بعض الخدمات إنشاء حساب على المنصة. وبذلك:
+                    قد توفر منصة ارتقاء محتوى أو معلومات أو مواد مرتبطة بالخدمات المقدمة عبرها.
+                    يلتزم المستخدم باستخدام هذا المحتوى للأغراض المسموح بها فقط، ولا يجوز نسخه أو إعادة نشره أو استخدامه بطريقة تنتهك حقوق الملكية الفكرية.
                 </p>
-                <ul>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> تلتزم بتقديم بيانات دقيقة وحديثة.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> تتحمل مسؤولية الحفاظ على سرية معلومات الدخول.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> توافق على إبلاغ الإدارة فورًا بأي استخدام غير مصرح به لحسابك.</li>
-                </ul>
             </div>
 
-            <!-- سابعاً: التسعير والدفع -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="350">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 7. الملكية الفكرية -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="350">
+                <div class="card-header">
                     <span class="card-number">٧</span>
-                    <h2><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(177, 151, 252)" d="M0 419.6L0 109.5c0-23.2 24.1-38.6 46.3-32 87.7 26.2 149.7 5.5 212.1-15.3 64.5-21.5 129.4-43.1 223.3-13.1 18.5 5.9 30.3 23.8 30.3 43.3l0 310.1c0 23.2-24.1 38.6-46.2 32-87.7-26.2-149.8-5.5-212.1 15.3-64.5 21.5-129.4 43.1-223.3 13.1-18.5-5.9-30.3-23.8-30.3-43.3zM336 256c0-53-35.8-96-80-96s-80 43-80 96 35.8 96 80 96 80-43 80-96zM120 413.6c4.4 0 7.9-3.8 7.2-8.1-4.6-27.8-27-49.5-55.2-53-4.4-.5-8 3.1-8 7.5l0 39.9c0 3.6 2.4 6.8 6 7.7 17.9 4.2 34.3 6.1 50 6.1zm318.5-51.1c5 .8 9.5-3 9.5-8l0-42.6c0-4.4-3.6-8.1-8-7.5-25.2 3.1-45.9 20.9-53.2 44.6-1.4 4.7 2.3 9.1 7.2 9.2 14.2 .4 29 1.7 44.4 4.3zM448 152l0-39.9c0-3.6-2.5-6.8-6-7.7-17.9-4.2-34.3-6.1-50-6.1-4.4 0-7.9 3.8-7.2 8.1 4.6 27.8 27 49.5 55.2 53 4.4 .5 8-3.1 8-7.5zM125.2 162.9c1.4-4.7-2.3-9.1-7.2-9.2-14.2-.4-29-1.7-44.4-4.3-5-.8-9.5 3-9.5 8L64 200c0 4.4 3.6 8.1 8 7.5 25.2-3.1 45.9-20.9 53.2-44.6z"/></svg> التسعير والدفع</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h2>الملكية الفكرية</h2>
                 </div>
+                <p>
+                    تخضع جميع عناصر منصة ارتقاء، بما في ذلك:
+                </p>
                 <ul>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> يتم عرض الأسعار بوضوح قبل إتمام طلب الخدمة.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> قد يتم احتساب رسوم ضريبية أو مصرفية إضافية حسب الدولة.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> تتم معالجة المدفوعات من خلال بوابات دفع آمنة ومعتمدة.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> لا تتحمل منصة ارتقاء مسؤولية أي خطأ صادر عن جهات الدفع الخارجية (مثل البنوك).</li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        العلامة التجارية.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        الشعار.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        التصاميم.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        الواجهات.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        الأنظمة التقنية.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        المحتوى الخاص بالمنصة.
+                    </li>
                 </ul>
+                <p>
+                    لحقوق الملكية الفكرية، ولا يجوز استخدامها أو استغلالها دون الحصول على إذن مسبق.
+                </p>
+                <p>
+                    وتخضع تفاصيل حقوق المحتوى وإجراءات التعامل مع الانتهاكات لسياسة الملكية الفكرية وDMCA الخاصة بالمنصة.
+                </p>
             </div>
 
-            <!-- ثامناً: إلغاء الخدمة واسترداد الرسوم -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="400">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 8. تعليق أو إنهاء الاستخدام -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-header">
                     <span class="card-number">٨</span>
-                    <h2><i class="fas fa-undo-alt"></i> إلغاء الخدمة واسترداد الرسوم</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L217.6 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/>
+                        </svg>
+                    </div>
+                    <h2>تعليق أو إنهاء الاستخدام</h2>
                 </div>
+                <p>تحتفظ منصة ارتقاء بحق تعليق أو تقييد وصول المستخدم إلى بعض أو جميع خدمات المنصة في حال:</p>
                 <ul>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> يحق للمستخدم طلب إلغاء الخدمة خلال فترة محددة تختلف بحسب نوع الخدمة.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> يتم رد المبالغ المستحقة وفقًا لسياسة الاسترجاع الخاصة بالموقع.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> تحتفظ منصة ارتقاء بحق رفض أو إيقاف الطلب في حال الاشتباه بسوء استخدام أو مخالفة للشروط.</li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        مخالفة شروط الاستخدام.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        انتهاك السياسات المعتمدة.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        إساءة استخدام الخدمات.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        وجود نشاط قد يضر بالمنصة أو المستخدمين الآخرين.
+                    </li>
                 </ul>
             </div>
 
-            <!-- تاسعاً: حدود المسؤولية -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="450">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 9. حدود المسؤولية -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="450">
+                <div class="card-header">
                     <span class="card-number">٩</span>
-                    <h2><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(99, 230, 190)" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/></svg> حدود المسؤولية</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/>
+                        </svg>
+                    </div>
+                    <h2>حدود المسؤولية</h2>
                 </div>
+                <p>
+                    تعمل منصة ارتقاء على توفير تجربة استخدام منظمة وآمنة، إلا أن المستخدم يتحمل مسؤولية استخدامه للمنصة والخدمات وفق طبيعتها وشروطها.
+                </p>
+                <p>لا تتحمل المنصة مسؤولية:</p>
                 <ul>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> تبذل المنصة أقصى جهد لضمان دقة وجودة الخدمات.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> لا تتحمل المنصة مسؤولية أي استخدام غير مشروع أو مخالف للأعراف الأكاديمية.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> لا تضمن خلو الموقع من الانقطاعات المؤقتة أو الأخطاء التقنية.</li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        الاستخدام غير الصحيح للخدمات.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        تقديم معلومات غير دقيقة من قبل المستخدم.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        النتائج الناتجة عن استخدام الخدمة خارج نطاقها المحدد.
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                        الظروف أو العوامل الخارجة عن نطاق التحكم المباشر للمنصة.
+                    </li>
                 </ul>
             </div>
 
-            <!-- عاشراً: روابط الأطراف الثالثة -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="500">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 10. تعديل شروط الاستخدام -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="card-header">
                     <span class="card-number">١٠</span>
-                    <h2><i class="fas fa-link"></i> روابط الأطراف الثالثة</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M480.1 192l7.9 0c13.3 0 24-10.7 24-24l0-144c0-9.7-5.8-18.5-14.8-22.2S477.9 .2 471 7L419.3 58.8C375 22.1 318 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1C79.2 135.5 159.3 64 256 64 300.4 64 341.2 79 373.7 104.3L327 151c-6.9 6.9-8.9 17.2-5.2 26.2S334.3 192 344 192l136.1 0zm29.4 100.5c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-44.4 0-85.2-15-117.7-40.3L185 361c6.9-6.9 8.9-17.2 5.2-26.2S177.7 320 168 320L24 320c-13.3 0-24 10.7-24 24L0 488c0 9.7 5.8 18.5 14.8 22.2S34.1 511.8 41 505l51.8-51.8C137 489.9 194 512 256 512 385 512 491.7 416.6 509.4 292.5z"/>
+                        </svg>
+                    </div>
+                    <h2>تعديل شروط الاستخدام</h2>
                 </div>
                 <p>
-                    قد يحتوي الموقع على روابط تؤدي إلى مواقع إلكترونية أخرى.
-                    منصة ارتقاء غير مسؤولة عن محتوى أو سياسات تلك المواقع، ويكون استخدامها على مسؤوليتك الشخصية.
+                    تحتفظ منصة ارتقاء بحق تحديث أو تعديل هذه الشروط عند الحاجة بما يتوافق مع تطور المنصة أو المتطلبات التنظيمية.
+                    يتم نشر النسخة المحدثة عبر المنصة، ويُعد استمرار المستخدم في استخدام المنصة بعد التحديث موافقة على الشروط الجديدة.
                 </p>
             </div>
 
-            <!-- الحادي عشر: حماية البيانات -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="550">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <!-- 11. التواصل -->
+            <div class="policy-card" data-aos="fade-up" data-aos-delay="550">
+                <div class="card-header">
                     <span class="card-number">١١</span>
-                    <h2><i class="fas fa-database"></i> حماية البيانات</h2>
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L217.6 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/>
+                        </svg>
+                    </div>
+                    <h2>التواصل</h2>
                 </div>
                 <p>
-                    تلتزم منصة ارتقاء بحماية بيانات المستخدمين وفقًا لما يلي:
-                </p>
-                <ul>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> سياسة الخصوصية المعتمدة في الموقع.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> الأنظمة المحلية والدولية مثل: GDPR، CCPA، ونظام حماية البيانات السعودي.</li>
-                </ul>
-            </div>
-
-            <!-- الثاني عشر: تعديل الشروط -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="600">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                    <span class="card-number">١٢</span>
-                    <h2><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(255, 212, 59)" d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1 465.9 144 490.3 119.6c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9 334.1 80 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"/></svg> تعديل الشروط</h2>
-                </div>
-                <p>
-                    يحق لمنصة ارتقاء تعديل هذه الشروط في أي وقت دون إشعار مسبق.
-                    سيتم نشر التعديلات على هذه الصفحة مع تحديث تاريخ السريان.
-                    ويُعد استمرارك في استخدام الموقع موافقة ضمنية على الشروط المعدلة.
-                </p>
-            </div>
-
-            <!-- الثالث عشر: القانون الواجب التطبيق -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="650">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                    <span class="card-number">١٣</span>
-                    <h2><i class="fas fa-gavel"></i> القانون الواجب التطبيق والاختصاص القضائي</h2>
-                </div>
-                <p>
-                    تُطبق القوانين التالية بحسب جهة التعامل:
-                </p>
-                <ul>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> <strong>القانون السعودي</strong> – للمستخدمين في المملكة.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> <strong>القانون المصري</strong> – للمستخدمين من خلال فرع مصر.</li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> <strong>القانون الإنجليزي أو الأمريكي</strong> – للفروع الدولية حسب الاختصاص.</li>
-                </ul>
-            </div>
-
-            <!-- الرابع عشر: التواصل -->
-            <div class="terms-card" data-aos="fade-up" data-aos-delay="700">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                    <span class="card-number">١٤</span>
-                    <h2><i class="fas fa-headset"></i> التواصل</h2>
-                </div>
-                <p>
-                    لأي استفسار أو ملاحظات بخصوص شروط الاستخدام، يُرجى التواصل معنا عبر:
+                    في حال وجود استفسارات أو ملاحظات حول شروط الاستخدام، يمكن للمستخدم التواصل مع منصة ارتقاء عبر قنوات التواصل المعتمدة.
                 </p>
             </div>
 
             <!-- الخلاصة -->
-            <div class="terms-summary" data-aos="fade-up" data-aos-delay="750">
-                <h3>📋 الخلاصة</h3>
+            <div class="policy-summary" data-aos="fade-up" data-aos-delay="600">
+                <h3>📜 الخلاصة</h3>
                 <p>
-                    باستخدامك للموقع أو تسجيلك في أي من خدماته، فإنك تُقر بأنك قرأت هذه الشروط،
-                    وفهمتها، وتوافق على الالتزام الكامل بها.
+                    باستخدام منصة ارتقاء، فإنك توافق على الالتزام بهذه الشروط وجميع السياسات المرتبطة باستخدام المنصة.
                 </p>
             </div>
 
@@ -1173,20 +1333,32 @@
     </section>
 
     <!-- ============================================================
-    نبذة عنا + التواصل
+    التواصل المصغر
     ============================================================ -->
-    <section class="about-section" id="about">
+    <section class="contact-mini">
         <div class="container">
-            <div data-aos="fade-up">
-                <h2>نبذة <span>عنّا</span></h2>
-                <p>
-                    نؤمن أن النزاهة الأكاديمية هي الأساس الذي تقوم عليه الجودة البحثية والتميز العلمي.
-                    لذلك نلتزم التزامًا كاملاً بتطبيق أعلى معايير الأمانة، والشفافية، والاحترام في كل ما نقدمه
-                    من خدمات تعليمية وبحثية واستشارية. نحن لا نُقدّم حلولاً بديلة عن جهد الباحث، بل نقدم
-                    إرشادًا أكاديميًا مسؤولًا يساعد الطلاب والباحثين على تطوير مهاراتهم البحثية، وتعزيز
-                    قدراتهم على التحليل العلمي، والالتزام بمعايير البحث الرصين. ترتكز خدماتنا على الدعم
-                    التعليمي الأخلاقي الذي يسهم في تمكين الباحث من إنتاج عمل علمي أصيل يعبّر عن فكره وجهده.
-                </p>
+            <div class="info-text">
+                <strong>📞 للاستفسارات:</strong> تواصل معنا عبر القنوات الرسمية
+            </div>
+            <div class="contact-links">
+                <a href="https://wa.me/966548504018" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path fill="currentColor" d="M92.1 254.6c0 24.9 7 49.2 20.2 70.1l3.1 5-13.3 48.6 49.9-13.1 4.8 2.9c20.2 12 43.4 18.4 67.1 18.4l.1 0c72.6 0 133.3-59.1 133.3-131.8 0-35.2-15.2-68.3-40.1-93.2-25-25-58-38.7-93.2-38.7-72.7 0-131.8 59.1-131.9 131.8zM274.8 330c-12.6 1.9-22.4 .9-47.5-9.9-36.8-15.9-61.8-51.5-66.9-58.7-.4-.6-.7-.9-.8-1.1-2-2.6-16.2-21.5-16.2-41 0-18.4 9-27.9 13.2-32.3 .3-.3 .5-.5 .7-.8 3.6-4 7.9-5 10.6-5 2.6 0 5.3 0 7.6 .1l.8 0c2.3 0 5.2 0 8.1 6.8 1.2 2.9 3 7.3 4.9 11.8 3.3 8 6.7 16.3 7.3 17.6 1 2 1.7 4.3 .3 6.9-3.4 6.8-6.9 10.4-9.3 13-3.1 3.2-4.5 4.7-2.3 8.6 15.3 26.3 30.6 35.4 53.9 47.1 4 2 6.3 1.7 8.6-1 2.3-2.6 9.9-11.6 12.5-15.5 2.6-4 5.3-3.3 8.9-2s23.1 10.9 27.1 12.9c.8 .4 1.5 .7 2.1 1 2.8 1.4 4.7 2.3 5.5 3.6 .9 1.9 .9 9.9-2.4 19.1-3.3 9.3-19.1 17.7-26.7 18.8zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM148.1 393.9L64 416 86.5 333.8c-13.9-24-21.2-51.3-21.2-79.3 .1-87.4 71.2-158.5 158.6-158.5 42.4 0 82.2 16.5 112.2 46.5 29.9 30 47.9 69.8 47.9 112.2 0 87.4-72.7 158.5-160.1 158.5-26.6 0-52.7-6.7-75.8-19.3z"/>
+                    </svg>
+                    واتساب
+                </a>
+                <a href="https://t.me/edu_shehap" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M256 8a248 248 0 1 0 0 496 248 248 0 1 0 0-496zM371 176.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7 .2-.7 .3-3.1-1.2-4.4s-3.6-.8-5.1-.5c-2.2 .5-37.1 23.5-104.6 69.1-9.9 6.8-18.9 10.1-26.9 9.9-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3 .6-4.5 6.7-9 18.4-13.7 72.3-31.5 120.5-52.3 144.6-62.3 68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6 .5 9.6 2.9 2 1.7 3.2 4.1 3.5 6.7 .5 3.2 .6 6.5 .4 9.8z"/>
+                    </svg>
+                    تيليجرام
+                </a>
+                <a href="mailto:alqadynjm088@gmail.com">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M61.4 64C27.5 64 0 91.5 0 125.4 0 126.3 0 127.1 .1 128L0 128 0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256-.1 0c0-.9 .1-1.7 .1-2.6 0-33.9-27.5-61.4-61.4-61.4L61.4 64zM464 192.3L464 384c0 8.8-7.2 16-16 16L64 400c-8.8 0-16-7.2-16-16l0-191.7 154.8 117.4c31.4 23.9 74.9 23.9 106.4 0L464 192.3zM48 125.4C48 118 54 112 61.4 112l389.2 0c7.4 0 13.4 6 13.4 13.4 0 4.2-2 8.2-5.3 10.7L280.2 271.5c-14.3 10.8-34.1 10.8-48.4 0L53.3 136.1c-3.3-2.5-5.3-6.5-5.3-10.7z"/>
+                    </svg>
+                    البريد الإلكتروني
+                </a>
             </div>
         </div>
     </section>
@@ -1218,23 +1390,25 @@
     <footer class="footer">
         <div class="container">
             <div class="social-links">
-                <a href="#" data-tooltip="اكس"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(204, 215, 224)" d="M357.2 48L427.8 48 273.6 224.2 455 464 313 464 201.7 318.6 74.5 464 3.8 464 168.7 275.5-5.2 48 140.4 48 240.9 180.9 357.2 48zM332.4 421.8l39.1 0-252.4-333.8-42 0 255.3 333.8z"/></svg></a>
-                <a href="#" data-tooltip="لينكد إن"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(204, 215, 224)" d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm5 170.2l66.5 0 0 213.8-66.5 0 0-213.8zm71.7-67.7a38.5 38.5 0 1 1 -77 0 38.5 38.5 0 1 1 77 0zM317.9 416l0-104c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9l0 105.8-66.4 0 0-213.8 63.7 0 0 29.2 .9 0c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9l0 117.2-66.4 0z"/></svg></a>
-                <a href="#" data-tooltip="يوتيوب"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="36" viewBox="0 0 576 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(204, 215, 224)" d="M549.7 124.1C543.5 100.4 524.9 81.8 501.4 75.5 458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5C51.2 81.8 32.7 100.4 26.4 124.1 15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8 42.6 11.5 213.4 11.5 213.4 11.5s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6l0-162.4 142.7 81.2-142.7 81.2z"/></svg></a>
-                <a href="#" data-tooltip="فيسبوك"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(116, 192, 252)" d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l98.2 0 0-145.8-52.8 0 0-78.2 52.8 0 0-33.7c0-87.1 39.4-127.5 125-127.5 16.2 0 44.2 3.2 55.7 6.4l0 70.8c-6-.6-16.5-1-29.6-1-42 0-58.2 15.9-58.2 57.2l0 27.8 83.6 0-14.4 78.2-69.3 0 0 145.8 129 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32z"/></svg></a>
-                <a href="#" data-tooltip="انستغرام"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(99, 230, 190)" d="M194.4 211.7a53.3 53.3 0 1 0 59.2 88.6 53.3 53.3 0 1 0 -59.2-88.6zm142.3-68.4c-5.2-5.2-11.5-9.3-18.4-12-18.1-7.1-57.6-6.8-83.1-6.5-4.1 0-7.9 .1-11.2 .1s-7.2 0-11.4-.1c-25.5-.3-64.8-.7-82.9 6.5-6.9 2.7-13.1 6.8-18.4 12s-9.3 11.5-12 18.4c-7.1 18.1-6.7 57.7-6.5 83.2 0 4.1 .1 7.9 .1 11.1s0 7-.1 11.1c-.2 25.5-.6 65.1 6.5 83.2 2.7 6.9 6.8 13.1 12 18.4s11.5 9.3 18.4 12c18.1 7.1 57.6 6.8 83.1 6.5 4.1 0 7.9-.1 11.2-.1s7.2 0 11.4 .1c25.5 .3 64.8 .7 82.9-6.5 6.9-2.7 13.1-6.8 18.4-12s9.3-11.5 12-18.4c7.2-18 6.8-57.4 6.5-83 0-4.2-.1-8.1-.1-11.4s0-7.1 .1-11.4c.3-25.5 .7-64.9-6.5-83-2.7-6.9-6.8-13.1-12-18.4l0 .2zm-67.1 44.5c18.1 12.1 30.6 30.9 34.9 52.2s-.2 43.5-12.3 61.6c-6 9-13.7 16.6-22.6 22.6s-19 10.1-29.6 12.2c-21.3 4.2-43.5-.2-61.6-12.3s-30.6-30.9-34.9-52.2 .2-43.5 12.2-61.6 30.9-30.6 52.2-34.9 43.5 .2 61.6 12.2l.1 0zm29.2-1.3c-3.1-2.1-5.6-5.1-7.1-8.6s-1.8-7.3-1.1-11.1 2.6-7.1 5.2-9.8 6.1-4.5 9.8-5.2 7.6-.4 11.1 1.1 6.5 3.9 8.6 7 3.2 6.8 3.2 10.6c0 2.5-.5 5-1.4 7.3s-2.4 4.4-4.1 6.2-3.9 3.2-6.2 4.2-4.8 1.5-7.3 1.5c-3.8 0-7.5-1.1-10.6-3.2l-.1 0zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM357 389c-18.7 18.7-41.4 24.6-67 25.9-26.4 1.5-105.6 1.5-132 0-25.6-1.3-48.3-7.2-67-25.9s-24.6-41.4-25.8-67c-1.5-26.4-1.5-105.6 0-132 1.3-25.6 7.1-48.3 25.8-67s41.5-24.6 67-25.8c26.4-1.5 105.6-1.5 132 0 25.6 1.3 48.3 7.1 67 25.8s24.6 41.4 25.8 67c1.5 26.3 1.5 105.4 0 131.9-1.3 25.6-7.1 48.3-25.8 67l0 .1z"/></svg></a>
-                <a href="#" data-tooltip="واتساب"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(99, 230, 190)" d="M92.1 254.6c0 24.9 7 49.2 20.2 70.1l3.1 5-13.3 48.6 49.9-13.1 4.8 2.9c20.2 12 43.4 18.4 67.1 18.4l.1 0c72.6 0 133.3-59.1 133.3-131.8 0-35.2-15.2-68.3-40.1-93.2-25-25-58-38.7-93.2-38.7-72.7 0-131.8 59.1-131.9 131.8zM274.8 330c-12.6 1.9-22.4 .9-47.5-9.9-36.8-15.9-61.8-51.5-66.9-58.7-.4-.6-.7-.9-.8-1.1-2-2.6-16.2-21.5-16.2-41 0-18.4 9-27.9 13.2-32.3 .3-.3 .5-.5 .7-.8 3.6-4 7.9-5 10.6-5 2.6 0 5.3 0 7.6 .1l.8 0c2.3 0 5.2 0 8.1 6.8 1.2 2.9 3 7.3 4.9 11.8 3.3 8 6.7 16.3 7.3 17.6 1 2 1.7 4.3 .3 6.9-3.4 6.8-6.9 10.4-9.3 13-3.1 3.2-4.5 4.7-2.3 8.6 15.3 26.3 30.6 35.4 53.9 47.1 4 2 6.3 1.7 8.6-1 2.3-2.6 9.9-11.6 12.5-15.5 2.6-4 5.3-3.3 8.9-2s23.1 10.9 27.1 12.9c.8 .4 1.5 .7 2.1 1 2.8 1.4 4.7 2.3 5.5 3.6 .9 1.9 .9 9.9-2.4 19.1-3.3 9.3-19.1 17.7-26.7 18.8zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM148.1 393.9L64 416 86.5 333.8c-13.9-24-21.2-51.3-21.2-79.3 .1-87.4 71.2-158.5 158.6-158.5 42.4 0 82.2 16.5 112.2 46.5 29.9 30 47.9 69.8 47.9 112.2 0 87.4-72.7 158.5-160.1 158.5-26.6 0-52.7-6.7-75.8-19.3z"/></svg></a>
-                <a href="#" data-tooltip="تيليجرام"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(116, 192, 252)" d="M256 8a248 248 0 1 0 0 496 248 248 0 1 0 0-496zM371 176.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7 .2-.7 .3-3.1-1.2-4.4s-3.6-.8-5.1-.5c-2.2 .5-37.1 23.5-104.6 69.1-9.9 6.8-18.9 10.1-26.9 9.9-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3 .6-4.5 6.7-9 18.4-13.7 72.3-31.5 120.5-52.3 144.6-62.3 68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6 .5 9.6 2.9 2 1.7 3.2 4.1 3.5 6.7 .5 3.2 .6 6.5 .4 9.8z"/></svg></a>
+                <a href="#" data-tooltip="اكس"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M357.2 48L427.8 48 273.6 224.2 455 464 313 464 201.7 318.6 74.5 464 3.8 464 168.7 275.5-5.2 48 140.4 48 240.9 180.9 357.2 48zM332.4 421.8l39.1 0-252.4-333.8-42 0 255.3 333.8z"/></svg></a>
+                <a href="#" data-tooltip="لينكد إن"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm5 170.2l66.5 0 0 213.8-66.5 0 0-213.8zm71.7-67.7a38.5 38.5 0 1 1 -77 0 38.5 38.5 0 1 1 77 0zM317.9 416l0-104c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9l0 105.8-66.4 0 0-213.8 63.7 0 0 29.2 .9 0c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9l0 117.2-66.4 0z"/></svg></a>
+                <a href="#" data-tooltip="يوتيوب"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M549.7 124.1C543.5 100.4 524.9 81.8 501.4 75.5 458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5C51.2 81.8 32.7 100.4 26.4 124.1 15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8 42.6 11.5 213.4 11.5 213.4 11.5s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6l0-162.4 142.7 81.2-142.7 81.2z"/></svg></a>
+                <a href="#" data-tooltip="فيسبوك"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l98.2 0 0-145.8-52.8 0 0-78.2 52.8 0 0-33.7c0-87.1 39.4-127.5 125-127.5 16.2 0 44.2 3.2 55.7 6.4l0 70.8c-6-.6-16.5-1-29.6-1-42 0-58.2 15.9-58.2 57.2l0 27.8 83.6 0-14.4 78.2-69.3 0 0 145.8 129 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32z"/></svg></a>
+                <a href="#" data-tooltip="انستغرام"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M194.4 211.7a53.3 53.3 0 1 0 59.2 88.6 53.3 53.3 0 1 0 -59.2-88.6zm142.3-68.4c-5.2-5.2-11.5-9.3-18.4-12-18.1-7.1-57.6-6.8-83.1-6.5-4.1 0-7.9 .1-11.2 .1s-7.2 0-11.4-.1c-25.5-.3-64.8-.7-82.9 6.5-6.9 2.7-13.1 6.8-18.4 12s-9.3 11.5-12 18.4c-7.1 18.1-6.7 57.7-6.5 83.2 0 4.1 .1 7.9 .1 11.1s0 7-.1 11.1c-.2 25.5-.6 65.1 6.5 83.2 2.7 6.9 6.8 13.1 12 18.4s11.5 9.3 18.4 12c18.1 7.1 57.6 6.8 83.1 6.5 4.1 0 7.9-.1 11.2-.1s7.2 0 11.4 .1c25.5 .3 64.8 .7 82.9-6.5 6.9-2.7 13.1-6.8 18.4-12s9.3-11.5 12-18.4c7.2-18 6.8-57.4 6.5-83 0-4.2-.1-8.1-.1-11.4s0-7.1 .1-11.4c.3-25.5 .7-64.9-6.5-83-2.7-6.9-6.8-13.1-12-18.4l0 .2zm-67.1 44.5c18.1 12.1 30.6 30.9 34.9 52.2s-.2 43.5-12.3 61.6c-6 9-13.7 16.6-22.6 22.6s-19 10.1-29.6 12.2c-21.3 4.2-43.5-.2-61.6-12.3s-30.6-30.9-34.9-52.2 .2-43.5 12.2-61.6 30.9-30.6 52.2-34.9 43.5 .2 61.6 12.2l.1 0zm29.2-1.3c-3.1-2.1-5.6-5.1-7.1-8.6s-1.8-7.3-1.1-11.1 2.6-7.1 5.2-9.8 6.1-4.5 9.8-5.2 7.6-.4 11.1 1.1 6.5 3.9 8.6 7 3.2 6.8 3.2 10.6c0 2.5-.5 5-1.4 7.3s-2.4 4.4-4.1 6.2-3.9 3.2-6.2 4.2-4.8 1.5-7.3 1.5c-3.8 0-7.5-1.1-10.6-3.2l-.1 0zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM357 389c-18.7 18.7-41.4 24.6-67 25.9-26.4 1.5-105.6 1.5-132 0-25.6-1.3-48.3-7.2-67-25.9s-24.6-41.4-25.8-67c-1.5-26.4-1.5-105.6 0-132 1.3-25.6 7.1-48.3 25.8-67s41.5-24.6 67-25.8c26.4-1.5 105.6-1.5 132 0 25.6 1.3 48.3 7.1 67 25.8s24.6 41.4 25.8 67c1.5 26.3 1.5 105.4 0 131.9-1.3 25.6-7.1 48.3-25.8 67l0 .1z"/></svg></a>
+                <a href="#" data-tooltip="واتساب"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M92.1 254.6c0 24.9 7 49.2 20.2 70.1l3.1 5-13.3 48.6 49.9-13.1 4.8 2.9c20.2 12 43.4 18.4 67.1 18.4l.1 0c72.6 0 133.3-59.1 133.3-131.8 0-35.2-15.2-68.3-40.1-93.2-25-25-58-38.7-93.2-38.7-72.7 0-131.8 59.1-131.9 131.8zM274.8 330c-12.6 1.9-22.4 .9-47.5-9.9-36.8-15.9-61.8-51.5-66.9-58.7-.4-.6-.7-.9-.8-1.1-2-2.6-16.2-21.5-16.2-41 0-18.4 9-27.9 13.2-32.3 .3-.3 .5-.5 .7-.8 3.6-4 7.9-5 10.6-5 2.6 0 5.3 0 7.6 .1l.8 0c2.3 0 5.2 0 8.1 6.8 1.2 2.9 3 7.3 4.9 11.8 3.3 8 6.7 16.3 7.3 17.6 1 2 1.7 4.3 .3 6.9-3.4 6.8-6.9 10.4-9.3 13-3.1 3.2-4.5 4.7-2.3 8.6 15.3 26.3 30.6 35.4 53.9 47.1 4 2 6.3 1.7 8.6-1 2.3-2.6 9.9-11.6 12.5-15.5 2.6-4 5.3-3.3 8.9-2s23.1 10.9 27.1 12.9c.8 .4 1.5 .7 2.1 1 2.8 1.4 4.7 2.3 5.5 3.6 .9 1.9 .9 9.9-2.4 19.1-3.3 9.3-19.1 17.7-26.7 18.8zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM148.1 393.9L64 416 86.5 333.8c-13.9-24-21.2-51.3-21.2-79.3 .1-87.4 71.2-158.5 158.6-158.5 42.4 0 82.2 16.5 112.2 46.5 29.9 30 47.9 69.8 47.9 112.2 0 87.4-72.7 158.5-160.1 158.5-26.6 0-52.7-6.7-75.8-19.3z"/></svg></a>
+                <a href="#" data-tooltip="تيليجرام"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8a248 248 0 1 0 0 496 248 248 0 1 0 0-496zM371 176.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7 .2-.7 .3-3.1-1.2-4.4s-3.6-.8-5.1-.5c-2.2 .5-37.1 23.5-104.6 69.1-9.9 6.8-18.9 10.1-26.9 9.9-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3 .6-4.5 6.7-9 18.4-13.7 72.3-31.5 120.5-52.3 144.6-62.3 68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6 .5 9.6 2.9 2 1.7 3.2 4.1 3.5 6.7 .5 3.2 .6 6.5 .4 9.8z"/></svg></a>
             </div>
             <div class="footer-brand">
                 <span>ارتقاء</span> للخدمات الأكاديمية
             </div>
             <div class="footer-links">
-                <a href="charter.html">📜 ميثاق العمل الأكاديمي والضمانات</a>
-                <a href="dmca.html">📜 سياسات وأحكام (DMCA)</a>
-                <a href="cookies-policy.html">🍪 سياسة ملفات الارتباط</a>
-                <a href="refund-policy.html">💰 سياسة الاسترداد</a>
-                <a href="terms-of-service.html" class="active-link">📋 شروط الاستخدام</a>
+                <a href="index.html">الرئيسية</a>
+                <a href="charter.html">ميثاق العمل</a>
+                <a href="dmca.html">سياسات وأحكام</a>
+                <a href="privacy-policy.html">سياسة الخصوصية</a>
+                <a href="cookies-policy.html">سياسة ملفات الارتباط</a>
+                <a href="platform-agreement.html">اتفاقية المنصة</a>
+                <a href="terms-of-use.html" class="active-link">شروط الاستخدام</a>
             </div>
             <div class="copyright">
                 &copy; 2026 منصة ارتقاء. جميع الحقوق محفوظة.
@@ -1249,12 +1423,52 @@
     </script>
     <script>
         // ============================================================
+        // تحديث تاريخ آخر تحديث تلقائياً
+        // ============================================================
+        function updateLastUpdateDate() {
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                const now = new Date();
+                
+                // تنسيق التاريخ باللغة العربية
+                const options = { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    weekday: 'long'
+                };
+                
+                // استخدام locale العربية
+                const formattedDate = now.toLocaleDateString('ar-SA', options);
+                
+                // إضافة الوقت أيضاً (اختياري)
+                const timeOptions = { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: true
+                };
+                const formattedTime = now.toLocaleTimeString('ar-SA', timeOptions);
+                
+                // عرض التاريخ والوقت معاً
+                dateElement.textContent = `${formattedDate} - ${formattedTime}`;
+            }
+        }
+
+        // استدعاء الدالة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLastUpdateDate();
+            
+            // تحديث التاريخ كل دقيقة (اختياري)
+            // setInterval(updateLastUpdateDate, 60000);
+        });
+
+        // ============================================================
         // تفعيل AOS
         // ============================================================
         AOS.init({
-            duration: 600,
+            duration: 500,
             once: true,
-            offset: 50
+            offset: 30
         });
 
         // ============================================================
@@ -1265,15 +1479,12 @@
         function toggleTheme() {
             isDark = !isDark;
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-            const icon = document.querySelector('.theme-toggle i');
-            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
 
         if (localStorage.getItem('theme') === 'dark') {
             isDark = true;
             document.documentElement.setAttribute('data-theme', 'dark');
-            document.querySelector('.theme-toggle i').className = 'fas fa-sun';
         }
 
         // ============================================================
@@ -1281,12 +1492,16 @@
         // ============================================================
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('backToTop');
-            if (window.scrollY > 500) {
+            if (window.scrollY > 400) {
                 btn.classList.add('visible');
             } else {
                 btn.classList.remove('visible');
             }
         });
+
+        console.log('📜 تم تحميل شروط استخدام منصة ارتقاء بنجاح!');
+        console.log('✅ التاريخ يتم تحديثه تلقائياً حسب تاريخ اليوم');
+        console.log('✅ تصميم مصغر وأنيق مع خطوط مناسبة');
     </script>
 
 </body>

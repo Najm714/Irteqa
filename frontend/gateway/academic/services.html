@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔬 خدمات البحث العلمي والترجمة والتصميم - منصة ارتقاء</title>
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <style>
+        /* ============================================================
+           المتغيرات
+           ============================================================ */
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --primary-light: #8B5CF6;
+            --secondary: #EC4899;
+            --secondary-dark: #DB2777;
+            --accent: #F59E0B;
+            --accent-light: #FBBF24;
+            --dark: #0F172A;
+            --dark-light: #1E293B;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --white: #FFFFFF;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.2);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --radius: 16px;
+            --bg-body: #F1F5F9;
+            --bg-card: #FFFFFF;
+            --text-color: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --gradient-main: linear-gradient(135deg, #7C3AED, #EC4899);
+            --gradient-secondary: linear-gradient(135deg, #F59E0B, #EC4899);
+            --gradient-hero: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #1a0a2e 100%);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0F172A;
+            --bg-card: #1E293B;
+            --text-color: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-color);
+            transition: var(--transition);
+            direction: rtl;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-main);
+            border-radius: 10px;
+        }
+
+        /* ============================================================
+           أزرار ثابتة
+           ============================================================ */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 999;
+            background: var(--bg-card);
+            color: var(--text-color);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
+            box-shadow: var(--shadow-hover);
+            background: var(--gradient-main);
+            color: #fff;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 95px;
+            left: 30px;
+            z-index: 999;
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* ============================================================
+           الهيدر
+           ============================================================ */
+        .header {
+            background: var(--bg-card);
+            box-shadow: var(--shadow);
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+            border-image: var(--gradient-main);
+            border-image-slice: 1;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--text-color);
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .logo span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-back {
+            background: var(--bg-body);
+            color: var(--text-color);
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-back svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-back:hover {
+            background: var(--gradient-main);
+            color: #fff;
+            transform: translateY(-2px);
+            border-color: transparent;
+        }
+
+        .btn-back.active-page {
+            background: var(--gradient-main);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        /* ============================================================
+           قسم البطل (Hero)
+           ============================================================ */
+        .services-hero {
+            background: var(--gradient-hero);
+            color: #fff;
+            padding: 50px 0 35px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .services-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.25), transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .services-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.12), transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, -30px) rotate(5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .services-hero .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .services-hero .hero-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .services-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .services-hero h1 span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .services-hero .hero-sub {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .services-hero p {
+            font-size: 1.05rem;
+            opacity: 0.85;
+            max-width: 700px;
+            margin: 10px auto 0;
+            line-height: 1.8;
+        }
+
+        .services-hero .stats-badge {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 4px 18px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.08);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* ============================================================
+           قسم الخدمات - تصميم دائري
+           ============================================================ */
+        .services-section {
+            padding: 40px 0 50px;
+            background: var(--bg-body);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .section-header h2 span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ✅ شبكة الخدمات الدائرية */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+            justify-items: center;
+            margin-top: 10px;
+        }
+
+        /* ✅ البطاقة الدائرية */
+        .service-card {
+            width: 100%;
+            max-width: 180px;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            background: var(--bg-card);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 15px;
+            text-align: center;
+            border: 3px solid var(--border-color);
+            transform-style: preserve-3d;
+            transform: rotateX(0deg) rotateY(0deg);
+            overflow: hidden;
+        }
+
+        /* ✅ التأثير ثلاثي الأبعاد */
+        .service-card:hover {
+            transform: rotateX(6deg) rotateY(-6deg) translateY(-8px) scale(1.04);
+            box-shadow: 0 30px 60px rgba(124, 58, 237, 0.25);
+            border-color: var(--primary-light);
+        }
+
+        /* ✅ خلفية متدرجة عند التمرير */
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, var(--primary-light) 0%, transparent 70%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+            transform: scale(0.5);
+        }
+
+        .service-card:hover::before {
+            opacity: 0.08;
+            transform: scale(1);
+        }
+
+        /* ✅ الحواف المتوهجة */
+        .service-card::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+            filter: blur(10px);
+        }
+
+        .service-card:hover::after {
+            opacity: 0.5;
+        }
+
+        /* ✅ الأيقونة */
+        .service-card .icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            background: rgba(124, 58, 237, 0.1);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            transform-style: preserve-3d;
+        }
+
+        .service-card:hover .icon {
+            transform: rotateY(180deg) scale(1.1);
+        }
+
+        .service-card .icon svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        /* ✅ ألوان مختلفة للأيقونات */
+        .service-card:nth-child(6n+1) .icon { color: #7C3AED; background: rgba(124, 58, 237, 0.15); }
+        .service-card:nth-child(6n+2) .icon { color: #EC4899; background: rgba(236, 72, 153, 0.15); }
+        .service-card:nth-child(6n+3) .icon { color: #F59E0B; background: rgba(245, 158, 11, 0.15); }
+        .service-card:nth-child(6n+4) .icon { color: #10B981; background: rgba(16, 185, 129, 0.15); }
+        .service-card:nth-child(6n+5) .icon { color: #3B82F6; background: rgba(59, 130, 246, 0.15); }
+        .service-card:nth-child(6n+6) .icon { color: #EF4444; background: rgba(239, 68, 68, 0.15); }
+
+        /* ✅ العنوان */
+        .service-card h3 {
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 3px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+            color: var(--text-color);
+        }
+
+        /* ✅ الوصف المختصر */
+        .service-card .service-desc {
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-height: 2.2em;
+        }
+
+        /* ✅ التقييم */
+        .service-card .rating {
+            font-size: 0.5rem;
+            color: #F59E0B;
+            margin-top: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card .rating span {
+            color: var(--text-muted);
+            font-size: 0.45rem;
+        }
+
+        /* ✅ التصنيف (Tag) */
+        .service-card .service-tag {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.45rem;
+            font-weight: 600;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ✅ تلميحة عند التمرير */
+        .service-card .card-tooltip {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: var(--bg-card);
+            color: var(--text-color);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.45rem;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            border: 1px solid var(--border-color);
+            z-index: 5;
+        }
+
+        .service-card:hover .card-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            bottom: -16px;
+        }
+
+        /* ============================================================
+           قسم التواصل المصغر
+           ============================================================ */
+        .contact-mini {
+            padding: 30px 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .contact-mini .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .contact-mini .info-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .contact-mini .info-text strong {
+            color: var(--text-color);
+        }
+
+        .contact-mini .contact-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .contact-mini .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: var(--bg-body);
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .contact-mini .contact-links a:hover {
+            background: var(--gradient-main);
+            color: #fff;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .contact-mini .contact-links a svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* ============================================================
+           الفوتر
+           ============================================================ */
+        .footer {
+            background: #0F172A;
+            color: #94A3B8;
+            padding: 30px 0 20px;
+            text-align: center;
+        }
+
+        .footer .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            text-decoration: none;
+            color: #94A3B8;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .footer .social-links a svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .footer .social-links a:hover {
+            color: #fff;
+            transform: translateY(-4px);
+            background: var(--gradient-main);
+        }
+
+        .footer .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .footer .footer-brand span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .footer .footer-links a {
+            color: #94A3B8;
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .footer .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer .footer-links a.active-link {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .footer .copyright {
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 12px;
+            margin-top: 8px;
+        }
+
+        /* ============================================================
+           التجاوب
+           ============================================================ */
+        @media (max-width: 992px) {
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 20px;
+            }
+            .service-card {
+                max-width: 160px;
+            }
+            .services-hero h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 15px;
+            }
+            .service-card {
+                max-width: 140px;
+                padding: 16px 12px;
+            }
+            .service-card .icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            .service-card .icon svg {
+                width: 22px;
+                height: 22px;
+            }
+            .service-card h3 {
+                font-size: 0.7rem;
+            }
+            .service-card .service-desc {
+                font-size: 0.5rem;
+                -webkit-line-clamp: 2;
+            }
+            .service-card .rating {
+                font-size: 0.45rem;
+            }
+            .service-card .service-tag {
+                font-size: 0.4rem;
+                padding: 2px 8px;
+            }
+            .service-card .card-tooltip {
+                display: none;
+            }
+            .services-hero {
+                padding: 35px 0 25px;
+            }
+            .services-hero h1 {
+                font-size: 1.6rem;
+            }
+            .services-hero p {
+                font-size: 0.9rem;
+            }
+            .section-header h2 {
+                font-size: 1.6rem;
+            }
+            .header .container {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+            .header-actions {
+                justify-content: center;
+            }
+            .theme-toggle,
+            .back-to-top {
+                width: 42px;
+                height: 42px;
+                font-size: 1.1rem;
+                bottom: 15px;
+                left: 15px;
+            }
+            .back-to-top {
+                bottom: 65px;
+            }
+            .contact-mini .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .contact-mini .contact-links a {
+                font-size: 0.7rem;
+                padding: 4px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 12px;
+            }
+            .service-card {
+                max-width: 120px;
+                padding: 12px 10px;
+            }
+            .service-card .icon {
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+            .service-card .icon svg {
+                width: 18px;
+                height: 18px;
+            }
+            .service-card h3 {
+                font-size: 0.6rem;
+            }
+            .service-card .service-desc {
+                font-size: 0.45rem;
+                -webkit-line-clamp: 1;
+                max-height: 1.2em;
+            }
+            .service-card .rating {
+                font-size: 0.4rem;
+            }
+            .service-card .service-tag {
+                font-size: 0.35rem;
+                padding: 1px 6px;
+                margin-top: 2px;
+            }
+            .services-hero h1 {
+                font-size: 1.3rem;
+            }
+            .services-hero p {
+                font-size: 0.82rem;
+            }
+            .section-header h2 {
+                font-size: 1.3rem;
+            }
+            .section-header p {
+                font-size: 0.8rem;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+            .btn-back {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== زر تبديل الوضع ====== -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+        <svg xmlns="http://www.w3.org/2000/svg" height="28" width="28" viewBox="0 0 512 512">
+            <path fill="currentColor" d="M0 256c0-141.4 114.6-256 256-256 33 0 64.6 6.3 93.6 17.7 7.4 2.9 11.5 10.7 9.8 18.4s-8.8 13-16.7 12.4c-4.8-.3-9.7-.5-14.6-.5-114.9 0-208 93.1-208 208s93.1 208 208 208c4.9 0 9.8-.2 14.6-.5 7.9-.5 15 4.7 16.7 12.4s-2.4 15.5-9.8 18.4C320.6 505.7 289 512 256 512 114.6 512 0 397.4 0 256zM375.4 137.4c3.5-7.1 13.7-7.1 17.2 0l31.5 63.8c1.4 2.8 4.1 4.8 7.2 5.3l70.4 10.2c7.9 1.1 11 10.8 5.3 16.4l-50.9 49.6c-2.3 2.2-3.3 5.4-2.8 8.5l12 70.1c1.3 7.8-6.9 13.8-13.9 10.1l-63-33.1c-2.8-1.5-6.1-1.5-8.9 0l-63 33.1c-7 3.7-15.3-2.3-13.9-10.1l12-70.1c.5-3.1-.5-6.3-2.8-8.5L261 233.1c-5.7-5.6-2.6-15.2 5.3-16.4l70.4-10.2c3.1-.5 5.8-2.4 7.2-5.3l31.5-63.8z"/>
+        </svg>
+    </button>
+
+    <!-- ====== زر العودة للأعلى ====== -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg xmlns="http://www.w3.org/2000/svg" height="28" width="28" viewBox="0 0 512 512">
+            <path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM377 271c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-87-87-87 87c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 167c9.4-9.4 24.6-9.4 33.9 0L377 271z"/>
+        </svg>
+    </button>
+
+    <!-- ============================================================
+    الهيدر
+    ============================================================ -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                    <path fill="currentColor" d="M493.9 295.6c-50.3 0-83.5-38.9-92.8-53.9 11.9-95.3 46.8-125.4 92.8-125.4 45.5 0 80.9 36.4 80.9 89.7s-35.4 89.7-80.9 89.7l0-.1zm0-237.8c-81.9 0-127.8 53.4-141 108.4-14.9-28-25.9-65.5-34.5-100.3l-113.2 0 0 141c0 51.1-23.3 89-68.8 89s-71.6-37.8-71.6-89l.5-141-65.3 0 0 141c0 41.1 13.3 78.4 37.6 105.1 25 27.5 59.2 41.8 98.8 41.8 78.8 0 133.8-60.4 133.8-146.9l0-94.8c8.2 31.2 27.8 91.1 65.3 143.6l-35 199.4 66.4 0 23.1-141.3c7.6 6.3 15.7 12 24.2 17 22.2 14 47.7 21.9 73.9 22.8 0 0 4 .2 6.1 .2 81.2 0 145.9-62.9 145.9-147.8S575.3 57.9 494.1 57.9l-.2-.1z"/>
+                </svg>
+                منصة <span>ارتقاء</span>
+            </a>
+            <div class="header-actions">
+                <a href="index.html" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M277.8 8.6c-12.3-11.4-31.3-11.4-43.5 0l-224 208c-9.6 9-12.8 22.9-8 35.1S18.8 272 32 272l16 0 0 176c0 35.3 28.7 64 64 64l288 0c35.3 0 64-28.7 64-64l0-176 16 0c13.2 0 25-8.1 29.8-20.3s1.6-26.2-8-35.1l-224-208zM200 256a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zM144 432c0-44.2 35.8-80 80-80l64 0c44.2 0 80 35.8 80 80 0 8.8-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16z"/>
+                    </svg>
+                    الرئيسية
+                </a>
+                <a href="academic-services.html" class="btn-back active-page">
+                    🔬 الخدمات الأكاديمية
+                </a>
+                <a href="dashboard.html" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                        <path fill="currentColor" d="M96 64c-35.3 0-64 28.7-64 64l0 256c-17.7 0-32 14.3-32 32s14.3 32 32 32l512 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-256c0-35.3-28.7-64-64-64L96 64zM480 384l-64 0 0-32c0-17.7-14.3-32-32-32l-96 0c-17.7 0-32 14.3-32 32l0 32-160 0 0-256 384 0 0 256z"/>
+                    </svg>
+                    لوحة التحكم
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    قسم البطل (Hero)
+    ============================================================ -->
+    <section class="services-hero">
+        <div class="container">
+            <div class="hero-content" data-aos="fade-up">
+                <div class="hero-icon">🔬</div>
+                <h1>خدمات <span>البحث العلمي والترجمة والتصميم</span></h1>
+                <p class="hero-sub">Academic Research, Translation &amp; Design Services</p>
+                <p>
+                    مجموعة متكاملة من الخدمات البحثية والمهنية تشمل الترجمة، والتحليل الإحصائي،
+                    والتدقيق اللغوي، والتصميم، والاستشارات البحثية.
+                </p>
+                <span class="stats-badge">🧩 أكثر من 40 خدمة متخصصة</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    قسم الخدمات - تصميم دائري
+    ============================================================ -->
+    <section class="services-section" id="services">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-duration="800">
+                <h2>خدماتنا <span>الأكاديمية</span></h2>
+                <p>نقدم لك أكثر من 40 خدمة أكاديمية متخصصة تغطي جميع احتياجاتك البحثية والتعليمية</p>
+            </div>
+
+            <div class="services-grid">
+                <!-- 1. الاستشارات الأكاديمية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="600" onclick="location.href='service-detail.html?id=consulting'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M268.9 85.2L152.3 214.8c-4.6 5.1-4.4 13 .5 17.9 30.5 30.5 80 30.5 110.5 0l31.8-31.8c4.2-4.2 9.5-6.5 14.9-6.9 6.8-.6 13.8 1.7 19 6.9L505.6 376 576 320 576 32 464 96 440.2 80.1C424.4 69.6 405.9 64 386.9 64l-70.4 0c-1.1 0-2.3 0-3.4 .1-16.9 .9-32.8 8.5-44.2 21.1zM116.6 182.7L223.4 64 183.8 64c-25.5 0-49.9 10.1-67.9 28.1L112 96 0 32 0 320 156.4 450.3c23 19.2 52 29.7 81.9 29.7l15.7 0-7-7c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l41 41 9 0c19.1 0 37.8-4.3 54.8-12.3L359 441c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l32 32 17.5-17.5c8.9-8.9 11.5-21.8 7.6-33.1l-137.9-136.8-14.9 14.9c-49.3 49.3-129.1 49.3-178.4 0-23-23-23.9-59.9-2.2-84z"/>
+                        </svg>
+                    </div>
+                    <h3>الاستشارات الأكاديمية</h3>
+                    <p class="service-desc">استشارات متخصصة لمساعدتك في مراحل بحثك</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">توجيه • دعم</span>
+                    <span class="card-tooltip">💼 استشارات أكاديمية</span>
+                </div>
+
+                <!-- 2. اقتراح عناوين رسائل -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="650" onclick="location.href='service-detail.html?id=thesis-titles'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>اقتراح عناوين رسائل</h3>
+                    <p class="service-desc">عناوين بحثية مبتكرة وأصيلة في تخصصك</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">إبداع • تميز</span>
+                    <span class="card-tooltip">💡 عناوين مبتكرة</span>
+                </div>
+
+                <!-- 3. توفير المراجع -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="700" onclick="location.href='service-detail.html?id=literature-review'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                    </div>
+                    <h3>توفير المراجع</h3>
+                    <p class="service-desc">مراجع علمية موثقة وتلخيص الدراسات</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">توثيق • تحليل</span>
+                    <span class="card-tooltip">📚 مراجع موثقة</span>
+                </div>
+
+                <!-- 4. إعداد المقترح البحثي -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="750" onclick="location.href='service-detail.html?id=research-proposal'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/>
+                        </svg>
+                    </div>
+                    <h3>إعداد المقترح البحثي</h3>
+                    <p class="service-desc">خطة بحثية متكاملة وفق أعلى المعايير</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">خطة • منهجية</span>
+                    <span class="card-tooltip">📝 خطة بحثية</span>
+                </div>
+
+                <!-- 5. إعداد الدراسات السابقة -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="800" onclick="location.href='service-detail.html?id=previous-studies'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M351.9 280l-190.9 0c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zM160.9 232l190.9 0C349 167.5 334.7 108.1 314.4 64.6 303 40.2 290.7 22.8 279.3 12.2 268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4zm-48 0C116.4 146.4 138.5 66.9 170.8 14.7 78.7 47.3 10.9 131.2 1.5 232l111.4 0zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3L1.5 280zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3l-111.4 0zm111.4-48C501.9 131.2 434.1 47.3 342 14.7 374.3 66.9 396.4 146.4 399.9 232l111.4 0z"/>
+                        </svg>
+                    </div>
+                    <h3>الدراسات السابقة</h3>
+                    <p class="service-desc">جمع وتحليل الدراسات العربية والعالمية</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">عربية • أجنبية</span>
+                    <span class="card-tooltip">🌍 دراسات سابقة</span>
+                </div>
+
+                <!-- 6. جمع وتوثيق المادة العلمية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="850" onclick="location.href='service-detail.html?id=collection-documentation'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/>
+                        </svg>
+                    </div>
+                    <h3>جمع وتوثيق المادة</h3>
+                    <p class="service-desc">جمع المادة العلمية من مصادر موثوقة</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.7)</span></div>
+                    <span class="service-tag">جمع • توثيق</span>
+                    <span class="card-tooltip">📦 توثيق علمي</span>
+                </div>
+
+                <!-- 7. الترجمة الأكاديمية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="900" onclick="location.href='service-detail.html?id=academic-translation'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M61.4 64C27.5 64 0 91.5 0 125.4 0 126.3 0 127.1 .1 128L0 128 0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256-.1 0c0-.9 .1-1.7 .1-2.6 0-33.9-27.5-61.4-61.4-61.4L61.4 64zM464 192.3L464 384c0 8.8-7.2 16-16 16L64 400c-8.8 0-16-7.2-16-16l0-191.7 154.8 117.4c31.4 23.9 74.9 23.9 106.4 0L464 192.3zM48 125.4C48 118 54 112 61.4 112l389.2 0c7.4 0 13.4 6 13.4 13.4 0 4.2-2 8.2-5.3 10.7L280.2 271.5c-14.3 10.8-34.1 10.8-48.4 0L53.3 136.1c-3.3-2.5-5.3-6.5-5.3-10.7z"/>
+                        </svg>
+                    </div>
+                    <h3>الترجمة الأكاديمية</h3>
+                    <p class="service-desc">ترجمة دقيقة بين العربية والإنجليزية</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">ترجمة • اعتماد</span>
+                    <span class="card-tooltip">🌐 ترجمة معتمدة</span>
+                </div>
+
+                <!-- 8. تصميم وتحكيم أدوات البحث -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="950" onclick="location.href='service-detail.html?id=research-tools'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>تصميم أدوات البحث</h3>
+                    <p class="service-desc">استبيانات ومقاييس محكمة علمياً</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">استبيان • تحكيم</span>
+                    <span class="card-tooltip">📋 أدوات محكمة</span>
+                </div>
+
+                <!-- 9. التحليل الإحصائي SPSS -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1000" onclick="location.href='service-detail.html?id=spss-analysis'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M32 32c17.7 0 32 14.3 32 32l0 336c0 8.8 7.2 16 16 16l400 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L80 480c-44.2 0-80-35.8-80-80L0 64C0 46.3 14.3 32 32 32zm96 64c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32zm32 80l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 112l256 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل الإحصائي SPSS</h3>
+                    <p class="service-desc">تحليل احترافي ومناقشة النتائج</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">SPSS • تحليل</span>
+                    <span class="card-tooltip">📊 تحليل SPSS</span>
+                </div>
+
+                <!-- 10. التدقيق اللغوي -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1050" onclick="location.href='service-detail.html?id=proofreading'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1 465.9 144 490.3 119.6c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9 334.1 80 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"/>
+                        </svg>
+                    </div>
+                    <h3>التدقيق اللغوي</h3>
+                    <p class="service-desc">تدقيق لغوي وإملائي احترافي</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">لغة • تحرير</span>
+                    <span class="card-tooltip">✍️ تدقيق لغوي</span>
+                </div>
+
+                <!-- 11. النقد الأكاديمي -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1100" onclick="location.href='service-detail.html?id=academic-critique'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M0 240c0 54.4 19.3 104.6 51.9 144.9L3.1 474.3c-2 3.7-3.1 7.9-3.1 12.2 0 14.1 11.4 25.5 25.5 25.5 4 0 7.8-.6 11.5-2.1L153.4 460c31.4 12.9 66.1 20 102.6 20 141.4 0 256-107.5 256-240S397.4 0 256 0 0 107.5 0 240zM94 407.9c9.3-17.1 7.4-38.1-4.8-53.2-26.1-32.3-41.2-71.9-41.2-114.7 0-103.2 90.2-192 208-192s208 88.8 208 192-90.2 192-208 192c-30.2 0-58.7-5.9-84.3-16.4-11.9-4.9-25.3-4.8-37.1 .3L76 440.9 94 407.9zM144 272a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm144-32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm80 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/>
+                        </svg>
+                    </div>
+                    <h3>النقد الأكاديمي</h3>
+                    <p class="service-desc">نقد علمي بناء من خبراء متخصصين</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">نقد • تحليل</span>
+                    <span class="card-tooltip">🔍 نقد أكاديمي</span>
+                </div>
+
+                <!-- 12. تنسيق الرسالة -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1150" onclick="location.href='service-detail.html?id=thesis-formatting'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/>
+                        </svg>
+                    </div>
+                    <h3>تنسيق الرسالة</h3>
+                    <p class="service-desc">تنسيق حسب دليل الجامعة بدقة</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">تنسيق • دليل</span>
+                    <span class="card-tooltip">📄 تنسيق احترافي</span>
+                </div>
+
+                <!-- 13. فحص السرقة الأدبية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1200" onclick="location.href='service-detail.html?id=plagiarism-check'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>فحص السرقة الأدبية</h3>
+                    <p class="service-desc">فحص دقيق باستخدام أحدث البرامج</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">تشابه • دقة</span>
+                    <span class="card-tooltip">🛡️ فحص تشابه</span>
+                </div>
+
+                <!-- 14. النشر العلمي ISI -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1250" onclick="location.href='service-detail.html?id=isi-publication'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M48 195.8l209.2 86.1c9.8 4 20.2 6.1 30.8 6.1s21-2.1 30.8-6.1l242.4-99.8c9-3.7 14.8-12.4 14.8-22.1s-5.8-18.4-14.8-22.1L318.8 38.1C309 34.1 298.6 32 288 32s-21 2.1-30.8 6.1L14.8 137.9C5.8 141.6 0 150.3 0 160L0 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-260.2zm48 71.7L96 384c0 53 86 96 192 96s192-43 192-96l0-116.6-142.9 58.9c-15.6 6.4-32.2 9.7-49.1 9.7s-33.5-3.3-49.1-9.7L96 267.4z"/>
+                        </svg>
+                    </div>
+                    <h3>النشر العلمي ISI</h3>
+                    <p class="service-desc">نشر في مجلات علمية محكمة ومصنفة</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">نشر • ISI</span>
+                    <span class="card-tooltip">📰 نشر علمي</span>
+                </div>
+
+                <!-- 15. مناقشة النتائج -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1300" onclick="location.href='service-detail.html?id=results-discussion'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M76.2 258.7c6.1-15.2 4-32.6-5.6-45.9-14.5-20.1-22.6-43.7-22.6-68.8 0-66.8 60.5-128 144-128s144 61.2 144 128-60.5 128-144 128c-15.9 0-31.1-2.3-45.3-6.5-10.3-3.1-21.4-2.5-31.4 1.5l-50.4 20.2 11.4-28.5zM0 144c0 35.8 11.6 69.1 31.7 96.8L1.9 315.2c-1.3 3.2-1.9 6.6-1.9 10 0 14.8 12 26.8 26.8 26.8 3.4 0 6.8-.7 10-1.9l96.3-38.5c18.6 5.5 38.4 8.4 58.9 8.4 106 0 192-78.8 192-176S298-32 192-32 0 46.8 0 144zM384 512c20.6 0 40.3-3 58.9-8.4l96.3 38.5c3.2 1.3 6.6 1.9 10 1.9 14.8 0 26.8-12 26.8-26.8 0-3.4-.7-6.8-1.9-10l-29.7-74.4c20-27.8 31.7-61.1 31.7-96.8 0-82.4-61.7-151.5-145-170.7-1.6 16.3-5.1 31.9-10.1 46.9 63.9 14.8 107.2 67.3 107.2 123.9 0 25.1-8.1 48.7-22.6 68.8-9.6 13.3-11.7 30.6-5.6 45.9l11.4 28.5-50.4-20.2c-10-4-21.1-4.5-31.4-1.5-14.2 4.2-29.4 6.5-45.3 6.5-72.2 0-127.1-45.7-140.7-101.2-15.6 3.2-31.7 5-48.1 5.2 16.4 81.9 94.7 144 188.8 144z"/>
+                        </svg>
+                    </div>
+                    <h3>مناقشة النتائج</h3>
+                    <p class="service-desc">تفسير علمي دقيق للنتائج</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">تفسير • مناقشة</span>
+                    <span class="card-tooltip">💬 تفسير نتائج</span>
+                </div>
+
+                <!-- 16. إعادة الصياغة -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1350" onclick="location.href='service-detail.html?id=paraphrasing'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1 465.9 144 490.3 119.6c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9 334.1 80 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"/>
+                        </svg>
+                    </div>
+                    <h3>إعادة الصياغة</h3>
+                    <p class="service-desc">صياغة أكاديمية مميزة وخالية من التشابه</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">صياغة • تحرير</span>
+                    <span class="card-tooltip">✏️ إعادة صياغة</span>
+                </div>
+
+                <!-- 17. تصميم السيرة الذاتية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1400" onclick="location.href='service-detail.html?id=cv-design'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/>
+                        </svg>
+                    </div>
+                    <h3>تصميم السيرة الذاتية</h3>
+                    <p class="service-desc">سيرة ذاتية احترافية للمجال الأكاديمي</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">CV • تصميم</span>
+                    <span class="card-tooltip">📇 سيرة ذاتية</span>
+                </div>
+
+                <!-- 18. إعداد الحقائب التدريبية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1450" onclick="location.href='service-detail.html?id=training-packages'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/>
+                        </svg>
+                    </div>
+                    <h3>الحقائب التدريبية</h3>
+                    <p class="service-desc">حقائب تدريبية متكاملة وفق المعايير</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">تدريب • تعليم</span>
+                    <span class="card-tooltip">💼 حقائب تدريبية</span>
+                </div>
+
+                <!-- 19. العروض التقديمية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1500" onclick="location.href='service-detail.html?id=presentations'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M48 195.8l209.2 86.1c9.8 4 20.2 6.1 30.8 6.1s21-2.1 30.8-6.1l242.4-99.8c9-3.7 14.8-12.4 14.8-22.1s-5.8-18.4-14.8-22.1L318.8 38.1C309 34.1 298.6 32 288 32s-21 2.1-30.8 6.1L14.8 137.9C5.8 141.6 0 150.3 0 160L0 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-260.2zm48 71.7L96 384c0 53 86 96 192 96s192-43 192-96l0-116.6-142.9 58.9c-15.6 6.4-32.2 9.7-49.1 9.7s-33.5-3.3-49.1-9.7L96 267.4z"/>
+                        </svg>
+                    </div>
+                    <h3>العروض التقديمية</h3>
+                    <p class="service-desc">عروض تقديمية احترافية تعكس تميزك</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">عرض • تصميم</span>
+                    <span class="card-tooltip">📽️ عروض تقديمية</span>
+                </div>
+
+                <!-- 20. رومنة المراجع -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1550" onclick="location.href='service-detail.html?id=romanization'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>رومنة المراجع</h3>
+                    <p class="service-desc">تحويل المراجع إلى كتابة لاتينية</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">رومنة • توثيق</span>
+                    <span class="card-tooltip">🔤 رومنة مراجع</span>
+                </div>
+
+                <!-- 21. خطاب الغرض من الدراسة -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1600" onclick="location.href='service-detail.html?id=statement-of-purpose'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M61.4 64C27.5 64 0 91.5 0 125.4 0 126.3 0 127.1 .1 128L0 128 0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256-.1 0c0-.9 .1-1.7 .1-2.6 0-33.9-27.5-61.4-61.4-61.4L61.4 64zM464 192.3L464 384c0 8.8-7.2 16-16 16L64 400c-8.8 0-16-7.2-16-16l0-191.7 154.8 117.4c31.4 23.9 74.9 23.9 106.4 0L464 192.3zM48 125.4C48 118 54 112 61.4 112l389.2 0c7.4 0 13.4 6 13.4 13.4 0 4.2-2 8.2-5.3 10.7L280.2 271.5c-14.3 10.8-34.1 10.8-48.4 0L53.3 136.1c-3.3-2.5-5.3-6.5-5.3-10.7z"/>
+                        </svg>
+                    </div>
+                    <h3>خطاب الغرض من الدراسة</h3>
+                    <p class="service-desc">SOP احترافي يعكس أهدافك الأكاديمية</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">SOP • هدف</span>
+                    <span class="card-tooltip">✉️ خطاب SOP</span>
+                </div>
+
+                <!-- 22. كتابة المحتوى -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1700" onclick="location.href='service-detail.html?id=content-writing'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1 465.9 144 490.3 119.6c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9 334.1 80 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"/>
+                        </svg>
+                    </div>
+                    <h3>كتابة المحتوى</h3>
+                    <p class="service-desc">محتوى أكاديمي مميز في مختلف التخصصات</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">كتابة • إبداع</span>
+                    <span class="card-tooltip">✍️ كتابة محتوى</span>
+                </div>
+
+                <!-- 23. بناء التصور المقترح -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1750" onclick="location.href='service-detail.html?id=conceptual-model'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M284-1.3c-17.3-10-38.7-10-56 0L143.8 47.3c-17.3 10-28 28.5-28 48.5l0 101.9-88.3 51c-17.3 10-28 28.5-28 48.5l0 97.3c0 20 10.7 38.5 28 48.5l84.3 48.6c17.3 10 38.7 10 56 0l88.3-51 88.3 51c17.3 10 38.7 10 56 0L484.5 443c17.3-10 28-28.5 28-48.5l0-97.3c0-20-10.7-38.5-28-48.5l-88.3-51 0-101.9c0-20-10.7-38.5-28-48.5L284-1.3zM232 292.6l0 106.5-88.3 51c-1.2 .7-2.6 1.1-4 1.1l0-105.3 92.3-53.3zm231.4 .6c.7 1.2 1.1 2.6 1.1 4l0 97.3c0 2.9-1.5 5.5-4 6.9l-84.3 48.6c-1.2 .7-2.6 1.1-4 1.1l0-105.3 91.2-52.6zM348.3 95.8l0 101.9-92.3 53.3 0-106.5 91.2-52.6c.7 1.2 1.1 2.6 1.1 4z"/>
+                        </svg>
+                    </div>
+                    <h3>بناء التصور المقترح</h3>
+                    <p class="service-desc">تصور أو نموذج بحثي مبتكر</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">تصور • ابتكار</span>
+                    <span class="card-tooltip">🧩 نموذج مقترح</span>
+                </div>
+
+                <!-- 24. تحليل الخرائط العلمية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1800" onclick="location.href='service-detail.html?id=science-mapping'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M48 195.8l209.2 86.1c9.8 4 20.2 6.1 30.8 6.1s21-2.1 30.8-6.1l242.4-99.8c9-3.7 14.8-12.4 14.8-22.1s-5.8-18.4-14.8-22.1L318.8 38.1C309 34.1 298.6 32 288 32s-21 2.1-30.8 6.1L14.8 137.9C5.8 141.6 0 150.3 0 160L0 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-260.2zm48 71.7L96 384c0 53 86 96 192 96s192-43 192-96l0-116.6-142.9 58.9c-15.6 6.4-32.2 9.7-49.1 9.7s-33.5-3.3-49.1-9.7L96 267.4z"/>
+                        </svg>
+                    </div>
+                    <h3>تحليل الخرائط العلمية</h3>
+                    <p class="service-desc">تحليل ورسم خرائط علمية باستخدام أحدث البرامج</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">خرائط • تصور</span>
+                    <span class="card-tooltip">🗺️ خرائط علمية</span>
+                </div>
+
+                <!-- 25. جلسات استشارية سريعة -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1900" onclick="location.href='service-detail.html?id=quick-consulting'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>جلسات استشارية سريعة</h3>
+                    <p class="service-desc">استشارات سريعة مع خبراء لحل مشكلاتك</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">سريع • دعم</span>
+                    <span class="card-tooltip">⚡ استشارات سريعة</span>
+                </div>
+
+                <!-- 26. التحليل التلوي Meta-analysis -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="1950" onclick="location.href='service-detail.html?id=meta-analysis'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M512.4 240l-176 0c-17.7 0-32-14.3-32-32l0-176c0-17.7 14.4-32.2 31.9-29.9 107 14.2 191.8 99 206 206 2.3 17.5-12.2 31.9-29.9 31.9zM222.6 37.2c18.1-3.8 33.8 11 33.8 29.5l0 197.3c0 5.6 2 11 5.5 15.3L394 438.7c11.7 14.1 9.2 35.4-6.9 44.1-34.1 18.6-73.2 29.2-114.7 29.2-132.5 0-240-107.5-240-240 0-115.5 81.5-211.9 190.2-234.8zM477.8 288l64 0c18.5 0 33.3 15.7 29.5 33.8-10.2 48.4-35 91.4-69.6 124.2-12.3 11.7-31.6 9.2-42.4-3.9L374.9 340.4c-17.3-20.9-2.4-52.4 24.6-52.4l78.2 0z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل التلوي</h3>
+                    <p class="service-desc">تحليل تلوي متقدم ونماذج تنبؤية</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">Meta • تنبؤ</span>
+                    <span class="card-tooltip">📈 تحليل تلوي</span>
+                </div>
+
+                <!-- 27. إنقاذ البحث -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2000" onclick="location.href='service-detail.html?id=research-rescue'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>إنقاذ البحث</h3>
+                    <p class="service-desc">إنقاذ بحثك من الأخطاء قبل التقييم</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">إنقاذ • تصحيح</span>
+                    <span class="card-tooltip">🚑 إنقاذ بحث</span>
+                </div>
+
+                <!-- 28. التقييم الأكاديمي -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2050" onclick="location.href='service-detail.html?id=peer-review'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                            <path fill="currentColor" d="M320 224a104 104 0 1 0 0-208 104 104 0 1 0 0 208zM96 232a72 72 0 1 0 0-144 72 72 0 1 0 0 144zM0 416l0 32c0 17.7 14.3 32 32 32l86.7 0c-4.3-9.8-6.7-20.6-6.7-32l0-16c0-53.2 20-101.8 52.9-138.6-11.7-3.5-24.1-5.4-36.9-5.4-70.7 0-128 57.3-128 128zM616 160a72 72 0 1 0 -144 0 72 72 0 1 0 144 0zM160 432l0 16c0 17.7 14.3 32 32 32l156.8 0c-7.1-21.6-6.3-44.4 10.7-64-14-16.2-20.5-39.7-11.4-63.3 6.6-17.1 15.9-33.1 27.4-47.3 5.4-6.6 11.6-11.7 18.3-15.4-22.1-11.5-47.2-18-73.8-18-88.4 0-160 71.6-160 160zm464.6-44.1c6.3-3.6 9.5-11.1 6.8-18-4.8-12.4-11.5-24.1-19.9-34.4-4.6-5.7-12.7-6.7-19-3-21.8 12.6-48.6-2.8-48.6-28.1 0-7.3-4.9-13.8-12.1-14.9-12.9-2-26.8-2-39.7 0-7.2 1.1-12.1 7.6-12.1 14.9 0 25.2-26.8 40.7-48.6 28.1-6.3-3.6-14.4-2.6-19 3-8.4 10.3-15.1 22-19.9 34.4-2.6 6.8 .5 14.3 6.8 17.9 21.9 12.6 21.9 43.5 0 56.2-6.3 3.6-9.5 11.1-6.8 17.9 4.8 12.4 11.5 24.1 19.9 34.4 4.6 5.7 12.7 6.7 19 3 21.8-12.6 48.6 2.9 48.6 28.1 0 7.3 4.9 13.8 12.1 14.9 12.9 2 26.8 2 39.7 0 7.2-1.1 12.1-7.6 12.1-14.9 0-25.2 26.8-40.7 48.6-28.1 6.3 3.6 14.4 2.6 19-3 8.4-10.3 15.1-22 19.9-34.4 2.6-6.8-.5-14.3-6.8-17.9-21.9-12.6-21.9-43.5 0-56.2zM472 416a40 40 0 1 1 80 0 40 40 0 1 1 -80 0z"/>
+                        </svg>
+                    </div>
+                    <h3>التقييم الأكاديمي</h3>
+                    <p class="service-desc">مراجعة أكاديمية من قبل خبراء متخصصين</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">تقييم • مراجعة</span>
+                    <span class="card-tooltip">👥 تقييم أكاديمي</span>
+                </div>
+
+                <!-- 29. الإعداد للتمويل البحثي -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2100" onclick="location.href='service-detail.html?id=research-grants'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M0 419.6L0 109.5c0-23.2 24.1-38.6 46.3-32 87.7 26.2 149.7 5.5 212.1-15.3 64.5-21.5 129.4-43.1 223.3-13.1 18.5 5.9 30.3 23.8 30.3 43.3l0 310.1c0 23.2-24.1 38.6-46.2 32-87.7-26.2-149.8-5.5-212.1 15.3-64.5 21.5-129.4 43.1-223.3 13.1-18.5-5.9-30.3-23.8-30.3-43.3zM336 256c0-53-35.8-96-80-96s-80 43-80 96 35.8 96 80 96 80-43 80-96zM120 413.6c4.4 0 7.9-3.8 7.2-8.1-4.6-27.8-27-49.5-55.2-53-4.4-.5-8 3.1-8 7.5l0 39.9c0 3.6 2.4 6.8 6 7.7 17.9 4.2 34.3 6.1 50 6.1zm318.5-51.1c5 .8 9.5-3 9.5-8l0-42.6c0-4.4-3.6-8.1-8-7.5-25.2 3.1-45.9 20.9-53.2 44.6-1.4 4.7 2.3 9.1 7.2 9.2 14.2 .4 29 1.7 44.4 4.3zM448 152l0-39.9c0-3.6-2.5-6.8-6-7.7-17.9-4.2-34.3-6.1-50-6.1-4.4 0-7.9 3.8-7.2 8.1 4.6 27.8 27 49.5 55.2 53 4.4 .5 8-3.1 8-7.5zM125.2 162.9c1.4-4.7-2.3-9.1-7.2-9.2-14.2-.4-29-1.7-44.4-4.3-5-.8-9.5 3-9.5 8L64 200c0 4.4 3.6 8.1 8 7.5 25.2-3.1 45.9-20.9 53.2-44.6z"/>
+                        </svg>
+                    </div>
+                    <h3>التمويل البحثي والمنح</h3>
+                    <p class="service-desc">إعداد مقترحات للحصول على تمويل</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.7)</span></div>
+                    <span class="service-tag">تمويل • منح</span>
+                    <span class="card-tooltip">💰 تمويل بحثي</span>
+                </div>
+
+                <!-- 30. تحكيم مشرف محلي -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2150" onclick="location.href='service-detail.html?id=local-supervisor'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                            <path fill="currentColor" d="M320 224a104 104 0 1 0 0-208 104 104 0 1 0 0 208zM96 232a72 72 0 1 0 0-144 72 72 0 1 0 0 144zM0 416l0 32c0 17.7 14.3 32 32 32l86.7 0c-4.3-9.8-6.7-20.6-6.7-32l0-16c0-53.2 20-101.8 52.9-138.6-11.7-3.5-24.1-5.4-36.9-5.4-70.7 0-128 57.3-128 128zM616 160a72 72 0 1 0 -144 0 72 72 0 1 0 144 0zM160 432l0 16c0 17.7 14.3 32 32 32l156.8 0c-7.1-21.6-6.3-44.4 10.7-64-14-16.2-20.5-39.7-11.4-63.3 6.6-17.1 15.9-33.1 27.4-47.3 5.4-6.6 11.6-11.7 18.3-15.4-22.1-11.5-47.2-18-73.8-18-88.4 0-160 71.6-160 160zm464.6-44.1c6.3-3.6 9.5-11.1 6.8-18-4.8-12.4-11.5-24.1-19.9-34.4-4.6-5.7-12.7-6.7-19-3-21.8 12.6-48.6-2.8-48.6-28.1 0-7.3-4.9-13.8-12.1-14.9-12.9-2-26.8-2-39.7 0-7.2 1.1-12.1 7.6-12.1 14.9 0 25.2-26.8 40.7-48.6 28.1-6.3-3.6-14.4-2.6-19 3-8.4 10.3-15.1 22-19.9 34.4-2.6 6.8 .5 14.3 6.8 17.9 21.9 12.6 21.9 43.5 0 56.2-6.3 3.6-9.5 11.1-6.8 17.9 4.8 12.4 11.5 24.1 19.9 34.4 4.6 5.7 12.7 6.7 19 3 21.8-12.6 48.6 2.9 48.6 28.1 0 7.3 4.9 13.8 12.1 14.9 12.9 2 26.8 2 39.7 0 7.2-1.1 12.1-7.6 12.1-14.9 0-25.2 26.8-40.7 48.6-28.1 6.3 3.6 14.4 2.6 19-3 8.4-10.3 15.1-22 19.9-34.4 2.6-6.8-.5-14.3-6.8-17.9-21.9-12.6-21.9-43.5 0-56.2zM472 416a40 40 0 1 1 80 0 40 40 0 1 1 -80 0z"/>
+                        </svg>
+                    </div>
+                    <h3>تحكيم مشرف محلي</h3>
+                    <p class="service-desc">مشرف محلي متخصص لتحكيم رسالتك</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">تحكيم • مشرف</span>
+                    <span class="card-tooltip">👨‍🏫 تحكيم مشرف</span>
+                </div>
+
+                <!-- 31. ترشيح المجلات العلمية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2200" onclick="location.href='service-detail.html?id=journal-recommendation'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M48 195.8l209.2 86.1c9.8 4 20.2 6.1 30.8 6.1s21-2.1 30.8-6.1l242.4-99.8c9-3.7 14.8-12.4 14.8-22.1s-5.8-18.4-14.8-22.1L318.8 38.1C309 34.1 298.6 32 288 32s-21 2.1-30.8 6.1L14.8 137.9C5.8 141.6 0 150.3 0 160L0 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-260.2zm48 71.7L96 384c0 53 86 96 192 96s192-43 192-96l0-116.6-142.9 58.9c-15.6 6.4-32.2 9.7-49.1 9.7s-33.5-3.3-49.1-9.7L96 267.4z"/>
+                        </svg>
+                    </div>
+                    <h3>ترشيح المجلات العلمية</h3>
+                    <p class="service-desc">ترشيح مجلات علمية مناسبة لنشر أبحاثك</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">ترشيح • نشر</span>
+                    <span class="card-tooltip">📰 ترشيح مجلات</span>
+                </div>
+
+                <!-- 32. تصميم البوسترات البحثية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2250" onclick="location.href='service-detail.html?id=research-posters'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/>
+                        </svg>
+                    </div>
+                    <h3>تصميم البوسترات</h3>
+                    <p class="service-desc">بوسترات بحثية احترافية تعكس تميزك</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">بوستر • تصميم</span>
+                    <span class="card-tooltip">🖼️ بوسترات بحثية</span>
+                </div>
+
+                <!-- 33. تلخيص الكتب والمراجع -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2300" onclick="location.href='service-detail.html?id=book-summary'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/>
+                        </svg>
+                    </div>
+                    <h3>تلخيص الكتب والمراجع</h3>
+                    <p class="service-desc">تلخيص الكتب والمراجع بالعربية والإنجليزية</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">تلخيص • مراجع</span>
+                    <span class="card-tooltip">📖 تلخيص كتب</span>
+                </div>
+
+                <!-- 34. التحليل الإحصائي للبحوث الطبية -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2350" onclick="location.href='service-detail.html?id=medical-statistics'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M32 32c17.7 0 32 14.3 32 32l0 336c0 8.8 7.2 16 16 16l400 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L80 480c-44.2 0-80-35.8-80-80L0 64C0 46.3 14.3 32 32 32zm96 64c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32zm32 80l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 112l256 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل الإحصائي الطبي</h3>
+                    <p class="service-desc">تحليل إحصائي متخصص للبحوث الطبية</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">طبي • سريري</span>
+                    <span class="card-tooltip">🏥 تحليل طبي</span>
+                </div>
+
+                <!-- 35. كتاب إلكتروني -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2400" onclick="location.href='service-detail.html?id=ebook'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/>
+                        </svg>
+                    </div>
+                    <h3>كتاب إلكتروني</h3>
+                    <p class="service-desc">تصميم ونشر كتاب إلكتروني أكاديمي</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.7)</span></div>
+                    <span class="service-tag">كتاب • نشر</span>
+                    <span class="card-tooltip">📱 كتاب إلكتروني</span>
+                </div>
+
+                <!-- 36. التحليل الإحصائي AMOS -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2450" onclick="location.href='service-detail.html?id=amos-analysis'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32l96 0c26.5 0 48 21.5 48 48l0 16 128 0 0-16c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-16-128 0 0 16c0 7.3-1.7 14.3-4.6 20.5l68.6 91.5 80 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96c0-7.3 1.7-14.3 4.6-20.5L128 224 48 224c-26.5 0-48-21.5-48-48L0 80z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل الإحصائي AMOS</h3>
+                    <p class="service-desc">تحليل المسار ونمذجة المعادلات الهيكلية</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">AMOS • SEM</span>
+                    <span class="card-tooltip">🔗 تحليل AMOS</span>
+                </div>
+
+                <!-- 37. التحليل الإحصائي النوعي -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2500" onclick="location.href='service-detail.html?id=qualitative-analysis'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل الإحصائي النوعي</h3>
+                    <p class="service-desc">تحليل نوعي باستخدام NVivo وأدوات متخصصة</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">نوعي • NVivo</span>
+                    <span class="card-tooltip">💬 تحليل نوعي</span>
+                </div>
+
+                <!-- 38. التحليل الإحصائي E-Views -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2550" onclick="location.href='service-detail.html?id=eviews-analysis'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64L0 400c0 44.2 35.8 80 80 80l400 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L80 416c-8.8 0-16-7.2-16-16L64 64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7 262.6 153.4c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l73.4-73.4 57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل الإحصائي E-Views</h3>
+                    <p class="service-desc">تحليل اقتصادي قياسي باستخدام E-Views</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">E-Views • اقتصادي</span>
+                    <span class="card-tooltip">📉 تحليل E-Views</span>
+                </div>
+
+                <!-- 39. التحليل الإحصائي SAS -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2600" onclick="location.href='service-detail.html?id=sas-analysis'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل الإحصائي SAS</h3>
+                    <p class="service-desc">تحليل إحصائي متقدم باستخدام SAS</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">SAS • متقدم</span>
+                    <span class="card-tooltip">💾 تحليل SAS</span>
+                </div>
+
+                <!-- 40. التحليل الإحصائي Smart PLS -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2650" onclick="location.href='service-detail.html?id=smart-pls'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل الإحصائي Smart PLS</h3>
+                    <p class="service-desc">تحليل PLS-SEM باستخدام Smart PLS</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.9)</span></div>
+                    <span class="service-tag">Smart PLS • SEM</span>
+                    <span class="card-tooltip">🔄 تحليل Smart PLS</span>
+                </div>
+
+                <!-- 41. التحليل الإحصائي STATA -->
+                <div class="service-card" data-aos="fade-up" data-aos-duration="2700" onclick="location.href='service-detail.html?id=stata-analysis'">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                            <path fill="currentColor" d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-384c0-35.3-28.7-64-64-64L64 0zM96 64l192 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L96 160c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32zm16 168a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zm80 24a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm128-24a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zM88 352a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm128-24a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zm80 24a24 24 0 1 1 0-48 24 24 0 1 1 0 48zM64 424c0-13.3 10.7-24 24-24l112 0c13.3 0 24 10.7 24 24s-10.7 24-24 24L88 448c-13.3 0-24-10.7-24-24zm232-24c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24z"/>
+                        </svg>
+                    </div>
+                    <h3>التحليل الإحصائي STATA</h3>
+                    <p class="service-desc">تحليل إحصائي متقدم باستخدام STATA</p>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(4.8)</span></div>
+                    <span class="service-tag">STATA • متقدم</span>
+                    <span class="card-tooltip">🧮 تحليل STATA</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================
+    التواصل المصغر
+    ============================================================ -->
+    <section class="contact-mini">
+        <div class="container">
+            <div class="info-text">
+                <strong>📞 للاستفسارات:</strong> تواصل معنا عبر القنوات الرسمية
+            </div>
+            <div class="contact-links">
+                <a href="https://wa.me/966548504018" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path fill="currentColor" d="M92.1 254.6c0 24.9 7 49.2 20.2 70.1l3.1 5-13.3 48.6 49.9-13.1 4.8 2.9c20.2 12 43.4 18.4 67.1 18.4l.1 0c72.6 0 133.3-59.1 133.3-131.8 0-35.2-15.2-68.3-40.1-93.2-25-25-58-38.7-93.2-38.7-72.7 0-131.8 59.1-131.9 131.8zM274.8 330c-12.6 1.9-22.4 .9-47.5-9.9-36.8-15.9-61.8-51.5-66.9-58.7-.4-.6-.7-.9-.8-1.1-2-2.6-16.2-21.5-16.2-41 0-18.4 9-27.9 13.2-32.3 .3-.3 .5-.5 .7-.8 3.6-4 7.9-5 10.6-5 2.6 0 5.3 0 7.6 .1l.8 0c2.3 0 5.2 0 8.1 6.8 1.2 2.9 3 7.3 4.9 11.8 3.3 8 6.7 16.3 7.3 17.6 1 2 1.7 4.3 .3 6.9-3.4 6.8-6.9 10.4-9.3 13-3.1 3.2-4.5 4.7-2.3 8.6 15.3 26.3 30.6 35.4 53.9 47.1 4 2 6.3 1.7 8.6-1 2.3-2.6 9.9-11.6 12.5-15.5 2.6-4 5.3-3.3 8.9-2s23.1 10.9 27.1 12.9c.8 .4 1.5 .7 2.1 1 2.8 1.4 4.7 2.3 5.5 3.6 .9 1.9 .9 9.9-2.4 19.1-3.3 9.3-19.1 17.7-26.7 18.8zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM148.1 393.9L64 416 86.5 333.8c-13.9-24-21.2-51.3-21.2-79.3 .1-87.4 71.2-158.5 158.6-158.5 42.4 0 82.2 16.5 112.2 46.5 29.9 30 47.9 69.8 47.9 112.2 0 87.4-72.7 158.5-160.1 158.5-26.6 0-52.7-6.7-75.8-19.3z"/>
+                    </svg>
+                    واتساب
+                </a>
+                <a href="https://t.me/edu_shehap" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M256 8a248 248 0 1 0 0 496 248 248 0 1 0 0-496zM371 176.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7 .2-.7 .3-3.1-1.2-4.4s-3.6-.8-5.1-.5c-2.2 .5-37.1 23.5-104.6 69.1-9.9 6.8-18.9 10.1-26.9 9.9-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3 .6-4.5 6.7-9 18.4-13.7 72.3-31.5 120.5-52.3 144.6-62.3 68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6 .5 9.6 2.9 2 1.7 3.2 4.1 3.5 6.7 .5 3.2 .6 6.5 .4 9.8z"/>
+                    </svg>
+                    تيليجرام
+                </a>
+                <a href="mailto:alqadynjm088@gmail.com">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M61.4 64C27.5 64 0 91.5 0 125.4 0 126.3 0 127.1 .1 128L0 128 0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256-.1 0c0-.9 .1-1.7 .1-2.6 0-33.9-27.5-61.4-61.4-61.4L61.4 64zM464 192.3L464 384c0 8.8-7.2 16-16 16L64 400c-8.8 0-16-7.2-16-16l0-191.7 154.8 117.4c31.4 23.9 74.9 23.9 106.4 0L464 192.3zM48 125.4C48 118 54 112 61.4 112l389.2 0c7.4 0 13.4 6 13.4 13.4 0 4.2-2 8.2-5.3 10.7L280.2 271.5c-14.3 10.8-34.1 10.8-48.4 0L53.3 136.1c-3.3-2.5-5.3-6.5-5.3-10.7z"/>
+                    </svg>
+                    البريد الإلكتروني
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    الفوتر
+    ============================================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="#" data-tooltip="اكس"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M357.2 48L427.8 48 273.6 224.2 455 464 313 464 201.7 318.6 74.5 464 3.8 464 168.7 275.5-5.2 48 140.4 48 240.9 180.9 357.2 48zM332.4 421.8l39.1 0-252.4-333.8-42 0 255.3 333.8z"/></svg></a>
+                <a href="#" data-tooltip="لينكد إن"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm5 170.2l66.5 0 0 213.8-66.5 0 0-213.8zm71.7-67.7a38.5 38.5 0 1 1 -77 0 38.5 38.5 0 1 1 77 0zM317.9 416l0-104c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9l0 105.8-66.4 0 0-213.8 63.7 0 0 29.2 .9 0c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9l0 117.2-66.4 0z"/></svg></a>
+                <a href="#" data-tooltip="يوتيوب"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M549.7 124.1C543.5 100.4 524.9 81.8 501.4 75.5 458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5C51.2 81.8 32.7 100.4 26.4 124.1 15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8 42.6 11.5 213.4 11.5 213.4 11.5s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6l0-162.4 142.7 81.2-142.7 81.2z"/></svg></a>
+                <a href="#" data-tooltip="فيسبوك"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l98.2 0 0-145.8-52.8 0 0-78.2 52.8 0 0-33.7c0-87.1 39.4-127.5 125-127.5 16.2 0 44.2 3.2 55.7 6.4l0 70.8c-6-.6-16.5-1-29.6-1-42 0-58.2 15.9-58.2 57.2l0 27.8 83.6 0-14.4 78.2-69.3 0 0 145.8 129 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32z"/></svg></a>
+                <a href="#" data-tooltip="انستغرام"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M194.4 211.7a53.3 53.3 0 1 0 59.2 88.6 53.3 53.3 0 1 0 -59.2-88.6zm142.3-68.4c-5.2-5.2-11.5-9.3-18.4-12-18.1-7.1-57.6-6.8-83.1-6.5-4.1 0-7.9 .1-11.2 .1s-7.2 0-11.4-.1c-25.5-.3-64.8-.7-82.9 6.5-6.9 2.7-13.1 6.8-18.4 12s-9.3 11.5-12 18.4c-7.1 18.1-6.7 57.7-6.5 83.2 0 4.1 .1 7.9 .1 11.1s0 7-.1 11.1c-.2 25.5-.6 65.1 6.5 83.2 2.7 6.9 6.8 13.1 12 18.4s11.5 9.3 18.4 12c18.1 7.1 57.6 6.8 83.1 6.5 4.1 0 7.9-.1 11.2-.1s7.2 0 11.4 .1c25.5 .3 64.8 .7 82.9-6.5 6.9-2.7 13.1-6.8 18.4-12s9.3-11.5 12-18.4c7.2-18 6.8-57.4 6.5-83 0-4.2-.1-8.1-.1-11.4s0-7.1 .1-11.4c.3-25.5 .7-64.9-6.5-83-2.7-6.9-6.8-13.1-12-18.4l0 .2zm-67.1 44.5c18.1 12.1 30.6 30.9 34.9 52.2s-.2 43.5-12.3 61.6c-6 9-13.7 16.6-22.6 22.6s-19 10.1-29.6 12.2c-21.3 4.2-43.5-.2-61.6-12.3s-30.6-30.9-34.9-52.2 .2-43.5 12.2-61.6 30.9-30.6 52.2-34.9 43.5 .2 61.6 12.2l.1 0zm29.2-1.3c-3.1-2.1-5.6-5.1-7.1-8.6s-1.8-7.3-1.1-11.1 2.6-7.1 5.2-9.8 6.1-4.5 9.8-5.2 7.6-.4 11.1 1.1 6.5 3.9 8.6 7 3.2 6.8 3.2 10.6c0 2.5-.5 5-1.4 7.3s-2.4 4.4-4.1 6.2-3.9 3.2-6.2 4.2-4.8 1.5-7.3 1.5c-3.8 0-7.5-1.1-10.6-3.2l-.1 0zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM357 389c-18.7 18.7-41.4 24.6-67 25.9-26.4 1.5-105.6 1.5-132 0-25.6-1.3-48.3-7.2-67-25.9s-24.6-41.4-25.8-67c-1.5-26.4-1.5-105.6 0-132 1.3-25.6 7.1-48.3 25.8-67s41.5-24.6 67-25.8c26.4-1.5 105.6-1.5 132 0 25.6 1.3 48.3 7.1 67 25.8s24.6 41.4 25.8 67c1.5 26.3 1.5 105.4 0 131.9-1.3 25.6-7.1 48.3-25.8 67l0 .1z"/></svg></a>
+                <a href="#" data-tooltip="واتساب"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M92.1 254.6c0 24.9 7 49.2 20.2 70.1l3.1 5-13.3 48.6 49.9-13.1 4.8 2.9c20.2 12 43.4 18.4 67.1 18.4l.1 0c72.6 0 133.3-59.1 133.3-131.8 0-35.2-15.2-68.3-40.1-93.2-25-25-58-38.7-93.2-38.7-72.7 0-131.8 59.1-131.9 131.8zM274.8 330c-12.6 1.9-22.4 .9-47.5-9.9-36.8-15.9-61.8-51.5-66.9-58.7-.4-.6-.7-.9-.8-1.1-2-2.6-16.2-21.5-16.2-41 0-18.4 9-27.9 13.2-32.3 .3-.3 .5-.5 .7-.8 3.6-4 7.9-5 10.6-5 2.6 0 5.3 0 7.6 .1l.8 0c2.3 0 5.2 0 8.1 6.8 1.2 2.9 3 7.3 4.9 11.8 3.3 8 6.7 16.3 7.3 17.6 1 2 1.7 4.3 .3 6.9-3.4 6.8-6.9 10.4-9.3 13-3.1 3.2-4.5 4.7-2.3 8.6 15.3 26.3 30.6 35.4 53.9 47.1 4 2 6.3 1.7 8.6-1 2.3-2.6 9.9-11.6 12.5-15.5 2.6-4 5.3-3.3 8.9-2s23.1 10.9 27.1 12.9c.8 .4 1.5 .7 2.1 1 2.8 1.4 4.7 2.3 5.5 3.6 .9 1.9 .9 9.9-2.4 19.1-3.3 9.3-19.1 17.7-26.7 18.8zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM148.1 393.9L64 416 86.5 333.8c-13.9-24-21.2-51.3-21.2-79.3 .1-87.4 71.2-158.5 158.6-158.5 42.4 0 82.2 16.5 112.2 46.5 29.9 30 47.9 69.8 47.9 112.2 0 87.4-72.7 158.5-160.1 158.5-26.6 0-52.7-6.7-75.8-19.3z"/></svg></a>
+                <a href="#" data-tooltip="تيليجرام"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8a248 248 0 1 0 0 496 248 248 0 1 0 0-496zM371 176.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7 .2-.7 .3-3.1-1.2-4.4s-3.6-.8-5.1-.5c-2.2 .5-37.1 23.5-104.6 69.1-9.9 6.8-18.9 10.1-26.9 9.9-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3 .6-4.5 6.7-9 18.4-13.7 72.3-31.5 120.5-52.3 144.6-62.3 68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6 .5 9.6 2.9 2 1.7 3.2 4.1 3.5 6.7 .5 3.2 .6 6.5 .4 9.8z"/></svg></a>
+            </div>
+            <div class="footer-brand">
+                <span>ارتقاء</span> للخدمات الأكاديمية
+            </div>
+            <div class="footer-links">
+                <a href="index.html">الرئيسية</a>
+                <a href="about.html">🏢 نبذة عنا</a>
+                <a href="how-it-works.html">🔄 آلية العمل</a>
+                <a href="academic-services.html" class="active-link">🔬 الخدمات الأكاديمية</a>
+                <a href="charter.html">📜 ميثاق العمل</a>
+                <a href="dmca.html">📜 سياسات وأحكام</a>
+            </div>
+            <div class="copyright">
+                &copy; 2026 منصة ارتقاء. جميع الحقوق محفوظة.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    ====== جافا سكريبت ======
+    ============================================================ -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+    </script>
+    <script>
+        // ============================================================
+        // تفعيل AOS
+        // ============================================================
+        AOS.init({
+            duration: 500,
+            once: true,
+            offset: 30
+        });
+
+        // ============================================================
+        // تبديل الوضع (Dark/Light)
+        // ============================================================
+        let isDark = false;
+
+        function toggleTheme() {
+            isDark = !isDark;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('theme') === 'dark') {
+            isDark = true;
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        // ============================================================
+        // زر العودة للأعلى
+        // ============================================================
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 400) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        console.log('🔬 تم تحميل صفحة خدمات البحث العلمي والترجمة والتصميم بنجاح!');
+        console.log('✅ جميع الخدمات مصممة بشكل دائري ثلاثي الأبعاد');
+        console.log('✅ تصميم جذاب مع تأثيرات متحركة');
+    </script>
+
+</body>
+</html>
