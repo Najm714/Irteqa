@@ -176,3 +176,9 @@ backend/uploads/business-orders/temp/
 # استبعاد ملفات تعريف المستخدمين المؤقتة
 *.user
 *.profile
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
