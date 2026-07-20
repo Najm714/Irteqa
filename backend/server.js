@@ -225,7 +225,54 @@ app.get('/api/videos/stream/:fileId', async (req, res) => {
         }
     }
 });
+// ============================================================
+// 🔍 اختبار وجود ملف في GridFS
+// ============================================================
+app.get('/api/files/test/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
 
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
+            });
+        }
+
+        // التحقق من وجود الملف في GridFS
+        const fileInfo = await getFileInfo(fileId);
+        
+        if (!fileInfo) {
+            return res.status(404).json({
+                success: false,
+                message: 'الملف غير موجود في GridFS',
+                fileId: fileId
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'الملف موجود في GridFS',
+            data: {
+                id: fileInfo._id,
+                filename: fileInfo.filename,
+                contentType: fileInfo.contentType,
+                size: fileInfo.length,
+                uploadDate: fileInfo.uploadDate,
+                metadata: fileInfo.metadata
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في اختبار الملف:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            stack: error.stack
+        });
+    }
+});
 // ✅ مسار لعرض الصور (متوافق مع الروابط القديمة)
 app.get('/api/images/:fileId', async (req, res) => {
     try {
