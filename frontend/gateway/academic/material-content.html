@@ -14,7 +14,7 @@
 
     <style>
         /* ============================================================
-           المتغيرات - متطابقة مع المنصة
+           المتغيرات
            ============================================================ */
         :root {
             --primary: #7C3AED;
@@ -306,7 +306,7 @@
         }
 
         /* ============================================================
-           قسم البطل (Hero) - تفاصيل المادة
+           قسم البطل
            ============================================================ */
         .material-hero {
             background: var(--gradient-hero);
@@ -653,8 +653,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
             z-index: 2000;
             justify-content: center;
             align-items: center;
@@ -667,14 +667,14 @@
 
         .modal-box {
             background: var(--bg-card);
-            max-width: 900px;
+            max-width: 920px;
             width: 100%;
             border-radius: var(--radius);
-            padding: 30px 30px 25px;
+            padding: 25px 30px 25px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
             position: relative;
             animation: slideUp 0.4s ease;
-            max-height: 90vh;
+            max-height: 92vh;
             overflow-y: auto;
         }
 
@@ -694,11 +694,19 @@
             cursor: pointer;
             transition: var(--transition);
             z-index: 10;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-body);
         }
 
         .modal-close:hover {
             color: var(--primary);
             transform: rotate(90deg);
+            background: rgba(124, 58, 237, 0.1);
         }
 
         .modal-box .video-player {
@@ -717,6 +725,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
+            background: #000;
         }
 
         .modal-box .video-player .placeholder {
@@ -738,7 +747,7 @@
         }
 
         .modal-box .video-info {
-            padding: 20px 0 0;
+            padding: 18px 0 5px;
         }
 
         .modal-box .video-info h3 {
@@ -754,12 +763,20 @@
             line-height: 1.7;
         }
 
-        .modal-box .video-info .video-url-info {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+        .modal-box .video-info .video-meta-info {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
             margin-top: 8px;
-            word-break: break-all;
-            opacity: 0.5;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .modal-box .video-info .video-meta-info span {
+            background: var(--bg-body);
+            padding: 3px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
         }
 
         /* ============================================================
@@ -902,7 +919,7 @@
             }
 
             .modal-box {
-                padding: 20px 15px;
+                padding: 15px;
             }
 
             .theme-toggle,
@@ -960,12 +977,12 @@
 
     <!-- ====== زر تبديل الوضع ====== -->
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
-        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(80, 73, 80)" d="M0 256c0-141.4 114.6-256 256-256 33 0 64.6 6.3 93.6 17.7 7.4 2.9 11.5 10.7 9.8 18.4s-8.8 13-16.7 12.4c-4.8-.3-9.7-.5-14.6-.5-114.9 0-208 93.1-208 208s93.1 208 208 208c4.9 0 9.8-.2 14.6-.5 7.9-.5 15 4.7 16.7 12.4s-2.4 15.5-9.8 18.4C320.6 505.7 289 512 256 512 114.6 512 0 397.4 0 256zM375.4 137.4c3.5-7.1 13.7-7.1 17.2 0l31.5 63.8c1.4 2.8 4.1 4.8 7.2 5.3l70.4 10.2c7.9 1.1 11 10.8 5.3 16.4l-50.9 49.6c-2.3 2.2-3.3 5.4-2.8 8.5l12 70.1c1.3 7.8-6.9 13.8-13.9 10.1l-63-33.1c-2.8-1.5-6.1-1.5-8.9 0l-63 33.1c-7 3.7-15.3-2.3-13.9-10.1l12-70.1c.5-3.1-.5-6.3-2.8-8.5L261 233.1c-5.7-5.6-2.6-15.2 5.3-16.4l70.4-10.2c3.1-.5 5.8-2.4 7.2-5.3l31.5-63.8z"/></svg>
+        <i class="fas fa-moon"></i>
     </button>
 
     <!-- ====== زر العودة للأعلى ====== -->
     <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(177, 151, 252)" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM377 271c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-87-87-87 87c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 167c9.4-9.4 24.6-9.4 33.9 0L377 271z"/></svg>
+        <i class="fas fa-arrow-up"></i>
     </button>
 
     <!-- ====== رسائل التنبيه ====== -->
@@ -977,7 +994,7 @@
     <header class="header">
         <div class="container">
             <a href="index.html" class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(177, 151, 252)" d="M128 320L24.5 320c-24.9 0-40.2-27.1-27.4-48.5L50 183.3C58.7 168.8 74.3 160 91.2 160l95 0c76.1-128.9 189.6-135.4 265.5-124.3 12.8 1.9 22.8 11.9 24.6 24.6 11.1 75.9 4.6 189.4-124.3 265.5l0 95c0 16.9-8.8 32.5-23.3 41.2l-88.2 52.9c-21.3 12.8-48.5-2.6-48.5-27.4L192 384c0-35.3-28.7-64-64-64l-.1 0zM400 160a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/></svg>
+                <i class="fas fa-graduation-cap"></i>
                 منصة <span>ارتقاء</span>
             </a>
             <div class="header-actions">
@@ -988,7 +1005,7 @@
                     <i class="fas fa-book-open"></i> الشروحات
                 </a>
                 <span class="btn-subscription-status" id="subscriptionStatus">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> مفعل
+                    <i class="fas fa-check-circle"></i> مفعل
                 </span>
             </div>
         </div>
@@ -1001,7 +1018,7 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <span class="material-code" id="materialCode">📖 MATH-101</span>
+                    <span class="material-code" id="materialCode"><i class="fas fa-book"></i> MATH-101</span>
                     <h1 id="materialTitle">رياضيات <span>١</span></h1>
                     <div class="instructor">
                         <i class="fas fa-user-graduate"></i>
@@ -1013,20 +1030,20 @@
                     <div class="hero-stats">
                         <div class="stat">
                             <span class="number" id="videosCount">0</span>
-                            <span class="label">🎬 فيديو</span>
+                            <span class="label"><i class="fas fa-video"></i> فيديو</span>
                         </div>
                         <div class="stat">
                             <span class="number" id="studentsCount">0</span>
-                            <span class="label">👨‍🎓 طالب</span>
+                            <span class="label"><i class="fas fa-users"></i> طالب</span>
                         </div>
                         <div class="stat">
                             <span class="number" id="ratingCount">4.9</span>
-                            <span class="label">⭐ تقييم</span>
+                            <span class="label"><i class="fas fa-star"></i> تقييم</span>
                         </div>
                     </div>
                 </div>
                 <div class="hero-badge">
-                    <span class="badge-icon">📚</span>
+                    <span class="badge-icon"><i class="fas fa-check-circle" style="color: #22C55E;"></i></span>
                     <span class="badge-text">مفعل</span>
                     <span class="badge-sub">اشتراك نشط</span>
                 </div>
@@ -1070,7 +1087,7 @@
             <div class="video-info">
                 <h3 id="videoModalTitle">عنوان الفيديو</h3>
                 <p class="video-desc" id="videoModalDesc">وصف الفيديو</p>
-                <div class="video-url-info" id="videoUrlInfo"></div>
+                <div class="video-meta-info" id="videoMetaInfo"></div>
             </div>
         </div>
     </div>
@@ -1086,18 +1103,18 @@
                 <a href="#" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
                 <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" aria-label="انستغرام"><i class="fab fa-instagram"></i></a>
-                <a href="#" aria-label="واتساب"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(99, 230, 190)" d="M92.1 254.6c0 24.9 7 49.2 20.2 70.1l3.1 5-13.3 48.6 49.9-13.1 4.8 2.9c20.2 12 43.4 18.4 67.1 18.4l.1 0c72.6 0 133.3-59.1 133.3-131.8 0-35.2-15.2-68.3-40.1-93.2-25-25-58-38.7-93.2-38.7-72.7 0-131.8 59.1-131.9 131.8zM274.8 330c-12.6 1.9-22.4 .9-47.5-9.9-36.8-15.9-61.8-51.5-66.9-58.7-.4-.6-.7-.9-.8-1.1-2-2.6-16.2-21.5-16.2-41 0-18.4 9-27.9 13.2-32.3 .3-.3 .5-.5 .7-.8 3.6-4 7.9-5 10.6-5 2.6 0 5.3 0 7.6 .1l.8 0c2.3 0 5.2 0 8.1 6.8 1.2 2.9 3 7.3 4.9 11.8 3.3 8 6.7 16.3 7.3 17.6 1 2 1.7 4.3 .3 6.9-3.4 6.8-6.9 10.4-9.3 13-3.1 3.2-4.5 4.7-2.3 8.6 15.3 26.3 30.6 35.4 53.9 47.1 4 2 6.3 1.7 8.6-1 2.3-2.6 9.9-11.6 12.5-15.5 2.6-4 5.3-3.3 8.9-2s23.1 10.9 27.1 12.9c.8 .4 1.5 .7 2.1 1 2.8 1.4 4.7 2.3 5.5 3.6 .9 1.9 .9 9.9-2.4 19.1-3.3 9.3-19.1 17.7-26.7 18.8zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM148.1 393.9L64 416 86.5 333.8c-13.9-24-21.2-51.3-21.2-79.3 .1-87.4 71.2-158.5 158.6-158.5 42.4 0 82.2 16.5 112.2 46.5 29.9 30 47.9 69.8 47.9 112.2 0 87.4-72.7 158.5-160.1 158.5-26.6 0-52.7-6.7-75.8-19.3z"/></svg></a>
-                <a href="#" aria-label="تيليجرام"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(116, 192, 252)" d="M256 8a248 248 0 1 0 0 496 248 248 0 1 0 0-496zM371 176.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7 .2-.7 .3-3.1-1.2-4.4s-3.6-.8-5.1-.5c-2.2 .5-37.1 23.5-104.6 69.1-9.9 6.8-18.9 10.1-26.9 9.9-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3 .6-4.5 6.7-9 18.4-13.7 72.3-31.5 120.5-52.3 144.6-62.3 68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6 .5 9.6 2.9 2 1.7 3.2 4.1 3.5 6.7 .5 3.2 .6 6.5 .4 9.8z"/></svg></a>
+                <a href="#" aria-label="واتساب"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" aria-label="تيليجرام"><i class="fab fa-telegram-plane"></i></a>
             </div>
             <div class="footer-brand">
                 <span>ارتقاء</span> للخدمات الأكاديمية
             </div>
             <div class="footer-links">
-                <a href="charter.html">📜 ميثاق العمل الأكاديمي والضمانات</a>
-                <a href="dmca.html">📜 سياسات وأحكام (DMCA)</a>
-                <a href="cookies-policy.html">🍪 سياسة ملفات الارتباط</a>
-                <a href="refund-policy.html">💰 سياسة الاسترداد</a>
-                <a href="terms-of-service.html">📋 شروط الاستخدام</a>
+                <a href="charter.html"><i class="fas fa-file-contract"></i> ميثاق العمل</a>
+                <a href="dmca.html"><i class="fas fa-file-contract"></i> سياسات وأحكام</a>
+                <a href="cookies-policy.html"><i class="fas fa-cookie-bite"></i> ملفات الارتباط</a>
+                <a href="refund-policy.html"><i class="fas fa-undo"></i> سياسة الاسترداد</a>
+                <a href="terms-of-service.html"><i class="fas fa-file-contract"></i> شروط الاستخدام</a>
             </div>
             <div class="copyright">
                 &copy; 2026 منصة ارتقاء. جميع الحقوق محفوظة.
@@ -1170,6 +1187,8 @@
             ? 'http://localhost:5000' 
             : 'https://irteqa.onrender.com';
 
+        console.log('🌐 API_URL:', API_URL);
+
         // ============================================================
         // 6. المتغيرات
         // ============================================================
@@ -1192,16 +1211,12 @@
             currentMaterialId = id;
             currentSubscriptionStatus = status;
 
-            // تحديث واجهة المادة
             document.getElementById('materialTitle').innerHTML = title + ' <span>الأكاديمية</span>';
-            document.getElementById('materialCode').textContent = code ? `📖 ${code}` : '📖 المادة';
+            document.getElementById('materialCode').innerHTML = `<i class="fas fa-book"></i> ${code || 'المادة'}`;
             document.getElementById('materialInstructor').textContent = instructor || 'المحاضر';
             document.getElementById('materialDescription').textContent = description || 'لا يوجد وصف للمادة';
 
-            // تحديث حالة الاشتراك
             updateSubscriptionStatus(status);
-
-            // تحديث عنوان الصفحة
             document.title = `📚 ${title} - منصة ارتقاء`;
         }
 
@@ -1213,11 +1228,11 @@
             switch (status) {
                 case 'active':
                     badge.className = 'btn-subscription-status';
-                    badge.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> مفعل';
+                    badge.innerHTML = '<i class="fas fa-check-circle"></i> مفعل';
                     break;
                 case 'pending':
                     badge.className = 'btn-subscription-status pending';
-                    badge.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="32" width="24" viewBox="0 0 384 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(255, 212, 59)" d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64l0 11c0 42.4 16.9 83.1 46.9 113.1l67.9 67.9-67.9 67.9C48.9 353.9 32 394.6 32 437l0 11c-17.7 0-32 14.3-32 32s14.3 32 32 32l320 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-11c0-42.4-16.9-83.1-46.9-113.1l-67.9-67.9 67.9-67.9c30-30 46.9-70.7 46.9-113.1l0-11c17.7 0 32-14.3 32-32S369.7 0 352 0L32 0zM288 437l0 11-192 0 0-11c0-25.5 10.1-49.9 28.1-67.9l67.9-67.9 67.9 67.9c18 18 28.1 42.4 28.1 67.9z"/></svg> قيد الانتظار';
+                    badge.innerHTML = '<i class="fas fa-clock"></i> قيد الانتظار';
                     break;
                 case 'cancelled':
                     badge.className = 'btn-subscription-status cancelled';
@@ -1225,174 +1240,219 @@
                     break;
                 default:
                     badge.className = 'btn-subscription-status';
-                    badge.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(70, 16, 225)" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> مفعل';
+                    badge.innerHTML = '<i class="fas fa-check-circle"></i> مفعل';
             }
         }
-// ============================================================
-// جلب فيديوهات المادة من الخادم
-// ============================================================
-async function loadVideos() {
-    const grid = document.getElementById('videosGrid');
-    const countLabel = document.getElementById('videosCountLabel');
-    const countStat = document.getElementById('videosCount');
 
-    grid.innerHTML = `
-        <div class="loading-center">
-            <i class="fas fa-spinner fa-spin"></i>
-            جاري تحميل الفيديوهات...
-        </div>
-    `;
+        // ============================================================
+        // 9. جلب فيديوهات المادة من الخادم
+        // ============================================================
+        async function loadVideos() {
+            const grid = document.getElementById('videosGrid');
+            const countLabel = document.getElementById('videosCountLabel');
+            const countStat = document.getElementById('videosCount');
 
-    try {
-        console.log('🔍 جلب فيديوهات للمادة ID:', currentMaterialId);
-
-        // ✅ جلب جميع الفيديوهات ثم فلترتها حسب subjectId
-        const response = await fetch(`${API_URL}/api/videos/all`);
-        const data = await response.json();
-
-        console.log('📦 جميع الفيديوهات:', data);
-
-        if (data.success) {
-            // ✅ فلترة الفيديوهات حسب معرف المادة
-            const allVideos = data.data || [];
-            videos = allVideos.filter(v => String(v.subjectId) === String(currentMaterialId));
-            
-            console.log('📽️ الفيديوهات المفلترة:', videos);
-            
-            countStat.textContent = videos.length;
-            countLabel.textContent = `${videos.length} فيديو`;
-            renderVideos(videos);
-        } else {
-            videos = [];
-            countStat.textContent = '0';
-            countLabel.textContent = '0 فيديو';
             grid.innerHTML = `
-                <div class="no-videos">
-                    <i class="fas fa-video-slash"></i>
-                    <h3>لا توجد فيديوهات</h3>
-                    <p>سيتم إضافة فيديوهات هذه المادة قريباً</p>
+                <div class="loading-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    جاري تحميل الفيديوهات...
                 </div>
             `;
-        }
-    } catch (error) {
-        console.error('❌ خطأ في جلب الفيديوهات:', error);
-        showAlert('❌ حدث خطأ في تحميل الفيديوهات', 'danger');
-        grid.innerHTML = `
-            <div class="no-videos">
-                <i class="fas fa-exclamation-circle" style="color:#EF4444;"></i>
-                <h3 style="color:#EF4444;">حدث خطأ</h3>
-                <p>تعذر تحميل الفيديوهات</p>
-            </div>
-        `;
-    }
-}
-// ============================================================
-// عرض الفيديوهات
-// ============================================================
-function renderVideos(videosList) {
-    const grid = document.getElementById('videosGrid');
 
-    if (!videosList || videosList.length === 0) {
-        grid.innerHTML = `
-            <div class="no-videos">
-                <i class="fas fa-video-slash"></i>
-                <h3>لا توجد فيديوهات</h3>
-                <p>سيتم إضافة فيديوهات هذه المادة قريباً</p>
-            </div>
-        `;
-        return;
-    }
+            try {
+                console.log('🔍 جلب فيديوهات للمادة ID:', currentMaterialId);
 
-    grid.innerHTML = videosList.map((video, index) => {
-        const thumbnail = video.thumbnail || 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg';
-        return `
-            <div class="video-card" data-aos="fade-up" data-aos-delay="${Math.min(index * 50, 300)}" onclick="openVideo('${video._id}')">
-                <div class="video-thumbnail">
-                    <img src="${thumbnail}" alt="${video.title}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg'" />
-                    <div class="play-overlay"><i class="fas fa-play"></i></div>
-                    <span class="duration"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="24" viewBox="0 0 384 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(255, 212, 59)" d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64l0 11c0 42.4 16.9 83.1 46.9 113.1l67.9 67.9-67.9 67.9C48.9 353.9 32 394.6 32 437l0 11c-17.7 0-32 14.3-32 32s14.3 32 32 32l320 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-11c0-42.4-16.9-83.1-46.9-113.1l-67.9-67.9 67.9-67.9c30-30 46.9-70.7 46.9-113.1l0-11c17.7 0 32-14.3 32-32S369.7 0 352 0L32 0zM288 437l0 11-192 0 0-11c0-25.5 10.1-49.9 28.1-67.9l67.9-67.9 67.9 67.9c18 18 28.1 42.4 28.1 67.9z"/></svg> ${video.duration || '00:00'}</span>
-                    <span class="views-badge"><i class="fas fa-eye"></i> ${video.views || 0}</span>
-                </div>
-                <div class="video-body">
-                    <h3>${video.title}</h3>
-                    <div class="video-meta">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" height="32" width="24" viewBox="0 0 384 512"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(255, 212, 59)" d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64l0 11c0 42.4 16.9 83.1 46.9 113.1l67.9 67.9-67.9 67.9C48.9 353.9 32 394.6 32 437l0 11c-17.7 0-32 14.3-32 32s14.3 32 32 32l320 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-11c0-42.4-16.9-83.1-46.9-113.1l-67.9-67.9 67.9-67.9c30-30 46.9-70.7 46.9-113.1l0-11c17.7 0 32-14.3 32-32S369.7 0 352 0L32 0zM288 437l0 11-192 0 0-11c0-25.5 10.1-49.9 28.1-67.9l67.9-67.9 67.9 67.9c18 18 28.1 42.4 28.1 67.9z"/></svg> ${video.duration || '00:00'}</span>
-                        <span><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                const response = await fetch(`${API_URL}/api/videos/all`);
+                const data = await response.json();
+
+                console.log('📦 جميع الفيديوهات:', data);
+
+                if (data.success) {
+                    const allVideos = data.data || [];
+                    videos = allVideos.filter(v => String(v.subjectId) === String(currentMaterialId));
+                    
+                    console.log('📽️ الفيديوهات المفلترة:', videos);
+                    
+                    countStat.textContent = videos.length;
+                    countLabel.textContent = `${videos.length} فيديو`;
+                    renderVideos(videos);
+                } else {
+                    videos = [];
+                    countStat.textContent = '0';
+                    countLabel.textContent = '0 فيديو';
+                    grid.innerHTML = `
+                        <div class="no-videos">
+                            <i class="fas fa-video-slash"></i>
+                            <h3>لا توجد فيديوهات</h3>
+                            <p>سيتم إضافة فيديوهات هذه المادة قريباً</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ خطأ في جلب الفيديوهات:', error);
+                showAlert('❌ حدث خطأ في تحميل الفيديوهات', 'danger');
+                grid.innerHTML = `
+                    <div class="no-videos">
+                        <i class="fas fa-exclamation-circle" style="color:#EF4444;"></i>
+                        <h3 style="color:#EF4444;">حدث خطأ</h3>
+                        <p>تعذر تحميل الفيديوهات</p>
                     </div>
-                    <div class="video-tags">
-                        <span class="tag">#${video.subjectName || 'مادة'}</span>
-                        ${video.tags ? video.tags.map(tag => `<span class="tag">#${tag}</span>`).join('') : ''}
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-// ============================================================
-// فتح الفيديو في المودال
-// ============================================================
-function openVideo(videoId) {
-    const video = videos.find(v => v._id === videoId);
-    if (!video) {
-        showAlert('❌ الفيديو غير موجود', 'danger');
-        return;
-    }
-
-    console.log('🎬 فتح الفيديو:', video);
-    console.log('📁 المسار المخزن:', video.filePath);
-    console.log('📁 اسم الملف:', video.fileName);
-
-    const modal = document.getElementById('videoModal');
-    const player = document.getElementById('videoPlayer');
-    const title = document.getElementById('videoModalTitle');
-    const desc = document.getElementById('videoModalDesc');
-    const urlInfo = document.getElementById('videoUrlInfo');
-
-    title.textContent = video.title;
-    desc.textContent = video.description || 'لا يوجد وصف';
-
-    // ✅ بناء المسار الصحيح للفيديو
-    let videoUrl = null;
-
-    if (video.filePath) {
-        if (video.filePath.startsWith('http')) {
-            videoUrl = video.filePath;
-        } else if (video.filePath.startsWith('/uploads')) {
-            videoUrl = `${API_URL}${video.filePath}`;
-        } else {
-            videoUrl = `${API_URL}/uploads/videos/${video.fileName || video.filePath}`;
+                `;
+            }
         }
-    } else if (video.fileName) {
-        videoUrl = `${API_URL}/uploads/videos/${video.fileName}`;
-    }
 
-    console.log('🔗 الرابط النهائي:', videoUrl);
+        // ============================================================
+        // 10. عرض الفيديوهات
+        // ============================================================
+        function renderVideos(videosList) {
+            const grid = document.getElementById('videosGrid');
 
-    // عرض رابط الفيديو للمساعدة في التصحيح
-    urlInfo.textContent = `⏱️ ${video.duration || '00:00'} | 🔗 ${videoUrl || 'لا يوجد رابط'}`;
+            if (!videosList || videosList.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-videos">
+                        <i class="fas fa-video-slash"></i>
+                        <h3>لا توجد فيديوهات</h3>
+                        <p>سيتم إضافة فيديوهات هذه المادة قريباً</p>
+                    </div>
+                `;
+                return;
+            }
 
-    if (videoUrl) {
-        player.innerHTML = `
-            <video controls autoplay style="width:100%; height:100%; object-fit:contain;" 
-                   onerror="this.parentElement.innerHTML='<div class=\\'placeholder\\'><i class=\\'fas fa-exclamation-circle error-icon\\'></i><p style=\\'color:#EF4444;\\'>❌ تعذر تحميل الفيديو</p><p style=\\'font-size:0.9rem; opacity:0.7;\\'>الملف غير موجود على الخادم</p><p style=\\'font-size:0.8rem; opacity:0.5; margin-top:10px;\\'>${videoUrl}</p></div>'">
-                <source src="${videoUrl}" type="video/mp4">
-                <source src="${videoUrl}" type="video/webm">
-                متصفحك لا يدعم تشغيل الفيديو
-            </video>
-        `;
-    } else {
-        player.innerHTML = `
-            <div class="placeholder">
-                <i class="fas fa-exclamation-circle error-icon"></i>
-                <p style="color:#EF4444;">❌ لا يوجد مسار للفيديو</p>
-                <p style="font-size:0.9rem; opacity:0.7;">يرجى التأكد من رفع الفيديو بشكل صحيح</p>
-            </div>
-        `;
-    }
+            grid.innerHTML = videosList.map((video, index) => {
+                const thumbnail = video.thumbnail || 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg';
+                return `
+                    <div class="video-card" data-aos="fade-up" data-aos-delay="${Math.min(index * 50, 300)}" onclick="openVideo('${video._id}')">
+                        <div class="video-thumbnail">
+                            <img src="${thumbnail}" alt="${video.title}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg'" />
+                            <div class="play-overlay"><i class="fas fa-play"></i></div>
+                            <span class="duration"><i class="fas fa-clock"></i> ${video.duration || '00:00'}</span>
+                            <span class="views-badge"><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                        </div>
+                        <div class="video-body">
+                            <h3>${video.title}</h3>
+                            <div class="video-meta">
+                                <span><i class="fas fa-clock"></i> ${video.duration || '00:00'}</span>
+                                <span><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                            </div>
+                            <div class="video-tags">
+                                <span class="tag">#${video.subjectName || 'مادة'}</span>
+                                ${video.tags ? video.tags.map(tag => `<span class="tag">#${tag}</span>`).join('') : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
+        // ============================================================
+        // 11. فتح الفيديو في المودال - مع دعم GridFS
+        // ============================================================
+        function openVideo(videoId) {
+            const video = videos.find(v => v._id === videoId);
+            if (!video) {
+                showAlert('❌ الفيديو غير موجود', 'danger');
+                return;
+            }
+
+            console.log('🎬 فتح الفيديو:', video);
+
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            const title = document.getElementById('videoModalTitle');
+            const desc = document.getElementById('videoModalDesc');
+            const metaInfo = document.getElementById('videoMetaInfo');
+
+            title.textContent = video.title;
+            desc.textContent = video.description || 'لا يوجد وصف';
+
+            // ✅ بناء المسار الصحيح للفيديو - دعم GridFS
+            let videoUrl = null;
+            let fileId = null;
+
+            // الطريقة 1: استخدام fileId (GridFS)
+            if (video.fileId) {
+                fileId = video.fileId;
+                videoUrl = `${API_URL}/api/files/${video.fileId}`;
+                console.log('✅ باستخدام fileId (GridFS):', videoUrl);
+            }
+            // الطريقة 2: استخدام filePath
+            else if (video.filePath) {
+                if (video.filePath.includes('/api/files/')) {
+                    // استخراج fileId من المسار
+                    const match = video.filePath.match(/\/([a-fA-F0-9]{24})/);
+                    if (match && match[1]) {
+                        fileId = match[1];
+                        videoUrl = `${API_URL}/api/files/${fileId}`;
+                        console.log('✅ استخراج fileId من filePath:', videoUrl);
+                    } else {
+                        videoUrl = `${API_URL}${video.filePath}`;
+                        console.log('✅ باستخدام filePath مباشر:', videoUrl);
+                    }
+                } else {
+                    let fileName = video.filePath.split('/').pop().split('\\').pop();
+                    if (fileName) {
+                        const match = fileName.match(/([a-fA-F0-9]{24})/);
+                        if (match && match[1]) {
+                            fileId = match[1];
+                            videoUrl = `${API_URL}/api/files/${fileId}`;
+                            console.log('✅ استخراج fileId من filename:', videoUrl);
+                        } else {
+                            videoUrl = `${API_URL}/uploads/videos/${fileName}`;
+                            console.log('⚠️ باستخدام filename (احتياطي):', videoUrl);
+                        }
+                    }
+                }
+            }
+            // الطريقة 3: استخدام filename
+            else if (video.filename) {
+                const match = video.filename.match(/([a-fA-F0-9]{24})/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                    videoUrl = `${API_URL}/api/files/${fileId}`;
+                    console.log('✅ استخراج fileId من filename:', videoUrl);
+                } else {
+                    videoUrl = `${API_URL}/uploads/videos/${video.filename}`;
+                    console.log('⚠️ باستخدام filename:', videoUrl);
+                }
+            }
+            // الطريقة 4: استخدام fileData (base64)
+            else if (video.fileData && video.fileData.startsWith('data:video/')) {
+                videoUrl = video.fileData;
+                console.log('✅ باستخدام fileData (base64)');
+            }
+
+            console.log('🔗 الرابط النهائي:', videoUrl);
+
+            // عرض معلومات إضافية
+            metaInfo.innerHTML = `
+                <span><i class="fas fa-clock"></i> ${video.duration || '00:00'}</span>
+                <span><i class="fas fa-eye"></i> ${video.views || 0} مشاهدة</span>
+                <span><i class="fas fa-tag"></i> ${video.subjectName || 'مادة'}</span>
+                ${fileId ? `<span><i class="fas fa-database"></i> GridFS</span>` : ''}
+            `;
+
+            if (videoUrl) {
+                player.innerHTML = `
+                    <video controls autoplay style="width:100%; height:100%; object-fit:contain;" 
+                           onerror="this.parentElement.innerHTML='<div class=\\'placeholder\\'><i class=\\'fas fa-exclamation-circle error-icon\\'></i><p style=\\'color:#EF4444;\\'>❌ تعذر تحميل الفيديو</p><p style=\\'font-size:0.9rem; opacity:0.7;\\'>الملف غير موجود على الخادم</p></div>'">
+                        <source src="${videoUrl}" type="video/mp4">
+                        <source src="${videoUrl}" type="video/webm">
+                        متصفحك لا يدعم تشغيل الفيديو
+                    </video>
+                `;
+            } else {
+                player.innerHTML = `
+                    <div class="placeholder">
+                        <i class="fas fa-exclamation-circle error-icon"></i>
+                        <p style="color:#EF4444;">❌ لا يوجد مسار للفيديو</p>
+                        <p style="font-size:0.9rem; opacity:0.7;">يرجى التأكد من رفع الفيديو بشكل صحيح</p>
+                    </div>
+                `;
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
         // ============================================================
         // 12. إغلاق مودال الفيديو
@@ -1401,7 +1461,6 @@ function openVideo(videoId) {
             const modal = document.getElementById('videoModal');
             const player = document.getElementById('videoPlayer');
 
-            // إيقاف الفيديو عند الإغلاق
             const video = player.querySelector('video');
             if (video) {
                 video.pause();
@@ -1411,7 +1470,6 @@ function openVideo(videoId) {
             modal.classList.remove('active');
             document.body.style.overflow = 'auto';
 
-            // إعادة تعيين مكان الفيديو بعد فترة
             setTimeout(() => {
                 player.innerHTML = `
                     <div class="placeholder">
@@ -1445,10 +1503,11 @@ function openVideo(videoId) {
 
             console.log('📚 تم تحميل صفحة محتوى المادة بنجاح!');
             console.log('🌐 API_URL:', API_URL);
+            console.log('💾 التخزين: GridFS (MongoDB)');
         });
 
         // ============================================================
-        // 16. دالة مساعدة للتحقق من وجود الفيديو (يمكن استدعاؤها من Console)
+        // 16. دالة مساعدة للتحقق من وجود الفيديو (للاختبار)
         // ============================================================
         async function checkVideoExists(videoId) {
             try {
@@ -1459,18 +1518,17 @@ function openVideo(videoId) {
                 }
 
                 let videoUrl = null;
-                if (video.filePath) {
-                    if (video.filePath.startsWith('http')) {
-                        videoUrl = video.filePath;
-                    } else if (video.filePath.startsWith('/uploads')) {
-                        videoUrl = `${API_URL}${video.filePath}`;
-                    } else {
-                        videoUrl = `${API_URL}/uploads/videos/${video.fileName || video.filePath}`;
+                if (video.fileId) {
+                    videoUrl = `${API_URL}/api/files/${video.fileId}`;
+                } else if (video.filePath) {
+                    const match = video.filePath.match(/\/([a-fA-F0-9]{24})/);
+                    if (match && match[1]) {
+                        videoUrl = `${API_URL}/api/files/${match[1]}`;
                     }
-                } else if (video.fileName) {
-                    videoUrl = `${API_URL}/uploads/videos/${video.fileName}`;
                 }
 
+                if (!videoUrl) return false;
+                
                 console.log('🔍 التحقق من الرابط:', videoUrl);
                 const response = await fetch(videoUrl, { method: 'HEAD' });
                 console.log(`✅ الفيديو موجود: ${response.ok}`);
@@ -1484,6 +1542,7 @@ function openVideo(videoId) {
         // جعل الدوال متاحة في Console للاختبار
         window.checkVideoExists = checkVideoExists;
         window.videos = videos;
+        window.loadVideos = loadVideos;
     </script>
 
 </body>
