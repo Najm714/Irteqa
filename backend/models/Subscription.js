@@ -9,8 +9,8 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     subscriptionType: {
         type: String,
-        required: true,
-        enum: ['basic', 'premium', 'vip']
+        enum: ['material', 'summary', 'course', 'lecture', 'video', 'business'],
+        required: true
     },
     materialId: {
         type: String,
@@ -22,7 +22,8 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     },
     phone: {
         type: String,
@@ -30,25 +31,30 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['card', 'cash', 'bank'],
+        enum: ['card', 'mada', 'alrajhi', 'bank_transfer'],
         default: 'card'
     },
     status: {
         type: String,
-        enum: ['pending', 'active', 'cancelled'],
+        enum: ['pending', 'active', 'cancelled', 'expired'],
         default: 'pending'
     },
     notes: {
         type: String,
         default: ''
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    activatedAt: {
+        type: Date
+    },
+    expiresAt: {
+        type: Date
     }
 }, {
     timestamps: true
 });
-
-// فهارس للبحث
-SubscriptionSchema.index({ user: 1 });
-SubscriptionSchema.index({ status: 1 });
-SubscriptionSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('Subscription', SubscriptionSchema);
