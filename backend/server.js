@@ -99,7 +99,260 @@ app.get('/uploads/videos/:filename', (req, res) => {
         }
     }
 });
+// ============================================================
+// 📁 مسارات موحدة لجميع الملفات (GridFS)
+// ============================================================
+ // ============================================================
+// 📁 مسار عام لعرض الملفات من GridFS
+// ============================================================
+app.get('/api/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
 
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
+            });
+        }
+
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            return res.status(404).json({
+                success: false,
+                message: 'الملف غير موجود'
+            });
+        }
+
+        const contentType = fileInfo.contentType || 'video/mp4';
+        
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Length', fileInfo.length);
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        const bucket = getGridFSBucket();
+        if (!bucket) {
+            return res.status(500).json({
+                success: false,
+                message: 'GridFS غير مهيأ'
+            });
+        }
+
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في بث الملف:', error);
+            if (!res.headersSent) {
+                res.status(500).json({
+                    success: false,
+                    message: 'حدث خطأ في عرض الملف: ' + error.message
+                });
+            }
+        });
+
+        downloadStream.pipe(res);
+
+    } catch (error) {
+        console.error('❌ خطأ في عرض الملف:', error);
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: error.message || 'حدث خطأ في عرض الملف'
+            });
+        }
+    }
+});
+
+// ✅ مسار لعرض الفيديوهات (متوافق مع الروابط القديمة)
+app.get('/api/videos/stream/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
+            });
+        }
+
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            return res.status(404).json({
+                success: false,
+                message: 'الملف غير موجود'
+            });
+        }
+
+        const contentType = fileInfo.contentType || 'video/mp4';
+        
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Length', fileInfo.length);
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        const bucket = getGridFSBucket();
+        if (!bucket) {
+            return res.status(500).json({
+                success: false,
+                message: 'GridFS غير مهيأ'
+            });
+        }
+
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في بث الفيديو:', error);
+            if (!res.headersSent) {
+                res.status(500).json({
+                    success: false,
+                    message: 'حدث خطأ في عرض الفيديو: ' + error.message
+                });
+            }
+        });
+
+        downloadStream.pipe(res);
+
+    } catch (error) {
+        console.error('❌ خطأ في عرض الفيديو:', error);
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: error.message || 'حدث خطأ في عرض الفيديو'
+            });
+        }
+    }
+});
+
+// ✅ مسار لعرض الصور (متوافق مع الروابط القديمة)
+app.get('/api/images/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
+            });
+        }
+
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            return res.status(404).json({
+                success: false,
+                message: 'الملف غير موجود'
+            });
+        }
+
+        const contentType = fileInfo.contentType || 'image/jpeg';
+        
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Length', fileInfo.length);
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        const bucket = getGridFSBucket();
+        if (!bucket) {
+            return res.status(500).json({
+                success: false,
+                message: 'GridFS غير مهيأ'
+            });
+        }
+
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في بث الصورة:', error);
+            if (!res.headersSent) {
+                res.status(500).json({
+                    success: false,
+                    message: 'حدث خطأ في عرض الصورة: ' + error.message
+                });
+            }
+        });
+
+        downloadStream.pipe(res);
+
+    } catch (error) {
+        console.error('❌ خطأ في عرض الصورة:', error);
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: error.message || 'حدث خطأ في عرض الصورة'
+            });
+        }
+    }
+});
+
+// ✅ مسار لتحميل الملفات كملف (للتنزيل)
+app.get('/api/files/download/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
+            });
+        }
+
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            return res.status(404).json({
+                success: false,
+                message: 'الملف غير موجود'
+            });
+        }
+
+        const fileName = fileInfo.filename || 'file';
+        res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+        res.setHeader('Content-Type', fileInfo.contentType || 'application/octet-stream');
+        res.setHeader('Content-Length', fileInfo.length);
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        const bucket = getGridFSBucket();
+        if (!bucket) {
+            return res.status(500).json({
+                success: false,
+                message: 'GridFS غير مهيأ'
+            });
+        }
+
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في تحميل الملف:', error);
+            if (!res.headersSent) {
+                res.status(500).json({
+                    success: false,
+                    message: 'حدث خطأ في تحميل الملف: ' + error.message
+                });
+            }
+        });
+
+        downloadStream.pipe(res);
+
+    } catch (error) {
+        console.error('❌ خطأ في تحميل الملف:', error);
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: error.message || 'حدث خطأ في تحميل الملف'
+            });
+        }
+    }
+});
+
+// ✅ مسار لملفات الدردشة (للتوافق مع الروابط القديمة)
+app.get('/api/chat/files/:fileId', async (req, res) => {
+    // إعادة توجيه إلى المسار العام
+    req.params.fileId = req.params.fileId;
+    return app.handle(req, res, '/api/files/:fileId');
+});
 // ============================================================
 // مسار بديل للفيديوهات (بسيط)
 // ============================================================
@@ -707,7 +960,7 @@ app.post('/api/videos/upload', protect, authorize('admin'), gridfsUpload.single(
             universityName: universityName || '',
             description: description || '',
             fileName: req.file.originalname,
-            filePath: `/api/files/stream/${fileResult.fileId}`,
+            filePath: `/api/files/${fileResult.fileId}`,
             fileSize: (req.file.size / (1024 * 1024)).toFixed(2) + ' MB',
             fileType: req.file.mimetype,
             fileId: fileResult.id,
