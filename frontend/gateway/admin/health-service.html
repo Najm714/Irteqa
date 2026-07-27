@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🏥 الخدمات الأكاديمية في العلوم الصحية - منصة ارتقاء</title>
+    <title>🏥 Health Sciences Academic Services - Irteqa Platform</title>
 
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
     <!-- AOS Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
     <style>
         /* ============================================================
-           المتغيرات
+           Variables
            ============================================================ */
         :root {
             --primary: #0891B2;
@@ -66,11 +66,11 @@
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-body);
             color: var(--text-color);
             transition: var(--transition);
-            direction: rtl;
+            direction: ltr;
             overflow-x: hidden;
         }
 
@@ -92,12 +92,12 @@
         }
 
         /* ============================================================
-           أزرار ثابتة
+           Fixed Buttons
            ============================================================ */
         .theme-toggle {
             position: fixed;
             bottom: 30px;
-            left: 30px;
+            right: 30px;
             z-index: 999;
             background: var(--bg-card);
             color: var(--text-color);
@@ -125,7 +125,7 @@
         .back-to-top {
             position: fixed;
             bottom: 90px;
-            left: 30px;
+            right: 30px;
             z-index: 999;
             background: var(--gradient-main);
             color: #fff;
@@ -152,7 +152,7 @@
         }
 
         /* ============================================================
-           الهيدر
+           Header
            ============================================================ */
         .header {
             background: var(--bg-card);
@@ -265,7 +265,7 @@
         }
 
         /* ============================================================
-           القسم الرئيسي (Hero)
+           Hero Section
            ============================================================ */
         .hero {
             background: var(--gradient-hero);
@@ -372,7 +372,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             position: relative;
             overflow: hidden;
@@ -411,7 +411,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
         }
 
@@ -422,7 +422,7 @@
         }
 
         /* ============================================================
-           فلتر الخدمات
+           Filter Section
            ============================================================ */
         .filter-section {
             padding: 20px 0 30px;
@@ -443,7 +443,7 @@
             border: 2px solid var(--border-color);
             background: var(--bg-card);
             color: var(--text-color);
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
@@ -467,7 +467,7 @@
             padding: 0 8px;
             border-radius: 20px;
             font-size: 0.6rem;
-            margin-right: 4px;
+            margin-left: 4px;
         }
 
         .filter-btn.active .count {
@@ -476,7 +476,7 @@
         }
 
         /* ============================================================
-           شبكة الخدمات
+           Services Grid
            ============================================================ */
         .services-section {
             padding: 0 0 50px;
@@ -533,13 +533,13 @@
             content: '';
             position: absolute;
             top: 0;
-            right: 0;
             left: 0;
+            right: 0;
             height: 4px;
             background: var(--gradient-main);
             transform: scaleX(0);
             transition: var(--transition);
-            transform-origin: right;
+            transform-origin: left;
         }
 
         .service-item:hover::before {
@@ -602,7 +602,7 @@
         .service-item .health-emoji {
             position: absolute;
             top: 8px;
-            left: 8px;
+            right: 8px;
             font-size: 0.8rem;
             opacity: 0.3;
         }
@@ -610,7 +610,7 @@
         .service-item .service-category-tag {
             position: absolute;
             bottom: 8px;
-            right: 8px;
+            left: 8px;
             font-size: 0.35rem;
             color: var(--text-muted);
             background: var(--bg-body);
@@ -624,7 +624,7 @@
         }
 
         /* ============================================================
-           صفحة تفاصيل الخدمة (Service Details Page)
+           Service Details Page
            ============================================================ */
         .service-details-page {
             display: none;
@@ -636,7 +636,7 @@
             display: block;
         }
 
-        .details-back {
+        .back-to-services {
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -644,15 +644,15 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 0.85rem;
-            margin-bottom: 25px;
             padding: 8px 20px;
             border-radius: 50px;
             border: 2px solid var(--border-color);
             transition: var(--transition);
             background: var(--bg-card);
+            cursor: pointer;
         }
 
-        .details-back:hover {
+        .back-to-services:hover {
             background: var(--gradient-main);
             color: #fff;
             border-color: transparent;
@@ -665,6 +665,7 @@
             padding: 35px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
+            margin-top: 20px;
         }
 
         .details-header {
@@ -714,7 +715,7 @@
         }
 
         /* ============================================================
-           أقسام صفحة التفاصيل
+           Details Sections
            ============================================================ */
         .details-section {
             margin-bottom: 30px;
@@ -765,7 +766,7 @@
         }
 
         /* ============================================================
-           معرض الصور
+           Gallery
            ============================================================ */
         .gallery-grid {
             display: grid;
@@ -798,8 +799,8 @@
         .gallery-item .gallery-label {
             position: absolute;
             bottom: 0;
-            right: 0;
             left: 0;
+            right: 0;
             background: rgba(0,0,0,0.6);
             color: #fff;
             font-size: 0.5rem;
@@ -808,7 +809,7 @@
         }
 
         /* ============================================================
-           أنواع الطلبات والأسئلة الشائعة
+           Request Types & FAQ
            ============================================================ */
         .request-types-grid {
             display: grid;
@@ -891,7 +892,7 @@
         }
 
         /* ============================================================
-           نموذج طلب الخدمة في صفحة التفاصيل
+           Request Form
            ============================================================ */
         .details-form-wrapper {
             background: var(--bg-body);
@@ -921,7 +922,7 @@
 
         .details-form-wrapper .form-group label .required {
             color: #EF4444;
-            margin-right: 3px;
+            margin-left: 3px;
         }
 
         .details-form-wrapper .form-group input,
@@ -932,7 +933,7 @@
             border: 2px solid var(--border-color);
             border-radius: 8px;
             font-size: 0.8rem;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Inter', sans-serif;
             transition: var(--transition);
             background: var(--bg-card);
             color: var(--text-color);
@@ -1002,7 +1003,7 @@
             color: #EF4444;
             font-weight: 700;
             font-size: 0.9rem;
-            margin-right: 3px;
+            margin-left: 3px;
             transition: var(--transition);
         }
 
@@ -1055,7 +1056,7 @@
             border: none;
             cursor: pointer;
             transition: var(--transition);
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             width: 100%;
             position: relative;
@@ -1113,7 +1114,7 @@
         }
 
         /* ============================================================
-           الشروط والأحكام
+           Terms & Conditions
            ============================================================ */
         .terms-section {
             padding: 30px 0 40px;
@@ -1181,7 +1182,7 @@
         }
 
         /* ============================================================
-           الفوتر
+           Footer
            ============================================================ */
         .footer {
             background: #0F172A;
@@ -1260,7 +1261,7 @@
         }
 
         /* ============================================================
-           التجاوب
+           Responsive
            ============================================================ */
         @media (max-width: 992px) {
             .services-grid {
@@ -1354,7 +1355,7 @@
                 height: 40px;
                 font-size: 1rem;
                 bottom: 15px;
-                left: 15px;
+                right: 15px;
             }
             .back-to-top {
                 bottom: 65px;
@@ -1450,7 +1451,7 @@
         }
 
         /* ============================================================
-           تأثيرات إضافية
+           Additional Effects
            ============================================================ */
         .fade-in {
             animation: fadeIn 0.5s ease forwards;
@@ -1473,61 +1474,28 @@
             opacity: 1;
             color: var(--primary);
         }
-
-        .badge-primary {
-            background: var(--gradient-main);
-            color: #fff;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.5rem;
-            font-weight: 600;
-        }
-
-        /* زر العودة للخدمات */
-        .back-to-services {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.85rem;
-            padding: 8px 20px;
-            border-radius: 50px;
-            border: 2px solid var(--border-color);
-            transition: var(--transition);
-            background: var(--bg-card);
-            cursor: pointer;
-        }
-
-        .back-to-services:hover {
-            background: var(--gradient-main);
-            color: #fff;
-            border-color: transparent;
-            transform: translateX(-5px);
-        }
     </style>
 </head>
 <body>
 
-    <!-- ====== زر تبديل الوضع ====== -->
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+    <!-- ====== Theme Toggle Button ====== -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
         <svg xmlns="http://www.w3.org/2000/svg" height="28" width="28" viewBox="0 0 512 512"><path fill="currentColor" d="M0 256c0-141.4 114.6-256 256-256 33 0 64.6 6.3 93.6 17.7 7.4 2.9 11.5 10.7 9.8 18.4s-8.8 13-16.7 12.4c-4.8-.3-9.7-.5-14.6-.5-114.9 0-208 93.1-208 208s93.1 208 208 208c4.9 0 9.8-.2 14.6-.5 7.9-.5 15 4.7 16.7 12.4s-2.4 15.5-9.8 18.4C320.6 505.7 289 512 256 512 114.6 512 0 397.4 0 256zM375.4 137.4c3.5-7.1 13.7-7.1 17.2 0l31.5 63.8c1.4 2.8 4.1 4.8 7.2 5.3l70.4 10.2c7.9 1.1 11 10.8 5.3 16.4l-50.9 49.6c-2.3 2.2-3.3 5.4-2.8 8.5l12 70.1c1.3 7.8-6.9 13.8-13.9 10.1l-63-33.1c-2.8-1.5-6.1-1.5-8.9 0l-63 33.1c-7 3.7-15.3-2.3-13.9-10.1l12-70.1c.5-3.1-.5-6.3-2.8-8.5L261 233.1c-5.7-5.6-2.6-15.2 5.3-16.4l70.4-10.2c3.1-.5 5.8-2.4 7.2-5.3l31.5-63.8z"/></svg>
     </button>
 
-    <!-- ====== زر العودة للأعلى ====== -->
+    <!-- ====== Back to Top Button ====== -->
     <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
         <i class="fas fa-arrow-up"></i>
     </button>
 
     <!-- ============================================================
-    الهيدر
+    Header
     ============================================================ -->
     <header class="header" id="header">
         <div class="container">
             <a href="index.html" class="logo">
                 <i class="fas fa-heartbeat"></i>
-                منصة <span>ارتقاء</span>
+                Irteqa <span>Platform</span>
                 <span style="font-size:0.5rem; background: var(--gradient-health); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight:400;">Health Sciences</span>
             </a>
 
@@ -1539,36 +1507,36 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M92.1 254.6c0 24.9 7 49.2 20.2 70.1l3.1 5-13.3 48.6 49.9-13.1 4.8 2.9c20.2 12 43.4 18.4 67.1 18.4l.1 0c72.6 0 133.3-59.1 133.3-131.8 0-35.2-15.2-68.3-40.1-93.2-25-25-58-38.7-93.2-38.7-72.7 0-131.8 59.1-131.9 131.8zM274.8 330c-12.6 1.9-22.4 .9-47.5-9.9-36.8-15.9-61.8-51.5-66.9-58.7-.4-.6-.7-.9-.8-1.1-2-2.6-16.2-21.5-16.2-41 0-18.4 9-27.9 13.2-32.3 .3-.3 .5-.5 .7-.8 3.6-4 7.9-5 10.6-5 2.6 0 5.3 0 7.6 .1l.8 0c2.3 0 5.2 0 8.1 6.8 1.2 2.9 3 7.3 4.9 11.8 3.3 8 6.7 16.3 7.3 17.6 1 2 1.7 4.3 .3 6.9-3.4 6.8-6.9 10.4-9.3 13-3.1 3.2-4.5 4.7-2.3 8.6 15.3 26.3 30.6 35.4 53.9 47.1 4 2 6.3 1.7 8.6-1 2.3-2.6 9.9-11.6 12.5-15.5 2.6-4 5.3-3.3 8.9-2s23.1 10.9 27.1 12.9c.8 .4 1.5 .7 2.1 1 2.8 1.4 4.7 2.3 5.5 3.6 .9 1.9 .9 9.9-2.4 19.1-3.3 9.3-19.1 17.7-26.7 18.8zM448 96c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320zM148.1 393.9L64 416 86.5 333.8c-13.9-24-21.2-51.3-21.2-79.3 .1-87.4 71.2-158.5 158.6-158.5 42.4 0 82.2 16.5 112.2 46.5 29.9 30 47.9 69.8 47.9 112.2 0 87.4-72.7 158.5-160.1 158.5-26.6 0-52.7-6.7-75.8-19.3z"/></svg> +966 54 850 4018
                 </a>
                 <a href="index.html" class="back-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><path fill="currentColor" d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg> الرئيسية
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><path fill="currentColor" d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg> Home
                 </a>
             </div>
         </div>
     </header>
 
     <!-- ============================================================
-    القسم الرئيسي (Hero)
+    Hero Section
     ============================================================ -->
     <section class="hero" id="hero">
         <div class="container">
             <div class="hero-content" data-aos="fade-up" data-aos-duration="800">
                 <div class="hero-badges">
-                    <span class="hero-badge"><i class="fas fa-hospital"></i> 39 خدمة صحية</span>
-                    <span class="hero-badge"><i class="fas fa-stethoscope"></i> تخصصات متنوعة</span>
-                    <span class="hero-badge"><i class="fas fa-user-md"></i> كوادر أكاديمية</span>
-                    <span class="hero-badge"><i class="fas fa-graduation-cap"></i> تدريب سريري</span>
+                    <span class="hero-badge"><i class="fas fa-hospital"></i> 39 Health Services</span>
+                    <span class="hero-badge"><i class="fas fa-stethoscope"></i> Diverse Specialties</span>
+                    <span class="hero-badge"><i class="fas fa-user-md"></i> Academic Staff</span>
+                    <span class="hero-badge"><i class="fas fa-graduation-cap"></i> Clinical Training</span>
                 </div>
-                <h1>الخدمات الأكاديمية في <span>العلوم الصحية</span></h1>
+                <h1>Health Sciences <span>Academic Services</span></h1>
                 <p>
-                    خدمات أكاديمية متخصصة في المجالات الصحية والتمريضية، تشمل تحليل الحالات السريرية،
-                    خطط الرعاية التمريضية، التوثيق السريري، التقارير الصحية، والعروض التقديمية العلمية،
-                    بأيدي خبراء أكاديميين وممارسين محترفين في المجال الصحي.
+                    Specialized academic services in health and nursing fields, including clinical case analysis,
+                    nursing care plans, clinical documentation, health reports, and scientific presentations,
+                    delivered by academic experts and professional practitioners in the healthcare field.
                 </p>
                 <div class="hero-actions">
                     <a href="#services-grid-section" class="btn-primary">
-                        <i class="fas fa-search"></i> استكشف الخدمات
+                        <i class="fas fa-search"></i> Explore Services
                     </a>
                     <a href="#services-grid-section" class="btn-secondary">
-                        <i class="fas fa-filter"></i> تصفية
+                        <i class="fas fa-filter"></i> Filter
                     </a>
                 </div>
             </div>
@@ -1576,133 +1544,133 @@
     </section>
 
     <!-- ============================================================
-    صفحة الخدمات (القائمة)
+    Services Page (List)
     ============================================================ -->
     <div id="servicesPage">
-        <!-- فلتر الخدمات -->
+        <!-- Filter Section -->
         <section class="filter-section">
             <div class="container">
                 <div class="filter-wrapper" id="filterWrapper">
                     <button class="filter-btn active" data-filter="all">
-                        <i class="fas fa-th"></i> الكل <span class="count" id="totalCount">0</span>
+                        <i class="fas fa-th"></i> All <span class="count" id="totalCount">0</span>
                     </button>
                     <button class="filter-btn" data-filter="clinical">
-                        <i class="fas fa-notes-medical"></i> سريرية <span class="count" id="clinicalCount">0</span>
+                        <i class="fas fa-notes-medical"></i> Clinical <span class="count" id="clinicalCount">0</span>
                     </button>
                     <button class="filter-btn" data-filter="nursing">
-                        <i class="fas fa-clipboard-list"></i> تمريضية <span class="count" id="nursingCount">0</span>
+                        <i class="fas fa-clipboard-list"></i> Nursing <span class="count" id="nursingCount">0</span>
                     </button>
                     <button class="filter-btn" data-filter="documentation">
-                        <i class="fas fa-pen-fancy"></i> توثيق <span class="count" id="documentationCount">0</span>
+                        <i class="fas fa-pen-fancy"></i> Documentation <span class="count" id="documentationCount">0</span>
                     </button>
                     <button class="filter-btn" data-filter="reports">
-                        <i class="fas fa-file-medical"></i> تقارير <span class="count" id="reportsCount">0</span>
+                        <i class="fas fa-file-medical"></i> Reports <span class="count" id="reportsCount">0</span>
                     </button>
                     <button class="filter-btn" data-filter="presentations">
-                        <i class="fas fa-presentation"></i> عروض <span class="count" id="presentationsCount">0</span>
+                        <i class="fas fa-presentation"></i> Presentations <span class="count" id="presentationsCount">0</span>
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- شبكة الخدمات -->
+        <!-- Services Grid -->
         <section class="services-section" id="services-grid-section">
             <div class="container">
                 <div class="section-header" data-aos="fade-up" data-aos-duration="600">
-                    <h2>جميع <span>الخدمات الصحية</span></h2>
-                    <p>اختر الخدمة المناسبة لاحتياجاتك الأكاديمية في المجال الصحي</p>
+                    <h2>All <span>Health Services</span></h2>
+                    <p>Choose the service that suits your academic needs in the health field</p>
                 </div>
 
                 <div class="services-grid" id="servicesGrid">
-                    <!-- سيتم إدراج الخدمات عبر JavaScript -->
+                    <!-- Services will be rendered via JavaScript -->
                 </div>
             </div>
         </section>
     </div>
 
     <!-- ============================================================
-    صفحة تفاصيل الخدمة (Service Details Page)
+    Service Details Page
     ============================================================ -->
     <div class="service-details-page" id="serviceDetailsPage">
         <div class="container">
             <button class="back-to-services" onclick="showServicesPage()">
-                <i class="fas fa-arrow-right"></i> العودة إلى جميع الخدمات
+                <i class="fas fa-arrow-left"></i> Back to All Services
             </button>
 
             <div class="details-container" id="detailsContainer">
-                <!-- سيتم ملء المحتوى عبر JavaScript -->
+                <!-- Content will be rendered via JavaScript -->
             </div>
         </div>
     </div>
 
     <!-- ============================================================
-    الشروط والأحكام
+    Terms & Conditions
     ============================================================ -->
     <section class="terms-section" id="terms">
         <div class="container">
             <div class="section-header" data-aos="fade-up" data-aos-duration="600">
-                <h2>الشروط <span>والأحكام</span></h2>
-                <p>نلتزم بتقديم خدماتنا الصحية وفق أعلى معايير الشفافية والاحترافية الأكاديمية</p>
+                <h2>Terms <span>& Conditions</span></h2>
+                <p>We are committed to providing our health services with the highest standards of transparency and academic professionalism</p>
             </div>
 
             <div class="terms-grid">
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
                     <div class="icon"><i class="fas fa-file-signature"></i></div>
-                    <h3>سياسة طلب الخدمات الصحية</h3>
+                    <h3>Health Service Request Policy</h3>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> دقة البيانات السريرية</li>
-                        <li><i class="fas fa-check-circle"></i> اكتمال المرفقات الطبية</li>
-                        <li><i class="fas fa-check-circle"></i> اعتماد الطلب الصحي</li>
+                        <li><i class="fas fa-check-circle"></i> Clinical data accuracy</li>
+                        <li><i class="fas fa-check-circle"></i> Complete medical attachments</li>
+                        <li><i class="fas fa-check-circle"></i> Request approval</li>
                     </ul>
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
                     <div class="icon"><i class="fas fa-credit-card"></i></div>
-                    <h3>سياسة الدفع والاسترجاع</h3>
+                    <h3>Payment & Refund Policy</h3>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> آلية الدفع</li>
-                        <li><i class="fas fa-check-circle"></i> إلغاء الطلب</li>
-                        <li><i class="fas fa-check-circle"></i> استرجاع المبلغ</li>
+                        <li><i class="fas fa-check-circle"></i> Payment mechanism</li>
+                        <li><i class="fas fa-check-circle"></i> Request cancellation</li>
+                        <li><i class="fas fa-check-circle"></i> Refund process</li>
                     </ul>
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
                     <div class="icon"><i class="fas fa-clock"></i></div>
-                    <h3>سياسة التسليم والمواعيد</h3>
+                    <h3>Delivery & Timeline Policy</h3>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> الالتزام بالمواعيد</li>
-                        <li><i class="fas fa-check-circle"></i> صيغ التسليم</li>
-                        <li><i class="fas fa-check-circle"></i> التأخير</li>
+                        <li><i class="fas fa-check-circle"></i> Commitment to deadlines</li>
+                        <li><i class="fas fa-check-circle"></i> Delivery formats</li>
+                        <li><i class="fas fa-check-circle"></i> Delay handling</li>
                     </ul>
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
                     <div class="icon"><i class="fas fa-edit"></i></div>
-                    <h3>سياسة التعديلات</h3>
+                    <h3>Revision Policy</h3>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> تعديلات مجانية</li>
-                        <li><i class="fas fa-check-circle"></i> فترة الطلب</li>
-                        <li><i class="fas fa-check-circle"></i> طلبات إضافية</li>
+                        <li><i class="fas fa-check-circle"></i> Free revisions</li>
+                        <li><i class="fas fa-check-circle"></i> Request period</li>
+                        <li><i class="fas fa-check-circle"></i> Additional requests</li>
                     </ul>
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
                     <div class="icon"><i class="fas fa-lock"></i></div>
-                    <h3>الخصوصية وسرية المعلومات</h3>
+                    <h3>Privacy & Confidentiality</h3>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> حماية البيانات الصحية</li>
-                        <li><i class="fas fa-check-circle"></i> ملكية العمل</li>
-                        <li><i class="fas fa-check-circle"></i> إتلاف الملفات</li>
+                        <li><i class="fas fa-check-circle"></i> Health data protection</li>
+                        <li><i class="fas fa-check-circle"></i> Work ownership</li>
+                        <li><i class="fas fa-check-circle"></i> File destruction</li>
                     </ul>
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
                     <div class="icon"><i class="fas fa-info-circle"></i></div>
-                    <h3>طبيعة الخدمات الصحية</h3>
+                    <h3>Nature of Health Services</h3>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> الهدف الأكاديمي والتعليمي</li>
-                        <li><i class="fas fa-check-circle"></i> حدود الاستخدام</li>
-                        <li><i class="fas fa-check-circle"></i> الاستشارة الطبية</li>
+                        <li><i class="fas fa-check-circle"></i> Academic & educational purpose</li>
+                        <li><i class="fas fa-check-circle"></i> Usage limitations</li>
+                        <li><i class="fas fa-check-circle"></i> Medical consultation</li>
                     </ul>
                 </div>
             </div>
@@ -1710,12 +1678,12 @@
     </section>
 
     <!-- ============================================================
-    الفوتر
+    Footer
     ============================================================ -->
     <footer class="footer">
         <div class="container">
             <div class="footer-brand">
-                منصة <span>ارتقاء</span> 🏥
+                Irteqa <span>Platform</span> 🏥
             </div>
             <div class="footer-contact">
                 <a href="https://t.me/edu_shehap" target="_blank" class="telegram">
@@ -1726,942 +1694,941 @@
                 </a>
             </div>
             <div class="footer-links">
-                <a href="index.html">الرئيسية</a>
-                <a href="dmca.html">سياسات وأحكام</a>
-                <a href="privacy-policy.html">سياسة الخصوصية</a>
-                <a href="terms-of-service.html">شروط الاستخدام</a>
+                <a href="index.html">Home</a>
+                <a href="dmca.html">Policies</a>
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="terms-of-service.html">Terms of Service</a>
             </div>
             <div class="copyright">
-                &copy; 2026 منصة ارتقاء. جميع الحقوق محفوظة.
+                &copy; 2026 Irteqa Platform. All Rights Reserved.
             </div>
         </div>
     </footer>
 
     <!-- ============================================================
-    جافا سكريبت
+    JavaScript
     ============================================================ -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // ============================================================
-        // بيانات الخدمات
+        // Services Data - All 39 Services
         // ============================================================
         const services = [
-            // ========== القسم: تحليل الحالات السريرية ==========
+            // ========== Clinical Case Analysis Services ==========
             {
                 id: 1,
-                name: 'الحالات السريرية العامة',
+                name: 'General Clinical Cases',
                 enName: 'General Clinical Cases',
                 icon: 'fa-heartbeat',
                 category: 'clinical',
-                categoryLabel: 'سريرية',
+                categoryLabel: 'Clinical',
                 emoji: '🩺',
-                description: 'خدمة متخصصة في تحليل الحالات السريرية الشاملة، تشمل دراسة الأعراض، التشخيص التفريقي، خطط العلاج، والمتابعة وفق أحدث المعايير الطبية.',
+                description: 'A specialized service for comprehensive clinical case analysis, including symptom study, differential diagnosis, treatment plans, and follow-up according to the latest medical standards.',
                 includes: [
-                    'تحليل شامل للحالة السريرية',
-                    'دراسة التاريخ المرضي',
-                    'التشخيص التفريقي',
-                    'خطط العلاج والمتابعة',
-                    'تقييم النتائج'
+                    'Comprehensive clinical case analysis',
+                    'Medical history review',
+                    'Differential diagnosis',
+                    'Treatment and follow-up plans',
+                    'Outcome evaluation'
                 ],
                 gallery: ['📋', '📊', '🩺', '💊'],
-                requestTypes: ['تحليل حالة', 'مراجعة تشخيص', 'خطة علاج', 'تقييم'],
+                requestTypes: ['Case Analysis', 'Diagnosis Review', 'Treatment Plan', 'Evaluation'],
                 faq: [
-                    { q: 'ما هي مدة تحليل الحالة؟', a: 'تتراوح مدة تحليل الحالة بين 3-5 أيام عمل حسب تعقيد الحالة.' },
-                    { q: 'هل تشمل الخدمة التوصيات العلاجية؟', a: 'نعم، تتضمن الخدمة توصيات علاجية مبنية على تحليل الحالة والمعايير الطبية.' },
-                    { q: 'ما هي متطلبات تقديم الحالة؟', a: 'تحتاج إلى تقديم التاريخ الطبي، نتائج الفحوصات، والأشعة إن وجدت.' }
+                    { q: 'How long does case analysis take?', a: 'Case analysis typically takes 3-5 working days depending on case complexity.' },
+                    { q: 'Does the service include treatment recommendations?', a: 'Yes, the service includes treatment recommendations based on case analysis and medical standards.' },
+                    { q: 'What are the requirements for submitting a case?', a: 'You need to provide medical history, test results, and imaging if available.' }
                 ]
             },
             {
                 id: 2,
-                name: 'حالات الطوارئ',
+                name: 'Emergency Cases',
                 enName: 'Emergency Cases',
                 icon: 'fa-ambulance',
                 category: 'clinical',
-                categoryLabel: 'سريرية',
+                categoryLabel: 'Clinical',
                 emoji: '🚑',
-                description: 'خدمة متخصصة في تحليل حالات الطوارئ والإسعاف، تشمل تقييم الحالة الحرجة، الأولويات، خطط التدخل العاجل، والمتابعة.',
+                description: 'A specialized service for analyzing emergency and first aid cases, including critical condition assessment, prioritization, emergency intervention plans, and follow-up.',
                 includes: [
-                    'تقييم الحالة الحرجة',
-                    'تحديد أولويات التدخل',
-                    'خطط التدخل العاجل',
-                    'إجراءات الإسعاف',
-                    'متابعة الحالة'
+                    'Critical condition assessment',
+                    'Intervention priority setting',
+                    'Emergency intervention plans',
+                    'First aid procedures',
+                    'Case follow-up'
                 ],
                 gallery: ['🚑', '💉', '🩸', '⚡'],
-                requestTypes: ['تحليل طوارئ', 'خطة تدخل', 'تقييم أولي', 'مراجعة'],
+                requestTypes: ['Emergency Analysis', 'Intervention Plan', 'Initial Assessment', 'Review'],
                 faq: [
-                    { q: 'ما هي سرعة الاستجابة للطلب؟', a: 'يتم التعامل مع طلبات الطوارئ خلال 24 ساعة.' },
-                    { q: 'هل تشمل الحالات الصدمات؟', a: 'نعم، تشمل جميع حالات الطوارئ بما فيها الصدمات والحوادث.' }
+                    { q: 'What is the response time for requests?', a: 'Emergency requests are handled within 24 hours.' },
+                    { q: 'Do you handle trauma cases?', a: 'Yes, all emergency cases including trauma and accidents are included.' }
                 ]
             },
             {
                 id: 3,
-                name: 'حالات الصحة المجتمعية',
+                name: 'Community Health Cases',
                 enName: 'Community Health Cases',
                 icon: 'fa-users',
                 category: 'clinical',
-                categoryLabel: 'سريرية',
+                categoryLabel: 'Clinical',
                 emoji: '🏥',
-                description: 'خدمة متخصصة في تحليل حالات الصحة العامة والمجتمع، تشمل دراسة العوامل المؤثرة، خطط التدخل المجتمعي، والتقييم الصحي.',
+                description: 'A specialized service for analyzing public health and community cases, including studying influencing factors, community intervention plans, and health assessment.',
                 includes: [
-                    'تحليل العوامل الصحية المجتمعية',
-                    'دراسة المؤشرات الصحية',
-                    'خطط التدخل المجتمعي',
-                    'برامج التوعية',
-                    'تقييم الصحة العامة'
+                    'Community health factor analysis',
+                    'Health indicators study',
+                    'Community intervention plans',
+                    'Awareness programs',
+                    'Public health assessment'
                 ],
                 gallery: ['🏥', '👨‍👩‍👧‍👦', '📊', '🌍'],
-                requestTypes: ['تحليل صحي', 'خطة مجتمعية', 'تقييم', 'برنامج توعية'],
+                requestTypes: ['Health Analysis', 'Community Plan', 'Assessment', 'Awareness Program'],
                 faq: [
-                    { q: 'ما هي مجالات الصحة المجتمعية؟', a: 'تشمل الصحة العامة، التوعية الصحية، الوقاية، وتحسين جودة الحياة.' },
-                    { q: 'هل تشمل الخدمة برامج التوعية؟', a: 'نعم، تتضمن تصميم برامج توعية صحية للمجتمع.' }
+                    { q: 'What areas does community health cover?', a: 'Includes public health, health awareness, prevention, and quality of life improvement.' },
+                    { q: 'Does the service include awareness programs?', a: 'Yes, it includes designing health awareness programs for the community.' }
                 ]
             },
             {
                 id: 4,
-                name: 'حالات الطب النفسي',
+                name: 'Psychiatric Cases',
                 enName: 'Psychiatric Cases',
                 icon: 'fa-brain',
                 category: 'clinical',
-                categoryLabel: 'سريرية',
+                categoryLabel: 'Clinical',
                 emoji: '🧠',
-                description: 'خدمة متخصصة في تحليل الحالات النفسية والعصبية، تشمل التقييم النفسي، التشخيص، خطط العلاج النفسي، والمتابعة.',
+                description: 'A specialized service for analyzing psychiatric and neurological cases, including psychological assessment, diagnosis, psychiatric treatment plans, and follow-up.',
                 includes: [
-                    'تقييم نفسي شامل',
-                    'التشخيص النفسي',
-                    'خطط العلاج النفسي',
-                    'المتابعة النفسية',
-                    'الدعم النفسي'
+                    'Comprehensive psychological assessment',
+                    'Psychiatric diagnosis',
+                    'Psychiatric treatment plans',
+                    'Psychological follow-up',
+                    'Psychological support'
                 ],
                 gallery: ['🧠', '💆', '📋', '💊'],
-                requestTypes: ['تقييم نفسي', 'خطة علاج', 'تشخيص', 'متابعة'],
+                requestTypes: ['Psychological Assessment', 'Treatment Plan', 'Diagnosis', 'Follow-up'],
                 faq: [
-                    { q: 'ما هي أنواع الحالات النفسية المشمولة؟', a: 'تشمل القلق، الاكتئاب، الاضطرابات النفسية المختلفة.' },
-                    { q: 'هل تشمل الخدمة الدعم النفسي؟', a: 'نعم، تتضمن الخدمة الدعم النفسي والإرشاد.' }
+                    { q: 'What types of psychiatric cases are included?', a: 'Includes anxiety, depression, and various psychiatric disorders.' },
+                    { q: 'Does the service include psychological support?', a: 'Yes, the service includes psychological support and counseling.' }
                 ]
             },
             {
                 id: 5,
-                name: 'حالات التوليد والقبالة',
+                name: 'Midwifery Cases',
                 enName: 'Midwifery Cases',
                 icon: 'fa-baby',
                 category: 'clinical',
-                categoryLabel: 'سريرية',
+                categoryLabel: 'Clinical',
                 emoji: '🤱',
-                description: 'خدمة متخصصة في تحليل حالات الحمل والولادة، تشمل رعاية الأمومة، متابعة الحمل، خطط الولادة، ورعاية المولود.',
+                description: 'A specialized service for analyzing pregnancy and childbirth cases, including maternal care, pregnancy monitoring, delivery plans, and newborn care.',
                 includes: [
-                    'رعاية الأمومة',
-                    'متابعة الحمل',
-                    'خطط الولادة',
-                    'رعاية المولود',
-                    'دعم الأم'
+                    'Maternal care',
+                    'Pregnancy monitoring',
+                    'Delivery plans',
+                    'Newborn care',
+                    'Maternal support'
                 ],
                 gallery: ['🤱', '👶', '🩺', '💝'],
-                requestTypes: ['رعاية حمل', 'خطة ولادة', 'متابعة', 'استشارة'],
+                requestTypes: ['Pregnancy Care', 'Delivery Plan', 'Follow-up', 'Consultation'],
                 faq: [
-                    { q: 'ما هي خدمات رعاية الأمومة؟', a: 'تشمل متابعة الحمل، التغذية، التثقيف الصحي، والدعم النفسي.' },
-                    { q: 'هل تشمل الخدمة رعاية المولود؟', a: 'نعم، تشمل رعاية المولود والتغذية والمتابعة.' }
+                    { q: 'What are the maternal care services?', a: 'Includes pregnancy monitoring, nutrition, health education, and psychological support.' },
+                    { q: 'Does the service include newborn care?', a: 'Yes, includes newborn care, nutrition, and follow-up.' }
                 ]
             },
             {
                 id: 6,
-                name: 'حالات طب الأطفال',
+                name: 'Pediatric Cases',
                 enName: 'Pediatric Cases',
                 icon: 'fa-child',
                 category: 'clinical',
-                categoryLabel: 'سريرية',
+                categoryLabel: 'Clinical',
                 emoji: '👶',
-                description: 'خدمة متخصصة في تحليل حالات الأطفال والرضع، تشمل التقييم الطبي، التشخيص، خطط العلاج، ومتابعة النمو.',
+                description: 'A specialized service for analyzing children and infant cases, including medical assessment, diagnosis, treatment plans, and growth monitoring.',
                 includes: [
-                    'تقييم صحة الطفل',
-                    'تشخيص الحالات',
-                    'خطط العلاج',
-                    'متابعة النمو',
-                    'تغذية الأطفال'
+                    'Child health assessment',
+                    'Case diagnosis',
+                    'Treatment plans',
+                    'Growth monitoring',
+                    'Child nutrition'
                 ],
                 gallery: ['👶', '🍼', '🩺', '📈'],
-                requestTypes: ['تقييم طفل', 'خطة علاج', 'متابعة نمو', 'استشارة'],
+                requestTypes: ['Child Assessment', 'Treatment Plan', 'Growth Monitoring', 'Consultation'],
                 faq: [
-                    { q: 'ما هي الأعمار المشمولة؟', a: 'تشمل الخدمة الأطفال من الولادة حتى 18 عاماً.' },
-                    { q: 'هل تشمل الخدمة التغذية؟', a: 'نعم، تشمل استشارات التغذية للأطفال.' }
+                    { q: 'What age range is covered?', a: 'The service covers children from birth to 18 years of age.' },
+                    { q: 'Does the service include nutrition?', a: 'Yes, includes child nutrition consultations.' }
                 ]
             },
             {
                 id: 7,
-                name: 'حالات تمريض الكبار',
+                name: 'Adult Nursing Cases',
                 enName: 'Adult Nursing Cases',
                 icon: 'fa-user-check',
                 category: 'clinical',
-                categoryLabel: 'سريرية',
+                categoryLabel: 'Clinical',
                 emoji: '👤',
-                description: 'خدمة متخصصة في تحليل حالات تمريض البالغين، تشمل التقييم التمريضي، خطط الرعاية، التدخلات، ومتابعة المرضى.',
+                description: 'A specialized service for analyzing adult nursing cases, including nursing assessment, care plans, interventions, and patient follow-up.',
                 includes: [
-                    'تقييم تمريضي شامل',
-                    'خطط رعاية تمريضية',
-                    'التدخلات التمريضية',
-                    'متابعة المريض',
-                    'تثقيف صحي'
+                    'Comprehensive nursing assessment',
+                    'Nursing care plans',
+                    'Nursing interventions',
+                    'Patient follow-up',
+                    'Health education'
                 ],
                 gallery: ['👤', '🩺', '📋', '💊'],
-                requestTypes: ['تقييم تمريضي', 'خطة رعاية', 'تدخلات', 'متابعة'],
+                requestTypes: ['Nursing Assessment', 'Care Plan', 'Interventions', 'Follow-up'],
                 faq: [
-                    { q: 'ما هي مجالات تمريض الكبار؟', a: 'تشمل الرعاية التمريضية للمرضى البالغين في جميع التخصصات.' },
-                    { q: 'هل تشمل الخدمة التثقيف الصحي؟', a: 'نعم، تشمل تثقيف المريض والعائلة حول الرعاية.' }
+                    { q: 'What are the areas of adult nursing?', a: 'Includes nursing care for adult patients across all specialties.' },
+                    { q: 'Does the service include health education?', a: 'Yes, includes patient and family education about care.' }
                 ]
             },
 
-            // ========== القسم: خطط الرعاية التمريضية ==========
+            // ========== Nursing Care Planning Services ==========
             {
                 id: 8,
-                name: 'خطط الرعاية التمريضية',
+                name: 'Nursing Care Plans',
                 enName: 'Nursing Care Plans',
                 icon: 'fa-file-medical',
                 category: 'nursing',
-                categoryLabel: 'تمريضية',
+                categoryLabel: 'Nursing',
                 emoji: '📋',
-                description: 'خدمة متخصصة في إعداد وتطوير خطط الرعاية التمريضية المتكاملة، تشمل التقييم، التشخيص، التدخلات، وتقييم النتائج.',
+                description: 'A specialized service for preparing and developing comprehensive nursing care plans, including assessment, diagnosis, interventions, and outcome evaluation.',
                 includes: [
-                    'تقييم تمريضي شامل',
-                    'تشخيص تمريضي',
-                    'خطط تدخل تمريضي',
-                    'تقييم النتائج',
-                    'توثيق الرعاية'
+                    'Comprehensive nursing assessment',
+                    'Nursing diagnosis',
+                    'Nursing intervention plans',
+                    'Outcome evaluation',
+                    'Care documentation'
                 ],
                 gallery: ['📋', '📊', '🩺', '✅'],
-                requestTypes: ['خطة رعاية', 'تقييم', 'تحديث خطة', 'مراجعة'],
+                requestTypes: ['Care Plan', 'Assessment', 'Plan Update', 'Review'],
                 faq: [
-                    { q: 'ما هي مكونات خطة الرعاية؟', a: 'تتضمن التقييم، التشخيص، الأهداف، التدخلات، والتقييم.' },
-                    { q: 'هل تشمل الخدمة تحديث الخطط؟', a: 'نعم، تشمل مراجعة وتحديث خطط الرعاية حسب الحاجة.' }
+                    { q: 'What are the components of a care plan?', a: 'Includes assessment, diagnosis, goals, interventions, and evaluation.' },
+                    { q: 'Does the service include plan updates?', a: 'Yes, includes reviewing and updating care plans as needed.' }
                 ]
             },
             {
                 id: 9,
-                name: 'التشخيص التمريضي',
+                name: 'Nursing Diagnosis',
                 enName: 'Nursing Diagnosis',
                 icon: 'fa-diagnoses',
                 category: 'nursing',
-                categoryLabel: 'تمريضية',
+                categoryLabel: 'Nursing',
                 emoji: '🔬',
-                description: 'خدمة متخصصة في تحليل وتشخيص الحالات التمريضية، تشمل تحديد المشكلات الصحية، تحليل الأعراض، وتحديد التشخيص التمريضي.',
+                description: 'A specialized service for analyzing and diagnosing nursing cases, including identifying health problems, symptom analysis, and determining nursing diagnosis.',
                 includes: [
-                    'تحليل الأعراض',
-                    'تحديد المشكلات الصحية',
-                    'التشخيص التمريضي',
-                    'تصنيف الحالات',
-                    'توثيق التشخيص'
+                    'Symptom analysis',
+                    'Health problem identification',
+                    'Nursing diagnosis',
+                    'Case classification',
+                    'Diagnosis documentation'
                 ],
                 gallery: ['🔬', '📋', '🩺', '📊'],
-                requestTypes: ['تشخيص', 'تحليل', 'مراجعة تشخيص', 'تصنيف'],
+                requestTypes: ['Diagnosis', 'Analysis', 'Diagnosis Review', 'Classification'],
                 faq: [
-                    { q: 'ما هو التشخيص التمريضي؟', a: 'هو تحديد المشكلات الصحية التي يمكن للممرض معالجتها بشكل مستقل.' },
-                    { q: 'ما هي أنواع التشخيص التمريضي؟', a: 'تشمل التشخيص الفعلي، المحتمل، والرفاهي.' }
+                    { q: 'What is nursing diagnosis?', a: 'It is the identification of health problems that nurses can independently treat.' },
+                    { q: 'What are the types of nursing diagnosis?', a: 'Includes actual, potential, and wellness diagnoses.' }
                 ]
             },
             {
                 id: 10,
-                name: 'التدخلات التمريضية',
+                name: 'Nursing Interventions',
                 enName: 'Nursing Interventions',
                 icon: 'fa-hand-holding-heart',
                 category: 'nursing',
-                categoryLabel: 'تمريضية',
+                categoryLabel: 'Nursing',
                 emoji: '💊',
-                description: 'خدمة متخصصة في تطوير خطط التدخل التمريضي، تشمل تحديد الإجراءات المناسبة، تنفيذ الخطط، وتقييم الفعالية.',
+                description: 'A specialized service for developing nursing intervention plans, including identifying appropriate procedures, implementing plans, and evaluating effectiveness.',
                 includes: [
-                    'تحديد التدخلات المناسبة',
-                    'تطوير خطط التدخل',
-                    'تنفيذ الخطط',
-                    'تقييم الفعالية',
-                    'تعديل الخطط'
+                    'Identifying appropriate interventions',
+                    'Developing intervention plans',
+                    'Implementing plans',
+                    'Effectiveness evaluation',
+                    'Plan modification'
                 ],
                 gallery: ['💊', '🩺', '📋', '✅'],
-                requestTypes: ['خطة تدخل', 'تنفيذ', 'تقييم', 'تعديل'],
+                requestTypes: ['Intervention Plan', 'Implementation', 'Evaluation', 'Modification'],
                 faq: [
-                    { q: 'ما هي أنواع التدخلات التمريضية؟', a: 'تشمل التدخلات المباشرة، غير المباشرة، والوقائية.' },
-                    { q: 'كيف يتم تقييم التدخلات؟', a: 'يتم تقييم التدخلات من خلال متابعة استجابة المريض ونتائج الرعاية.' }
+                    { q: 'What types of nursing interventions are there?', a: 'Includes direct, indirect, and preventive interventions.' },
+                    { q: 'How are interventions evaluated?', a: 'Interventions are evaluated through patient response monitoring and care outcomes.' }
                 ]
             },
             {
                 id: 11,
-                name: 'نتائج المرضى',
+                name: 'Patient Outcomes',
                 enName: 'Patient Outcomes',
                 icon: 'fa-chart-simple',
                 category: 'nursing',
-                categoryLabel: 'تمريضية',
+                categoryLabel: 'Nursing',
                 emoji: '📊',
-                description: 'خدمة متخصصة في تقييم ومتابعة نتائج المرضى، تشمل قياس المؤشرات، تحليل النتائج، وتوثيق التقدم.',
+                description: 'A specialized service for evaluating and monitoring patient outcomes, including measuring indicators, outcome analysis, and progress documentation.',
                 includes: [
-                    'قياس المؤشرات الصحية',
-                    'تحليل النتائج',
-                    'توثيق التقدم',
-                    'تقييم الرعاية',
-                    'تحسين الجودة'
+                    'Health indicator measurement',
+                    'Outcome analysis',
+                    'Progress documentation',
+                    'Care evaluation',
+                    'Quality improvement'
                 ],
                 gallery: ['📊', '📈', '📋', '✅'],
-                requestTypes: ['تقييم نتائج', 'تحليل', 'توثيق', 'تحسين'],
+                requestTypes: ['Outcome Evaluation', 'Analysis', 'Documentation', 'Improvement'],
                 faq: [
-                    { q: 'ما هي مؤشرات النتائج؟', a: 'تشمل المؤشرات السريرية، الوظيفية، ونوعية الحياة.' },
-                    { q: 'كيف يتم تحسين النتائج؟', a: 'من خلال تحليل البيانات وتطبيق خطط التحسين المستمر.' }
+                    { q: 'What are outcome indicators?', a: 'Include clinical, functional, and quality of life indicators.' },
+                    { q: 'How are outcomes improved?', a: 'Through data analysis and implementing continuous improvement plans.' }
                 ]
             },
 
-            // ========== القسم: التوثيق السريري ==========
+            // ========== Clinical Training & Documentation Services ==========
             {
                 id: 12,
-                name: 'الكشوفات السريرية',
+                name: 'Clinical Sheets',
                 enName: 'Clinical Sheets',
                 icon: 'fa-clipboard',
                 category: 'documentation',
-                categoryLabel: 'توثيق',
+                categoryLabel: 'Documentation',
                 emoji: '📄',
-                description: 'خدمة متخصصة في إعداد وتنظيم الكشوفات السريرية، تشمل تصميم النماذج، تنظيم البيانات، وتوحيد الوثائق.',
+                description: 'A specialized service for preparing and organizing clinical sheets, including form design, data organization, and document standardization.',
                 includes: [
-                    'تصميم النماذج السريرية',
-                    'تنظيم البيانات',
-                    'توحيد الوثائق',
-                    'مراجعة الكشوفات',
-                    'تحديث النماذج'
+                    'Clinical form design',
+                    'Data organization',
+                    'Document standardization',
+                    'Sheet review',
+                    'Form updates'
                 ],
                 gallery: ['📄', '📋', '✏️', '📊'],
-                requestTypes: ['تصميم نموذج', 'مراجعة', 'تحديث', 'تنظيم'],
+                requestTypes: ['Form Design', 'Review', 'Update', 'Organization'],
                 faq: [
-                    { q: 'ما هي أنواع الكشوفات السريرية؟', a: 'تشمل كشوفات التمريض، كشوفات المتابعة، وكشوفات التقييم.' },
-                    { q: 'كيف يتم توحيد الكشوفات؟', a: 'يتم توحيدها وفق المعايير الصحية المعتمدة.' }
+                    { q: 'What types of clinical sheets are available?', a: 'Include nursing sheets, follow-up sheets, and assessment sheets.' },
+                    { q: 'How are sheets standardized?', a: 'They are standardized according to approved health standards.' }
                 ]
             },
             {
                 id: 13,
-                name: 'سجل الأدوية',
+                name: 'Drug Logbook',
                 enName: 'Drug Logbook',
                 icon: 'fa-pills',
                 category: 'documentation',
-                categoryLabel: 'توثيق',
+                categoryLabel: 'Documentation',
                 emoji: '💊',
-                description: 'خدمة متخصصة في إدارة وتوثيق الأدوية، تشمل تسجيل الأدوية، متابعة الجرعات، وتوثيق التفاعلات الدوائية.',
+                description: 'A specialized service for medication management and documentation, including drug recording, dosage monitoring, and drug interaction documentation.',
                 includes: [
-                    'تسجيل الأدوية',
-                    'متابعة الجرعات',
-                    'توثيق التفاعلات الدوائية',
-                    'مراجعة الأدوية',
-                    'تحديث السجلات'
+                    'Medication recording',
+                    'Dosage monitoring',
+                    'Drug interaction documentation',
+                    'Medication review',
+                    'Record updates'
                 ],
                 gallery: ['💊', '📋', '💉', '📊'],
-                requestTypes: ['تسجيل أدوية', 'مراجعة', 'تحديث', 'تحليل'],
+                requestTypes: ['Medication Recording', 'Review', 'Update', 'Analysis'],
                 faq: [
-                    { q: 'ما هي أهمية سجل الأدوية؟', a: 'يساعد في متابعة الأدوية وتجنب التداخلات الدوائية.' },
-                    { q: 'هل تشمل الخدمة الأدوية الممنوعة؟', a: 'نعم، تشمل مراقبة الأدوية الممنوعة والمنبهة.' }
+                    { q: 'Why is a drug logbook important?', a: 'It helps track medications and avoid drug interactions.' },
+                    { q: 'Does the service include controlled substances?', a: 'Yes, includes monitoring of controlled and stimulant medications.' }
                 ]
             },
             {
                 id: 14,
-                name: 'دفتر الانعكاس',
+                name: 'Reflection Journal',
                 enName: 'Reflection Journal',
                 icon: 'fa-book-open',
                 category: 'documentation',
-                categoryLabel: 'توثيق',
+                categoryLabel: 'Documentation',
                 emoji: '📖',
-                description: 'خدمة متخصصة في كتابة وتطوير التأملات السريرية، تشمل توثيق التجارب، تحليل الممارسات، وتطوير المهارات.',
+                description: 'A specialized service for writing and developing clinical reflections, including experience documentation, practice analysis, and skill development.',
                 includes: [
-                    'كتابة التأملات',
-                    'تحليل الممارسات',
-                    'تطوير المهارات',
-                    'توثيق التجارب',
-                    'مراجعة الأداء'
+                    'Reflection writing',
+                    'Practice analysis',
+                    'Skill development',
+                    'Experience documentation',
+                    'Performance review'
                 ],
                 gallery: ['📖', '✏️', '📋', '💡'],
-                requestTypes: ['كتابة تأمل', 'مراجعة', 'تحليل', 'تطوير'],
+                requestTypes: ['Reflection Writing', 'Review', 'Analysis', 'Development'],
                 faq: [
-                    { q: 'ما هو دفتر الانعكاس؟', a: 'هو أداة لتوثيق التأملات السريرية وتطوير الممارسة المهنية.' },
-                    { q: 'كيف يساعد في التطوير المهني؟', a: 'يساعد في تحليل الممارسات وتحديد مجالات التحسين.' }
+                    { q: 'What is a reflection journal?', a: 'It is a tool for documenting clinical reflections and developing professional practice.' },
+                    { q: 'How does it help in professional development?', a: 'It helps analyze practices and identify areas for improvement.' }
                 ]
             },
             {
                 id: 15,
-                name: 'السجلات التمريضية',
+                name: 'Nursing Records',
                 enName: 'Nursing Records',
                 icon: 'fa-file-medical-alt',
                 category: 'documentation',
-                categoryLabel: 'توثيق',
+                categoryLabel: 'Documentation',
                 emoji: '📑',
-                description: 'خدمة متخصصة في تنظيم وتوثيق السجلات التمريضية، تشمل توحيد السجلات، تنظيم البيانات، وضمان الجودة.',
+                description: 'A specialized service for organizing and documenting nursing records, including record standardization, data organization, and quality assurance.',
                 includes: [
-                    'توحيد السجلات',
-                    'تنظيم البيانات',
-                    'ضمان الجودة',
-                    'مراجعة السجلات',
-                    'تحديث النماذج'
+                    'Record standardization',
+                    'Data organization',
+                    'Quality assurance',
+                    'Record review',
+                    'Form updates'
                 ],
                 gallery: ['📑', '📋', '✏️', '✅'],
-                requestTypes: ['تنظيم سجلات', 'مراجعة', 'تحديث', 'توحيد'],
+                requestTypes: ['Record Organization', 'Review', 'Update', 'Standardization'],
                 faq: [
-                    { q: 'ما هي أنواع السجلات التمريضية؟', a: 'تشمل سجلات التمريض، سجلات المتابعة، وسجلات التقييم.' },
-                    { q: 'كيف يتم ضمان جودة السجلات؟', a: 'من خلال المراجعة الدورية وتطبيق معايير الجودة.' }
+                    { q: 'What types of nursing records are there?', a: 'Include nursing records, follow-up records, and assessment records.' },
+                    { q: 'How is record quality ensured?', a: 'Through regular review and application of quality standards.' }
                 ]
             },
             {
                 id: 16,
-                name: 'ورقة العائلة',
+                name: 'Family Sheet',
                 enName: 'Family Sheet',
                 icon: 'fa-users',
                 category: 'documentation',
-                categoryLabel: 'توثيق',
+                categoryLabel: 'Documentation',
                 emoji: '👨‍👩‍👧‍👦',
-                description: 'خدمة متخصصة في توثيق تاريخ العائلة الصحي، تشمل جمع البيانات، تحليل التاريخ العائلي، وتوثيق المعلومات.',
+                description: 'A specialized service for documenting family health history, including data collection, family history analysis, and information documentation.',
                 includes: [
-                    'جمع البيانات الصحية',
-                    'تحليل التاريخ العائلي',
-                    'توثيق المعلومات',
-                    'تقييم المخاطر',
-                    'تحديث السجلات'
+                    'Health data collection',
+                    'Family history analysis',
+                    'Information documentation',
+                    'Risk assessment',
+                    'Record updates'
                 ],
                 gallery: ['👨‍👩‍👧‍👦', '📋', '📊', '🩺'],
-                requestTypes: ['توثيق تاريخ', 'تحليل', 'تقييم مخاطر', 'تحديث'],
+                requestTypes: ['History Documentation', 'Analysis', 'Risk Assessment', 'Update'],
                 faq: [
-                    { q: 'ما هي أهمية ورقة العائلة؟', a: 'تساعد في تحديد المخاطر الصحية الوراثية والتاريخ العائلي.' },
-                    { q: 'ما هي البيانات المطلوبة؟', a: 'تشمل تاريخ الأمراض العائلية، العوامل الوراثية، والتاريخ الصحي.' }
+                    { q: 'Why is the family sheet important?', a: 'It helps identify genetic health risks and family history.' },
+                    { q: 'What data is required?', a: 'Includes family disease history, genetic factors, and health history.' }
                 ]
             },
             {
                 id: 17,
-                name: 'بطاقة كاردكس',
+                name: 'Kardex',
                 enName: 'Kardex',
                 icon: 'fa-id-card',
                 category: 'documentation',
-                categoryLabel: 'توثيق',
+                categoryLabel: 'Documentation',
                 emoji: '🆔',
-                description: 'خدمة متخصصة في إعداد وتحديث بطاقات المرضى، تشمل تنظيم المعلومات، تحديث البيانات، وضمان الدقة.',
+                description: 'A specialized service for preparing and updating patient cards, including information organization, data updates, and accuracy assurance.',
                 includes: [
-                    'إعداد بطاقات المرضى',
-                    'تحديث البيانات',
-                    'تنظيم المعلومات',
-                    'ضمان الدقة',
-                    'مراجعة البطاقات'
+                    'Patient card preparation',
+                    'Data updates',
+                    'Information organization',
+                    'Accuracy assurance',
+                    'Card review'
                 ],
                 gallery: ['🆔', '📋', '✏️', '✅'],
-                requestTypes: ['إعداد بطاقة', 'تحديث', 'مراجعة', 'تنظيم'],
+                requestTypes: ['Card Preparation', 'Update', 'Review', 'Organization'],
                 faq: [
-                    { q: 'ما هي بطاقة كاردكس؟', a: 'هي بطاقة تحتوي على معلومات أساسية عن المريض وحالته الصحية.' },
-                    { q: 'كم مرة يتم تحديث البطاقة؟', a: 'يتم تحديثها عند كل تغيير في حالة المريض أو خطة الرعاية.' }
+                    { q: 'What is a Kardex card?', a: 'It is a card containing essential patient information and health status.' },
+                    { q: 'How often is the card updated?', a: 'It is updated with every change in patient condition or care plan.' }
                 ]
             },
             {
                 id: 18,
-                name: 'سجل التدريب السريري',
+                name: 'Clinical Logbook',
                 enName: 'Clinical Logbook',
                 icon: 'fa-graduation-cap',
                 category: 'documentation',
-                categoryLabel: 'توثيق',
+                categoryLabel: 'Documentation',
                 emoji: '🎓',
-                description: 'خدمة متخصصة في توثيق التدريب السريري، تشمل تسجيل المهارات، متابعة التقدم، وتقييم الأداء.',
+                description: 'A specialized service for clinical training documentation, including skill recording, progress tracking, and performance evaluation.',
                 includes: [
-                    'تسجيل المهارات السريرية',
-                    'متابعة التقدم',
-                    'تقييم الأداء',
-                    'توثيق التدريب',
-                    'مراجعة السجل'
+                    'Clinical skill recording',
+                    'Progress tracking',
+                    'Performance evaluation',
+                    'Training documentation',
+                    'Log review'
                 ],
                 gallery: ['🎓', '📋', '✏️', '📊'],
-                requestTypes: ['تسجيل تدريب', 'مراجعة', 'تقييم', 'تحديث'],
+                requestTypes: ['Training Recording', 'Review', 'Evaluation', 'Update'],
                 faq: [
-                    { q: 'ما هي مكونات سجل التدريب؟', a: 'يشمل المهارات السريرية، عدد الحالات، والتقييمات.' },
-                    { q: 'كيف يتم تقييم الأداء؟', a: 'يتم التقييم من خلال المشرفين والمعايير المعتمدة.' }
+                    { q: 'What are the components of a training log?', a: 'Includes clinical skills, case count, and evaluations.' },
+                    { q: 'How is performance evaluated?', a: 'Evaluation is done through supervisors and approved standards.' }
                 ]
             },
             {
                 id: 19,
-                name: 'قائمة المهارات السريرية',
+                name: 'Skills Checklist',
                 enName: 'Skills Checklist',
                 icon: 'fa-check-double',
                 category: 'documentation',
-                categoryLabel: 'توثيق',
+                categoryLabel: 'Documentation',
                 emoji: '✅',
-                description: 'خدمة متخصصة في تقييم وتطوير المهارات السريرية، تشمل تحديد المهارات، تقييم الكفاءة، وتطوير الخطط.',
+                description: 'A specialized service for assessing and developing clinical skills, including skill identification, competency evaluation, and development planning.',
                 includes: [
-                    'تحديد المهارات السريرية',
-                    'تقييم الكفاءة',
-                    'تطوير خطط التحسين',
-                    'توثيق التقدم',
-                    'مراجعة المهارات'
+                    'Clinical skill identification',
+                    'Competency evaluation',
+                    'Improvement plan development',
+                    'Progress documentation',
+                    'Skill review'
                 ],
                 gallery: ['✅', '📋', '✏️', '📊'],
-                requestTypes: ['تقييم مهارات', 'تطوير خطة', 'مراجعة', 'تحديث'],
+                requestTypes: ['Skill Assessment', 'Plan Development', 'Review', 'Update'],
                 faq: [
-                    { q: 'ما هي المهارات السريرية الأساسية؟', a: 'تشمل المهارات الإجرائية، التواصل، والتقييم السريري.' },
-                    { q: 'كيف يتم تقييم الكفاءة؟', a: 'يتم التقييم من خلال الملاحظة المباشرة والمعايير المعتمدة.' }
+                    { q: 'What are the essential clinical skills?', a: 'Include procedural skills, communication, and clinical assessment.' },
+                    { q: 'How is competency evaluated?', a: 'Evaluation is done through direct observation and approved standards.' }
                 ]
             },
 
-            // ========== القسم: التقارير والعروض الصحية ==========
-            // التقارير السريرية
+            // ========== Clinical Reports ==========
             {
                 id: 20,
-                name: 'إعداد التقارير السريرية',
+                name: 'Preparation of Clinical Reports',
                 enName: 'Clinical Reports Preparation',
                 icon: 'fa-file-medical',
                 category: 'reports',
-                categoryLabel: 'تقارير',
+                categoryLabel: 'Reports',
                 emoji: '📋',
-                description: 'خدمة متخصصة في إعداد التقارير السريرية، تشمل تنظيم البيانات، كتابة التقارير، وضمان الجودة.',
+                description: 'A specialized service for preparing clinical reports, including data organization, report writing, and quality assurance.',
                 includes: [
-                    'تنظيم البيانات السريرية',
-                    'كتابة التقارير',
-                    'تحليل النتائج',
-                    'مراجعة الجودة',
-                    'تنسيق التقارير'
+                    'Clinical data organization',
+                    'Report writing',
+                    'Result analysis',
+                    'Quality review',
+                    'Report formatting'
                 ],
                 gallery: ['📋', '📊', '✏️', '✅'],
-                requestTypes: ['إعداد تقرير', 'مراجعة', 'تحليل', 'تنسيق'],
+                requestTypes: ['Report Preparation', 'Review', 'Analysis', 'Formatting'],
                 faq: [
-                    { q: 'ما هي أنواع التقارير السريرية؟', a: 'تشمل تقارير الحالات، تقارير المتابعة، والتقارير النهائية.' },
-                    { q: 'ما هي مدة إعداد التقرير؟', a: 'تختلف حسب حجم التقرير، تتراوح بين 2-5 أيام عمل.' }
+                    { q: 'What types of clinical reports are available?', a: 'Include case reports, follow-up reports, and final reports.' },
+                    { q: 'How long does report preparation take?', a: 'Varies depending on report size, typically 2-5 working days.' }
                 ]
             },
             {
                 id: 21,
-                name: 'مراجعة التقارير السريرية',
+                name: 'Review of Clinical Reports',
                 enName: 'Clinical Reports Review',
                 icon: 'fa-check-circle',
                 category: 'reports',
-                categoryLabel: 'تقارير',
+                categoryLabel: 'Reports',
                 emoji: '✅',
-                description: 'خدمة متخصصة في مراجعة وتحسين التقارير السريرية، تشمل التدقيق، التحسين، وضمان الدقة.',
+                description: 'A specialized service for reviewing and improving clinical reports, including auditing, improvement, and accuracy assurance.',
                 includes: [
-                    'تدقيق التقارير',
-                    'تحسين المحتوى',
-                    'ضمان الدقة',
-                    'مراجعة المصادر',
-                    'تنسيق التقرير'
+                    'Report auditing',
+                    'Content improvement',
+                    'Accuracy assurance',
+                    'Source review',
+                    'Report formatting'
                 ],
                 gallery: ['✅', '📋', '✏️', '📊'],
-                requestTypes: ['مراجعة تقرير', 'تدقيق', 'تحسين', 'تنسيق'],
+                requestTypes: ['Report Review', 'Auditing', 'Improvement', 'Formatting'],
                 faq: [
-                    { q: 'ما هي معايير المراجعة؟', a: 'تعتمد على المعايير الأكاديمية والسريرية المعتمدة.' },
-                    { q: 'كم تستغرق عملية المراجعة؟', a: 'تستغرق 2-3 أيام عمل حسب حجم التقرير.' }
+                    { q: 'What are the review criteria?', a: 'Based on approved academic and clinical standards.' },
+                    { q: 'How long does the review process take?', a: 'Takes 2-3 working days depending on report size.' }
                 ]
             },
             {
                 id: 22,
-                name: 'تنظيم التقارير السريرية',
+                name: 'Organization of Clinical Reports',
                 enName: 'Clinical Reports Organization',
                 icon: 'fa-sort',
                 category: 'reports',
-                categoryLabel: 'تقارير',
+                categoryLabel: 'Reports',
                 emoji: '📂',
-                description: 'خدمة متخصصة في تنظيم وهيكلة التقارير السريرية، تشمل ترتيب المحتوى، تنظيم الأقسام، وتوحيد التنسيق.',
+                description: 'A specialized service for organizing and structuring clinical reports, including content arrangement, section organization, and format standardization.',
                 includes: [
-                    'ترتيب المحتوى',
-                    'تنظيم الأقسام',
-                    'توحيد التنسيق',
-                    'هيكلة التقرير',
-                    'مراجعة التنظيم'
+                    'Content arrangement',
+                    'Section organization',
+                    'Format standardization',
+                    'Report structuring',
+                    'Organization review'
                 ],
                 gallery: ['📂', '📋', '✏️', '📊'],
-                requestTypes: ['تنظيم تقرير', 'هيكلة', 'توحيد', 'مراجعة'],
+                requestTypes: ['Report Organization', 'Structuring', 'Standardization', 'Review'],
                 faq: [
-                    { q: 'ما هي أهمية تنظيم التقرير؟', a: 'يساعد في سهولة القراءة والفهم وتحديد المعلومات المهمة.' },
-                    { q: 'ما هي طريقة التنظيم المتبعة؟', a: 'يتم التنظيم حسب المعايير العلمية والسريرية المعتمدة.' }
+                    { q: 'Why is report organization important?', a: 'It helps with readability, understanding, and identifying important information.' },
+                    { q: 'What organization method is used?', a: 'Organization follows approved scientific and clinical standards.' }
                 ]
             },
             {
                 id: 23,
-                name: 'تحليل التقارير السريرية',
+                name: 'Analysis of Clinical Reports',
                 enName: 'Clinical Reports Analysis',
                 icon: 'fa-chart-bar',
                 category: 'reports',
-                categoryLabel: 'تقارير',
+                categoryLabel: 'Reports',
                 emoji: '📊',
-                description: 'خدمة متخصصة في تحليل بيانات التقارير السريرية، تشمل استخراج المؤشرات، تحليل النتائج، وتفسير البيانات.',
+                description: 'A specialized service for analyzing clinical report data, including indicator extraction, result analysis, and data interpretation.',
                 includes: [
-                    'استخراج المؤشرات',
-                    'تحليل النتائج',
-                    'تفسير البيانات',
-                    'توثيق التحليل',
-                    'تقديم التوصيات'
+                    'Indicator extraction',
+                    'Result analysis',
+                    'Data interpretation',
+                    'Analysis documentation',
+                    'Recommendations'
                 ],
                 gallery: ['📊', '📈', '📋', '✅'],
-                requestTypes: ['تحليل بيانات', 'استخراج مؤشرات', 'تفسير', 'توصيات'],
+                requestTypes: ['Data Analysis', 'Indicator Extraction', 'Interpretation', 'Recommendations'],
                 faq: [
-                    { q: 'ما هي أنواع التحليل؟', a: 'تشمل التحليل الوصفي، التحليل المقارن، وتحليل الاتجاهات.' },
-                    { q: 'كيف يتم تفسير النتائج؟', a: 'يتم التفسير بناءً على المعايير السريرية والإحصائية.' }
+                    { q: 'What types of analysis are available?', a: 'Include descriptive, comparative, and trend analysis.' },
+                    { q: 'How are results interpreted?', a: 'Interpretation is based on clinical and statistical standards.' }
                 ]
             },
             {
                 id: 24,
-                name: 'تنسيق التقارير السريرية',
+                name: 'Formatting of Clinical Reports',
                 enName: 'Clinical Reports Formatting',
                 icon: 'fa-edit',
                 category: 'reports',
-                categoryLabel: 'تقارير',
+                categoryLabel: 'Reports',
                 emoji: '🎨',
-                description: 'خدمة متخصصة في تنسيق وتجميل التقارير السريرية، تشمل التنسيق الاحترافي، التصميم، والمراجعة النهائية.',
+                description: 'A specialized service for formatting and beautifying clinical reports, including professional formatting, design, and final review.',
                 includes: [
-                    'تنسيق احترافي',
-                    'تصميم التقرير',
-                    'مراجعة نهائية',
-                    'تحسين المظهر',
-                    'ضمان الجودة'
+                    'Professional formatting',
+                    'Report design',
+                    'Final review',
+                    'Appearance improvement',
+                    'Quality assurance'
                 ],
                 gallery: ['🎨', '📋', '✏️', '✅'],
-                requestTypes: ['تنسيق تقرير', 'تصميم', 'مراجعة', 'تحسين'],
+                requestTypes: ['Report Formatting', 'Design', 'Review', 'Improvement'],
                 faq: [
-                    { q: 'ما هي عناصر التنسيق؟', a: 'تشمل الخطوط، الألوان، الجداول، الرسوم البيانية، والتخطيط.' },
-                    { q: 'هل يتضمن التنسيق الصور؟', a: 'نعم، تشمل إضافة الصور والرسوم البيانية عند الحاجة.' }
+                    { q: 'What are the formatting elements?', a: 'Include fonts, colors, tables, charts, and layout.' },
+                    { q: 'Does formatting include images?', a: 'Yes, includes adding images and charts when needed.' }
                 ]
             },
 
-            // العروض التقديمية للحالات السريرية
+            // ========== Clinical Case Presentations ==========
             {
                 id: 25,
-                name: 'إعداد عروض الحالات السريرية',
+                name: 'Preparation of Clinical Case Presentations',
                 enName: 'Clinical Case Presentations',
                 icon: 'fa-slideshare',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🖥️',
-                description: 'خدمة متخصصة في إعداد عروض الحالات السريرية، تشمل تنظيم المحتوى، تصميم الشرائح، وإعداد العرض.',
+                description: 'A specialized service for preparing clinical case presentations, including content organization, slide design, and presentation preparation.',
                 includes: [
-                    'تنظيم محتوى الحالة',
-                    'تصميم الشرائح',
-                    'إعداد العرض',
-                    'مراجعة المحتوى',
-                    'تحسين العرض'
+                    'Case content organization',
+                    'Slide design',
+                    'Presentation preparation',
+                    'Content review',
+                    'Presentation improvement'
                 ],
                 gallery: ['🖥️', '📊', '✏️', '🎨'],
-                requestTypes: ['إعداد عرض', 'تصميم شرائح', 'مراجعة', 'تحسين'],
+                requestTypes: ['Presentation Preparation', 'Slide Design', 'Review', 'Improvement'],
                 faq: [
-                    { q: 'ما هي مكونات عرض الحالة؟', a: 'تشمل مقدمة، تاريخ الحالة، التشخيص، الخطة، والمناقشة.' },
-                    { q: 'كم عدد الشرائح المثالي؟', a: 'يتراوح عدد الشرائح بين 15-25 شريحة حسب الحالة.' }
+                    { q: 'What are the components of a case presentation?', a: 'Include introduction, case history, diagnosis, plan, and discussion.' },
+                    { q: 'What is the ideal number of slides?', a: 'Typically 15-25 slides depending on the case.' }
                 ]
             },
             {
                 id: 26,
-                name: 'مراجعة عروض الحالات السريرية',
+                name: 'Review of Clinical Case Presentations',
                 enName: 'Clinical Case Presentations Review',
                 icon: 'fa-eye',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🔍',
-                description: 'خدمة متخصصة في مراجعة عروض الحالات السريرية، تشمل التدقيق، التحسين، وتقييم الجودة.',
+                description: 'A specialized service for reviewing clinical case presentations, including auditing, improvement, and quality evaluation.',
                 includes: [
-                    'تدقيق المحتوى',
-                    'تحسين العرض',
-                    'تقييم الجودة',
-                    'مراجعة التصميم',
-                    'تقديم الملاحظات'
+                    'Content auditing',
+                    'Presentation improvement',
+                    'Quality evaluation',
+                    'Design review',
+                    'Feedback provision'
                 ],
                 gallery: ['🔍', '📋', '✏️', '✅'],
-                requestTypes: ['مراجعة عرض', 'تدقيق', 'تحسين', 'تقييم'],
+                requestTypes: ['Presentation Review', 'Auditing', 'Improvement', 'Evaluation'],
                 faq: [
-                    { q: 'ما هي معايير تقييم العرض؟', a: 'تعتمد على المحتوى العلمي، التصميم، ووضوح العرض.' },
-                    { q: 'كم تستغرق المراجعة؟', a: 'تستغرق 1-2 أيام عمل حسب حجم العرض.' }
+                    { q: 'What are the presentation evaluation criteria?', a: 'Based on scientific content, design, and presentation clarity.' },
+                    { q: 'How long does the review take?', a: 'Takes 1-2 working days depending on presentation size.' }
                 ]
             },
             {
                 id: 27,
-                name: 'تنظيم محتوى العروض',
+                name: 'Organization of Presentation Content',
                 enName: 'Presentation Content Organization',
                 icon: 'fa-layer-group',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '📑',
-                description: 'خدمة متخصصة في تنظيم وهيكلة محتوى العروض، تشمل ترتيب المعلومات، تنظيم الأقسام، وضمان التدفق المنطقي.',
+                description: 'A specialized service for organizing and structuring presentation content, including information arrangement, section organization, and ensuring logical flow.',
                 includes: [
-                    'ترتيب المعلومات',
-                    'تنظيم الأقسام',
-                    'ضمان التدفق المنطقي',
-                    'هيكلة المحتوى',
-                    'مراجعة التنظيم'
+                    'Information arrangement',
+                    'Section organization',
+                    'Logical flow assurance',
+                    'Content structuring',
+                    'Organization review'
                 ],
                 gallery: ['📑', '📋', '✏️', '📊'],
-                requestTypes: ['تنظيم محتوى', 'هيكلة', 'ترتيب', 'مراجعة'],
+                requestTypes: ['Content Organization', 'Structuring', 'Arrangement', 'Review'],
                 faq: [
-                    { q: 'ما هي أهمية تنظيم المحتوى؟', a: 'يساعد في وضوح الرسالة وسهولة متابعة العرض.' },
-                    { q: 'كيف يتم تنظيم المحتوى؟', a: 'يتم التنظيم حسب التسلسل المنطقي للموضوع.' }
+                    { q: 'Why is content organization important?', a: 'It helps with message clarity and easy presentation follow-up.' },
+                    { q: 'How is content organized?', a: 'Organization follows the logical sequence of the topic.' }
                 ]
             },
             {
                 id: 28,
-                name: 'تصميم شرائح العروض',
+                name: 'Presentation Slide Design',
                 enName: 'Presentation Slide Design',
                 icon: 'fa-paint-brush',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🎨',
-                description: 'خدمة متخصصة في تصميم شرائح احترافية، تشمل اختيار الألوان، تنسيق النصوص، وإضافة العناصر البصرية.',
+                description: 'A specialized service for professional slide design, including color selection, text formatting, and visual element addition.',
                 includes: [
-                    'اختيار الألوان',
-                    'تنسيق النصوص',
-                    'إضافة العناصر البصرية',
-                    'تصميم الشرائح',
-                    'مراجعة التصميم'
+                    'Color selection',
+                    'Text formatting',
+                    'Visual element addition',
+                    'Slide design',
+                    'Design review'
                 ],
                 gallery: ['🎨', '🖥️', '✏️', '📊'],
-                requestTypes: ['تصميم شرائح', 'تنسيق', 'تحسين', 'مراجعة'],
+                requestTypes: ['Slide Design', 'Formatting', 'Improvement', 'Review'],
                 faq: [
-                    { q: 'ما هي أفضل ممارسات التصميم؟', a: 'استخدام ألوان متناسقة، نصوص واضحة، وعناصر بصرية جذابة.' },
-                    { q: 'هل تشمل الخدمة الرسوم البيانية؟', a: 'نعم، تشمل إضافة الرسوم البيانية والجداول.' }
+                    { q: 'What are the best design practices?', a: 'Using consistent colors, clear text, and attractive visual elements.' },
+                    { q: 'Does the service include charts?', a: 'Yes, includes adding charts and tables.' }
                 ]
             },
             {
                 id: 29,
-                name: 'تطوير العروض التقديمية',
+                name: 'Presentation Development',
                 enName: 'Presentation Development',
                 icon: 'fa-rocket',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🚀',
-                description: 'خدمة متخصصة في تطوير وتحسين العروض التقديمية، تشمل تحسين المحتوى، تطوير التصميم، ورفع الجودة.',
+                description: 'A specialized service for developing and improving presentations, including content enhancement, design development, and quality improvement.',
                 includes: [
-                    'تحسين المحتوى',
-                    'تطوير التصميم',
-                    'رفع الجودة',
-                    'إضافة العناصر التفاعلية',
-                    'مراجعة نهائية'
+                    'Content enhancement',
+                    'Design development',
+                    'Quality improvement',
+                    'Interactive element addition',
+                    'Final review'
                 ],
                 gallery: ['🚀', '📊', '✏️', '✅'],
-                requestTypes: ['تطوير عرض', 'تحسين', 'رفع جودة', 'مراجعة'],
+                requestTypes: ['Presentation Development', 'Improvement', 'Quality Enhancement', 'Review'],
                 faq: [
-                    { q: 'ما هي مراحل تطوير العرض؟', a: 'تشمل التخطيط، التصميم، التطوير، والمراجعة النهائية.' },
-                    { q: 'هل تشمل الخدمة التدريب على العرض؟', a: 'نعم، تشمل نصائح وتوجيهات لتقديم العرض بفعالية.' }
+                    { q: 'What are the presentation development stages?', a: 'Include planning, design, development, and final review.' },
+                    { q: 'Does the service include presentation training?', a: 'Yes, includes tips and guidance for effective presentation delivery.' }
                 ]
             },
 
-            // العروض العلمية
+            // ========== Scientific Presentations ==========
             {
                 id: 30,
-                name: 'العروض العلمية',
+                name: 'Preparation of Scientific Presentations',
                 enName: 'Scientific Presentations',
                 icon: 'fa-flask',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🔬',
-                description: 'خدمة متخصصة في إعداد العروض العلمية، تشمل تنظيم البحث العلمي، عرض النتائج، وتقديم الاستنتاجات.',
+                description: 'A specialized service for preparing scientific presentations, including research organization, result presentation, and conclusion delivery.',
                 includes: [
-                    'تنظيم البحث العلمي',
-                    'عرض النتائج',
-                    'تقديم الاستنتاجات',
-                    'تصميم الشرائح',
-                    'مراجعة المحتوى'
+                    'Research organization',
+                    'Result presentation',
+                    'Conclusion delivery',
+                    'Slide design',
+                    'Content review'
                 ],
                 gallery: ['🔬', '📊', '✏️', '🖥️'],
-                requestTypes: ['إعداد عرض علمي', 'تصميم', 'مراجعة', 'تحسين'],
+                requestTypes: ['Scientific Presentation Preparation', 'Design', 'Review', 'Improvement'],
                 faq: [
-                    { q: 'ما هي مكونات العرض العلمي؟', a: 'تشمل المقدمة، المنهجية، النتائج، المناقشة، والاستنتاجات.' },
-                    { q: 'كم مدة إعداد العرض؟', a: 'تتراوح بين 3-7 أيام حسب حجم البحث.' }
+                    { q: 'What are the components of a scientific presentation?', a: 'Include introduction, methodology, results, discussion, and conclusions.' },
+                    { q: 'How long does preparation take?', a: 'Typically 3-7 days depending on research size.' }
                 ]
             },
             {
                 id: 31,
-                name: 'مراجعة العروض العلمية',
+                name: 'Review of Scientific Presentations',
                 enName: 'Scientific Presentations Review',
                 icon: 'fa-star',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '⭐',
-                description: 'خدمة متخصصة في مراجعة وتقييم العروض العلمية، تشمل تدقيق المحتوى، تقييم الجودة، وتقديم الملاحظات.',
+                description: 'A specialized service for reviewing and evaluating scientific presentations, including content auditing, quality evaluation, and feedback provision.',
                 includes: [
-                    'تدقيق المحتوى العلمي',
-                    'تقييم الجودة',
-                    'تقديم الملاحظات',
-                    'مراجعة التصميم',
-                    'تحسين العرض'
+                    'Scientific content auditing',
+                    'Quality evaluation',
+                    'Feedback provision',
+                    'Design review',
+                    'Presentation improvement'
                 ],
                 gallery: ['⭐', '📋', '✏️', '✅'],
-                requestTypes: ['مراجعة عرض علمي', 'تدقيق', 'تقييم', 'تحسين'],
+                requestTypes: ['Scientific Presentation Review', 'Auditing', 'Evaluation', 'Improvement'],
                 faq: [
-                    { q: 'ما هي معايير المراجعة العلمية؟', a: 'تعتمد على الدقة العلمية، الوضوح، وجودة العرض.' },
-                    { q: 'هل تشمل المراجعة المصادر؟', a: 'نعم، تشمل مراجعة المصادر والاستشهادات.' }
+                    { q: 'What are the scientific review criteria?', a: 'Based on scientific accuracy, clarity, and presentation quality.' },
+                    { q: 'Does the review include sources?', a: 'Yes, includes source and citation review.' }
                 ]
             },
             {
                 id: 32,
-                name: 'تصميم العروض العلمية',
+                name: 'Presentation Design',
                 enName: 'Scientific Presentation Design',
                 icon: 'fa-pen-nib',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '✏️',
-                description: 'خدمة متخصصة في تصميم العروض العلمية الاحترافية، تشمل التصميم البصري، تنسيق البيانات، وإضافة العناصر التفاعلية.',
+                description: 'A specialized service for professional scientific presentation design, including visual design, data formatting, and interactive element addition.',
                 includes: [
-                    'التصميم البصري',
-                    'تنسيق البيانات',
-                    'إضافة العناصر التفاعلية',
-                    'تصميم الشرائح',
-                    'مراجعة التصميم'
+                    'Visual design',
+                    'Data formatting',
+                    'Interactive element addition',
+                    'Slide design',
+                    'Design review'
                 ],
                 gallery: ['✏️', '🎨', '📊', '🖥️'],
-                requestTypes: ['تصميم عرض علمي', 'تنسيق', 'تحسين', 'مراجعة'],
+                requestTypes: ['Scientific Presentation Design', 'Formatting', 'Improvement', 'Review'],
                 faq: [
-                    { q: 'ما هي عناصر التصميم العلمي؟', a: 'تشمل الرسوم البيانية، الجداول، الصور، والنصوص العلمية.' },
-                    { q: 'هل تشمل الخدمة التصاميم المخصصة؟', a: 'نعم، يتم تصميم الشرائح حسب متطلبات العميل.' }
+                    { q: 'What are the scientific design elements?', a: 'Include charts, tables, images, and scientific text.' },
+                    { q: 'Does the service include custom designs?', a: 'Yes, slides are designed according to client requirements.' }
                 ]
             },
             {
                 id: 33,
-                name: 'تنظيم المحتوى العلمي',
+                name: 'Organization of Scientific Content',
                 enName: 'Scientific Content Organization',
                 icon: 'fa-sitemap',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '📚',
-                description: 'خدمة متخصصة في تنظيم المحتوى العلمي للعروض، تشمل هيكلة المعلومات، ترتيب الأقسام، وضمان التدفق المنطقي.',
+                description: 'A specialized service for organizing scientific presentation content, including information structuring, section arrangement, and logical flow assurance.',
                 includes: [
-                    'هيكلة المعلومات',
-                    'ترتيب الأقسام',
-                    'ضمان التدفق المنطقي',
-                    'تنظيم المحتوى',
-                    'مراجعة الهيكلة'
+                    'Information structuring',
+                    'Section arrangement',
+                    'Logical flow assurance',
+                    'Content organization',
+                    'Structure review'
                 ],
                 gallery: ['📚', '📋', '✏️', '📊'],
-                requestTypes: ['تنظيم محتوى علمي', 'هيكلة', 'ترتيب', 'مراجعة'],
+                requestTypes: ['Scientific Content Organization', 'Structuring', 'Arrangement', 'Review'],
                 faq: [
-                    { q: 'ما هي أهمية تنظيم المحتوى العلمي؟', a: 'يساعد في توصيل الفكرة بوضوح وسهولة متابعة العرض.' },
-                    { q: 'كيف يتم تنظيم المحتوى؟', a: 'يتم التنظيم حسب التسلسل العلمي للموضوع.' }
+                    { q: 'Why is scientific content organization important?', a: 'It helps convey ideas clearly and allows easy presentation follow-up.' },
+                    { q: 'How is content organized?', a: 'Organization follows the scientific sequence of the topic.' }
                 ]
             },
             {
                 id: 34,
-                name: 'العروض التعليمية',
+                name: 'Educational Presentation Development',
                 enName: 'Educational Presentations',
                 icon: 'fa-chalkboard-user',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '📖',
-                description: 'خدمة متخصصة في تطوير العروض التعليمية الطبية، تشمل تصميم المحتوى التعليمي، إضافة الأنشطة، وتقييم التعلم.',
+                description: 'A specialized service for developing medical educational presentations, including educational content design, activity addition, and learning evaluation.',
                 includes: [
-                    'تصميم المحتوى التعليمي',
-                    'إضافة الأنشطة',
-                    'تقييم التعلم',
-                    'إعداد المواد التعليمية',
-                    'مراجعة المحتوى'
+                    'Educational content design',
+                    'Activity addition',
+                    'Learning evaluation',
+                    'Educational material preparation',
+                    'Content review'
                 ],
                 gallery: ['📖', '🎓', '✏️', '📊'],
-                requestTypes: ['إعداد عرض تعليمي', 'تصميم', 'تقييم', 'تحسين'],
+                requestTypes: ['Educational Presentation Preparation', 'Design', 'Evaluation', 'Improvement'],
                 faq: [
-                    { q: 'ما هي مكونات العرض التعليمي؟', a: 'تشمل الأهداف، المحتوى، الأنشطة، والتقييم.' },
-                    { q: 'هل تشمل الخدمة مواد تعليمية إضافية؟', a: 'نعم، تشمل إعداد مواد تعليمية مساعدة.' }
+                    { q: 'What are the components of an educational presentation?', a: 'Include objectives, content, activities, and evaluation.' },
+                    { q: 'Does the service include additional educational materials?', a: 'Yes, includes preparing supporting educational materials.' }
                 ]
             },
 
-            // عروض الندوات
+            // ========== Clinical Seminar Presentations ==========
             {
                 id: 35,
-                name: 'عروض الندوات السريرية',
+                name: 'Preparation of Clinical Seminar Presentations',
                 enName: 'Clinical Seminar Presentations',
                 icon: 'fa-users',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🎤',
-                description: 'خدمة متخصصة في إعداد عروض الندوات السريرية، تشمل تنظيم المحتوى، تصميم الشرائح، وإعداد العرض.',
+                description: 'A specialized service for preparing clinical seminar presentations, including content organization, slide design, and presentation preparation.',
                 includes: [
-                    'تنظيم محتوى الندوة',
-                    'تصميم الشرائح',
-                    'إعداد العرض',
-                    'مراجعة المحتوى',
-                    'تحسين العرض'
+                    'Seminar content organization',
+                    'Slide design',
+                    'Presentation preparation',
+                    'Content review',
+                    'Presentation improvement'
                 ],
                 gallery: ['🎤', '📊', '✏️', '🖥️'],
-                requestTypes: ['إعداد عرض ندوة', 'تصميم', 'مراجعة', 'تحسين'],
+                requestTypes: ['Seminar Presentation Preparation', 'Design', 'Review', 'Improvement'],
                 faq: [
-                    { q: 'ما هي مكونات عرض الندوة؟', a: 'تشمل المقدمة، الموضوع الرئيسي، المناقشة، والاستنتاجات.' },
-                    { q: 'كم مدة العرض المثالية؟', a: 'تتراوح بين 20-45 دقيقة حسب موضوع الندوة.' }
+                    { q: 'What are the components of a seminar presentation?', a: 'Include introduction, main topic, discussion, and conclusions.' },
+                    { q: 'What is the ideal presentation duration?', a: 'Typically 20-45 minutes depending on the seminar topic.' }
                 ]
             },
             {
                 id: 36,
-                name: 'مراجعة عروض الندوات',
+                name: 'Review of Seminar Presentations',
                 enName: 'Seminar Presentations Review',
                 icon: 'fa-check-double',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '✅',
-                description: 'خدمة متخصصة في مراجعة عروض الندوات التخصصية، تشمل التدقيق، التقييم، وتقديم الملاحظات.',
+                description: 'A specialized service for reviewing specialized seminar presentations, including auditing, evaluation, and feedback provision.',
                 includes: [
-                    'تدقيق المحتوى',
-                    'تقييم الجودة',
-                    'تقديم الملاحظات',
-                    'مراجعة التصميم',
-                    'تحسين العرض'
+                    'Content auditing',
+                    'Quality evaluation',
+                    'Feedback provision',
+                    'Design review',
+                    'Presentation improvement'
                 ],
                 gallery: ['✅', '📋', '✏️', '📊'],
-                requestTypes: ['مراجعة عرض ندوة', 'تدقيق', 'تقييم', 'تحسين'],
+                requestTypes: ['Seminar Presentation Review', 'Auditing', 'Evaluation', 'Improvement'],
                 faq: [
-                    { q: 'ما هي معايير مراجعة الندوات؟', a: 'تعتمد على المحتوى العلمي، وضوح العرض، وجودة التصميم.' },
-                    { q: 'كم تستغرق المراجعة؟', a: 'تستغرق 1-3 أيام حسب حجم العرض.' }
+                    { q: 'What are the seminar review criteria?', a: 'Based on scientific content, presentation clarity, and design quality.' },
+                    { q: 'How long does the review take?', a: 'Takes 1-3 days depending on presentation size.' }
                 ]
             },
             {
                 id: 37,
-                name: 'تنظيم محتوى الندوات',
+                name: 'Organization of Seminar Content',
                 enName: 'Seminar Content Organization',
                 icon: 'fa-arrows-to-dot',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🎯',
-                description: 'خدمة متخصصة في تنظيم محتوى الندوات السريرية، تشمل هيكلة الموضوع، ترتيب الأقسام، وضمان التدفق.',
+                description: 'A specialized service for organizing clinical seminar content, including topic structuring, section arrangement, and flow assurance.',
                 includes: [
-                    'هيكلة الموضوع',
-                    'ترتيب الأقسام',
-                    'ضمان التدفق',
-                    'تنظيم المحتوى',
-                    'مراجعة الهيكلة'
+                    'Topic structuring',
+                    'Section arrangement',
+                    'Flow assurance',
+                    'Content organization',
+                    'Structure review'
                 ],
                 gallery: ['🎯', '📋', '✏️', '📊'],
-                requestTypes: ['تنظيم محتوى ندوة', 'هيكلة', 'ترتيب', 'مراجعة'],
+                requestTypes: ['Seminar Content Organization', 'Structuring', 'Arrangement', 'Review'],
                 faq: [
-                    { q: 'ما هي أهمية تنظيم محتوى الندوة؟', a: 'يساعد في تقديم المعلومات بوضوح وسهولة المتابعة.' },
-                    { q: 'كيف يتم تنظيم المحتوى؟', a: 'يتم التنظيم حسب التسلسل المنطقي للموضوع.' }
+                    { q: 'Why is seminar content organization important?', a: 'It helps present information clearly and ensures easy follow-up.' },
+                    { q: 'How is content organized?', a: 'Organization follows the logical sequence of the topic.' }
                 ]
             },
             {
                 id: 38,
-                name: 'عروض المؤتمرات الطبية',
+                name: 'Conference Presentation Design',
                 enName: 'Conference Presentations',
                 icon: 'fa-microphone',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🎙️',
-                description: 'خدمة متخصصة في تصميم عروض المؤتمرات الطبية، تشمل التصميم الاحترافي، تنظيم المحتوى، وإعداد العرض.',
+                description: 'A specialized service for designing medical conference presentations, including professional design, content organization, and presentation preparation.',
                 includes: [
-                    'تصميم احترافي',
-                    'تنظيم المحتوى',
-                    'إعداد العرض',
-                    'مراجعة الجودة',
-                    'تحسين التصميم'
+                    'Professional design',
+                    'Content organization',
+                    'Presentation preparation',
+                    'Quality review',
+                    'Design improvement'
                 ],
                 gallery: ['🎙️', '📊', '✏️', '🖥️'],
-                requestTypes: ['تصميم عرض مؤتمر', 'تنظيم', 'مراجعة', 'تحسين'],
+                requestTypes: ['Conference Presentation Design', 'Organization', 'Review', 'Improvement'],
                 faq: [
-                    { q: 'ما هي متطلبات عروض المؤتمرات؟', a: 'تشمل التصميم الجذاب، المحتوى العلمي الدقيق، والوضوح.' },
-                    { q: 'هل تشمل الخدمة التدريب على العرض؟', a: 'نعم، تشمل نصائح وتوجيهات لتقديم العرض بفعالية.' }
+                    { q: 'What are the requirements for conference presentations?', a: 'Include attractive design, accurate scientific content, and clarity.' },
+                    { q: 'Does the service include presentation training?', a: 'Yes, includes tips and guidance for effective presentation delivery.' }
                 ]
             },
             {
                 id: 39,
-                name: 'الدعم العلمي للعروض',
+                name: 'Supporting Scientific',
                 enName: 'Scientific Support for Presentations',
                 icon: 'fa-handshake',
                 category: 'presentations',
-                categoryLabel: 'عروض',
+                categoryLabel: 'Presentations',
                 emoji: '🤝',
-                description: 'خدمة متخصصة في الدعم العلمي للعروض التقديمية، تشمل مراجعة المصادر، التحقق من الدقة، وتقديم الدعم.',
+                description: 'A specialized service for scientific support of presentations, including source review, accuracy verification, and support provision.',
                 includes: [
-                    'مراجعة المصادر',
-                    'التحقق من الدقة',
-                    'تقديم الدعم العلمي',
-                    'مراجعة المحتوى',
-                    'تحسين الجودة'
+                    'Source review',
+                    'Accuracy verification',
+                    'Scientific support provision',
+                    'Content review',
+                    'Quality improvement'
                 ],
                 gallery: ['🤝', '📋', '📚', '✅'],
-                requestTypes: ['دعم علمي', 'مراجعة مصادر', 'تحقق', 'تحسين'],
+                requestTypes: ['Scientific Support', 'Source Review', 'Verification', 'Improvement'],
                 faq: [
-                    { q: 'ما هو الدعم العلمي؟', a: 'يشمل مراجعة المصادر، التحقق من المعلومات، وتقديم الاستشهادات.' },
-                    { q: 'كم تستغرق عملية الدعم؟', a: 'تستغرق 1-3 أيام حسب حجم العرض.' }
+                    { q: 'What is scientific support?', a: 'Includes source review, information verification, and citation provision.' },
+                    { q: 'How long does the support process take?', a: 'Takes 1-3 days depending on presentation size.' }
                 ]
             }
         ];
 
         // ============================================================
-        // عرض الخدمات
+        // Render Services
         // ============================================================
         function renderServices(filter = 'all') {
             const grid = document.getElementById('servicesGrid');
@@ -2671,7 +2638,7 @@
                 ? services 
                 : services.filter(s => s.category === filter);
 
-            // تحديث العدادات
+            // Update counts
             document.getElementById('totalCount').textContent = services.length;
             document.getElementById('clinicalCount').textContent = services.filter(s => s.category === 'clinical').length;
             document.getElementById('nursingCount').textContent = services.filter(s => s.category === 'nursing').length;
@@ -2683,7 +2650,7 @@
                 grid.innerHTML = `
                     <div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">
                         <i class="fas fa-search" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
-                        <p>لا توجد خدمات في هذا التصنيف</p>
+                        <p>No services found in this category</p>
                     </div>
                 `;
                 return;
@@ -2700,7 +2667,7 @@
                     <span class="en-name">${service.enName}</span>
                     <span class="tag">${service.categoryLabel}</span>
                     <span class="service-category-tag">${service.categoryLabel}</span>
-                    <span class="click-hint"><i class="fas fa-arrow-left"></i> اضغط للتفاصيل</span>
+                    <span class="click-hint"><i class="fas fa-arrow-right"></i> Click for details</span>
                 `;
                 item.onclick = () => showServiceDetails(service.id);
                 grid.appendChild(item);
@@ -2708,12 +2675,11 @@
         }
 
         // ============================================================
-        // تصفية الخدمات
+        // Filter Services
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             renderServices('all');
 
-            // أحداث الفلتر
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -2722,7 +2688,6 @@
                 });
             });
 
-            // تفعيل AOS
             AOS.init({
                 duration: 600,
                 once: true,
@@ -2731,64 +2696,61 @@
         });
 
         // ============================================================
-        // عرض تفاصيل الخدمة
+        // Show Service Details
         // ============================================================
         function showServiceDetails(serviceId) {
             const service = services.find(s => s.id === serviceId);
             if (!service) return;
 
-            // إخفاء صفحة الخدمات
             document.getElementById('servicesPage').style.display = 'none';
-            // إظهار صفحة التفاصيل
             const detailsPage = document.getElementById('serviceDetailsPage');
             detailsPage.classList.add('active');
             detailsPage.scrollIntoView({ behavior: 'smooth' });
 
             const container = document.getElementById('detailsContainer');
 
-            // بناء HTML لصفحة التفاصيل
             container.innerHTML = `
-                <!-- رأس التفاصيل -->
+                <!-- Details Header -->
                 <div class="details-header">
                     <div class="icon"><i class="fas ${service.icon}"></i></div>
                     <div class="info">
                         <h2>${service.name}</h2>
                         <div class="en-title">${service.enName}</div>
                         <span class="category-badge"><i class="fas fa-tag"></i> ${service.categoryLabel}</span>
-                        <span style="margin-right:8px; font-size:1.2rem;">${service.emoji}</span>
+                        <span style="margin-left:8px; font-size:1.2rem;">${service.emoji}</span>
                     </div>
                 </div>
 
-                <!-- وصف الخدمة -->
+                <!-- Service Description -->
                 <div class="details-section">
-                    <h3><i class="fas fa-info-circle"></i> وصف الخدمة</h3>
+                    <h3><i class="fas fa-info-circle"></i> Service Description</h3>
                     <p>${service.description}</p>
                 </div>
 
-                <!-- ماذا تتضمن الخدمة -->
+                <!-- What's Included -->
                 <div class="details-section">
-                    <h3><i class="fas fa-list-check"></i> ماذا تتضمن الخدمة؟</h3>
+                    <h3><i class="fas fa-list-check"></i> What's Included?</h3>
                     <ul>
                         ${service.includes.map(item => `<li><i class="fas fa-check-circle"></i> ${item}</li>`).join('')}
                     </ul>
                 </div>
 
-                <!-- معرض الصور -->
+                <!-- Gallery -->
                 <div class="details-section">
-                    <h3><i class="fas fa-images"></i> معرض الخدمة</h3>
+                    <h3><i class="fas fa-images"></i> Service Gallery</h3>
                     <div class="gallery-grid">
                         ${service.gallery.map((item, i) => `
                             <div class="gallery-item" style="background: ${['#0891B2','#059669','#F59E0B','#EC4899','#8B5CF6','#EF4444','#14B8A6'][i % 7]}22;">
                                 <span style="font-size:3rem;">${item}</span>
-                                <div class="gallery-label">${['نموذج الخدمة','تحليل الحالة','توثيق','متابعة','تقييم','نتائج','توصيات'][i % 7]}</div>
+                                <div class="gallery-label">${['Service Model','Case Analysis','Documentation','Follow-up','Evaluation','Results','Recommendations'][i % 7]}</div>
                             </div>
                         `).join('')}
                     </div>
                 </div>
 
-                <!-- أنواع الطلبات -->
+                <!-- Request Types -->
                 <div class="details-section">
-                    <h3><i class="fas fa-clipboard-list"></i> أنواع الطلبات المتاحة</h3>
+                    <h3><i class="fas fa-clipboard-list"></i> Available Request Types</h3>
                     <div class="request-types-grid">
                         ${service.requestTypes.map(type => `
                             <div class="request-type-item">
@@ -2799,9 +2761,9 @@
                     </div>
                 </div>
 
-                <!-- الأسئلة الشائعة -->
+                <!-- FAQ -->
                 <div class="details-section">
-                    <h3><i class="fas fa-question-circle"></i> الأسئلة الشائعة</h3>
+                    <h3><i class="fas fa-question-circle"></i> Frequently Asked Questions</h3>
                     ${service.faq.map((item, index) => `
                         <div class="faq-item" onclick="toggleFaq(this)">
                             <div class="question">
@@ -2813,48 +2775,48 @@
                     `).join('')}
                 </div>
 
-                <!-- نموذج طلب الخدمة -->
+                <!-- Request Form -->
                 <div class="details-section">
-                    <h3><i class="fas fa-paper-plane"></i> طلب الخدمة</h3>
+                    <h3><i class="fas fa-paper-plane"></i> Request Service</h3>
                     <div class="details-form-wrapper">
                         <form onsubmit="submitDetailsRequest(event, '${service.name}')">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>الاسم الكامل <span class="required">*</span></label>
-                                    <input type="text" id="detailsFullName" placeholder="أدخل اسمك الكامل" required />
+                                    <label>Full Name <span class="required">*</span></label>
+                                    <input type="text" id="detailsFullName" placeholder="Enter your full name" required />
                                 </div>
                                 <div class="form-group">
-                                    <label>البريد الإلكتروني <span class="required">*</span></label>
+                                    <label>Email <span class="required">*</span></label>
                                     <input type="email" id="detailsEmail" placeholder="example@email.com" required />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>رقم التواصل <span class="required">*</span></label>
+                                <label>Phone Number <span class="required">*</span></label>
                                 <input type="tel" id="detailsPhone" placeholder="+966 54 850 4018" required />
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>نوع الطلب <span class="required">*</span></label>
+                                    <label>Request Type <span class="required">*</span></label>
                                     <select id="detailsRequestType" required>
-                                        <option value="">اختر نوع الطلب</option>
+                                        <option value="">Select request type</option>
                                         ${service.requestTypes.map(type => `<option value="${type}">${type}</option>`).join('')}
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>موعد التسليم <span class="required">*</span></label>
+                                    <label>Delivery Date <span class="required">*</span></label>
                                     <input type="date" id="detailsDeliveryDate" required />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>وصف الطلب <span class="required">*</span></label>
-                                <textarea id="detailsDescription" placeholder="صف طلبك بالتفصيل..." required></textarea>
+                                <label>Request Description <span class="required">*</span></label>
+                                <textarea id="detailsDescription" placeholder="Describe your request in detail..." required></textarea>
                             </div>
                             <div class="form-group">
-                                <label>الملفات المرفقة</label>
+                                <label>Attached Files</label>
                                 <div class="file-upload" onclick="document.getElementById('detailsFileInput').click()">
                                     <i class="fas fa-cloud-upload-alt"></i>
-                                    <p><strong>اضغط لرفع الملفات</strong></p>
-                                    <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP, صور</p>
+                                    <p><strong>Click to upload files</strong></p>
+                                    <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP, Images</p>
                                 </div>
                                 <input type="file" id="detailsFileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.jpg,.jpeg,.png" style="display: none;" onchange="handleDetailsFiles(this.files)" />
                                 <div class="file-list" id="detailsFileList"></div>
@@ -2863,12 +2825,12 @@
                                 <div class="checkbox-group">
                                     <input type="checkbox" id="detailsTermsAgree" required />
                                     <label for="detailsTermsAgree">
-                                        <strong>أقر بأنني قرأت ووافقت على الشروط والأحكام</strong>
+                                        <strong>I confirm that I have read and agree to the terms and conditions</strong>
                                     </label>
                                 </div>
                             </div>
                             <button type="submit" class="btn-submit" id="detailsSubmitBtn">
-                                <i class="fas fa-paper-plane"></i> إرسال طلب ${service.name}
+                                <i class="fas fa-paper-plane"></i> Submit ${service.name} Request
                             </button>
                             <div class="form-message" id="detailsFormMessage"></div>
                         </form>
@@ -2876,7 +2838,6 @@
                 </div>
             `;
 
-            // تعيين التاريخ الافتراضي
             const dateInput = document.getElementById('detailsDeliveryDate');
             const today = new Date();
             const future = new Date(today);
@@ -2886,7 +2847,7 @@
         }
 
         // ============================================================
-        // العودة إلى صفحة الخدمات
+        // Show Services Page
         // ============================================================
         function showServicesPage() {
             document.getElementById('servicesPage').style.display = 'block';
@@ -2895,14 +2856,14 @@
         }
 
         // ============================================================
-        // تفعيل/إلغاء الأسئلة الشائعة
+        // Toggle FAQ
         // ============================================================
         function toggleFaq(element) {
             element.classList.toggle('open');
         }
 
         // ============================================================
-        // معالجة الملفات في نموذج التفاصيل
+        // File Handling
         // ============================================================
         let detailsSelectedFiles = [];
 
@@ -2937,8 +2898,19 @@
         }
 
         // ============================================================
-        // إرسال طلب التفاصيل
+        // Submit Details Request
         // ============================================================
+        function showDetailsMessage(text, type) {
+            const messageEl = document.getElementById('detailsFormMessage');
+            messageEl.textContent = text;
+            messageEl.className = 'form-message ' + type;
+            messageEl.style.display = 'block';
+
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 8000);
+        }
+
         async function submitDetailsRequest(event, serviceName) {
             event.preventDefault();
 
@@ -2951,24 +2923,24 @@
             const termsAgreed = document.getElementById('detailsTermsAgree').checked;
 
             const errors = [];
-            if (!name) errors.push('الاسم الكامل');
-            if (!email) errors.push('البريد الإلكتروني');
-            if (!phone) errors.push('رقم التواصل');
-            if (!requestType) errors.push('نوع الطلب');
-            if (!deliveryDate) errors.push('موعد التسليم');
-            if (!description) errors.push('وصف الطلب');
-            if (!termsAgreed) errors.push('الموافقة على الشروط');
+            if (!name) errors.push('Full Name');
+            if (!email) errors.push('Email');
+            if (!phone) errors.push('Phone Number');
+            if (!requestType) errors.push('Request Type');
+            if (!deliveryDate) errors.push('Delivery Date');
+            if (!description) errors.push('Request Description');
+            if (!termsAgreed) errors.push('Terms Agreement');
 
             if (errors.length > 0) {
-                showDetailsMessage(`❌ يرجى تعبئة: ${errors.join('، ')}`, 'error');
+                showDetailsMessage(`❌ Please fill in: ${errors.join(', ')}`, 'error');
                 return;
             }
 
-            showDetailsMessage('⏳ جاري معالجة الطلب...', 'info');
+            showDetailsMessage('⏳ Processing your request...', 'info');
 
             const submitBtn = document.getElementById('detailsSubmitBtn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
             try {
                 const API_URL = window.location.hostname === 'localhost' 
@@ -2984,7 +2956,7 @@
                     category: 'health-sciences-details'
                 };
 
-                console.log('📤 إرسال طلب صحي (تفاصيل):', data);
+                console.log('📤 Sending health request (details):', data);
 
                 const response = await fetch(`${API_URL}/health-orders`, {
                     method: 'POST',
@@ -3011,30 +2983,19 @@
                     future.setDate(future.getDate() + 7);
                     dateInput.value = future.toISOString().split('T')[0];
                 } else {
-                    showDetailsMessage(`❌ ${result.message || 'حدث خطأ'}`, 'error');
+                    showDetailsMessage(`❌ ${result.message || 'An error occurred'}`, 'error');
                 }
             } catch (error) {
-                console.error('❌ خطأ:', error);
-                showDetailsMessage('❌ حدث خطأ في الاتصال بالخادم.', 'error');
+                console.error('❌ Error:', error);
+                showDetailsMessage('❌ An error occurred connecting to the server.', 'error');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
             }
         }
 
-        function showDetailsMessage(text, type) {
-            const messageEl = document.getElementById('detailsFormMessage');
-            messageEl.textContent = text;
-            messageEl.className = 'form-message ' + type;
-            messageEl.style.display = 'block';
-
-            setTimeout(() => {
-                messageEl.style.display = 'none';
-            }, 8000);
-        }
-
         // ============================================================
-        // تبديل الوضع
+        // Theme Toggle
         // ============================================================
         let isDark = false;
 
@@ -3050,7 +3011,7 @@
         }
 
         // ============================================================
-        // زر العودة للأعلى
+        // Back to Top Button
         // ============================================================
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('backToTop');
@@ -3061,16 +3022,16 @@
             }
         });
 
-        console.log('🏥 منصة ارتقاء - الخدمات الأكاديمية في العلوم الصحية');
-        console.log(`📋 ${services.length} خدمة صحية متخصصة`);
-        console.log('📌 التصنيفات:');
-        console.log('  📂 سريرية: 7 خدمات');
-        console.log('  📂 تمريضية: 4 خدمات');
-        console.log('  📂 توثيق: 8 خدمات');
-        console.log('  📂 تقارير: 5 خدمات');
-        console.log('  📂 عروض: 15 خدمة');
-        console.log('📊 إجمالي الخدمات: 39 خدمة صحية');
-        console.log('💡 كل خدمة تحتوي على صفحة تفاصيل متكاملة');
+        console.log('🏥 Irteqa Platform - Health Sciences Academic Services');
+        console.log(`📋 ${services.length} specialized health services`);
+        console.log('📌 Categories:');
+        console.log('  📂 Clinical: 7 services');
+        console.log('  📂 Nursing: 4 services');
+        console.log('  📂 Documentation: 8 services');
+        console.log('  📂 Reports: 5 services');
+        console.log('  📂 Presentations: 15 services');
+        console.log('📊 Total Services: 39 Health Services');
+        console.log('💡 Each service contains a complete details page');
     </script>
 </body>
 </html>
