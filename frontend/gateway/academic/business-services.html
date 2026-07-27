@@ -150,7 +150,7 @@
         }
 
         /* ============================================================
-           الهيدر - مصغر
+           الهيدر
            ============================================================ */
         .header {
             background: var(--bg-card);
@@ -263,61 +263,15 @@
         }
 
         /* ============================================================
-           القسم الرئيسي (Hero) - مصغر
+           القسم الرئيسي (Hero)
            ============================================================ */
         .hero {
-            background: linear-gradient(180deg, #0a0a1a 0%, #0f172a 40%, #1a0a2e 70%, #0d1b2a 100%);
+            background: var(--gradient-hero);
             color: #fff;
             padding: 50px 0 35px;
             position: relative;
             overflow: hidden;
             text-align: center;
-        }
-
-        .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            background: #fff;
-            border-radius: 50%;
-            animation: twinkle var(--duration) ease-in-out infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .light-rays {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .ray {
-            position: absolute;
-            top: -50%;
-            width: 100%;
-            height: 200%;
-            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.03), transparent);
-            transform: rotate(var(--angle));
-            animation: rayMove 12s linear infinite;
-        }
-
-        @keyframes rayMove {
-            0% { transform: rotate(var(--angle)) translateX(-100%); }
-            100% { transform: rotate(var(--angle)) translateX(100%); }
         }
 
         .hero .container {
@@ -326,7 +280,7 @@
         }
 
         .hero-content h1 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             font-weight: 900;
             margin-bottom: 12px;
         }
@@ -365,11 +319,6 @@
             font-size: 0.7rem;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .hero-badge svg {
-            width: 16px;
-            height: 16px;
         }
 
         .hero-actions {
@@ -441,30 +390,24 @@
             border-color: var(--secondary);
         }
 
-        .btn-secondary svg,
-        .btn-primary svg {
-            width: 18px;
-            height: 18px;
-        }
-
         /* ============================================================
-           أقسام الخدمات - مصغرة
+           أقسام الخدمات
            ============================================================ */
         .services-section {
-            padding: 30px 0 40px;
+            padding: 40px 0 50px;
             background: var(--bg-body);
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .section-header h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 900;
             color: var(--text-color);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .section-header h2 span {
@@ -474,18 +417,17 @@
         }
 
         .section-header p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
-            line-height: 1.7;
         }
 
         .service-category {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 20px 22px;
+            padding: 25px 28px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: var(--transition);
@@ -499,9 +441,9 @@
         .category-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
-            padding-bottom: 10px;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
             border-bottom: 2px solid var(--border-color);
             position: relative;
         }
@@ -518,132 +460,222 @@
         }
 
         .category-header .icon-wrapper {
-            width: 44px;
-            height: 44px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: var(--gradient-main);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             color: #fff;
             flex-shrink: 0;
         }
 
-        .category-header .icon-wrapper svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-
         .category-header .info h3 {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 700;
             color: var(--text-color);
             margin: 0;
         }
 
         .category-header .info .en-title {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             font-weight: 400;
         }
 
         .category-desc {
             color: var(--text-muted);
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             line-height: 1.7;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
+        /* ============================================================
+           الخدمات - تصميم دائري ثلاثي الأبعاد
+           ============================================================ */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+            justify-items: center;
+            margin-top: 10px;
         }
 
         .service-item {
-            background: var(--bg-body);
-            border-radius: var(--radius);
-            padding: 16px 18px;
+            width: 100%;
+            max-width: 180px;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            background: var(--bg-card);
+            box-shadow: var(--shadow);
             transition: var(--transition);
-            border: 1px solid transparent;
             cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 15px;
+            text-align: center;
+            border: 3px solid var(--border-color);
+            transform-style: preserve-3d;
+            transform: rotateX(0deg) rotateY(0deg);
+            overflow: hidden;
         }
 
         .service-item:hover {
+            transform: rotateX(6deg) rotateY(-6deg) translateY(-8px) scale(1.04);
+            box-shadow: 0 30px 60px rgba(124, 58, 237, 0.25);
             border-color: var(--primary-light);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-            background: var(--bg-card);
+        }
+
+        .service-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, var(--primary-light) 0%, transparent 70%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+            transform: scale(0.5);
+        }
+
+        .service-item:hover::before {
+            opacity: 0.08;
+            transform: scale(1);
+        }
+
+        .service-item::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+            filter: blur(10px);
+        }
+
+        .service-item:hover::after {
+            opacity: 0.5;
         }
 
         .service-item .service-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.4rem;
-            color: var(--primary);
             margin-bottom: 6px;
-            display: inline-block;
+            background: rgba(124, 58, 237, 0.1);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            transform-style: preserve-3d;
         }
 
-        .service-item .service-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
+        .service-item:hover .service-icon {
+            transform: rotateY(180deg) scale(1.1);
         }
+
+        .service-item .service-icon i {
+            font-size: 1.5rem;
+        }
+
+        .service-item:nth-child(10n+1) .service-icon { color: #7C3AED; background: rgba(124, 58, 237, 0.15); }
+        .service-item:nth-child(10n+2) .service-icon { color: #EC4899; background: rgba(236, 72, 153, 0.15); }
+        .service-item:nth-child(10n+3) .service-icon { color: #F59E0B; background: rgba(245, 158, 11, 0.15); }
+        .service-item:nth-child(10n+4) .service-icon { color: #10B981; background: rgba(16, 185, 129, 0.15); }
+        .service-item:nth-child(10n+5) .service-icon { color: #3B82F6; background: rgba(59, 130, 246, 0.15); }
+        .service-item:nth-child(10n+6) .service-icon { color: #EF4444; background: rgba(239, 68, 68, 0.15); }
+        .service-item:nth-child(10n+7) .service-icon { color: #8B5CF6; background: rgba(139, 92, 246, 0.15); }
+        .service-item:nth-child(10n+8) .service-icon { color: #14B8A6; background: rgba(20, 184, 166, 0.15); }
+        .service-item:nth-child(10n+9) .service-icon { color: #F97316; background: rgba(249, 115, 22, 0.15); }
+        .service-item:nth-child(10n+10) .service-icon { color: #8B5CF6; background: rgba(139, 92, 246, 0.15); }
 
         .service-item h4 {
-            font-size: 0.85rem;
+            font-size: 0.78rem;
+            font-weight: 800;
+            margin-bottom: 2px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
             color: var(--text-color);
-            margin-bottom: 4px;
         }
 
         .service-item .en-name {
-            font-size: 0.6rem;
+            font-size: 0.45rem;
             color: var(--text-muted);
-            margin-bottom: 6px;
-            display: block;
+            opacity: 0.7;
+            position: relative;
+            z-index: 1;
+            margin: 2px 0;
         }
 
         .service-item p {
+            font-size: 0.5rem;
             color: var(--text-muted);
-            font-size: 0.78rem;
-            line-height: 1.6;
-        }
-
-        .service-item .sub-services {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed var(--border-color);
-        }
-
-        .service-item .sub-services .sub-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            padding: 2px 0;
-        }
-
-        .service-item .sub-services .sub-item i {
-            color: var(--primary);
-            font-size: 0.4rem;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-height: 2.2em;
+            margin: 0;
         }
 
         .service-item .tag {
             display: inline-block;
-            margin-top: 6px;
+            margin-top: 4px;
             padding: 2px 10px;
-            background: rgba(108, 43, 217, 0.08);
-            color: var(--primary);
             border-radius: 20px;
-            font-size: 0.55rem;
+            font-size: 0.4rem;
             font-weight: 600;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-item .card-tooltip {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: var(--bg-card);
+            color: var(--text-color);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.45rem;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            border: 1px solid var(--border-color);
+            z-index: 5;
+        }
+
+        .service-item:hover .card-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            bottom: -16px;
         }
 
         /* ============================================================
-           نموذج الطلب - مصغر
+           نموذج الطلب
            ============================================================ */
         .request-form-section {
             padding: 40px 0;
@@ -838,12 +870,6 @@
             box-shadow: 0 10px 30px rgba(108, 43, 217, 0.4);
         }
 
-        .btn-submit svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
         .form-message {
             padding: 12px 16px;
             border-radius: 10px;
@@ -874,8 +900,40 @@
             border: 2px solid #60A5FA;
         }
 
+        .file-list {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .file-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4px 12px 4px 8px;
+            font-size: 0.7rem;
+            color: var(--text-color);
+        }
+
+        .file-item .remove-file {
+            cursor: pointer;
+            color: #EF4444;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-right: 4px;
+            transition: var(--transition);
+        }
+
+        .file-item .remove-file:hover {
+            transform: scale(1.2);
+        }
+
         /* ============================================================
-           الشروط والأحكام - مصغرة
+           الشروط والأحكام
            ============================================================ */
         .terms-section {
             padding: 30px 0 40px;
@@ -907,12 +965,6 @@
             color: var(--primary);
             margin-bottom: 10px;
             display: inline-block;
-        }
-
-        .terms-card .icon svg {
-            width: 28px;
-            height: 28px;
-            fill: currentColor;
         }
 
         .terms-card h3 {
@@ -949,7 +1001,7 @@
         }
 
         /* ============================================================
-           الفوتر - مصغر
+           الفوتر
            ============================================================ */
         .footer {
             background: #0F172A;
@@ -1001,11 +1053,6 @@
             color: #0088CC;
         }
 
-        .footer .footer-contact a svg {
-            width: 18px;
-            height: 18px;
-        }
-
         .footer .footer-links {
             display: flex;
             justify-content: center;
@@ -1036,18 +1083,55 @@
            التجاوب
            ============================================================ */
         @media (max-width: 992px) {
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 20px;
+            }
+            .service-item {
+                max-width: 160px;
+            }
             .hero-content h1 {
                 font-size: 2rem;
             }
             .service-category {
-                padding: 16px 18px;
-            }
-            .services-grid {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                padding: 18px 20px;
             }
         }
 
         @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 15px;
+            }
+            .service-item {
+                max-width: 140px;
+                padding: 16px 12px;
+            }
+            .service-item .service-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            .service-item .service-icon i {
+                font-size: 1.2rem;
+            }
+            .service-item h4 {
+                font-size: 0.68rem;
+            }
+            .service-item p {
+                font-size: 0.45rem;
+                -webkit-line-clamp: 2;
+            }
+            .service-item .en-name {
+                font-size: 0.4rem;
+            }
+            .service-item .tag {
+                font-size: 0.35rem;
+                padding: 2px 8px;
+            }
+            .service-item .card-tooltip {
+                display: none;
+            }
             .hero {
                 padding: 35px 0 25px;
             }
@@ -1062,21 +1146,7 @@
                 padding: 4px 10px;
             }
             .section-header h2 {
-                font-size: 1.5rem;
-            }
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-            .service-category {
-                padding: 14px 16px;
-            }
-            .category-header .info h3 {
-                font-size: 0.95rem;
-            }
-            .category-header .icon-wrapper {
-                width: 38px;
-                height: 38px;
-                font-size: 1rem;
+                font-size: 1.6rem;
             }
             .request-form-wrapper {
                 padding: 20px;
@@ -1106,9 +1176,53 @@
             .back-to-top {
                 bottom: 65px;
             }
+            .category-header .info h3 {
+                font-size: 1rem;
+            }
+            .category-header .icon-wrapper {
+                width: 42px;
+                height: 42px;
+                font-size: 1.2rem;
+            }
+            .service-category {
+                padding: 14px 16px;
+            }
         }
 
         @media (max-width: 480px) {
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 12px;
+            }
+            .service-item {
+                max-width: 120px;
+                padding: 12px 10px;
+            }
+            .service-item .service-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
+                margin-bottom: 4px;
+            }
+            .service-item .service-icon i {
+                font-size: 1rem;
+            }
+            .service-item h4 {
+                font-size: 0.6rem;
+            }
+            .service-item p {
+                font-size: 0.4rem;
+                -webkit-line-clamp: 1;
+                max-height: 1.2em;
+            }
+            .service-item .en-name {
+                font-size: 0.35rem;
+            }
+            .service-item .tag {
+                font-size: 0.3rem;
+                padding: 1px 6px;
+                margin-top: 2px;
+            }
             .hero-content h1 {
                 font-size: 1.3rem;
             }
@@ -1123,24 +1237,11 @@
                 width: 100%;
                 justify-content: center;
             }
-            .service-category {
-                padding: 12px 14px;
+            .section-header h2 {
+                font-size: 1.3rem;
             }
-            .services-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            .service-item {
-                padding: 12px 14px;
-            }
-            .service-item h4 {
-                font-size: 0.78rem;
-            }
-            .service-item p {
-                font-size: 0.72rem;
-            }
-            .service-item .sub-services .sub-item {
-                font-size: 0.65rem;
+            .section-header p {
+                font-size: 0.8rem;
             }
             .request-form-wrapper {
                 padding: 15px;
@@ -1156,6 +1257,20 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 8px;
+            }
+            .category-header .info h3 {
+                font-size: 0.85rem;
+            }
+            .category-header .icon-wrapper {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            .category-desc {
+                font-size: 0.75rem;
+            }
+            .service-category {
+                padding: 12px 14px;
             }
         }
     </style>
@@ -1178,7 +1293,7 @@
     <header class="header" id="header">
         <div class="container">
             <a href="index.html" class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" height="28" width="32" viewBox="0 0 576 512"><path fill="currentColor" d="M48 195.8l209.2 86.1c9.8 4 20.2 6.1 30.8 6.1s21-2.1 30.8-6.1l242.4-99.8c9-3.7 14.8-12.4 14.8-22.1s-5.8-18.4-14.8-22.1L318.8 38.1C309 34.1 298.6 32 288 32s-21 2.1-30.8 6.1L14.8 137.9C5.8 141.6 0 150.3 0 160L0 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-260.2zm48 71.7L96 384c0 53 86 96 192 96s192-43 192-96l0-116.6-142.9 58.9c-15.6 6.4-32.2 9.7-49.1 9.7s-33.5-3.3-49.1-9.7L96 267.4z"/></svg>
+                <i class="fas fa-chart-line"></i>
                 منصة <span>ارتقاء</span>
             </a>
 
@@ -1197,15 +1312,15 @@
     </header>
 
     <!-- ============================================================
-    القسم الرئيسي (Hero) - مصغر
+    القسم الرئيسي (Hero)
     ============================================================ -->
     <section class="hero" id="hero">
         <div class="container">
             <div class="hero-content" data-aos="fade-up" data-aos-duration="800">
                 <div class="hero-badges">
-                    <span class="hero-badge"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M384 32c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0zM64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zm230.7 89.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L211.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"/></svg> 7 أقسام متخصصة</span>
-                    <span class="hero-badge"><i class="fas fa-star"></i> خدمات أكاديمية</span>
-                    <span class="hero-badge"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M320 16a104 104 0 1 1 0 208 104 104 0 1 1 0-208zM96 88a72 72 0 1 1 0 144 72 72 0 1 1 0-144zM0 416c0-70.7 57.3-128 128-128 12.8 0 25.2 1.9 36.9 5.4-32.9 36.8-52.9 85.4-52.9 138.6l0 16c0 11.4 2.4 22.2 6.7 32L32 480c-17.7 0-32-14.3-32-32l0-32zm521.3 64c4.3-9.8 6.7-20.6 6.7-32l0-16c0-53.2-20-101.8-52.9-138.6 11.7-3.5 24.1-5.4 36.9-5.4 70.7 0 128 57.3 128 128l0 32c0 17.7-14.3 32-32 32l-86.7 0zM472 160a72 72 0 1 1 144 0 72 72 0 1 1 -144 0zM160 432c0-88.4 71.6-160 160-160s160 71.6 160 160l0 16c0 17.7-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32l0-16z"/></svg> خبراء معتمدون</span>
+                    <span class="hero-badge"><i class="fas fa-building"></i> 10 أقسام متخصصة</span>
+                    <span class="hero-badge"><i class="fas fa-star"></i> 45 خدمة تطبيقية</span>
+                    <span class="hero-badge"><i class="fas fa-users"></i> خبراء معتمدون</span>
                 </div>
                 <h1>خدمات <span>الأعمال والاقتصاد</span></h1>
                 <p>
@@ -1215,10 +1330,10 @@
                 </p>
                 <div class="hero-actions">
                     <a href="#services" class="btn-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/></svg> استكشف الخدمات
+                        <i class="fas fa-search"></i> استكشف الخدمات
                     </a>
                     <a href="#request-form" class="btn-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M290.5 287.7L491.4 86.9 359 456.3 290.5 287.7zM457.4 53L256.6 253.8 88 185.3 457.4 53zM38.1 216.8l205.8 83.6 83.6 205.8c5.3 13.1 18.1 21.7 32.3 21.7 14.7 0 27.8-9.2 32.8-23.1L570.6 8c3.5-9.8 1-20.6-6.3-28s-18.2-9.8-28-6.3L39.4 151.7c-13.9 5-23.1 18.1-23.1 32.8 0 14.2 8.6 27 21.7 32.3z"/></svg> طلب خدمة
+                        <i class="fas fa-paper-plane"></i> طلب خدمة
                     </a>
                 </div>
             </div>
@@ -1226,19 +1341,22 @@
     </section>
 
     <!-- ============================================================
-    أقسام الخدمات - مصغرة
+    أقسام الخدمات - جميع الخدمات (45 خدمة)
     ============================================================ -->
     <section class="services-section" id="services">
         <div class="container">
             <div class="section-header" data-aos="fade-up" data-aos-duration="600">
                 <h2>أقسام وخدمات <span>الأعمال والاقتصاد</span></h2>
-                <p>اختر القسم المناسب لتخصصك واستكشف الخدمات المتاحة</p>
+                <p>الخدمات التطبيقية المتخصصة في مجالات الأعمال والاقتصاد - 45 خدمة متكاملة</p>
             </div>
 
-            <!-- القسم 1: الإدارة والاستراتيجية وإدارة المشاريع -->
+            <!-- ==========================================================
+            القسم 1: الإدارة والاستراتيجية وإدارة المشاريع - 5 خدمات
+            (3 خدمات قديمة + 2 جديدتين)
+            ========================================================== -->
             <div class="service-category" data-aos="fade-up" data-aos-duration="500">
                 <div class="category-header">
-                    <div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/></svg></div>
+                    <div class="icon-wrapper"><i class="fas fa-briefcase"></i></div>
                     <div class="info">
                         <h3>الإدارة والاستراتيجية وإدارة المشاريع</h3>
                         <span class="en-title">Management, Strategy & Project Management</span>
@@ -1250,56 +1368,65 @@
                 </p>
 
                 <div class="services-grid">
+                    <!-- خدمة قديمة 1 -->
                     <div class="service-item" onclick="openRequestForm('تحليل المفاهيم والنماذج الإدارية')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/></svg></div>
-                        <h4>تحليل المفاهيم والنماذج الإدارية</h4>
-                        <span class="en-name">Management Concepts & Models</span>
-                        <p>تحليل وتطبيق النماذج والمفاهيم الإدارية على الحالات والدراسات المختلفة</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل النماذج الإدارية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق أدوات التحليل الاستراتيجي (SWOT وPESTEL)</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل البيئة الداخلية والخارجية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> دراسة وتحليل الحالات الإدارية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد التقارير والتحليلات الإدارية</div>
-                        </div>
-                        <span class="tag">إدارة • تحليل • استراتيجية</span>
+                        <div class="service-icon"><i class="fas fa-chart-pie"></i></div>
+                        <h4>تحليل النماذج الإدارية</h4>
+                        <span class="en-name">Management Concepts</span>
+                        <p>تحليل وتطبيق النماذج الإدارية</p>
+                        <span class="tag">إدارة • تحليل</span>
+                        <span class="card-tooltip">📊 تحليل نماذج</span>
                     </div>
 
+                    <!-- خدمة قديمة 2 -->
                     <div class="service-item" onclick="openRequestForm('إدارة المشاريع')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32l96 0c26.5 0 48 21.5 48 48l0 16 128 0 0-16c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-16-128 0 0 16c0 7.3-1.7 14.3-4.6 20.5l68.6 91.5 80 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96c0-7.3 1.7-14.3 4.6-20.5L128 224 48 224c-26.5 0-48-21.5-48-48L0 80z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-tasks"></i></div>
                         <h4>إدارة المشاريع</h4>
                         <span class="en-name">Project Management</span>
-                        <p>تحليل وإدارة مراحل دورة حياة المشروع وإعداد الهياكل والخطط</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل مراحل دورة حياة المشروع</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد هياكل وخطط المشاريع</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل المخاطر وإدارة الموارد</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد الجداول الزمنية للمشاريع</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق أدوات متابعة وتقييم المشاريع</div>
-                        </div>
-                        <span class="tag">مشاريع • تخطيط • مخاطر</span>
+                        <p>تحليل وإدارة مراحل المشروع</p>
+                        <span class="tag">مشاريع • تخطيط</span>
+                        <span class="card-tooltip">📋 إدارة مشاريع</span>
                     </div>
 
+                    <!-- خدمة قديمة 3 -->
                     <div class="service-item" onclick="openRequestForm('الجودة والقيادة')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1 465.9 144 490.3 119.6c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9 334.1 80 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-crown"></i></div>
                         <h4>الجودة والقيادة</h4>
                         <span class="en-name">Quality & Leadership</span>
-                        <p>تحليل نماذج إدارة الجودة وتطبيق أدوات التحسين المستمر ودراسة أنماط القيادة</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل نماذج إدارة الجودة</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق أدوات التحسين المستمر</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل أنماط القيادة واتخاذ القرار</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> دراسة الحالات المرتبطة بالسلوك الإداري</div>
-                        </div>
-                        <span class="tag">جودة • قيادة • تحسين</span>
+                        <p>تحليل نماذج الجودة والقيادة</p>
+                        <span class="tag">جودة • قيادة</span>
+                        <span class="card-tooltip">👑 قيادة وجودة</span>
+                    </div>
+
+                    <!-- خدمة جديدة 1: إعداد وتحليل الحالات الإدارية -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتحليل الحالات الإدارية')">
+                        <div class="service-icon"><i class="fas fa-file-alt"></i></div>
+                        <h4>تحليل الحالات الإدارية</h4>
+                        <span class="en-name">Case Study Analysis</span>
+                        <p>إعداد وتحليل الحالات الإدارية</p>
+                        <span class="tag">حالات • تحليل</span>
+                        <span class="card-tooltip">📋 حالات إدارية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 2: تطبيق وتحليل النماذج الإدارية -->
+                    <div class="service-item" onclick="openRequestForm('تطبيق وتحليل النماذج الإدارية')">
+                        <div class="service-icon"><i class="fas fa-sitemap"></i></div>
+                        <h4>تطبيق النماذج الإدارية</h4>
+                        <span class="en-name">Models Application</span>
+                        <p>تطبيق وتحليل النماذج الإدارية</p>
+                        <span class="tag">نماذج • تطبيق</span>
+                        <span class="card-tooltip">🧩 نماذج إدارية</span>
                     </div>
                 </div>
             </div>
 
-            <!-- القسم 2: التمويل والاستثمار والتحليل المالي -->
+            <!-- ==========================================================
+            القسم 2: التمويل والاستثمار والتحليل المالي - 5 خدمات
+            (3 خدمات قديمة + 2 جديدتين)
+            ========================================================== -->
             <div class="service-category" data-aos="fade-up" data-aos-duration="500">
                 <div class="category-header">
-                    <div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M96 0C60.7 0 32 28.7 32 64l0 384c0 35.3 28.7 64 64 64l180 0c-10.5-14.6-19-30.7-25.1-48l-74.9 0 0-80c0-17.7 14.3-32 32-32l32 0c2 0 4 .2 5.9 .5 6-23.6 16.3-45.4 30.1-64.5l-4 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 4c27.5-19.8 60.3-32.4 96-35.4L416 64c0-35.3-28.7-64-64-64L96 0zm32 112c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zM128 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM576 400a144 144 0 1 0 -288 0 144 144 0 1 0 288 0zm-86.6-60.9c7.1 5.2 8.7 15.2 3.5 22.3l-64 88c-2.8 3.8-7 6.2-11.7 6.5s-9.3-1.3-12.6-4.6l-40-40c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0l26.8 26.8 53-72.9c5.2-7.1 15.2-8.7 22.4-3.5z"/></svg></div>
+                    <div class="icon-wrapper"><i class="fas fa-coins"></i></div>
                     <div class="info">
                         <h3>التمويل والاستثمار والتحليل المالي</h3>
                         <span class="en-title">Finance, Investment & Financial Analysis</span>
@@ -1311,54 +1438,65 @@
                 </p>
 
                 <div class="services-grid">
+                    <!-- خدمة قديمة 1 -->
                     <div class="service-item" onclick="openRequestForm('التحليل المالي')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 32c17.7 0 32 14.3 32 32l0 336c0 8.8 7.2 16 16 16l400 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L80 480c-44.2 0-80-35.8-80-80L0 64C0 46.3 14.3 32 32 32zm96 64c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32zm32 80l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 112l256 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-file-invoice-dollar"></i></div>
                         <h4>التحليل المالي</h4>
                         <span class="en-name">Financial Analysis</span>
-                        <p>تحليل القوائم المالية وحساب وتفسير النسب والمؤشرات المالية</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل القوائم المالية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> حساب وتفسير النسب والمؤشرات المالية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تقييم الأداء المالي</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل الاتجاهات المالية</div>
-                        </div>
-                        <span class="tag">تحليل • نسب • أداء</span>
+                        <p>تحليل القوائم والنسب المالية</p>
+                        <span class="tag">تحليل • نسب</span>
+                        <span class="card-tooltip">💰 تحليل مالي</span>
                     </div>
 
+                    <!-- خدمة قديمة 2 -->
                     <div class="service-item" onclick="openRequestForm('التمويل والاستثمار')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 419.6L0 109.5c0-23.2 24.1-38.6 46.3-32 87.7 26.2 149.7 5.5 212.1-15.3 64.5-21.5 129.4-43.1 223.3-13.1 18.5 5.9 30.3 23.8 30.3 43.3l0 310.1c0 23.2-24.1 38.6-46.2 32-87.7-26.2-149.8-5.5-212.1 15.3-64.5 21.5-129.4 43.1-223.3 13.1-18.5-5.9-30.3-23.8-30.3-43.3zM336 256c0-53-35.8-96-80-96s-80 43-80 96 35.8 96 80 96 80-43 80-96zM120 413.6c4.4 0 7.9-3.8 7.2-8.1-4.6-27.8-27-49.5-55.2-53-4.4-.5-8 3.1-8 7.5l0 39.9c0 3.6 2.4 6.8 6 7.7 17.9 4.2 34.3 6.1 50 6.1zm318.5-51.1c5 .8 9.5-3 9.5-8l0-42.6c0-4.4-3.6-8.1-8-7.5-25.2 3.1-45.9 20.9-53.2 44.6-1.4 4.7 2.3 9.1 7.2 9.2 14.2 .4 29 1.7 44.4 4.3zM448 152l0-39.9c0-3.6-2.5-6.8-6-7.7-17.9-4.2-34.3-6.1-50-6.1-4.4 0-7.9 3.8-7.2 8.1 4.6 27.8 27 49.5 55.2 53 4.4 .5 8-3.1 8-7.5zM125.2 162.9c1.4-4.7-2.3-9.1-7.2-9.2-14.2-.4-29-1.7-44.4-4.3-5-.8-9.5 3-9.5 8L64 200c0 4.4 3.6 8.1 8 7.5 25.2-3.1 45.9-20.9 53.2-44.6z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-chart-line"></i></div>
                         <h4>التمويل والاستثمار</h4>
                         <span class="en-name">Finance & Investment</span>
-                        <p>تحليل القرارات التمويلية وتطبيق مفاهيم القيمة الزمنية للنقود وتحليل العائد والمخاطر</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل القرارات التمويلية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق مفاهيم القيمة الزمنية للنقود</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل العائد والمخاطر</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تقييم البدائل الاستثمارية</div>
-                        </div>
-                        <span class="tag">تمويل • استثمار • مخاطر</span>
+                        <p>تحليل القرارات التمويلية</p>
+                        <span class="tag">تمويل • استثمار</span>
+                        <span class="card-tooltip">📈 تمويل واستثمار</span>
                     </div>
 
+                    <!-- خدمة قديمة 3 -->
                     <div class="service-item" onclick="openRequestForm('النماذج والدراسات المالية')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-384c0-35.3-28.7-64-64-64L64 0zM96 64l192 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L96 160c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32zm16 168a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zm80 24a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm128-24a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zM88 352a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm128-24a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zm80 24a24 24 0 1 1 0-48 24 24 0 1 1 0 48zM64 424c0-13.3 10.7-24 24-24l112 0c13.3 0 24 10.7 24 24s-10.7 24-24 24L88 448c-13.3 0-24-10.7-24-24zm232-24c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24z"/></svg></div>
-                        <h4>النماذج والدراسات المالية</h4>
-                        <span class="en-name">Financial Models & Studies</span>
-                        <p>إعداد النماذج المالية وتحليل التدفقات النقدية وتطبيق مؤشرات التقييم</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد النماذج المالية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل التدفقات النقدية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق مؤشرات التقييم (NPV وIRR)</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد التحليلات المالية للمشاريع</div>
-                        </div>
-                        <span class="tag">نماذج • تدفقات • NPV</span>
+                        <div class="service-icon"><i class="fas fa-calculator"></i></div>
+                        <h4>النماذج المالية</h4>
+                        <span class="en-name">Financial Models</span>
+                        <p>إعداد النماذج والدراسات</p>
+                        <span class="tag">نماذج • NPV</span>
+                        <span class="card-tooltip">🧮 نماذج مالية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 1: إعداد وتطوير النماذج المالية للمشاريع -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير النماذج المالية للمشاريع')">
+                        <div class="service-icon"><i class="fas fa-chart-simple"></i></div>
+                        <h4>النماذج المالية للمشاريع</h4>
+                        <span class="en-name">Financial Modeling</span>
+                        <p>تطوير النماذج المالية للمشاريع</p>
+                        <span class="tag">نماذج • توقعات</span>
+                        <span class="card-tooltip">📊 نماذج مالية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 2: التحليل المالي وإدارة المخاطر -->
+                    <div class="service-item" onclick="openRequestForm('التحليل المالي وإدارة المخاطر')">
+                        <div class="service-icon"><i class="fas fa-shield"></i></div>
+                        <h4>التحليل المالي وإدارة المخاطر</h4>
+                        <span class="en-name">Risk Management</span>
+                        <p>تحليل الأداء ودراسة المخاطر</p>
+                        <span class="tag">مخاطر • تحليل</span>
+                        <span class="card-tooltip">🛡️ إدارة مخاطر</span>
                     </div>
                 </div>
             </div>
 
-            <!-- القسم 3: المحاسبة والتقارير المالية -->
+            <!-- ==========================================================
+            القسم 3: المحاسبة والتقارير المالية - 4 خدمات
+            (1 خدمة قديمة + 3 جديدتين)
+            ========================================================== -->
             <div class="service-category" data-aos="fade-up" data-aos-duration="500">
                 <div class="category-header">
-                    <div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-384c0-35.3-28.7-64-64-64L64 0zM96 64l192 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L96 160c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32zm16 168a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zm80 24a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm128-24a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zM88 352a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm128-24a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zm80 24a24 24 0 1 1 0-48 24 24 0 1 1 0 48zM64 424c0-13.3 10.7-24 24-24l112 0c13.3 0 24 10.7 24 24s-10.7 24-24 24L88 448c-13.3 0-24-10.7-24-24zm232-24c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24z"/></svg></div>
+                    <div class="icon-wrapper"><i class="fas fa-book"></i></div>
                     <div class="info">
                         <h3>المحاسبة والتقارير المالية</h3>
                         <span class="en-title">Accounting & Financial Reporting</span>
@@ -1370,29 +1508,55 @@
                 </p>
 
                 <div class="services-grid">
+                    <!-- خدمة قديمة 1 -->
                     <div class="service-item" onclick="openRequestForm('تحليل الحالات المحاسبية')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-384c0-35.3-28.7-64-64-64L64 0zM96 64l192 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L96 160c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32zm16 168a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zm80 24a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm128-24a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zM88 352a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm128-24a24 24 0 1 1 -48 0 24 24 0 1 1 48 0zm80 24a24 24 0 1 1 0-48 24 24 0 1 1 0 48zM64 424c0-13.3 10.7-24 24-24l112 0c13.3 0 24 10.7 24 24s-10.7 24-24 24L88 448c-13.3 0-24-10.7-24-24zm232-24c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-file-invoice"></i></div>
                         <h4>تحليل الحالات المحاسبية</h4>
-                        <span class="en-name">Accounting Case Analysis</span>
-                        <p>معالجة وتحليل القيود المحاسبية وتحليل عناصر التكاليف</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل الحالات المحاسبية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد ومعالجة القيود المحاسبية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل عناصر التكاليف</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق مفاهيم المحاسبة الإدارية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد وتحليل التقارير المالية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تفسير المعلومات المحاسبية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تنظيم وتحليل البيانات المالية</div>
-                        </div>
-                        <span class="tag">محاسبة • تقارير • تحليل</span>
+                        <span class="en-name">Accounting Cases</span>
+                        <p>تحليل القيود والتكاليف</p>
+                        <span class="tag">محاسبة • تقارير</span>
+                        <span class="card-tooltip">📊 محاسبة</span>
+                    </div>
+
+                    <!-- خدمة جديدة 1: تحليل القوائم والبيانات المالية -->
+                    <div class="service-item" onclick="openRequestForm('تحليل القوائم والبيانات المالية')">
+                        <div class="service-icon"><i class="fas fa-chart-bar"></i></div>
+                        <h4>تحليل القوائم المالية</h4>
+                        <span class="en-name">Financial Statements</span>
+                        <p>تحليل القوائم واستخراج المؤشرات</p>
+                        <span class="tag">قوائم • مؤشرات</span>
+                        <span class="card-tooltip">📈 تحليل قوائم</span>
+                    </div>
+
+                    <!-- خدمة جديدة 2: إعداد وتطوير النماذج والجداول المحاسبية -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير النماذج والجداول المحاسبية')">
+                        <div class="service-icon"><i class="fas fa-table"></i></div>
+                        <h4>النماذج والجداول المحاسبية</h4>
+                        <span class="en-name">Accounting Templates</span>
+                        <p>تصميم نماذج وجداول محاسبية</p>
+                        <span class="tag">جداول • نماذج</span>
+                        <span class="card-tooltip">📊 نماذج محاسبية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 3: إعداد ومراجعة التقارير المالية والتحليلية -->
+                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة التقارير المالية والتحليلية')">
+                        <div class="service-icon"><i class="fas fa-file-pen"></i></div>
+                        <h4>التقارير المالية والتحليلية</h4>
+                        <span class="en-name">Financial Reports</span>
+                        <p>إعداد ومراجعة التقارير المالية</p>
+                        <span class="tag">تقارير • تحليل</span>
+                        <span class="card-tooltip">📑 تقارير مالية</span>
                     </div>
                 </div>
             </div>
 
-            <!-- القسم 4: التسويق وريادة الأعمال ودراسات الأعمال -->
+            <!-- ==========================================================
+            القسم 4: التسويق وريادة الأعمال ودراسات الأعمال - 7 خدمات
+            (3 خدمات قديمة + 4 جديدتين)
+            ========================================================== -->
             <div class="service-category" data-aos="fade-up" data-aos-duration="500">
                 <div class="category-header">
-                    <div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M461.2 18.9C472.7 24 480 35.4 480 48l0 416c0 12.6-7.3 24-18.8 29.1s-24.8 3.2-34.3-5.1l-46.6-40.7c-43.6-38.1-98.7-60.3-156.4-63l0 95.7c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-96C57.3 384 0 326.7 0 256S57.3 128 128 128l84.5 0c61.8-.2 121.4-22.7 167.9-63.3l46.6-40.7c9.4-8.3 22.9-10.2 34.3-5.1zM224 320l0 .2c70.3 2.7 137.8 28.5 192 73.4l0-275.3c-54.2 44.9-121.7 70.7-192 73.4L224 320z"/></svg></div>
+                    <div class="icon-wrapper"><i class="fas fa-bullhorn"></i></div>
                     <div class="info">
                         <h3>التسويق وريادة الأعمال ودراسات الأعمال</h3>
                         <span class="en-title">Marketing, Entrepreneurship & Business Studies</span>
@@ -1404,54 +1568,85 @@
                 </p>
 
                 <div class="services-grid">
+                    <!-- خدمة قديمة 1 -->
                     <div class="service-item" onclick="openRequestForm('التسويق')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M461.2 18.9C472.7 24 480 35.4 480 48l0 416c0 12.6-7.3 24-18.8 29.1s-24.8 3.2-34.3-5.1l-46.6-40.7c-43.6-38.1-98.7-60.3-156.4-63l0 95.7c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-96C57.3 384 0 326.7 0 256S57.3 128 128 128l84.5 0c61.8-.2 121.4-22.7 167.9-63.3l46.6-40.7c9.4-8.3 22.9-10.2 34.3-5.1zM224 320l0 .2c70.3 2.7 137.8 28.5 192 73.4l0-275.3c-54.2 44.9-121.7 70.7-192 73.4L224 320z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-chart-bar"></i></div>
                         <h4>التسويق</h4>
                         <span class="en-name">Marketing</span>
-                        <p>تحليل الأسواق والقطاعات المستهدفة وتحليل سلوك المستهلك وتطبيق نماذج واستراتيجيات التسويق</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل الأسواق والقطاعات المستهدفة</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل سلوك المستهلك</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق نماذج واستراتيجيات التسويق</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل المزيج التسويقي</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد الدراسات والتحليلات التسويقية</div>
-                        </div>
-                        <span class="tag">تسويق • أسواق • استراتيجية</span>
+                        <p>تحليل الأسواق والسلوك</p>
+                        <span class="tag">تسويق • استراتيجية</span>
+                        <span class="card-tooltip">📊 تسويق</span>
                     </div>
 
+                    <!-- خدمة قديمة 2 -->
                     <div class="service-item" onclick="openRequestForm('ريادة الأعمال')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-lightbulb"></i></div>
                         <h4>ريادة الأعمال</h4>
                         <span class="en-name">Entrepreneurship</span>
-                        <p>تحليل الأفكار والمشاريع الريادية وتقييم نماذج الأعمال وتطبيق نموذج العمل التجاري</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل الأفكار والمشاريع الريادية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تقييم نماذج الأعمال</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق نموذج العمل التجاري Business Model Canvas</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل الفرص والتحديات</div>
-                        </div>
-                        <span class="tag">ريادة • أعمال • نموذج</span>
+                        <p>تحليل المشاريع الريادية</p>
+                        <span class="tag">ريادة • أعمال</span>
+                        <span class="card-tooltip">💡 ريادة أعمال</span>
                     </div>
 
+                    <!-- خدمة قديمة 3 -->
                     <div class="service-item" onclick="openRequestForm('دراسات الأعمال')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M48 195.8l209.2 86.1c9.8 4 20.2 6.1 30.8 6.1s21-2.1 30.8-6.1l242.4-99.8c9-3.7 14.8-12.4 14.8-22.1s-5.8-18.4-14.8-22.1L318.8 38.1C309 34.1 298.6 32 288 32s-21 2.1-30.8 6.1L14.8 137.9C5.8 141.6 0 150.3 0 160L0 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-260.2zm48 71.7L96 384c0 53 86 96 192 96s192-43 192-96l0-116.6-142.9 58.9c-15.6 6.4-32.2 9.7-49.1 9.7s-33.5-3.3-49.1-9.7L96 267.4z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-building"></i></div>
                         <h4>دراسات الأعمال</h4>
                         <span class="en-name">Business Studies</span>
-                        <p>تحليل بيئة الأعمال ودراسة الحالات التجارية وإعداد الدراسات والتقارير المتعلقة بالأعمال</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل بيئة الأعمال</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> دراسة الحالات التجارية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد الدراسات والتقارير المتعلقة بالأعمال</div>
-                        </div>
-                        <span class="tag">أعمال • دراسات • تقارير</span>
+                        <p>تحليل بيئة الأعمال</p>
+                        <span class="tag">أعمال • دراسات</span>
+                        <span class="card-tooltip">🏢 دراسات أعمال</span>
+                    </div>
+
+                    <!-- خدمة جديدة 1: إعداد وتطوير خطط المشاريع والأعمال -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير خطط المشاريع والأعمال')">
+                        <div class="service-icon"><i class="fas fa-list-check"></i></div>
+                        <h4>خطط المشاريع والأعمال</h4>
+                        <span class="en-name">Project Plans</span>
+                        <p>تطوير خطط المشاريع والأعمال</p>
+                        <span class="tag">خطط • مشاريع</span>
+                        <span class="card-tooltip">📋 خطط مشاريع</span>
+                    </div>
+
+                    <!-- خدمة جديدة 2: إعداد ومراجعة دراسات الجدوى للمشاريع -->
+                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة دراسات الجدوى للمشاريع')">
+                        <div class="service-icon"><i class="fas fa-scale-balanced"></i></div>
+                        <h4>دراسات الجدوى</h4>
+                        <span class="en-name">Feasibility Studies</span>
+                        <p>إعداد ومراجعة دراسات الجدوى</p>
+                        <span class="tag">جدوى • دراسة</span>
+                        <span class="card-tooltip">⚖️ دراسات جدوى</span>
+                    </div>
+
+                    <!-- خدمة جديدة 3: إعداد وتحليل نموذج العمل التجاري -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتحليل نموذج العمل التجاري')">
+                        <div class="service-icon"><i class="fas fa-cube"></i></div>
+                        <h4>نموذج العمل التجاري</h4>
+                        <span class="en-name">Business Model</span>
+                        <p>إعداد وتحليل نموذج العمل</p>
+                        <span class="tag">نموذج • أعمال</span>
+                        <span class="card-tooltip">🧊 نموذج عمل</span>
+                    </div>
+
+                    <!-- خدمة جديدة 4: تقييم وتطوير أفكار المشاريع -->
+                    <div class="service-item" onclick="openRequestForm('تقييم وتطوير أفكار المشاريع')">
+                        <div class="service-icon"><i class="fas fa-brain"></i></div>
+                        <h4>تقييم أفكار المشاريع</h4>
+                        <span class="en-name">Idea Evaluation</span>
+                        <p>تقييم وتطوير أفكار المشاريع</p>
+                        <span class="tag">أفكار • تقييم</span>
+                        <span class="card-tooltip">💡 تقييم أفكار</span>
                     </div>
                 </div>
             </div>
 
-            <!-- القسم 5: الاقتصاد والتحليل الكمي -->
+            <!-- ==========================================================
+            القسم 5: الاقتصاد والتحليل الكمي - 7 خدمات
+            (3 خدمات قديمة + 4 جديدتين)
+            ========================================================== -->
             <div class="service-category" data-aos="fade-up" data-aos-duration="500">
                 <div class="category-header">
-                    <div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M351.9 280l-190.9 0c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zM160.9 232l190.9 0C349 167.5 334.7 108.1 314.4 64.6 303 40.2 290.7 22.8 279.3 12.2 268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4zm-48 0C116.4 146.4 138.5 66.9 170.8 14.7 78.7 47.3 10.9 131.2 1.5 232l111.4 0zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3L1.5 280zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3l-111.4 0zm111.4-48C501.9 131.2 434.1 47.3 342 14.7 374.3 66.9 396.4 146.4 399.9 232l111.4 0z"/></svg></div>
+                    <div class="icon-wrapper"><i class="fas fa-globe-americas"></i></div>
                     <div class="info">
                         <h3>الاقتصاد والتحليل الكمي</h3>
                         <span class="en-title">Economics & Quantitative Analysis</span>
@@ -1463,54 +1658,85 @@
                 </p>
 
                 <div class="services-grid">
+                    <!-- خدمة قديمة 1 -->
                     <div class="service-item" onclick="openRequestForm('الاقتصاد')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M351.9 280l-190.9 0c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zM160.9 232l190.9 0C349 167.5 334.7 108.1 314.4 64.6 303 40.2 290.7 22.8 279.3 12.2 268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4zm-48 0C116.4 146.4 138.5 66.9 170.8 14.7 78.7 47.3 10.9 131.2 1.5 232l111.4 0zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3L1.5 280zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3l-111.4 0zm111.4-48C501.9 131.2 434.1 47.3 342 14.7 374.3 66.9 396.4 146.4 399.9 232l111.4 0z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-chart-simple"></i></div>
                         <h4>الاقتصاد</h4>
                         <span class="en-name">Economics</span>
-                        <p>تحليل المفاهيم والنماذج الاقتصادية ودراسة المؤشرات الاقتصادية وتحليل الأسواق</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل المفاهيم والنماذج الاقتصادية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> دراسة المؤشرات الاقتصادية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل الأسواق والعوامل الاقتصادية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تفسير الظواهر الاقتصادية</div>
-                        </div>
-                        <span class="tag">اقتصاد • مؤشرات • أسواق</span>
+                        <p>تحليل المؤشرات الاقتصادية</p>
+                        <span class="tag">اقتصاد • مؤشرات</span>
+                        <span class="card-tooltip">🌍 اقتصاد</span>
                     </div>
 
+                    <!-- خدمة قديمة 2 -->
                     <div class="service-item" onclick="openRequestForm('التحليل الكمي')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 32c17.7 0 32 14.3 32 32l0 336c0 8.8 7.2 16 16 16l400 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L80 480c-44.2 0-80-35.8-80-80L0 64C0 46.3 14.3 32 32 32zm96 64c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32zm32 80l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 112l256 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-square-root-variable"></i></div>
                         <h4>التحليل الكمي</h4>
                         <span class="en-name">Quantitative Analysis</span>
-                        <p>تحليل البيانات الكمية وتطبيق الأساليب الإحصائية وبناء النماذج التحليلية</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل البيانات الكمية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق الأساليب الإحصائية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> بناء النماذج التحليلية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تفسير النتائج والمؤشرات</div>
-                        </div>
-                        <span class="tag">كمي • إحصاء • نماذج</span>
+                        <p>تحليل البيانات الكمية</p>
+                        <span class="tag">كمي • إحصاء</span>
+                        <span class="card-tooltip">📊 تحليل كمي</span>
                     </div>
 
+                    <!-- خدمة قديمة 3 -->
                     <div class="service-item" onclick="openRequestForm('بحوث العمليات واتخاذ القرار')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/></svg></div>
-                        <h4>بحوث العمليات واتخاذ القرار</h4>
-                        <span class="en-name">Operations Research & Decision Making</span>
-                        <p>تطبيق النماذج الرياضية وتحليل البدائل والقرارات والبرمجة الخطية ونماذج التحسين</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق النماذج الرياضية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل البدائل والقرارات</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> البرمجة الخطية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> نماذج التحسين</div>
-                        </div>
-                        <span class="tag">عمليات • قرار • تحسين</span>
+                        <div class="service-icon"><i class="fas fa-diagram-project"></i></div>
+                        <h4>بحوث العمليات</h4>
+                        <span class="en-name">Operations Research</span>
+                        <p>نماذج رياضية وتحسين</p>
+                        <span class="tag">عمليات • قرار</span>
+                        <span class="card-tooltip">📐 بحوث عمليات</span>
+                    </div>
+
+                    <!-- خدمة جديدة 1: تحليل البيانات والمؤشرات الاقتصادية -->
+                    <div class="service-item" onclick="openRequestForm('تحليل البيانات والمؤشرات الاقتصادية')">
+                        <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                        <h4>تحليل المؤشرات الاقتصادية</h4>
+                        <span class="en-name">Economic Indicators</span>
+                        <p>تحليل البيانات والمؤشرات</p>
+                        <span class="tag">مؤشرات • بيانات</span>
+                        <span class="card-tooltip">📈 مؤشرات اقتصادية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 2: إعداد ومراجعة الدراسات الاقتصادية -->
+                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة الدراسات الاقتصادية')">
+                        <div class="service-icon"><i class="fas fa-file-signature"></i></div>
+                        <h4>الدراسات الاقتصادية</h4>
+                        <span class="en-name">Economic Studies</span>
+                        <p>إعداد ومراجعة دراسات اقتصادية</p>
+                        <span class="tag">دراسات • اقتصاد</span>
+                        <span class="card-tooltip">📄 دراسات اقتصادية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 3: التحليل الإحصائي لبيانات الأعمال -->
+                    <div class="service-item" onclick="openRequestForm('التحليل الإحصائي لبيانات الأعمال')">
+                        <div class="service-icon"><i class="fas fa-calculator"></i></div>
+                        <h4>التحليل الإحصائي للأعمال</h4>
+                        <span class="en-name">Statistical Analysis</span>
+                        <p>تحليل بيانات الأعمال إحصائياً</p>
+                        <span class="tag">إحصاء • أعمال</span>
+                        <span class="card-tooltip">📊 تحليل إحصائي</span>
+                    </div>
+
+                    <!-- خدمة جديدة 4: إعداد النماذج الكمية وتحليل القرارات -->
+                    <div class="service-item" onclick="openRequestForm('إعداد النماذج الكمية وتحليل القرارات')">
+                        <div class="service-icon"><i class="fas fa-gear"></i></div>
+                        <h4>النماذج الكمية وتحليل القرار</h4>
+                        <span class="en-name">Quantitative Models</span>
+                        <p>إعداد نماذج كمية وتحليل القرارات</p>
+                        <span class="tag">نماذج • قرار</span>
+                        <span class="card-tooltip">⚙️ نماذج كمية</span>
                     </div>
                 </div>
             </div>
 
-            <!-- القسم 6: إدارة العمليات وسلاسل الإمداد -->
+            <!-- ==========================================================
+            القسم 6: إدارة العمليات وسلاسل الإمداد - 6 خدمات
+            (5 خدمات قديمة + 1 جديدة)
+            ========================================================== -->
             <div class="service-category" data-aos="fade-up" data-aos-duration="500">
                 <div class="category-header">
-                    <div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M64 80c-8.8 0-16 7.2-16 16l0 288c0 8.8 7.2 16 16 16l3.3 0c10.4-36.9 44.4-64 84.7-64s74.2 27.1 84.7 64l102.6 0c4.9-17.4 15.1-32.7 28.7-43.9L368 96c0-8.8-7.2-16-16-16L64 80zm3.3 368L64 448c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l288 0c35.3 0 64 28.7 64 64l0 32 55.4 0c17 0 33.3 6.7 45.3 18.7l40.6 40.6c12 12 18.7 28.3 18.7 45.3L576 384c0 35.3-28.7 64-64 64l-3.3 0c-10.4 36.9-44.4 64-84.7 64s-74.2-27.1-84.7-64l-102.6 0c-10.4 36.9-44.4 64-84.7 64s-74.2-27.1-84.7-64zM416 256l112 0 0-23.4c0-4.2-1.7-8.3-4.7-11.3l-40.6-40.6c-3-3-7.1-4.7-11.3-4.7l-55.4 0 0 80zm0 48l0 32.4c2.6-.2 5.3-.4 8-.4 40.3 0 74.2 27.1 84.7 64l3.3 0c8.8 0 16-7.2 16-16l0-80-112 0zM152 464a40 40 0 1 0 0-80 40 40 0 1 0 0 80zm272 0a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/></svg></div>
+                    <div class="icon-wrapper"><i class="fas fa-truck"></i></div>
                     <div class="info">
                         <h3>إدارة العمليات وسلاسل الإمداد</h3>
                         <span class="en-title">Operations & Supply Chain Management</span>
@@ -1522,29 +1748,75 @@
                 </p>
 
                 <div class="services-grid">
-                    <div class="service-item" onclick="openRequestForm('تحليل العمليات التشغيلية')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"/></svg></div>
+                    <!-- خدمة قديمة 1 -->
+                    <div class="service-item" onclick="openRequestForm('تحليل وتطوير العمليات التشغيلية')">
+                        <div class="service-icon"><i class="fas fa-gears"></i></div>
                         <h4>تحليل العمليات التشغيلية</h4>
-                        <span class="en-name">Operational Process Analysis</span>
-                        <p>تحليل العمليات التشغيلية وتخطيط الإنتاج وإدارة وتحليل المخزون</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل العمليات التشغيلية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تخطيط الإنتاج</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إدارة وتحليل المخزون</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> دراسة سلاسل الإمداد</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل تدفق العمليات</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تطبيق أدوات تحسين الكفاءة</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> دراسة الحالات التشغيلية</div>
-                        </div>
-                        <span class="tag">عمليات • إنتاج • مخزون</span>
+                        <span class="en-name">Operations Analysis</span>
+                        <p>مراجعة وتحليل العمليات</p>
+                        <span class="tag">عمليات • تطوير</span>
+                        <span class="card-tooltip">⚙️ تحليل عمليات</span>
+                    </div>
+
+                    <!-- خدمة قديمة 2 -->
+                    <div class="service-item" onclick="openRequestForm('إعداد نماذج تخطيط العمليات والإنتاج')">
+                        <div class="service-icon"><i class="fas fa-industry"></i></div>
+                        <h4>تخطيط العمليات والإنتاج</h4>
+                        <span class="en-name">Production Planning</span>
+                        <p>نماذج تخطيط إنتاجية</p>
+                        <span class="tag">تخطيط • إنتاج</span>
+                        <span class="card-tooltip">🏭 تخطيط إنتاج</span>
+                    </div>
+
+                    <!-- خدمة قديمة 3 -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتحليل نماذج إدارة المخزون')">
+                        <div class="service-icon"><i class="fas fa-warehouse"></i></div>
+                        <h4>إدارة المخزون</h4>
+                        <span class="en-name">Inventory Management</span>
+                        <p>نماذج إدارة المخزون</p>
+                        <span class="tag">مخزون • EOQ</span>
+                        <span class="card-tooltip">📦 إدارة مخزون</span>
+                    </div>
+
+                    <!-- خدمة قديمة 4 -->
+                    <div class="service-item" onclick="openRequestForm('إعداد نماذج تحليل سلاسل الإمداد')">
+                        <div class="service-icon"><i class="fas fa-route"></i></div>
+                        <h4>تحليل سلاسل الإمداد</h4>
+                        <span class="en-name">Supply Chain Analysis</span>
+                        <p>نماذج تحليل سلاسل الإمداد</p>
+                        <span class="tag">سلاسل • لوجستيات</span>
+                        <span class="card-tooltip">🚚 سلاسل إمداد</span>
+                    </div>
+
+                    <!-- خدمة قديمة 5 -->
+                    <div class="service-item" onclick="openRequestForm('تحسين العمليات التشغيلية')">
+                        <div class="service-icon"><i class="fas fa-cogs"></i></div>
+                        <h4>تحسين العمليات التشغيلية</h4>
+                        <span class="en-name">Process Improvement</span>
+                        <p>دراسة وتحسين العمليات</p>
+                        <span class="tag">عمليات • كفاءة</span>
+                        <span class="card-tooltip">🔧 تحسين عمليات</span>
+                    </div>
+
+                    <!-- خدمة جديدة 1: إعداد خرائط العمليات التشغيلية -->
+                    <div class="service-item" onclick="openRequestForm('إعداد خرائط العمليات التشغيلية')">
+                        <div class="service-icon"><i class="fas fa-map"></i></div>
+                        <h4>خرائط العمليات التشغيلية</h4>
+                        <span class="en-name">Process Mapping</span>
+                        <p>إعداد خرائط العمليات التشغيلية</p>
+                        <span class="tag">خرائط • عمليات</span>
+                        <span class="card-tooltip">🗺️ خرائط عمليات</span>
                     </div>
                 </div>
             </div>
 
-            <!-- القسم 7: الدراسات والتقارير التحليلية -->
+            <!-- ==========================================================
+            القسم 7: الدراسات والتقارير التحليلية - 11 خدمة
+            (7 خدمات قديمة + 4 جديدتين)
+            ========================================================== -->
             <div class="service-category" data-aos="fade-up" data-aos-duration="500">
                 <div class="category-header">
-                    <div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M48 195.8l209.2 86.1c9.8 4 20.2 6.1 30.8 6.1s21-2.1 30.8-6.1l242.4-99.8c9-3.7 14.8-12.4 14.8-22.1s-5.8-18.4-14.8-22.1L318.8 38.1C309 34.1 298.6 32 288 32s-21 2.1-30.8 6.1L14.8 137.9C5.8 141.6 0 150.3 0 160L0 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-260.2zm48 71.7L96 384c0 53 86 96 192 96s192-43 192-96l0-116.6-142.9 58.9c-15.6 6.4-32.2 9.7-49.1 9.7s-33.5-3.3-49.1-9.7L96 267.4z"/></svg></div>
+                    <div class="icon-wrapper"><i class="fas fa-file-alt"></i></div>
                     <div class="info">
                         <h3>الدراسات والتقارير التحليلية</h3>
                         <span class="en-title">Analytical Studies & Reports</span>
@@ -1556,35 +1828,185 @@
                 </p>
 
                 <div class="services-grid">
+                    <!-- خدمة قديمة 1 -->
+                    <div class="service-item" onclick="openRequestForm('إعداد الدراسات التطبيقية المتخصصة')">
+                        <div class="service-icon"><i class="fas fa-pen-fancy"></i></div>
+                        <h4>الدراسات التطبيقية</h4>
+                        <span class="en-name">Applied Studies</span>
+                        <p>إعداد دراسات تطبيقية</p>
+                        <span class="tag">دراسات • تطبيق</span>
+                        <span class="card-tooltip">📝 دراسات تطبيقية</span>
+                    </div>
+
+                    <!-- خدمة قديمة 2 -->
                     <div class="service-item" onclick="openRequestForm('التقارير التحليلية')">
-                        <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M200 48l112 0c4.4 0 8 3.6 8 8l0 40-128 0 0-40c0-4.4 3.6-8 8-8zm-56 8l0 40-80 0C28.7 96 0 124.7 0 160l0 96 512 0 0-96c0-35.3-28.7-64-64-64l-80 0 0-40c0-30.9-25.1-56-56-56L200 0c-30.9 0-56 25.1-56 56zM512 304l-192 0 0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16-192 0 0 112c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-112z"/></svg></div>
+                        <div class="service-icon"><i class="fas fa-file-lines"></i></div>
                         <h4>التقارير التحليلية</h4>
                         <span class="en-name">Analytical Reports</span>
-                        <p>إعداد التقارير التحليلية المتخصصة وتحليل ودراسة الحالات وإعداد الدراسات</p>
-                        <div class="sub-services">
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد التقارير التحليلية المتخصصة</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تحليل ودراسة الحالات (Case Studies)</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد الدراسات المتعلقة بمجالات الأعمال والاقتصاد</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تنظيم وتحليل البيانات والمعلومات</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> إعداد النماذج والجداول التحليلية</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تلخيص وتحليل المعلومات لدعم الدراسات والمشاريع</div>
-                            <div class="sub-item"><i class="fas fa-circle"></i> تصميم العروض التقديمية المرتبطة بالتقارير والدراسات</div>
-                        </div>
-                        <span class="tag">تقارير • دراسات • تحليل</span>
+                        <p>إعداد تقارير متخصصة</p>
+                        <span class="tag">تقارير • تحليل</span>
+                        <span class="card-tooltip">📄 تقارير تحليلية</span>
+                    </div>
+
+                    <!-- خدمة قديمة 3 -->
+                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة التقارير التطبيقية المتخصصة')">
+                        <div class="service-icon"><i class="fas fa-file-pen"></i></div>
+                        <h4>إعداد ومراجعة التقارير</h4>
+                        <span class="en-name">Applied Reports</span>
+                        <p>إعداد ومراجعة تقارير تطبيقية</p>
+                        <span class="tag">تقارير • مراجعة</span>
+                        <span class="card-tooltip">📑 إعداد تقارير</span>
+                    </div>
+
+                    <!-- خدمة قديمة 4 -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير العروض التقديمية للمشاريع')">
+                        <div class="service-icon"><i class="fas fa-presentation-screen"></i></div>
+                        <h4>العروض التقديمية</h4>
+                        <span class="en-name">Project Presentations</span>
+                        <p>تطوير عروض المشاريع</p>
+                        <span class="tag">عرض • تصميم</span>
+                        <span class="card-tooltip">📽️ عروض تقديمية</span>
+                    </div>
+
+                    <!-- خدمة قديمة 5 -->
+                    <div class="service-item" onclick="openRequestForm('تطوير النماذج والجداول التحليلية')">
+                        <div class="service-icon"><i class="fas fa-table"></i></div>
+                        <h4>النماذج والجداول</h4>
+                        <span class="en-name">Analytical Templates</span>
+                        <p>تصميم نماذج وجداول تحليلية</p>
+                        <span class="tag">نماذج • جداول</span>
+                        <span class="card-tooltip">📊 نماذج تحليلية</span>
+                    </div>
+
+                    <!-- خدمة قديمة 6 -->
+                    <div class="service-item" onclick="openRequestForm('مراجعة وتقييم الأعمال التطبيقية')">
+                        <div class="service-icon"><i class="fas fa-clipboard-check"></i></div>
+                        <h4>مراجعة وتقييم الأعمال</h4>
+                        <span class="en-name">Work Review</span>
+                        <p>مراجعة وتقييم الأعمال التطبيقية</p>
+                        <span class="tag">مراجعة • تقييم</span>
+                        <span class="card-tooltip">✅ مراجعة أعمال</span>
+                    </div>
+
+                    <!-- خدمة قديمة 7 -->
+                    <div class="service-item" onclick="openRequestForm('تحسين وتطوير المخرجات النهائية')">
+                        <div class="service-icon"><i class="fas fa-arrow-up"></i></div>
+                        <h4>تحسين المخرجات النهائية</h4>
+                        <span class="en-name">Outputs Improvement</span>
+                        <p>تحسين جودة المخرجات النهائية</p>
+                        <span class="tag">تحسين • تطوير</span>
+                        <span class="card-tooltip">🚀 تحسين مخرجات</span>
+                    </div>
+
+                    <!-- خدمة جديدة 1: إعداد ومراجعة التقارير الإدارية التطبيقية -->
+                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة التقارير الإدارية التطبيقية')">
+                        <div class="service-icon"><i class="fas fa-file-lines"></i></div>
+                        <h4>التقارير الإدارية التطبيقية</h4>
+                        <span class="en-name">Management Reports</span>
+                        <p>إعداد ومراجعة تقارير إدارية</p>
+                        <span class="tag">تقارير • إدارة</span>
+                        <span class="card-tooltip">📋 تقارير إدارية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 2: إعداد الدراسات التسويقية -->
+                    <div class="service-item" onclick="openRequestForm('إعداد الدراسات التسويقية')">
+                        <div class="service-icon"><i class="fas fa-chart-pie"></i></div>
+                        <h4>الدراسات التسويقية</h4>
+                        <span class="en-name">Marketing Studies</span>
+                        <p>إعداد دراسات تسويقية</p>
+                        <span class="tag">تسويق • دراسات</span>
+                        <span class="card-tooltip">📊 دراسات تسويقية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 3: إعداد وتطوير الخطط التسويقية -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير الخطط التسويقية')">
+                        <div class="service-icon"><i class="fas fa-bullhorn"></i></div>
+                        <h4>الخطط التسويقية</h4>
+                        <span class="en-name">Marketing Plans</span>
+                        <p>تطوير الخطط التسويقية</p>
+                        <span class="tag">خطط • تسويق</span>
+                        <span class="card-tooltip">📋 خطط تسويقية</span>
+                    </div>
+
+                    <!-- خدمة جديدة 4: إعداد وتطوير النماذج والجداول التحليلية (مكررة ولكن نحتاج إلى تمييزها) 
+                    تمت إضافتها بالفعل كخدمة قديمة رقم 5 -->
+                </div>
+            </div>
+
+            <!-- ==========================================================
+            القسم 8: المشاريع وريادة الأعمال (قسم جديد)
+            ========================================================== -->
+            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
+                <div class="category-header">
+                    <div class="icon-wrapper"><i class="fas fa-rocket"></i></div>
+                    <div class="info">
+                        <h3>المشاريع وريادة الأعمال</h3>
+                        <span class="en-title">Projects & Entrepreneurship</span>
+                    </div>
+                </div>
+
+                <p class="category-desc">
+                    خدمات متخصصة في تطوير وتحليل المشاريع والأفكار الريادية، تشمل إعداد الخطط، دراسة الجدوى، وتطوير نماذج العمل.
+                </p>
+
+                <div class="services-grid">
+                    <!-- خدمة جديدة: إعداد وتحليل نموذج العمل التجاري (تمت إضافتها بالفعل في القسم 4) -->
+                    <!-- سنضيف خدمات إضافية هنا لضمان عدم التكرار -->
+                    
+                    <!-- خدمة جديدة: تقييم وتطوير أفكار المشاريع (تمت إضافتها بالفعل في القسم 4) -->
+                    
+                    <!-- خدمة إضافية جديدة: إعداد خطط المشاريع -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير خطط المشاريع والأعمال')">
+                        <div class="service-icon"><i class="fas fa-list-check"></i></div>
+                        <h4>خطط المشاريع والأعمال</h4>
+                        <span class="en-name">Project Plans</span>
+                        <p>تطوير خطط المشاريع والأعمال</p>
+                        <span class="tag">خطط • مشاريع</span>
+                        <span class="card-tooltip">📋 خطط مشاريع</span>
+                    </div>
+
+                    <!-- خدمة إضافية جديدة: دراسات الجدوى -->
+                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة دراسات الجدوى للمشاريع')">
+                        <div class="service-icon"><i class="fas fa-scale-balanced"></i></div>
+                        <h4>دراسات الجدوى</h4>
+                        <span class="en-name">Feasibility Studies</span>
+                        <p>إعداد ومراجعة دراسات الجدوى</p>
+                        <span class="tag">جدوى • دراسة</span>
+                        <span class="card-tooltip">⚖️ دراسات جدوى</span>
+                    </div>
+
+                    <!-- خدمة إضافية جديدة: تقييم أفكار المشاريع -->
+                    <div class="service-item" onclick="openRequestForm('تقييم وتطوير أفكار المشاريع')">
+                        <div class="service-icon"><i class="fas fa-brain"></i></div>
+                        <h4>تقييم أفكار المشاريع</h4>
+                        <span class="en-name">Idea Evaluation</span>
+                        <p>تقييم وتطوير أفكار المشاريع</p>
+                        <span class="tag">أفكار • تقييم</span>
+                        <span class="card-tooltip">💡 تقييم أفكار</span>
+                    </div>
+
+                    <!-- خدمة جديدة: نموذج العمل التجاري -->
+                    <div class="service-item" onclick="openRequestForm('إعداد وتحليل نموذج العمل التجاري')">
+                        <div class="service-icon"><i class="fas fa-cube"></i></div>
+                        <h4>نموذج العمل التجاري</h4>
+                        <span class="en-name">Business Model</span>
+                        <p>إعداد وتحليل نموذج العمل</p>
+                        <span class="tag">نموذج • أعمال</span>
+                        <span class="card-tooltip">🧊 نموذج عمل</span>
                     </div>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: 30px;" data-aos="fade-up" data-aos-duration="600">
                 <a href="#request-form" class="btn-primary" style="padding: 12px 45px; font-size: 0.9rem;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" height="18" width="20"><path fill="currentColor" d="M290.5 287.7L491.4 86.9 359 456.3 290.5 287.7zM457.4 53L256.6 253.8 88 185.3 457.4 53zM38.1 216.8l205.8 83.6 83.6 205.8c5.3 13.1 18.1 21.7 32.3 21.7 14.7 0 27.8-9.2 32.8-23.1L570.6 8c3.5-9.8 1-20.6-6.3-28s-18.2-9.8-28-6.3L39.4 151.7c-13.9 5-23.1 18.1-23.1 32.8 0 14.2 8.6 27 21.7 32.3z"/></svg> تقديم طلب خدمة
+                    <i class="fas fa-paper-plane"></i> تقديم طلب خدمة
                 </a>
             </div>
         </div>
     </section>
 
     <!-- ============================================================
-    نموذج طلب الخدمة - مصغر
+    نموذج طلب الخدمة
     ============================================================ -->
     <section class="request-form-section" id="request-form">
         <div class="container">
@@ -1624,6 +2046,7 @@
                                 <option value="الاقتصاد والتحليل الكمي">الاقتصاد والتحليل الكمي</option>
                                 <option value="إدارة العمليات وسلاسل الإمداد">إدارة العمليات وسلاسل الإمداد</option>
                                 <option value="الدراسات والتقارير التحليلية">الدراسات والتقارير التحليلية</option>
+                                <option value="المشاريع وريادة الأعمال">المشاريع وريادة الأعمال</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -1693,7 +2116,7 @@
                     </div>
 
                     <button type="submit" class="btn-submit" id="submitBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M290.5 287.7L491.4 86.9 359 456.3 290.5 287.7zM457.4 53L256.6 253.8 88 185.3 457.4 53zM38.1 216.8l205.8 83.6 83.6 205.8c5.3 13.1 18.1 21.7 32.3 21.7 14.7 0 27.8-9.2 32.8-23.1L570.6 8c3.5-9.8 1-20.6-6.3-28s-18.2-9.8-28-6.3L39.4 151.7c-13.9 5-23.1 18.1-23.1 32.8 0 14.2 8.6 27 21.7 32.3z"/></svg> إرسال الطلب
+                        <i class="fas fa-paper-plane"></i> إرسال الطلب
                     </button>
 
                     <div class="form-message" id="formMessage"></div>
@@ -1703,7 +2126,7 @@
     </section>
 
     <!-- ============================================================
-    الشروط والأحكام - مصغرة
+    الشروط والأحكام
     ============================================================ -->
     <section class="terms-section" id="terms">
         <div class="container">
@@ -1714,7 +2137,7 @@
 
             <div class="terms-grid">
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M311.4 32l8.6 0c35.3 0 64 28.7 64 64l0 352c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l8.6 0C83.6 12.9 104.3 0 128 0L256 0c23.7 0 44.4 12.9 55.4 32zM248 112c13.3 0 24-10.7 24-24s-10.7-24-24-24L136 64c-13.3 0-24 10.7-24 24s10.7 24 24 24l112 0zM128 256a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm32 0c0 13.3 10.7 24 24 24l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-112 0c-13.3 0-24 10.7-24 24zm0 128c0 13.3 10.7 24 24 24l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-112 0c-13.3 0-24 10.7-24 24zM96 416a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg></div>
+                    <div class="icon"><i class="fas fa-file-signature"></i></div>
                     <h3>سياسة طلب الخدمات</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> دقة البيانات</li>
@@ -1724,7 +2147,7 @@
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M448 112c8.8 0 16 7.2 16 16l0 32-416 0 0-32c0-8.8 7.2-16 16-16l384 0zm16 112l0 160c0 8.8-7.2 16-16 16L64 400c-8.8 0-16-7.2-16-16l0-160 416 0zM64 64C28.7 64 0 92.7 0 128L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L64 64zM80 344c0 13.3 10.7 24 24 24l48 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-48 0c-13.3 0-24 10.7-24 24zm144 0c0 13.3 10.7 24 24 24l64 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-64 0c-13.3 0-24 10.7-24 24z"/></svg></div>
+                    <div class="icon"><i class="fas fa-credit-card"></i></div>
                     <h3>سياسة الدفع والاسترجاع</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> آلية الدفع</li>
@@ -1734,7 +2157,7 @@
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64l0 11c0 42.4 16.9 83.1 46.9 113.1l67.9 67.9-67.9 67.9C48.9 353.9 32 394.6 32 437l0 11c-17.7 0-32 14.3-32 32s14.3 32 32 32l320 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-11c0-42.4-16.9-83.1-46.9-113.1l-67.9-67.9 67.9-67.9c30-30 46.9-70.7 46.9-113.1l0-11c17.7 0 32-14.3 32-32S369.7 0 352 0L32 0zM288 437l0 11-192 0 0-11c0-25.5 10.1-49.9 28.1-67.9l67.9-67.9 67.9 67.9c18 18 28.1 42.4 28.1 67.9z"/></svg></div>
+                    <div class="icon"><i class="fas fa-clock"></i></div>
                     <h3>سياسة التسليم والمواعيد</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> الالتزام بالمواعيد</li>
@@ -1744,7 +2167,7 @@
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1 465.9 144 490.3 119.6c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9 334.1 80 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"/></svg></div>
+                    <div class="icon"><i class="fas fa-edit"></i></div>
                     <h3>سياسة التعديلات</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> تعديلات مجانية</li>
@@ -1754,7 +2177,7 @@
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M128 96l0 64 128 0 0-64c0-35.3-28.7-64-64-64s-64 28.7-64 64zM64 160l0-64C64 25.3 121.3-32 192-32S320 25.3 320 96l0 64c35.3 0 64 28.7 64 64l0 224c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 224c0-35.3 28.7-64 64-64z"/></svg></div>
+                    <div class="icon"><i class="fas fa-lock"></i></div>
                     <h3>الخصوصية وسرية المعلومات</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> حماية البيانات</li>
@@ -1764,7 +2187,7 @@
                 </div>
 
                 <div class="terms-card" data-aos="fade-up" data-aos-duration="400">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M48 195.8l209.2 86.1c9.8 4 20.2 6.1 30.8 6.1s21-2.1 30.8-6.1l242.4-99.8c9-3.7 14.8-12.4 14.8-22.1s-5.8-18.4-14.8-22.1L318.8 38.1C309 34.1 298.6 32 288 32s-21 2.1-30.8 6.1L14.8 137.9C5.8 141.6 0 150.3 0 160L0 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-260.2zm48 71.7L96 384c0 53 86 96 192 96s192-43 192-96l0-116.6-142.9 58.9c-15.6 6.4-32.2 9.7-49.1 9.7s-33.5-3.3-49.1-9.7L96 267.4z"/></svg></div>
+                    <div class="icon"><i class="fas fa-info-circle"></i></div>
                     <h3>طبيعة الخدمات</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> الهدف الاسترشادي</li>
@@ -1776,7 +2199,7 @@
     </section>
 
     <!-- ============================================================
-    الفوتر - مصغر
+    الفوتر
     ============================================================ -->
     <footer class="footer">
         <div class="container">
@@ -1804,7 +2227,7 @@
     </footer>
 
     <!-- ============================================================
-    الجافا سكريبت
+    جافا سكريبت
     ============================================================ -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -1815,44 +2238,6 @@
             duration: 600,
             once: true,
             offset: 50
-        });
-
-        // ============================================================
-        // إنشاء النجوم
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const hero = document.querySelector('.hero');
-            
-            const starsContainer = document.createElement('div');
-            starsContainer.className = 'stars';
-            
-            for (let i = 0; i < 80; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                const size = Math.random() * 3 + 1;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-                star.style.animationDelay = (Math.random() * 3) + 's';
-                starsContainer.appendChild(star);
-            }
-            
-            hero.prepend(starsContainer);
-            
-            const raysContainer = document.createElement('div');
-            raysContainer.className = 'light-rays';
-            
-            for (let i = 0; i < 6; i++) {
-                const ray = document.createElement('div');
-                ray.className = 'ray';
-                ray.style.setProperty('--angle', (i * 30) + 'deg');
-                ray.style.animationDelay = (i * 2) + 's';
-                raysContainer.appendChild(ray);
-            }
-            
-            hero.prepend(raysContainer);
         });
 
         // ============================================================
@@ -2037,13 +2422,23 @@
                 showMessage('❌ حدث خطأ في الاتصال بالخادم.', 'error');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" height="18" width="20"><path fill="currentColor" d="M290.5 287.7L491.4 86.9 359 456.3 290.5 287.7zM457.4 53L256.6 253.8 88 185.3 457.4 53zM38.1 216.8l205.8 83.6 83.6 205.8c5.3 13.1 18.1 21.7 32.3 21.7 14.7 0 27.8-9.2 32.8-23.1L570.6 8c3.5-9.8 1-20.6-6.3-28s-18.2-9.8-28-6.3L39.4 151.7c-13.9 5-23.1 18.1-23.1 32.8 0 14.2 8.6 27 21.7 32.3z"/></svg> إرسال الطلب';
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
             }
         }
 
-        console.log('🚀 منصة ارتقاء - خدمات الأعمال والاقتصاد (مصغرة)');
-        console.log('📋 7 أقسام رئيسية مع خدمات متخصصة');
-        console.log('✅ تم تصغير حجم الخطوط والخانات وحذف الإحصائيات');
+        console.log('🚀 منصة ارتقاء - خدمات الأعمال والاقتصاد (جميع الخدمات الـ 45)');
+        console.log('📋 8 أقسام رئيسية مع 45 خدمة متخصصة');
+        console.log('✅ تصميم دائري ثلاثي الأبعاد');
+        console.log('📌 توزيع الخدمات:');
+        console.log('  📂 الإدارة والاستراتيجية: 5 خدمات');
+        console.log('  📂 التمويل والاستثمار: 5 خدمات');
+        console.log('  📂 المحاسبة: 4 خدمات');
+        console.log('  📂 التسويق وريادة الأعمال: 7 خدمات');
+        console.log('  📂 الاقتصاد والتحليل الكمي: 7 خدمات');
+        console.log('  📂 العمليات وسلاسل الإمداد: 6 خدمات');
+        console.log('  📂 الدراسات والتقارير: 11 خدمة');
+        console.log('  📂 المشاريع وريادة الأعمال: 4 خدمات (قسم جديد)');
+        console.log('📊 المجموع الكلي: 45 خدمة');
     </script>
 </body>
 </html>
