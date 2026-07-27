@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>💼 إدارة الأعمال والاقتصاد - منصة ارتقاء</title>
+    <title>💼 خدمات الأعمال والاقتصاد - منصة ارتقاء</title>
 
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -41,6 +41,7 @@
             --gradient-main: linear-gradient(135deg, #7C3AED, #EC4899);
             --gradient-secondary: linear-gradient(135deg, #F59E0B, #EC4899);
             --gradient-hero: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #2D1B69 100%);
+            --gradient-business: linear-gradient(135deg, #7C3AED, #EC4899, #F59E0B);
         }
 
         [data-theme="dark"] {
@@ -274,6 +275,35 @@
             text-align: center;
         }
 
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulseGlow 8s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulseGlow 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1) translate(0); opacity: 0.5; }
+            50% { transform: scale(1.3) translate(30px, -20px); opacity: 1; }
+        }
+
         .hero .container {
             position: relative;
             z-index: 1;
@@ -364,7 +394,7 @@
 
         .btn-primary:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(108, 43, 217, 0.4);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
         }
 
         .btn-secondary {
@@ -391,16 +421,70 @@
         }
 
         /* ============================================================
-           أقسام الخدمات
+           فلتر الخدمات
+           ============================================================ */
+        .filter-section {
+            padding: 20px 0 30px;
+            background: var(--bg-body);
+        }
+
+        .filter-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-color);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: var(--gradient-main);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .filter-btn .count {
+            background: var(--bg-body);
+            color: var(--text-muted);
+            padding: 0 8px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            margin-right: 4px;
+        }
+
+        .filter-btn.active .count {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        /* ============================================================
+           شبكة الخدمات
            ============================================================ */
         .services-section {
-            padding: 40px 0 50px;
+            padding: 0 0 50px;
             background: var(--bg-body);
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
         .section-header h2 {
@@ -423,428 +507,569 @@
             margin: 0 auto;
         }
 
-        .service-category {
-            margin-bottom: 40px;
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 25px 28px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            transition: var(--transition);
-        }
-
-        .service-category:hover {
-            box-shadow: var(--shadow-hover);
-            border-color: var(--primary-light);
-        }
-
-        .category-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border-color);
-            position: relative;
-        }
-
-        .category-header::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            right: 0;
-            width: 60px;
-            height: 2px;
-            background: var(--gradient-main);
-            border-radius: 2px;
-        }
-
-        .category-header .icon-wrapper {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--gradient-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: #fff;
-            flex-shrink: 0;
-        }
-
-        .category-header .info h3 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin: 0;
-        }
-
-        .category-header .info .en-title {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .category-desc {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            line-height: 1.7;
-            margin-bottom: 18px;
-        }
-
-        /* ============================================================
-           الخدمات - تصميم دائري ثلاثي الأبعاد
-           ============================================================ */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 25px;
-            justify-items: center;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
         }
 
         .service-item {
-            width: 100%;
-            max-width: 180px;
-            aspect-ratio: 1/1;
-            border-radius: 50%;
             background: var(--bg-card);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
+            border-radius: var(--radius);
+            padding: 20px 16px;
+            text-align: center;
             cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid var(--border-color);
             text-decoration: none;
             color: var(--text-color);
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 15px;
-            text-align: center;
-            border: 3px solid var(--border-color);
-            transform-style: preserve-3d;
-            transform: rotateX(0deg) rotateY(0deg);
             overflow: hidden;
-        }
-
-        .service-item:hover {
-            transform: rotateX(6deg) rotateY(-6deg) translateY(-8px) scale(1.04);
-            box-shadow: 0 30px 60px rgba(124, 58, 237, 0.25);
-            border-color: var(--primary-light);
+            box-shadow: var(--shadow);
         }
 
         .service-item::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, var(--primary-light) 0%, transparent 70%);
-            opacity: 0;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 4px;
+            background: var(--gradient-main);
+            transform: scaleX(0);
             transition: var(--transition);
-            z-index: 0;
-            transform: scale(0.5);
+            transform-origin: right;
         }
 
         .service-item:hover::before {
-            opacity: 0.08;
-            transform: scale(1);
+            transform: scaleX(1);
         }
 
-        .service-item::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: var(--gradient-main);
-            z-index: -1;
-            opacity: 0;
-            transition: var(--transition);
-            filter: blur(10px);
-        }
-
-        .service-item:hover::after {
-            opacity: 0.5;
+        .service-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
         }
 
         .service-item .service-icon {
-            width: 55px;
-            height: 55px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.4rem;
-            margin-bottom: 6px;
+            margin: 0 auto 10px;
             background: rgba(124, 58, 237, 0.1);
             transition: var(--transition);
-            position: relative;
-            z-index: 1;
-            transform-style: preserve-3d;
+            color: var(--primary);
         }
 
         .service-item:hover .service-icon {
-            transform: rotateY(180deg) scale(1.1);
+            background: var(--gradient-main);
+            color: #fff;
+            transform: scale(1.1) rotateY(180deg);
         }
-
-        .service-item .service-icon i {
-            font-size: 1.5rem;
-        }
-
-        .service-item:nth-child(10n+1) .service-icon { color: #7C3AED; background: rgba(124, 58, 237, 0.15); }
-        .service-item:nth-child(10n+2) .service-icon { color: #EC4899; background: rgba(236, 72, 153, 0.15); }
-        .service-item:nth-child(10n+3) .service-icon { color: #F59E0B; background: rgba(245, 158, 11, 0.15); }
-        .service-item:nth-child(10n+4) .service-icon { color: #10B981; background: rgba(16, 185, 129, 0.15); }
-        .service-item:nth-child(10n+5) .service-icon { color: #3B82F6; background: rgba(59, 130, 246, 0.15); }
-        .service-item:nth-child(10n+6) .service-icon { color: #EF4444; background: rgba(239, 68, 68, 0.15); }
-        .service-item:nth-child(10n+7) .service-icon { color: #8B5CF6; background: rgba(139, 92, 246, 0.15); }
-        .service-item:nth-child(10n+8) .service-icon { color: #14B8A6; background: rgba(20, 184, 166, 0.15); }
-        .service-item:nth-child(10n+9) .service-icon { color: #F97316; background: rgba(249, 115, 22, 0.15); }
-        .service-item:nth-child(10n+10) .service-icon { color: #8B5CF6; background: rgba(139, 92, 246, 0.15); }
 
         .service-item h4 {
-            font-size: 0.78rem;
-            font-weight: 800;
-            margin-bottom: 2px;
-            position: relative;
-            z-index: 1;
-            line-height: 1.3;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 4px;
             color: var(--text-color);
+            line-height: 1.3;
         }
 
         .service-item .en-name {
-            font-size: 0.45rem;
-            color: var(--text-muted);
-            opacity: 0.7;
-            position: relative;
-            z-index: 1;
-            margin: 2px 0;
-        }
-
-        .service-item p {
             font-size: 0.5rem;
             color: var(--text-muted);
-            line-height: 1.4;
-            position: relative;
-            z-index: 1;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            max-height: 2.2em;
-            margin: 0;
+            opacity: 0.7;
+            display: block;
+            margin-bottom: 4px;
         }
 
         .service-item .tag {
             display: inline-block;
             margin-top: 4px;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.4rem;
-            font-weight: 600;
-            background: rgba(124, 58, 237, 0.1);
-            color: var(--primary);
-            position: relative;
-            z-index: 1;
-        }
-
-        .service-item .card-tooltip {
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%) scale(0.8);
-            background: var(--bg-card);
-            color: var(--text-color);
-            padding: 3px 12px;
+            padding: 2px 12px;
             border-radius: 20px;
             font-size: 0.45rem;
             font-weight: 600;
-            box-shadow: var(--shadow);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            white-space: nowrap;
-            border: 1px solid var(--border-color);
-            z-index: 5;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
         }
 
-        .service-item:hover .card-tooltip {
+        .service-item .business-emoji {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.8rem;
+            opacity: 0.3;
+        }
+
+        .service-item .service-category-tag {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 0.35rem;
+            color: var(--text-muted);
+            background: var(--bg-body);
+            padding: 2px 8px;
+            border-radius: 20px;
+            opacity: 0.7;
+        }
+
+        .service-item.hidden {
+            display: none;
+        }
+
+        .service-item .click-hint {
+            font-size: 0.4rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .service-item:hover .click-hint {
             opacity: 1;
-            transform: translateX(-50%) scale(1);
-            bottom: -16px;
+            color: var(--primary);
         }
 
         /* ============================================================
-           نموذج الطلب
+           صفحة تفاصيل الخدمة (Service Details Page)
            ============================================================ */
-        .request-form-section {
-            padding: 40px 0;
-            background: var(--bg-card);
+        .service-details-page {
+            display: none;
+            padding: 30px 0 50px;
+            background: var(--bg-body);
         }
 
-        .request-form-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--bg-body);
-            padding: 30px 35px;
+        .service-details-page.active {
+            display: block;
+        }
+
+        .back-to-services {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            transition: var(--transition);
+            background: var(--bg-card);
+            cursor: pointer;
+        }
+
+        .back-to-services:hover {
+            background: var(--gradient-main);
+            color: #fff;
+            border-color: transparent;
+            transform: translateX(-5px);
+        }
+
+        .details-container {
+            background: var(--bg-card);
             border-radius: var(--radius);
+            padding: 35px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
+            margin-top: 20px;
         }
 
-        .request-form-wrapper .form-header {
-            text-align: center;
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
             margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
         }
 
-        .request-form-wrapper .form-header h2 {
-            font-size: 1.8rem;
+        .details-header .icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .details-header .info h2 {
+            font-size: 1.6rem;
             font-weight: 900;
+            color: var(--text-color);
+            margin: 0 0 4px;
+        }
+
+        .details-header .info .en-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .details-header .info .category-badge {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+        }
+
+        /* ============================================================
+           أقسام صفحة التفاصيل
+           ============================================================ */
+        .details-section {
+            margin-bottom: 30px;
+        }
+
+        .details-section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .details-section h3 i {
+            color: var(--primary);
+        }
+
+        .details-section p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 0.9rem;
+        }
+
+        .details-section ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .details-section ul li {
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .details-section ul li i {
+            color: var(--primary);
+        }
+
+        /* ============================================================
+           معرض الصور
+           ============================================================ */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1/1;
+            border-radius: 10px;
+            background: var(--gradient-business);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: rgba(255,255,255,0.3);
+            border: 2px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .gallery-item .gallery-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            font-size: 0.5rem;
+            padding: 4px 8px;
+            text-align: center;
+        }
+
+        /* ============================================================
+           أنواع الطلبات والأسئلة الشائعة
+           ============================================================ */
+        .request-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .request-type-item {
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--bg-body);
+            border: 2px solid var(--border-color);
+            text-align: center;
+            transition: var(--transition);
+            cursor: default;
+        }
+
+        .request-type-item:hover {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        .request-type-item i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .request-type-item span {
+            font-size: 0.7rem;
+            font-weight: 600;
             color: var(--text-color);
         }
 
-        .request-form-wrapper .form-header h2 span {
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .faq-item {
+            padding: 14px 18px;
+            border-radius: 10px;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            transition: var(--transition);
+            cursor: pointer;
         }
 
-        .request-form-wrapper .form-header p {
-            color: var(--text-muted);
-            margin-top: 6px;
+        .faq-item:hover {
+            border-color: var(--primary);
+        }
+
+        .faq-item .question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-color);
             font-size: 0.85rem;
         }
 
-        .form-row {
+        .faq-item .question i {
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .faq-item .answer {
+            display: none;
+            margin-top: 10px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .faq-item.open .answer {
+            display: block;
+        }
+
+        .faq-item.open .question i {
+            transform: rotate(180deg);
+        }
+
+        /* ============================================================
+           نموذج طلب الخدمة في صفحة التفاصيل
+           ============================================================ */
+        .details-form-wrapper {
+            background: var(--bg-body);
+            padding: 25px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            margin-top: 10px;
+        }
+
+        .details-form-wrapper .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
 
-        .form-group {
-            margin-bottom: 18px;
+        .details-form-wrapper .form-group {
+            margin-bottom: 15px;
         }
 
-        .form-group label {
+        .details-form-wrapper .form-group label {
             display: block;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             color: var(--text-color);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
-        .form-group label .required {
+        .details-form-wrapper .form-group label .required {
             color: #EF4444;
             margin-right: 3px;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .details-form-wrapper .form-group input,
+        .details-form-wrapper .form-group select,
+        .details-form-wrapper .form-group textarea {
             width: 100%;
-            padding: 10px 14px;
+            padding: 8px 12px;
             border: 2px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
             font-family: 'Cairo', sans-serif;
             transition: var(--transition);
             background: var(--bg-card);
             color: var(--text-color);
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .details-form-wrapper .form-group input:focus,
+        .details-form-wrapper .form-group select:focus,
+        .details-form-wrapper .form-group textarea:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.12);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
         }
 
-        .form-group textarea {
-            min-height: 80px;
+        .details-form-wrapper .form-group textarea {
+            min-height: 70px;
             resize: vertical;
         }
 
-        .form-group .file-upload {
+        .details-form-wrapper .file-upload {
             border: 2px dashed var(--border-color);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             text-align: center;
             cursor: pointer;
             transition: var(--transition);
             background: var(--bg-card);
         }
 
-        .form-group .file-upload:hover {
+        .details-form-wrapper .file-upload:hover {
             border-color: var(--primary);
-            background: rgba(108, 43, 217, 0.05);
+            background: rgba(124, 58, 237, 0.05);
         }
 
-        .form-group .file-upload i {
-            font-size: 2rem;
+        .details-form-wrapper .file-upload i {
+            font-size: 1.5rem;
             color: var(--primary);
-            margin-bottom: 5px;
             display: block;
+            margin-bottom: 4px;
         }
 
-        .form-group .file-upload p {
+        .details-form-wrapper .file-upload p {
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
 
-        .form-group .file-upload .supported-formats {
+        .details-form-wrapper .file-list {
+            margin-top: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .details-form-wrapper .file-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3px 10px 3px 6px;
             font-size: 0.65rem;
-            color: var(--text-muted);
-            margin-top: 3px;
+            color: var(--text-color);
         }
 
-        .form-group .checkbox-group {
+        .details-form-wrapper .file-item .remove-file {
+            cursor: pointer;
+            color: #EF4444;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 3px;
+            transition: var(--transition);
+        }
+
+        .details-form-wrapper .file-item .remove-file:hover {
+            transform: scale(1.2);
+        }
+
+        .details-form-wrapper .checkbox-group {
             display: flex;
             align-items: flex-start;
             gap: 10px;
-            padding: 12px 16px;
-            background: rgba(108, 43, 217, 0.04);
-            border-radius: 10px;
+            padding: 10px 14px;
+            background: rgba(124, 58, 237, 0.04);
+            border-radius: 8px;
             border: 2px solid var(--border-color);
             transition: var(--transition);
         }
 
-        .form-group .checkbox-group:hover {
+        .details-form-wrapper .checkbox-group:hover {
             border-color: var(--primary);
         }
 
-        .form-group .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+        .details-form-wrapper .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
             margin-top: 2px;
             accent-color: var(--primary);
             cursor: pointer;
             flex-shrink: 0;
         }
 
-        .form-group .checkbox-group label {
+        .details-form-wrapper .checkbox-group label {
             font-weight: 400;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             margin-bottom: 0;
             cursor: pointer;
             line-height: 1.5;
         }
 
-        .form-group .checkbox-group label strong {
+        .details-form-wrapper .checkbox-group label strong {
             color: var(--primary);
         }
 
         .btn-submit {
             background: var(--gradient-main);
             color: #fff;
-            padding: 12px 40px;
+            padding: 10px 30px;
             border-radius: 50px;
             font-weight: 700;
             border: none;
             cursor: pointer;
             transition: var(--transition);
             font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             width: 100%;
             position: relative;
             overflow: hidden;
@@ -867,16 +1092,16 @@
 
         .btn-submit:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(108, 43, 217, 0.4);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
         }
 
         .form-message {
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-top: 15px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-top: 12px;
             display: none;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .form-message.success {
@@ -900,38 +1125,6 @@
             border: 2px solid #60A5FA;
         }
 
-        .file-list {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .file-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 4px 12px 4px 8px;
-            font-size: 0.7rem;
-            color: var(--text-color);
-        }
-
-        .file-item .remove-file {
-            cursor: pointer;
-            color: #EF4444;
-            font-weight: 700;
-            font-size: 1rem;
-            margin-right: 4px;
-            transition: var(--transition);
-        }
-
-        .file-item .remove-file:hover {
-            transform: scale(1.2);
-        }
-
         /* ============================================================
            الشروط والأحكام
            ============================================================ */
@@ -942,13 +1135,13 @@
 
         .terms-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 20px;
         }
 
         .terms-card {
             background: var(--bg-card);
-            padding: 20px 22px;
+            padding: 18px 20px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
@@ -961,16 +1154,16 @@
         }
 
         .terms-card .icon {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: inline-block;
         }
 
         .terms-card h3 {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-color);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .terms-card ul {
@@ -979,14 +1172,14 @@
         }
 
         .terms-card ul li {
-            padding: 5px 0;
+            padding: 4px 0;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-muted);
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             line-height: 1.6;
             display: flex;
             align-items: flex-start;
-            gap: 8px;
+            gap: 6px;
         }
 
         .terms-card ul li:last-child {
@@ -995,9 +1188,9 @@
 
         .terms-card ul li i {
             color: var(--primary);
-            margin-top: 3px;
+            margin-top: 2px;
             flex-shrink: 0;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
 
         /* ============================================================
@@ -1084,53 +1277,36 @@
            ============================================================ */
         @media (max-width: 992px) {
             .services-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                gap: 20px;
-            }
-            .service-item {
-                max-width: 160px;
+                grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
             }
             .hero-content h1 {
                 font-size: 2rem;
             }
-            .service-category {
-                padding: 18px 20px;
+            .details-container {
+                padding: 25px;
+            }
+            .details-header .icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.6rem;
             }
         }
 
         @media (max-width: 768px) {
             .services-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 15px;
             }
             .service-item {
-                max-width: 140px;
                 padding: 16px 12px;
             }
             .service-item .service-icon {
-                width: 45px;
-                height: 45px;
-                font-size: 1.2rem;
-            }
-            .service-item .service-icon i {
-                font-size: 1.2rem;
+                width: 44px;
+                height: 44px;
+                font-size: 1.1rem;
             }
             .service-item h4 {
-                font-size: 0.68rem;
-            }
-            .service-item p {
-                font-size: 0.45rem;
-                -webkit-line-clamp: 2;
-            }
-            .service-item .en-name {
-                font-size: 0.4rem;
-            }
-            .service-item .tag {
-                font-size: 0.35rem;
-                padding: 2px 8px;
-            }
-            .service-item .card-tooltip {
-                display: none;
+                font-size: 0.75rem;
             }
             .hero {
                 padding: 35px 0 25px;
@@ -1148,14 +1324,34 @@
             .section-header h2 {
                 font-size: 1.6rem;
             }
-            .request-form-wrapper {
-                padding: 20px;
+            .details-container {
+                padding: 18px;
             }
-            .form-row {
+            .details-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .details-header .info h2 {
+                font-size: 1.3rem;
+            }
+            .details-section ul {
                 grid-template-columns: 1fr;
             }
-            .terms-grid {
+            .details-form-wrapper .form-row {
                 grid-template-columns: 1fr;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .request-types-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .filter-wrapper {
+                gap: 6px;
+            }
+            .filter-btn {
+                padding: 6px 14px;
+                font-size: 0.65rem;
             }
             .header .container {
                 flex-direction: column;
@@ -1176,52 +1372,37 @@
             .back-to-top {
                 bottom: 65px;
             }
-            .category-header .info h3 {
-                font-size: 1rem;
-            }
-            .category-header .icon-wrapper {
-                width: 42px;
-                height: 42px;
-                font-size: 1.2rem;
-            }
-            .service-category {
-                padding: 14px 16px;
+            .terms-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 480px) {
             .services-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
                 gap: 12px;
             }
             .service-item {
-                max-width: 120px;
                 padding: 12px 10px;
             }
             .service-item .service-icon {
                 width: 38px;
                 height: 38px;
                 font-size: 1rem;
-                margin-bottom: 4px;
-            }
-            .service-item .service-icon i {
-                font-size: 1rem;
+                margin-bottom: 6px;
             }
             .service-item h4 {
-                font-size: 0.6rem;
-            }
-            .service-item p {
-                font-size: 0.4rem;
-                -webkit-line-clamp: 1;
-                max-height: 1.2em;
+                font-size: 0.65rem;
             }
             .service-item .en-name {
-                font-size: 0.35rem;
+                font-size: 0.4rem;
             }
             .service-item .tag {
-                font-size: 0.3rem;
-                padding: 1px 6px;
-                margin-top: 2px;
+                font-size: 0.4rem;
+                padding: 1px 8px;
+            }
+            .service-item .service-category-tag {
+                display: none;
             }
             .hero-content h1 {
                 font-size: 1.3rem;
@@ -1243,11 +1424,25 @@
             .section-header p {
                 font-size: 0.8rem;
             }
-            .request-form-wrapper {
-                padding: 15px;
+            .details-container {
+                padding: 14px;
             }
-            .terms-card {
-                padding: 16px 18px;
+            .details-header .icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            .details-header .info h2 {
+                font-size: 1.1rem;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            .request-types-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            .details-form-wrapper {
+                padding: 14px;
             }
             .footer .footer-contact {
                 flex-direction: column;
@@ -1258,20 +1453,22 @@
                 align-items: center;
                 gap: 8px;
             }
-            .category-header .info h3 {
-                font-size: 0.85rem;
+            .filter-btn {
+                padding: 4px 10px;
+                font-size: 0.6rem;
             }
-            .category-header .icon-wrapper {
-                width: 36px;
-                height: 36px;
-                font-size: 1rem;
+            .filter-btn .count {
+                font-size: 0.5rem;
             }
-            .category-desc {
-                font-size: 0.75rem;
-            }
-            .service-category {
-                padding: 12px 14px;
-            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -1295,6 +1492,7 @@
             <a href="index.html" class="logo">
                 <i class="fas fa-chart-line"></i>
                 منصة <span>ارتقاء</span>
+                <span style="font-size:0.5rem; background: var(--gradient-business); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight:400;">Business</span>
             </a>
 
             <div class="contact-badge">
@@ -1318,22 +1516,22 @@
         <div class="container">
             <div class="hero-content" data-aos="fade-up" data-aos-duration="800">
                 <div class="hero-badges">
-                    <span class="hero-badge"><i class="fas fa-building"></i> 10 أقسام متخصصة</span>
-                    <span class="hero-badge"><i class="fas fa-star"></i> 45 خدمة تطبيقية</span>
+                    <span class="hero-badge"><i class="fas fa-building"></i> 45 خدمة</span>
+                    <span class="hero-badge"><i class="fas fa-star"></i> 7 تخصصات</span>
                     <span class="hero-badge"><i class="fas fa-users"></i> خبراء معتمدون</span>
+                    <span class="hero-badge"><i class="fas fa-graduation-cap"></i> أكاديمي</span>
                 </div>
                 <h1>خدمات <span>الأعمال والاقتصاد</span></h1>
                 <p>
-                    نقدم مجموعة متكاملة من الخدمات الأكاديمية والاستشارية المتخصصة في مجالات
-                    الإدارة، التسويق، المالية، المحاسبة، الاقتصاد، والموارد البشرية،
-                    بأيدي خبراء أكاديميين وممارسين محترفين.
+                    خدمات أكاديمية واستشارية متخصصة في مجالات الإدارة، التسويق، المالية، المحاسبة، الاقتصاد،
+                    والموارد البشرية، بأيدي خبراء أكاديميين وممارسين محترفين.
                 </p>
                 <div class="hero-actions">
-                    <a href="#services" class="btn-primary">
+                    <a href="#services-grid-section" class="btn-primary">
                         <i class="fas fa-search"></i> استكشف الخدمات
                     </a>
-                    <a href="#request-form" class="btn-secondary">
-                        <i class="fas fa-paper-plane"></i> طلب خدمة
+                    <a href="#services-grid-section" class="btn-secondary">
+                        <i class="fas fa-filter"></i> تصفية
                     </a>
                 </div>
             </div>
@@ -1341,789 +1539,70 @@
     </section>
 
     <!-- ============================================================
-    أقسام الخدمات - جميع الخدمات (45 خدمة)
+    صفحة الخدمات (القائمة)
     ============================================================ -->
-    <section class="services-section" id="services">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up" data-aos-duration="600">
-                <h2>أقسام وخدمات <span>الأعمال والاقتصاد</span></h2>
-                <p>الخدمات التطبيقية المتخصصة في مجالات الأعمال والاقتصاد - 45 خدمة متكاملة</p>
-            </div>
-
-            <!-- ==========================================================
-            القسم 1: الإدارة والاستراتيجية وإدارة المشاريع - 5 خدمات
-            (3 خدمات قديمة + 2 جديدتين)
-            ========================================================== -->
-            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
-                <div class="category-header">
-                    <div class="icon-wrapper"><i class="fas fa-briefcase"></i></div>
-                    <div class="info">
-                        <h3>الإدارة والاستراتيجية وإدارة المشاريع</h3>
-                        <span class="en-title">Management, Strategy & Project Management</span>
-                    </div>
-                </div>
-
-                <p class="category-desc">
-                    خدمات تحليلية وتطبيقية في مجالات الإدارة والاستراتيجية وإدارة المشاريع، تشمل تحليل النماذج الإدارية، دراسة الحالات، وتطبيق أدوات التخطيط والتحليل على المشاريع والدراسات المختلفة.
-                </p>
-
-                <div class="services-grid">
-                    <!-- خدمة قديمة 1 -->
-                    <div class="service-item" onclick="openRequestForm('تحليل المفاهيم والنماذج الإدارية')">
-                        <div class="service-icon"><i class="fas fa-chart-pie"></i></div>
-                        <h4>تحليل النماذج الإدارية</h4>
-                        <span class="en-name">Management Concepts</span>
-                        <p>تحليل وتطبيق النماذج الإدارية</p>
-                        <span class="tag">إدارة • تحليل</span>
-                        <span class="card-tooltip">📊 تحليل نماذج</span>
-                    </div>
-
-                    <!-- خدمة قديمة 2 -->
-                    <div class="service-item" onclick="openRequestForm('إدارة المشاريع')">
-                        <div class="service-icon"><i class="fas fa-tasks"></i></div>
-                        <h4>إدارة المشاريع</h4>
-                        <span class="en-name">Project Management</span>
-                        <p>تحليل وإدارة مراحل المشروع</p>
-                        <span class="tag">مشاريع • تخطيط</span>
-                        <span class="card-tooltip">📋 إدارة مشاريع</span>
-                    </div>
-
-                    <!-- خدمة قديمة 3 -->
-                    <div class="service-item" onclick="openRequestForm('الجودة والقيادة')">
-                        <div class="service-icon"><i class="fas fa-crown"></i></div>
-                        <h4>الجودة والقيادة</h4>
-                        <span class="en-name">Quality & Leadership</span>
-                        <p>تحليل نماذج الجودة والقيادة</p>
-                        <span class="tag">جودة • قيادة</span>
-                        <span class="card-tooltip">👑 قيادة وجودة</span>
-                    </div>
-
-                    <!-- خدمة جديدة 1: إعداد وتحليل الحالات الإدارية -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتحليل الحالات الإدارية')">
-                        <div class="service-icon"><i class="fas fa-file-alt"></i></div>
-                        <h4>تحليل الحالات الإدارية</h4>
-                        <span class="en-name">Case Study Analysis</span>
-                        <p>إعداد وتحليل الحالات الإدارية</p>
-                        <span class="tag">حالات • تحليل</span>
-                        <span class="card-tooltip">📋 حالات إدارية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 2: تطبيق وتحليل النماذج الإدارية -->
-                    <div class="service-item" onclick="openRequestForm('تطبيق وتحليل النماذج الإدارية')">
-                        <div class="service-icon"><i class="fas fa-sitemap"></i></div>
-                        <h4>تطبيق النماذج الإدارية</h4>
-                        <span class="en-name">Models Application</span>
-                        <p>تطبيق وتحليل النماذج الإدارية</p>
-                        <span class="tag">نماذج • تطبيق</span>
-                        <span class="card-tooltip">🧩 نماذج إدارية</span>
-                    </div>
+    <div id="servicesPage">
+        <!-- فلتر الخدمات -->
+        <section class="filter-section">
+            <div class="container">
+                <div class="filter-wrapper" id="filterWrapper">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-th"></i> الكل <span class="count" id="totalCount">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="management">
+                        <i class="fas fa-briefcase"></i> إدارة <span class="count" id="managementCount">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="finance">
+                        <i class="fas fa-coins"></i> مالية <span class="count" id="financeCount">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="accounting">
+                        <i class="fas fa-book"></i> محاسبة <span class="count" id="accountingCount">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="marketing">
+                        <i class="fas fa-bullhorn"></i> تسويق <span class="count" id="marketingCount">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="economics">
+                        <i class="fas fa-globe-americas"></i> اقتصاد <span class="count" id="economicsCount">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="operations">
+                        <i class="fas fa-truck"></i> عمليات <span class="count" id="operationsCount">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="reports">
+                        <i class="fas fa-file-alt"></i> تقارير <span class="count" id="reportsCount">0</span>
+                    </button>
                 </div>
             </div>
+        </section>
 
-            <!-- ==========================================================
-            القسم 2: التمويل والاستثمار والتحليل المالي - 5 خدمات
-            (3 خدمات قديمة + 2 جديدتين)
-            ========================================================== -->
-            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
-                <div class="category-header">
-                    <div class="icon-wrapper"><i class="fas fa-coins"></i></div>
-                    <div class="info">
-                        <h3>التمويل والاستثمار والتحليل المالي</h3>
-                        <span class="en-title">Finance, Investment & Financial Analysis</span>
-                    </div>
+        <!-- شبكة الخدمات -->
+        <section class="services-section" id="services-grid-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up" data-aos-duration="600">
+                    <h2>جميع <span>خدمات الأعمال</span></h2>
+                    <p>اختر الخدمة المناسبة لاحتياجاتك الأكاديمية في مجالات الأعمال والاقتصاد</p>
                 </div>
 
-                <p class="category-desc">
-                    خدمات تحليلية وتطبيقية في المجالات المالية، تشمل تحليل المعلومات المالية، تطبيق النماذج المالية، ودراسة القرارات الاستثمارية باستخدام الأدوات والأساليب المناسبة.
-                </p>
-
-                <div class="services-grid">
-                    <!-- خدمة قديمة 1 -->
-                    <div class="service-item" onclick="openRequestForm('التحليل المالي')">
-                        <div class="service-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                        <h4>التحليل المالي</h4>
-                        <span class="en-name">Financial Analysis</span>
-                        <p>تحليل القوائم والنسب المالية</p>
-                        <span class="tag">تحليل • نسب</span>
-                        <span class="card-tooltip">💰 تحليل مالي</span>
-                    </div>
-
-                    <!-- خدمة قديمة 2 -->
-                    <div class="service-item" onclick="openRequestForm('التمويل والاستثمار')">
-                        <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-                        <h4>التمويل والاستثمار</h4>
-                        <span class="en-name">Finance & Investment</span>
-                        <p>تحليل القرارات التمويلية</p>
-                        <span class="tag">تمويل • استثمار</span>
-                        <span class="card-tooltip">📈 تمويل واستثمار</span>
-                    </div>
-
-                    <!-- خدمة قديمة 3 -->
-                    <div class="service-item" onclick="openRequestForm('النماذج والدراسات المالية')">
-                        <div class="service-icon"><i class="fas fa-calculator"></i></div>
-                        <h4>النماذج المالية</h4>
-                        <span class="en-name">Financial Models</span>
-                        <p>إعداد النماذج والدراسات</p>
-                        <span class="tag">نماذج • NPV</span>
-                        <span class="card-tooltip">🧮 نماذج مالية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 1: إعداد وتطوير النماذج المالية للمشاريع -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير النماذج المالية للمشاريع')">
-                        <div class="service-icon"><i class="fas fa-chart-simple"></i></div>
-                        <h4>النماذج المالية للمشاريع</h4>
-                        <span class="en-name">Financial Modeling</span>
-                        <p>تطوير النماذج المالية للمشاريع</p>
-                        <span class="tag">نماذج • توقعات</span>
-                        <span class="card-tooltip">📊 نماذج مالية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 2: التحليل المالي وإدارة المخاطر -->
-                    <div class="service-item" onclick="openRequestForm('التحليل المالي وإدارة المخاطر')">
-                        <div class="service-icon"><i class="fas fa-shield"></i></div>
-                        <h4>التحليل المالي وإدارة المخاطر</h4>
-                        <span class="en-name">Risk Management</span>
-                        <p>تحليل الأداء ودراسة المخاطر</p>
-                        <span class="tag">مخاطر • تحليل</span>
-                        <span class="card-tooltip">🛡️ إدارة مخاطر</span>
-                    </div>
+                <div class="services-grid" id="servicesGrid">
+                    <!-- سيتم إدراج الخدمات عبر JavaScript -->
                 </div>
             </div>
-
-            <!-- ==========================================================
-            القسم 3: المحاسبة والتقارير المالية - 4 خدمات
-            (1 خدمة قديمة + 3 جديدتين)
-            ========================================================== -->
-            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
-                <div class="category-header">
-                    <div class="icon-wrapper"><i class="fas fa-book"></i></div>
-                    <div class="info">
-                        <h3>المحاسبة والتقارير المالية</h3>
-                        <span class="en-title">Accounting & Financial Reporting</span>
-                    </div>
-                </div>
-
-                <p class="category-desc">
-                    خدمات تحليلية وتطبيقية في المحاسبة والتقارير المالية، تشمل معالجة وتحليل البيانات المحاسبية وتفسير المعلومات المالية باستخدام الأساليب المتخصصة.
-                </p>
-
-                <div class="services-grid">
-                    <!-- خدمة قديمة 1 -->
-                    <div class="service-item" onclick="openRequestForm('تحليل الحالات المحاسبية')">
-                        <div class="service-icon"><i class="fas fa-file-invoice"></i></div>
-                        <h4>تحليل الحالات المحاسبية</h4>
-                        <span class="en-name">Accounting Cases</span>
-                        <p>تحليل القيود والتكاليف</p>
-                        <span class="tag">محاسبة • تقارير</span>
-                        <span class="card-tooltip">📊 محاسبة</span>
-                    </div>
-
-                    <!-- خدمة جديدة 1: تحليل القوائم والبيانات المالية -->
-                    <div class="service-item" onclick="openRequestForm('تحليل القوائم والبيانات المالية')">
-                        <div class="service-icon"><i class="fas fa-chart-bar"></i></div>
-                        <h4>تحليل القوائم المالية</h4>
-                        <span class="en-name">Financial Statements</span>
-                        <p>تحليل القوائم واستخراج المؤشرات</p>
-                        <span class="tag">قوائم • مؤشرات</span>
-                        <span class="card-tooltip">📈 تحليل قوائم</span>
-                    </div>
-
-                    <!-- خدمة جديدة 2: إعداد وتطوير النماذج والجداول المحاسبية -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير النماذج والجداول المحاسبية')">
-                        <div class="service-icon"><i class="fas fa-table"></i></div>
-                        <h4>النماذج والجداول المحاسبية</h4>
-                        <span class="en-name">Accounting Templates</span>
-                        <p>تصميم نماذج وجداول محاسبية</p>
-                        <span class="tag">جداول • نماذج</span>
-                        <span class="card-tooltip">📊 نماذج محاسبية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 3: إعداد ومراجعة التقارير المالية والتحليلية -->
-                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة التقارير المالية والتحليلية')">
-                        <div class="service-icon"><i class="fas fa-file-pen"></i></div>
-                        <h4>التقارير المالية والتحليلية</h4>
-                        <span class="en-name">Financial Reports</span>
-                        <p>إعداد ومراجعة التقارير المالية</p>
-                        <span class="tag">تقارير • تحليل</span>
-                        <span class="card-tooltip">📑 تقارير مالية</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==========================================================
-            القسم 4: التسويق وريادة الأعمال ودراسات الأعمال - 7 خدمات
-            (3 خدمات قديمة + 4 جديدتين)
-            ========================================================== -->
-            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
-                <div class="category-header">
-                    <div class="icon-wrapper"><i class="fas fa-bullhorn"></i></div>
-                    <div class="info">
-                        <h3>التسويق وريادة الأعمال ودراسات الأعمال</h3>
-                        <span class="en-title">Marketing, Entrepreneurship & Business Studies</span>
-                    </div>
-                </div>
-
-                <p class="category-desc">
-                    خدمات تحليلية وتطبيقية في مجالات التسويق وريادة الأعمال ودراسات الأعمال، تشمل تحليل الأسواق ونماذج الأعمال وتطبيق الأدوات المتخصصة لدراسة المشاريع والفرص.
-                </p>
-
-                <div class="services-grid">
-                    <!-- خدمة قديمة 1 -->
-                    <div class="service-item" onclick="openRequestForm('التسويق')">
-                        <div class="service-icon"><i class="fas fa-chart-bar"></i></div>
-                        <h4>التسويق</h4>
-                        <span class="en-name">Marketing</span>
-                        <p>تحليل الأسواق والسلوك</p>
-                        <span class="tag">تسويق • استراتيجية</span>
-                        <span class="card-tooltip">📊 تسويق</span>
-                    </div>
-
-                    <!-- خدمة قديمة 2 -->
-                    <div class="service-item" onclick="openRequestForm('ريادة الأعمال')">
-                        <div class="service-icon"><i class="fas fa-lightbulb"></i></div>
-                        <h4>ريادة الأعمال</h4>
-                        <span class="en-name">Entrepreneurship</span>
-                        <p>تحليل المشاريع الريادية</p>
-                        <span class="tag">ريادة • أعمال</span>
-                        <span class="card-tooltip">💡 ريادة أعمال</span>
-                    </div>
-
-                    <!-- خدمة قديمة 3 -->
-                    <div class="service-item" onclick="openRequestForm('دراسات الأعمال')">
-                        <div class="service-icon"><i class="fas fa-building"></i></div>
-                        <h4>دراسات الأعمال</h4>
-                        <span class="en-name">Business Studies</span>
-                        <p>تحليل بيئة الأعمال</p>
-                        <span class="tag">أعمال • دراسات</span>
-                        <span class="card-tooltip">🏢 دراسات أعمال</span>
-                    </div>
-
-                    <!-- خدمة جديدة 1: إعداد وتطوير خطط المشاريع والأعمال -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير خطط المشاريع والأعمال')">
-                        <div class="service-icon"><i class="fas fa-list-check"></i></div>
-                        <h4>خطط المشاريع والأعمال</h4>
-                        <span class="en-name">Project Plans</span>
-                        <p>تطوير خطط المشاريع والأعمال</p>
-                        <span class="tag">خطط • مشاريع</span>
-                        <span class="card-tooltip">📋 خطط مشاريع</span>
-                    </div>
-
-                    <!-- خدمة جديدة 2: إعداد ومراجعة دراسات الجدوى للمشاريع -->
-                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة دراسات الجدوى للمشاريع')">
-                        <div class="service-icon"><i class="fas fa-scale-balanced"></i></div>
-                        <h4>دراسات الجدوى</h4>
-                        <span class="en-name">Feasibility Studies</span>
-                        <p>إعداد ومراجعة دراسات الجدوى</p>
-                        <span class="tag">جدوى • دراسة</span>
-                        <span class="card-tooltip">⚖️ دراسات جدوى</span>
-                    </div>
-
-                    <!-- خدمة جديدة 3: إعداد وتحليل نموذج العمل التجاري -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتحليل نموذج العمل التجاري')">
-                        <div class="service-icon"><i class="fas fa-cube"></i></div>
-                        <h4>نموذج العمل التجاري</h4>
-                        <span class="en-name">Business Model</span>
-                        <p>إعداد وتحليل نموذج العمل</p>
-                        <span class="tag">نموذج • أعمال</span>
-                        <span class="card-tooltip">🧊 نموذج عمل</span>
-                    </div>
-
-                    <!-- خدمة جديدة 4: تقييم وتطوير أفكار المشاريع -->
-                    <div class="service-item" onclick="openRequestForm('تقييم وتطوير أفكار المشاريع')">
-                        <div class="service-icon"><i class="fas fa-brain"></i></div>
-                        <h4>تقييم أفكار المشاريع</h4>
-                        <span class="en-name">Idea Evaluation</span>
-                        <p>تقييم وتطوير أفكار المشاريع</p>
-                        <span class="tag">أفكار • تقييم</span>
-                        <span class="card-tooltip">💡 تقييم أفكار</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==========================================================
-            القسم 5: الاقتصاد والتحليل الكمي - 7 خدمات
-            (3 خدمات قديمة + 4 جديدتين)
-            ========================================================== -->
-            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
-                <div class="category-header">
-                    <div class="icon-wrapper"><i class="fas fa-globe-americas"></i></div>
-                    <div class="info">
-                        <h3>الاقتصاد والتحليل الكمي</h3>
-                        <span class="en-title">Economics & Quantitative Analysis</span>
-                    </div>
-                </div>
-
-                <p class="category-desc">
-                    خدمات تحليلية وتطبيقية في الاقتصاد والتحليل الكمي، تشمل تحليل البيانات، تطبيق النماذج الاقتصادية، واستخدام الأساليب الكمية لدراسة الظواهر ودعم اتخاذ القرار.
-                </p>
-
-                <div class="services-grid">
-                    <!-- خدمة قديمة 1 -->
-                    <div class="service-item" onclick="openRequestForm('الاقتصاد')">
-                        <div class="service-icon"><i class="fas fa-chart-simple"></i></div>
-                        <h4>الاقتصاد</h4>
-                        <span class="en-name">Economics</span>
-                        <p>تحليل المؤشرات الاقتصادية</p>
-                        <span class="tag">اقتصاد • مؤشرات</span>
-                        <span class="card-tooltip">🌍 اقتصاد</span>
-                    </div>
-
-                    <!-- خدمة قديمة 2 -->
-                    <div class="service-item" onclick="openRequestForm('التحليل الكمي')">
-                        <div class="service-icon"><i class="fas fa-square-root-variable"></i></div>
-                        <h4>التحليل الكمي</h4>
-                        <span class="en-name">Quantitative Analysis</span>
-                        <p>تحليل البيانات الكمية</p>
-                        <span class="tag">كمي • إحصاء</span>
-                        <span class="card-tooltip">📊 تحليل كمي</span>
-                    </div>
-
-                    <!-- خدمة قديمة 3 -->
-                    <div class="service-item" onclick="openRequestForm('بحوث العمليات واتخاذ القرار')">
-                        <div class="service-icon"><i class="fas fa-diagram-project"></i></div>
-                        <h4>بحوث العمليات</h4>
-                        <span class="en-name">Operations Research</span>
-                        <p>نماذج رياضية وتحسين</p>
-                        <span class="tag">عمليات • قرار</span>
-                        <span class="card-tooltip">📐 بحوث عمليات</span>
-                    </div>
-
-                    <!-- خدمة جديدة 1: تحليل البيانات والمؤشرات الاقتصادية -->
-                    <div class="service-item" onclick="openRequestForm('تحليل البيانات والمؤشرات الاقتصادية')">
-                        <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-                        <h4>تحليل المؤشرات الاقتصادية</h4>
-                        <span class="en-name">Economic Indicators</span>
-                        <p>تحليل البيانات والمؤشرات</p>
-                        <span class="tag">مؤشرات • بيانات</span>
-                        <span class="card-tooltip">📈 مؤشرات اقتصادية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 2: إعداد ومراجعة الدراسات الاقتصادية -->
-                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة الدراسات الاقتصادية')">
-                        <div class="service-icon"><i class="fas fa-file-signature"></i></div>
-                        <h4>الدراسات الاقتصادية</h4>
-                        <span class="en-name">Economic Studies</span>
-                        <p>إعداد ومراجعة دراسات اقتصادية</p>
-                        <span class="tag">دراسات • اقتصاد</span>
-                        <span class="card-tooltip">📄 دراسات اقتصادية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 3: التحليل الإحصائي لبيانات الأعمال -->
-                    <div class="service-item" onclick="openRequestForm('التحليل الإحصائي لبيانات الأعمال')">
-                        <div class="service-icon"><i class="fas fa-calculator"></i></div>
-                        <h4>التحليل الإحصائي للأعمال</h4>
-                        <span class="en-name">Statistical Analysis</span>
-                        <p>تحليل بيانات الأعمال إحصائياً</p>
-                        <span class="tag">إحصاء • أعمال</span>
-                        <span class="card-tooltip">📊 تحليل إحصائي</span>
-                    </div>
-
-                    <!-- خدمة جديدة 4: إعداد النماذج الكمية وتحليل القرارات -->
-                    <div class="service-item" onclick="openRequestForm('إعداد النماذج الكمية وتحليل القرارات')">
-                        <div class="service-icon"><i class="fas fa-gear"></i></div>
-                        <h4>النماذج الكمية وتحليل القرار</h4>
-                        <span class="en-name">Quantitative Models</span>
-                        <p>إعداد نماذج كمية وتحليل القرارات</p>
-                        <span class="tag">نماذج • قرار</span>
-                        <span class="card-tooltip">⚙️ نماذج كمية</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==========================================================
-            القسم 6: إدارة العمليات وسلاسل الإمداد - 6 خدمات
-            (5 خدمات قديمة + 1 جديدة)
-            ========================================================== -->
-            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
-                <div class="category-header">
-                    <div class="icon-wrapper"><i class="fas fa-truck"></i></div>
-                    <div class="info">
-                        <h3>إدارة العمليات وسلاسل الإمداد</h3>
-                        <span class="en-title">Operations & Supply Chain Management</span>
-                    </div>
-                </div>
-
-                <p class="category-desc">
-                    خدمات تحليلية وتطبيقية تهدف إلى دراسة وتحسين العمليات التشغيلية وسلاسل الإمداد من خلال تحليل الأنظمة وتطبيق الأدوات المتخصصة.
-                </p>
-
-                <div class="services-grid">
-                    <!-- خدمة قديمة 1 -->
-                    <div class="service-item" onclick="openRequestForm('تحليل وتطوير العمليات التشغيلية')">
-                        <div class="service-icon"><i class="fas fa-gears"></i></div>
-                        <h4>تحليل العمليات التشغيلية</h4>
-                        <span class="en-name">Operations Analysis</span>
-                        <p>مراجعة وتحليل العمليات</p>
-                        <span class="tag">عمليات • تطوير</span>
-                        <span class="card-tooltip">⚙️ تحليل عمليات</span>
-                    </div>
-
-                    <!-- خدمة قديمة 2 -->
-                    <div class="service-item" onclick="openRequestForm('إعداد نماذج تخطيط العمليات والإنتاج')">
-                        <div class="service-icon"><i class="fas fa-industry"></i></div>
-                        <h4>تخطيط العمليات والإنتاج</h4>
-                        <span class="en-name">Production Planning</span>
-                        <p>نماذج تخطيط إنتاجية</p>
-                        <span class="tag">تخطيط • إنتاج</span>
-                        <span class="card-tooltip">🏭 تخطيط إنتاج</span>
-                    </div>
-
-                    <!-- خدمة قديمة 3 -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتحليل نماذج إدارة المخزون')">
-                        <div class="service-icon"><i class="fas fa-warehouse"></i></div>
-                        <h4>إدارة المخزون</h4>
-                        <span class="en-name">Inventory Management</span>
-                        <p>نماذج إدارة المخزون</p>
-                        <span class="tag">مخزون • EOQ</span>
-                        <span class="card-tooltip">📦 إدارة مخزون</span>
-                    </div>
-
-                    <!-- خدمة قديمة 4 -->
-                    <div class="service-item" onclick="openRequestForm('إعداد نماذج تحليل سلاسل الإمداد')">
-                        <div class="service-icon"><i class="fas fa-route"></i></div>
-                        <h4>تحليل سلاسل الإمداد</h4>
-                        <span class="en-name">Supply Chain Analysis</span>
-                        <p>نماذج تحليل سلاسل الإمداد</p>
-                        <span class="tag">سلاسل • لوجستيات</span>
-                        <span class="card-tooltip">🚚 سلاسل إمداد</span>
-                    </div>
-
-                    <!-- خدمة قديمة 5 -->
-                    <div class="service-item" onclick="openRequestForm('تحسين العمليات التشغيلية')">
-                        <div class="service-icon"><i class="fas fa-cogs"></i></div>
-                        <h4>تحسين العمليات التشغيلية</h4>
-                        <span class="en-name">Process Improvement</span>
-                        <p>دراسة وتحسين العمليات</p>
-                        <span class="tag">عمليات • كفاءة</span>
-                        <span class="card-tooltip">🔧 تحسين عمليات</span>
-                    </div>
-
-                    <!-- خدمة جديدة 1: إعداد خرائط العمليات التشغيلية -->
-                    <div class="service-item" onclick="openRequestForm('إعداد خرائط العمليات التشغيلية')">
-                        <div class="service-icon"><i class="fas fa-map"></i></div>
-                        <h4>خرائط العمليات التشغيلية</h4>
-                        <span class="en-name">Process Mapping</span>
-                        <p>إعداد خرائط العمليات التشغيلية</p>
-                        <span class="tag">خرائط • عمليات</span>
-                        <span class="card-tooltip">🗺️ خرائط عمليات</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==========================================================
-            القسم 7: الدراسات والتقارير التحليلية - 11 خدمة
-            (7 خدمات قديمة + 4 جديدتين)
-            ========================================================== -->
-            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
-                <div class="category-header">
-                    <div class="icon-wrapper"><i class="fas fa-file-alt"></i></div>
-                    <div class="info">
-                        <h3>الدراسات والتقارير التحليلية</h3>
-                        <span class="en-title">Analytical Studies & Reports</span>
-                    </div>
-                </div>
-
-                <p class="category-desc">
-                    خدمات متخصصة لإعداد وتحليل الدراسات والتقارير المرتبطة بمجالات الأعمال والاقتصاد، تشمل تنظيم المعلومات، تطبيق الأساليب التحليلية، وتقديم مخرجات احترافية تدعم المشاريع والدراسات المختلفة.
-                </p>
-
-                <div class="services-grid">
-                    <!-- خدمة قديمة 1 -->
-                    <div class="service-item" onclick="openRequestForm('إعداد الدراسات التطبيقية المتخصصة')">
-                        <div class="service-icon"><i class="fas fa-pen-fancy"></i></div>
-                        <h4>الدراسات التطبيقية</h4>
-                        <span class="en-name">Applied Studies</span>
-                        <p>إعداد دراسات تطبيقية</p>
-                        <span class="tag">دراسات • تطبيق</span>
-                        <span class="card-tooltip">📝 دراسات تطبيقية</span>
-                    </div>
-
-                    <!-- خدمة قديمة 2 -->
-                    <div class="service-item" onclick="openRequestForm('التقارير التحليلية')">
-                        <div class="service-icon"><i class="fas fa-file-lines"></i></div>
-                        <h4>التقارير التحليلية</h4>
-                        <span class="en-name">Analytical Reports</span>
-                        <p>إعداد تقارير متخصصة</p>
-                        <span class="tag">تقارير • تحليل</span>
-                        <span class="card-tooltip">📄 تقارير تحليلية</span>
-                    </div>
-
-                    <!-- خدمة قديمة 3 -->
-                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة التقارير التطبيقية المتخصصة')">
-                        <div class="service-icon"><i class="fas fa-file-pen"></i></div>
-                        <h4>إعداد ومراجعة التقارير</h4>
-                        <span class="en-name">Applied Reports</span>
-                        <p>إعداد ومراجعة تقارير تطبيقية</p>
-                        <span class="tag">تقارير • مراجعة</span>
-                        <span class="card-tooltip">📑 إعداد تقارير</span>
-                    </div>
-
-                    <!-- خدمة قديمة 4 -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير العروض التقديمية للمشاريع')">
-                        <div class="service-icon"><i class="fas fa-presentation-screen"></i></div>
-                        <h4>العروض التقديمية</h4>
-                        <span class="en-name">Project Presentations</span>
-                        <p>تطوير عروض المشاريع</p>
-                        <span class="tag">عرض • تصميم</span>
-                        <span class="card-tooltip">📽️ عروض تقديمية</span>
-                    </div>
-
-                    <!-- خدمة قديمة 5 -->
-                    <div class="service-item" onclick="openRequestForm('تطوير النماذج والجداول التحليلية')">
-                        <div class="service-icon"><i class="fas fa-table"></i></div>
-                        <h4>النماذج والجداول</h4>
-                        <span class="en-name">Analytical Templates</span>
-                        <p>تصميم نماذج وجداول تحليلية</p>
-                        <span class="tag">نماذج • جداول</span>
-                        <span class="card-tooltip">📊 نماذج تحليلية</span>
-                    </div>
-
-                    <!-- خدمة قديمة 6 -->
-                    <div class="service-item" onclick="openRequestForm('مراجعة وتقييم الأعمال التطبيقية')">
-                        <div class="service-icon"><i class="fas fa-clipboard-check"></i></div>
-                        <h4>مراجعة وتقييم الأعمال</h4>
-                        <span class="en-name">Work Review</span>
-                        <p>مراجعة وتقييم الأعمال التطبيقية</p>
-                        <span class="tag">مراجعة • تقييم</span>
-                        <span class="card-tooltip">✅ مراجعة أعمال</span>
-                    </div>
-
-                    <!-- خدمة قديمة 7 -->
-                    <div class="service-item" onclick="openRequestForm('تحسين وتطوير المخرجات النهائية')">
-                        <div class="service-icon"><i class="fas fa-arrow-up"></i></div>
-                        <h4>تحسين المخرجات النهائية</h4>
-                        <span class="en-name">Outputs Improvement</span>
-                        <p>تحسين جودة المخرجات النهائية</p>
-                        <span class="tag">تحسين • تطوير</span>
-                        <span class="card-tooltip">🚀 تحسين مخرجات</span>
-                    </div>
-
-                    <!-- خدمة جديدة 1: إعداد ومراجعة التقارير الإدارية التطبيقية -->
-                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة التقارير الإدارية التطبيقية')">
-                        <div class="service-icon"><i class="fas fa-file-lines"></i></div>
-                        <h4>التقارير الإدارية التطبيقية</h4>
-                        <span class="en-name">Management Reports</span>
-                        <p>إعداد ومراجعة تقارير إدارية</p>
-                        <span class="tag">تقارير • إدارة</span>
-                        <span class="card-tooltip">📋 تقارير إدارية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 2: إعداد الدراسات التسويقية -->
-                    <div class="service-item" onclick="openRequestForm('إعداد الدراسات التسويقية')">
-                        <div class="service-icon"><i class="fas fa-chart-pie"></i></div>
-                        <h4>الدراسات التسويقية</h4>
-                        <span class="en-name">Marketing Studies</span>
-                        <p>إعداد دراسات تسويقية</p>
-                        <span class="tag">تسويق • دراسات</span>
-                        <span class="card-tooltip">📊 دراسات تسويقية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 3: إعداد وتطوير الخطط التسويقية -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير الخطط التسويقية')">
-                        <div class="service-icon"><i class="fas fa-bullhorn"></i></div>
-                        <h4>الخطط التسويقية</h4>
-                        <span class="en-name">Marketing Plans</span>
-                        <p>تطوير الخطط التسويقية</p>
-                        <span class="tag">خطط • تسويق</span>
-                        <span class="card-tooltip">📋 خطط تسويقية</span>
-                    </div>
-
-                    <!-- خدمة جديدة 4: إعداد وتطوير النماذج والجداول التحليلية (مكررة ولكن نحتاج إلى تمييزها) 
-                    تمت إضافتها بالفعل كخدمة قديمة رقم 5 -->
-                </div>
-            </div>
-
-            <!-- ==========================================================
-            القسم 8: المشاريع وريادة الأعمال (قسم جديد)
-            ========================================================== -->
-            <div class="service-category" data-aos="fade-up" data-aos-duration="500">
-                <div class="category-header">
-                    <div class="icon-wrapper"><i class="fas fa-rocket"></i></div>
-                    <div class="info">
-                        <h3>المشاريع وريادة الأعمال</h3>
-                        <span class="en-title">Projects & Entrepreneurship</span>
-                    </div>
-                </div>
-
-                <p class="category-desc">
-                    خدمات متخصصة في تطوير وتحليل المشاريع والأفكار الريادية، تشمل إعداد الخطط، دراسة الجدوى، وتطوير نماذج العمل.
-                </p>
-
-                <div class="services-grid">
-                    <!-- خدمة جديدة: إعداد وتحليل نموذج العمل التجاري (تمت إضافتها بالفعل في القسم 4) -->
-                    <!-- سنضيف خدمات إضافية هنا لضمان عدم التكرار -->
-                    
-                    <!-- خدمة جديدة: تقييم وتطوير أفكار المشاريع (تمت إضافتها بالفعل في القسم 4) -->
-                    
-                    <!-- خدمة إضافية جديدة: إعداد خطط المشاريع -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتطوير خطط المشاريع والأعمال')">
-                        <div class="service-icon"><i class="fas fa-list-check"></i></div>
-                        <h4>خطط المشاريع والأعمال</h4>
-                        <span class="en-name">Project Plans</span>
-                        <p>تطوير خطط المشاريع والأعمال</p>
-                        <span class="tag">خطط • مشاريع</span>
-                        <span class="card-tooltip">📋 خطط مشاريع</span>
-                    </div>
-
-                    <!-- خدمة إضافية جديدة: دراسات الجدوى -->
-                    <div class="service-item" onclick="openRequestForm('إعداد ومراجعة دراسات الجدوى للمشاريع')">
-                        <div class="service-icon"><i class="fas fa-scale-balanced"></i></div>
-                        <h4>دراسات الجدوى</h4>
-                        <span class="en-name">Feasibility Studies</span>
-                        <p>إعداد ومراجعة دراسات الجدوى</p>
-                        <span class="tag">جدوى • دراسة</span>
-                        <span class="card-tooltip">⚖️ دراسات جدوى</span>
-                    </div>
-
-                    <!-- خدمة إضافية جديدة: تقييم أفكار المشاريع -->
-                    <div class="service-item" onclick="openRequestForm('تقييم وتطوير أفكار المشاريع')">
-                        <div class="service-icon"><i class="fas fa-brain"></i></div>
-                        <h4>تقييم أفكار المشاريع</h4>
-                        <span class="en-name">Idea Evaluation</span>
-                        <p>تقييم وتطوير أفكار المشاريع</p>
-                        <span class="tag">أفكار • تقييم</span>
-                        <span class="card-tooltip">💡 تقييم أفكار</span>
-                    </div>
-
-                    <!-- خدمة جديدة: نموذج العمل التجاري -->
-                    <div class="service-item" onclick="openRequestForm('إعداد وتحليل نموذج العمل التجاري')">
-                        <div class="service-icon"><i class="fas fa-cube"></i></div>
-                        <h4>نموذج العمل التجاري</h4>
-                        <span class="en-name">Business Model</span>
-                        <p>إعداد وتحليل نموذج العمل</p>
-                        <span class="tag">نموذج • أعمال</span>
-                        <span class="card-tooltip">🧊 نموذج عمل</span>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;" data-aos="fade-up" data-aos-duration="600">
-                <a href="#request-form" class="btn-primary" style="padding: 12px 45px; font-size: 0.9rem;">
-                    <i class="fas fa-paper-plane"></i> تقديم طلب خدمة
-                </a>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!-- ============================================================
-    نموذج طلب الخدمة
+    صفحة تفاصيل الخدمة (Service Details Page)
     ============================================================ -->
-    <section class="request-form-section" id="request-form">
+    <div class="service-details-page" id="serviceDetailsPage">
         <div class="container">
-            <div class="request-form-wrapper" data-aos="fade-up" data-aos-duration="600">
-                <div class="form-header">
-                    <h2>طلب <span>خدمة أكاديمية</span></h2>
-                    <p>املأ النموذج التالي وسيتم إرسال طلبك إلى فريق الإدارة للمراجعة</p>
-                </div>
+            <button class="back-to-services" onclick="showServicesPage()">
+                <i class="fas fa-arrow-right"></i> العودة إلى جميع الخدمات
+            </button>
 
-                <form id="serviceRequestForm" onsubmit="submitRequest(event)">
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>الاسم الكامل <span class="required">*</span></label>
-                            <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" required />
-                        </div>
-                        <div class="form-group">
-                            <label>البريد الإلكتروني <span class="required">*</span></label>
-                            <input type="email" id="email" placeholder="example@email.com" required />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>رقم التواصل (واتساب) <span class="required">*</span></label>
-                        <input type="tel" id="phone" placeholder="+966 54 850 4018" required />
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>القسم <span class="required">*</span></label>
-                            <select id="department" required>
-                                <option value="">اختر القسم</option>
-                                <option value="الإدارة والاستراتيجية وإدارة المشاريع">الإدارة والاستراتيجية وإدارة المشاريع</option>
-                                <option value="التمويل والاستثمار والتحليل المالي">التمويل والاستثمار والتحليل المالي</option>
-                                <option value="المحاسبة والتقارير المالية">المحاسبة والتقارير المالية</option>
-                                <option value="التسويق وريادة الأعمال ودراسات الأعمال">التسويق وريادة الأعمال ودراسات الأعمال</option>
-                                <option value="الاقتصاد والتحليل الكمي">الاقتصاد والتحليل الكمي</option>
-                                <option value="إدارة العمليات وسلاسل الإمداد">إدارة العمليات وسلاسل الإمداد</option>
-                                <option value="الدراسات والتقارير التحليلية">الدراسات والتقارير التحليلية</option>
-                                <option value="المشاريع وريادة الأعمال">المشاريع وريادة الأعمال</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>الخدمة المطلوبة <span class="required">*</span></label>
-                            <input type="text" id="service" placeholder="مثال: تحليل مالي" required />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>نوع الطلب <span class="required">*</span></label>
-                        <select id="requestType" required>
-                            <option value="">اختر نوع الطلب</option>
-                            <option value="تحليل">تحليل</option>
-                            <option value="مراجعة">مراجعة</option>
-                            <option value="إعداد تقرير">إعداد تقرير</option>
-                            <option value="تنظيم بيانات">تنظيم بيانات</option>
-                            <option value="تفسير نتائج">تفسير نتائج</option>
-                            <option value="تطوير محتوى">تطوير محتوى</option>
-                            <option value="إعداد عرض تقديمي">إعداد عرض تقديمي</option>
-                            <option value="أخرى">أخرى</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>عنوان الطلب <span class="required">*</span></label>
-                        <input type="text" id="requestTitle" placeholder="مثال: تحليل استراتيجيات التسويق" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label>وصف الطلب <span class="required">*</span></label>
-                        <textarea id="requestDescription" placeholder="صف طلبك بالتفصيل، واذكر المتطلبات والتوقعات..." required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>الجهة أو الشركة محل التطبيق (اختياري)</label>
-                        <input type="text" id="organization" placeholder="اسم الجهة أو الشركة إن وجدت" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>الملفات المرفقة</label>
-                        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p><strong>اضغط لرفع الملفات</strong></p>
-                            <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP</p>
-                        </div>
-                        <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip" style="display: none;" onchange="handleFiles(this.files)" />
-                        <div class="file-list" id="fileList"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>موعد التسليم المطلوب <span class="required">*</span></label>
-                        <input type="date" id="deliveryDate" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label>ملاحظات إضافية (اختياري)</label>
-                        <textarea id="additionalNotes" placeholder="أي تعليمات أو ملاحظات إضافية..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="termsAgree" required />
-                            <label for="termsAgree">
-                                <strong>أقر بأنني قرأت ووافقت على الشروط والأحكام</strong>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-submit" id="submitBtn">
-                        <i class="fas fa-paper-plane"></i> إرسال الطلب
-                    </button>
-
-                    <div class="form-message" id="formMessage"></div>
-                </form>
+            <div class="details-container" id="detailsContainer">
+                <!-- سيتم ملء المحتوى عبر JavaScript -->
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- ============================================================
     الشروط والأحكام
@@ -2132,7 +1611,7 @@
         <div class="container">
             <div class="section-header" data-aos="fade-up" data-aos-duration="600">
                 <h2>الشروط <span>والأحكام</span></h2>
-                <p>نلتزم بتقديم خدماتنا وفق أعلى معايير الشفافية والاحترافية</p>
+                <p>نلتزم بتقديم خدماتنا وفق أعلى معايير الشفافية والاحترافية الأكاديمية</p>
             </div>
 
             <div class="terms-grid">
@@ -2190,7 +1669,7 @@
                     <div class="icon"><i class="fas fa-info-circle"></i></div>
                     <h3>طبيعة الخدمات</h3>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i> الهدف الاسترشادي</li>
+                        <li><i class="fas fa-check-circle"></i> الهدف الأكاديمي</li>
                         <li><i class="fas fa-check-circle"></i> حدود الاستخدام</li>
                     </ul>
                 </div>
@@ -2204,7 +1683,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-brand">
-                منصة <span>ارتقاء</span>
+                منصة <span>ارتقاء</span> 💼
             </div>
             <div class="footer-contact">
                 <a href="https://t.me/edu_shehap" target="_blank" class="telegram">
@@ -2232,13 +1711,1433 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // ============================================================
-        // تفعيل AOS
+        // بيانات الخدمات - جميع الخدمات (45 خدمة)
         // ============================================================
-        AOS.init({
-            duration: 600,
-            once: true,
-            offset: 50
+        const services = [
+            // ========== القسم: الإدارة والاستراتيجية ==========
+            {
+                id: 1,
+                name: 'تحليل النماذج الإدارية',
+                enName: 'Management Concepts Analysis',
+                icon: 'fa-chart-pie',
+                category: 'management',
+                categoryLabel: 'إدارة',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تحليل وتطبيق النماذج الإدارية على الحالات الدراسية والتطبيقية، تشمل فهم النماذج، تطبيقها، وتفسير النتائج.',
+                includes: [
+                    'تحليل النماذج الإدارية',
+                    'تطبيق النماذج على الحالات',
+                    'تفسير النتائج',
+                    'تطوير التوصيات',
+                    'مراجعة التحليل'
+                ],
+                gallery: ['📊', '📈', '📋', '🎯'],
+                requestTypes: ['تحليل نموذج', 'تطبيق', 'مراجعة', 'توصيات'],
+                faq: [
+                    { q: 'ما هي النماذج الإدارية المشمولة؟', a: 'تشمل SWOT، PESTEL، Porter\'s Five Forces، والنماذج الاستراتيجية الأخرى.' },
+                    { q: 'كم تستغرق عملية التحليل؟', a: 'تتراوح بين 2-4 أيام حسب تعقيد الحالة.' }
+                ]
+            },
+            {
+                id: 2,
+                name: 'إدارة المشاريع',
+                enName: 'Project Management',
+                icon: 'fa-tasks',
+                category: 'management',
+                categoryLabel: 'إدارة',
+                emoji: '📋',
+                description: 'خدمة متخصصة في تحليل وإدارة مراحل المشروع، تشمل التخطيط، التنفيذ، المتابعة، وتقييم المشاريع.',
+                includes: [
+                    'تخطيط المشروع',
+                    'إدارة المراحل',
+                    'متابعة التنفيذ',
+                    'تقييم المشروع',
+                    'تطوير الخطط'
+                ],
+                gallery: ['📋', '📊', '📈', '✅'],
+                requestTypes: ['تخطيط', 'متابعة', 'تقييم', 'تطوير'],
+                faq: [
+                    { q: 'ما هي منهجيات إدارة المشاريع؟', a: 'تشمل Agile، Waterfall، وPrince2 حسب طبيعة المشروع.' },
+                    { q: 'هل تشمل الخدمة أدوات الجدولة؟', a: 'نعم، تشمل استخدام أدوات مثل Gantt Chart و WBS.' }
+                ]
+            },
+            {
+                id: 3,
+                name: 'الجودة والقيادة',
+                enName: 'Quality & Leadership',
+                icon: 'fa-crown',
+                category: 'management',
+                categoryLabel: 'إدارة',
+                emoji: '👑',
+                description: 'خدمة متخصصة في تحليل نماذج الجودة والقيادة، تشمل تقييم الأداء، تطوير المهارات القيادية، وتحسين الجودة.',
+                includes: [
+                    'تقييم الأداء',
+                    'تطوير المهارات القيادية',
+                    'تحسين الجودة',
+                    'تحليل نماذج القيادة',
+                    'توصيات التطوير'
+                ],
+                gallery: ['👑', '📊', '⭐', '🎯'],
+                requestTypes: ['تقييم', 'تطوير', 'تحليل', 'توصيات'],
+                faq: [
+                    { q: 'ما هي نماذج القيادة المشمولة؟', a: 'تشمل القيادة التحويلية، القيادة الموقفية، والقيادة الاستراتيجية.' },
+                    { q: 'كيف يتم تقييم الجودة؟', a: 'يتم التقييم باستخدام معايير الجودة العالمية مثل ISO و EFQM.' }
+                ]
+            },
+            {
+                id: 4,
+                name: 'تحليل الحالات الإدارية',
+                enName: 'Management Case Analysis',
+                icon: 'fa-file-alt',
+                category: 'management',
+                categoryLabel: 'إدارة',
+                emoji: '📋',
+                description: 'خدمة متخصصة في إعداد وتحليل الحالات الإدارية، تشمل فهم الموضوع، تحديد المحاور، وتحليل المعطيات.',
+                includes: [
+                    'فهم موضوع الحالة',
+                    'تحديد المحاور الرئيسية',
+                    'تحليل المعطيات',
+                    'تطوير المناقشات',
+                    'تحسين عرض الحلول'
+                ],
+                gallery: ['📋', '📊', '✏️', '📈'],
+                requestTypes: ['تحليل حالة', 'مراجعة', 'تطوير', 'تحسين'],
+                faq: [
+                    { q: 'ما هي أنواع الحالات الإدارية؟', a: 'تشمل حالات استراتيجية، تشغيلية، ومالية.' },
+                    { q: 'كم تستغرق عملية التحليل؟', a: 'تتراوح بين 3-5 أيام حسب تعقيد الحالة.' }
+                ]
+            },
+            {
+                id: 5,
+                name: 'تطبيق النماذج الإدارية',
+                enName: 'Management Models Application',
+                icon: 'fa-sitemap',
+                category: 'management',
+                categoryLabel: 'إدارة',
+                emoji: '🧩',
+                description: 'خدمة متخصصة في تطبيق وتحليل النماذج الإدارية على المشاريع والحالات، تشمل اختيار النموذج المناسب وتطبيقه.',
+                includes: [
+                    'اختيار النموذج المناسب',
+                    'تطبيق النموذج',
+                    'تفسير النتائج',
+                    'تطوير المخرجات',
+                    'مراجعة التطبيق'
+                ],
+                gallery: ['🧩', '📊', '📋', '🎯'],
+                requestTypes: ['تطبيق نموذج', 'تحليل', 'مراجعة', 'تطوير'],
+                faq: [
+                    { q: 'ما هي النماذج الإدارية المتاحة؟', a: 'تشمل SWOT، PESTEL، Porter، وBusiness Model Canvas.' },
+                    { q: 'كيف يتم اختيار النموذج المناسب؟', a: 'يتم اختيار النموذج بناءً على طبيعة المشروع وأهدافه.' }
+                ]
+            },
+
+            // ========== القسم: التمويل والاستثمار ==========
+            {
+                id: 6,
+                name: 'التحليل المالي',
+                enName: 'Financial Analysis',
+                icon: 'fa-file-invoice-dollar',
+                category: 'finance',
+                categoryLabel: 'مالية',
+                emoji: '💰',
+                description: 'خدمة متخصصة في تحليل القوائم والنسب المالية، تشمل دراسة الأداء المالي، تحليل النسب، وتفسير النتائج.',
+                includes: [
+                    'تحليل القوائم المالية',
+                    'حساب النسب المالية',
+                    'تفسير النتائج',
+                    'تقييم الأداء',
+                    'تطوير التوصيات'
+                ],
+                gallery: ['💰', '📊', '📈', '📋'],
+                requestTypes: ['تحليل مالي', 'حساب نسب', 'تقييم', 'توصيات'],
+                faq: [
+                    { q: 'ما هي النسب المالية المستخدمة؟', a: 'تشمل نسب السيولة، الربحية، الملاءة، والنشاط.' },
+                    { q: 'كم تستغرق عملية التحليل؟', a: 'تتراوح بين 2-4 أيام حسب حجم البيانات.' }
+                ]
+            },
+            {
+                id: 7,
+                name: 'التمويل والاستثمار',
+                enName: 'Finance & Investment',
+                icon: 'fa-chart-line',
+                category: 'finance',
+                categoryLabel: 'مالية',
+                emoji: '📈',
+                description: 'خدمة متخصصة في تحليل القرارات التمويلية والاستثمارية، تشمل تقييم الفرص، تحليل المخاطر، وتطوير الاستراتيجيات.',
+                includes: [
+                    'تقييم الفرص الاستثمارية',
+                    'تحليل المخاطر',
+                    'تطوير الاستراتيجيات',
+                    'تحليل العوائد',
+                    'توصيات الاستثمار'
+                ],
+                gallery: ['📈', '💰', '📊', '🎯'],
+                requestTypes: ['تقييم استثمار', 'تحليل مخاطر', 'تطوير استراتيجية', 'توصيات'],
+                faq: [
+                    { q: 'ما هي معايير تقييم الاستثمار؟', a: 'تشمل NPV، IRR، وفترة الاسترداد.' },
+                    { q: 'هل تشمل الخدمة تحليل المخاطر؟', a: 'نعم، تشمل تحليل المخاطر المالية والاستثمارية.' }
+                ]
+            },
+            {
+                id: 8,
+                name: 'النماذج المالية',
+                enName: 'Financial Models',
+                icon: 'fa-calculator',
+                category: 'finance',
+                categoryLabel: 'مالية',
+                emoji: '🧮',
+                description: 'خدمة متخصصة في إعداد النماذج والدراسات المالية، تشمل تطوير النماذج، تحليل البيانات، وتقديم التوصيات.',
+                includes: [
+                    'تطوير النماذج المالية',
+                    'تحليل البيانات',
+                    'تقديم التوصيات',
+                    'مراجعة النماذج',
+                    'تحديث الدراسات'
+                ],
+                gallery: ['🧮', '📊', '📈', '📋'],
+                requestTypes: ['تطوير نموذج', 'تحليل', 'مراجعة', 'تحديث'],
+                faq: [
+                    { q: 'ما هي أنواع النماذج المالية؟', a: 'تشمل نماذج التقييم، نماذج التخطيط، ونماذج المحاكاة.' },
+                    { q: 'كم تستغرق عملية التطوير؟', a: 'تتراوح بين 3-7 أيام حسب تعقيد النموذج.' }
+                ]
+            },
+            {
+                id: 9,
+                name: 'النماذج المالية للمشاريع',
+                enName: 'Financial Modeling for Projects',
+                icon: 'fa-chart-simple',
+                category: 'finance',
+                categoryLabel: 'مالية',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تطوير النماذج المالية للمشاريع، تشمل تنظيم الإيرادات والتكاليف، وإعداد الجداول المالية.',
+                includes: [
+                    'تنظيم الإيرادات والتكاليف',
+                    'إعداد الجداول المالية',
+                    'تطوير التوقعات',
+                    'تحليل السيناريوهات',
+                    'مراجعة النماذج'
+                ],
+                gallery: ['📊', '📈', '💰', '📋'],
+                requestTypes: ['تطوير نموذج', 'تحليل', 'مراجعة', 'تحديث'],
+                faq: [
+                    { q: 'ما هي مكونات النموذج المالي؟', a: 'تشمل الإيرادات، التكاليف، التدفقات النقدية، وصافي القيمة الحالية.' },
+                    { q: 'هل تشمل الخدمة تحليل الحساسية؟', a: 'نعم، تشمل تحليل الحساسية والسيناريوهات.' }
+                ]
+            },
+            {
+                id: 10,
+                name: 'التحليل المالي وإدارة المخاطر',
+                enName: 'Financial Analysis & Risk Management',
+                icon: 'fa-shield',
+                category: 'finance',
+                categoryLabel: 'مالية',
+                emoji: '🛡️',
+                description: 'خدمة متخصصة في تحليل الأداء المالي ودراسة المخاطر، تشمل تحليل المؤشرات، تقييم المخاطر، وتطوير استراتيجيات التعامل.',
+                includes: [
+                    'تحليل المؤشرات المالية',
+                    'تقييم المخاطر',
+                    'تحليل السيناريوهات',
+                    'تطوير استراتيجيات التعامل',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['🛡️', '📊', '📈', '🎯'],
+                requestTypes: ['تحليل مخاطر', 'تقييم', 'استراتيجيات', 'توصيات'],
+                faq: [
+                    { q: 'ما هي أنواع المخاطر المالية؟', a: 'تشمل مخاطر السوق، الائتمان، السيولة، والتشغيل.' },
+                    { q: 'كيف يتم تقييم المخاطر؟', a: 'يتم التقييم باستخدام أدوات مثل Value at Risk وتحليل السيناريوهات.' }
+                ]
+            },
+
+            // ========== القسم: المحاسبة ==========
+            {
+                id: 11,
+                name: 'تحليل الحالات المحاسبية',
+                enName: 'Accounting Case Analysis',
+                icon: 'fa-file-invoice',
+                category: 'accounting',
+                categoryLabel: 'محاسبة',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تحليل الحالات المحاسبية التطبيقية، تشمل فهم المشكلة، تطبيق المعالجات المحاسبية، وتقديم الحلول.',
+                includes: [
+                    'فهم المشكلة المحاسبية',
+                    'تحليل المعلومات',
+                    'تطبيق المعالجات المحاسبية',
+                    'تقديم الحلول',
+                    'مراجعة التحليل'
+                ],
+                gallery: ['📊', '📋', '💰', '✅'],
+                requestTypes: ['تحليل حالة', 'مراجعة', 'تطبيق', 'توصيات'],
+                faq: [
+                    { q: 'ما هي المعايير المحاسبية المستخدمة؟', a: 'تشمل المعايير الدولية IFRS والمعايير المحلية.' },
+                    { q: 'كم تستغرق عملية التحليل؟', a: 'تتراوح بين 2-5 أيام حسب تعقيد الحالة.' }
+                ]
+            },
+            {
+                id: 12,
+                name: 'تحليل القوائم المالية',
+                enName: 'Financial Statement Analysis',
+                icon: 'fa-chart-bar',
+                category: 'accounting',
+                categoryLabel: 'محاسبة',
+                emoji: '📈',
+                description: 'خدمة متخصصة في تحليل القوائم المالية واستخراج المؤشرات، تشمل دراسة الميزانية، قائمة الدخل، والتدفقات النقدية.',
+                includes: [
+                    'تحليل الميزانية العمومية',
+                    'تحليل قائمة الدخل',
+                    'تحليل التدفقات النقدية',
+                    'استخراج المؤشرات',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['📈', '📊', '💰', '📋'],
+                requestTypes: ['تحليل قوائم', 'استخراج مؤشرات', 'تقييم', 'توصيات'],
+                faq: [
+                    { q: 'ما هي المؤشرات المالية الرئيسية؟', a: 'تشمل نسب السيولة، الربحية، الملاءة، والكفاءة.' },
+                    { q: 'هل تشمل الخدمة التحليل الرأسي والأفقي؟', a: 'نعم، تشمل كلا النوعين من التحليل.' }
+                ]
+            },
+            {
+                id: 13,
+                name: 'النماذج والجداول المحاسبية',
+                enName: 'Accounting Templates',
+                icon: 'fa-table',
+                category: 'accounting',
+                categoryLabel: 'محاسبة',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تصميم النماذج والجداول المحاسبية، تشمل تحسين الهيكل، ترتيب المعلومات، وتطوير طريقة العرض.',
+                includes: [
+                    'تصميم النماذج المحاسبية',
+                    'تطوير الجداول',
+                    'تنظيم المعلومات',
+                    'تحسين العرض',
+                    'مراجعة التصميم'
+                ],
+                gallery: ['📊', '📋', '✏️', '✅'],
+                requestTypes: ['تصميم نموذج', 'تطوير جدول', 'مراجعة', 'تحسين'],
+                faq: [
+                    { q: 'ما هي أنواع النماذج المحاسبية؟', a: 'تشمل نماذج القيود، نماذج التسوية، ونماذج التقارير.' },
+                    { q: 'هل تشمل الخدمة نماذج Excel؟', a: 'نعم، تشمل تصميم نماذج Excel احترافية.' }
+                ]
+            },
+            {
+                id: 14,
+                name: 'التقارير المالية والتحليلية',
+                enName: 'Financial Reports',
+                icon: 'fa-file-pen',
+                category: 'accounting',
+                categoryLabel: 'محاسبة',
+                emoji: '📑',
+                description: 'خدمة متخصصة في إعداد ومراجعة التقارير المالية والتحليلية، تشمل تنظيم البيانات، تحسين العرض، ومراجعة الجودة.',
+                includes: [
+                    'تنظيم البيانات المالية',
+                    'إعداد التقارير',
+                    'تحسين العرض',
+                    'مراجعة الجودة',
+                    'تطوير التوصيات'
+                ],
+                gallery: ['📑', '📊', '💰', '✅'],
+                requestTypes: ['إعداد تقرير', 'مراجعة', 'تحسين', 'توصيات'],
+                faq: [
+                    { q: 'ما هي مكونات التقرير المالي؟', a: 'تشمل المقدمة، التحليل، النتائج، والتوصيات.' },
+                    { q: 'كم تستغرق عملية الإعداد؟', a: 'تتراوح بين 3-7 أيام حسب حجم التقرير.' }
+                ]
+            },
+
+            // ========== القسم: التسويق وريادة الأعمال ==========
+            {
+                id: 15,
+                name: 'التسويق',
+                enName: 'Marketing',
+                icon: 'fa-chart-bar',
+                category: 'marketing',
+                categoryLabel: 'تسويق',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تحليل الأسواق والسلوك التسويقي، تشمل دراسة السوق، تحليل المنافسين، وتطوير الاستراتيجيات.',
+                includes: [
+                    'تحليل السوق',
+                    'دراسة المنافسين',
+                    'تحليل سلوك العملاء',
+                    'تطوير الاستراتيجيات',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['📊', '🎯', '📈', '📋'],
+                requestTypes: ['تحليل سوق', 'استراتيجية', 'توصيات', 'تطوير'],
+                faq: [
+                    { q: 'ما هي أدوات التحليل التسويقي؟', a: 'تشمل SWOT، PESTEL، وتحليل المنافسين.' },
+                    { q: 'هل تشمل الخدمة التسويق الرقمي؟', a: 'نعم، تشمل استراتيجيات التسويق الرقمي والتقليدي.' }
+                ]
+            },
+            {
+                id: 16,
+                name: 'ريادة الأعمال',
+                enName: 'Entrepreneurship',
+                icon: 'fa-lightbulb',
+                category: 'marketing',
+                categoryLabel: 'تسويق',
+                emoji: '💡',
+                description: 'خدمة متخصصة في تحليل المشاريع الريادية، تشمل تقييم الأفكار، تطوير نماذج الأعمال، وتحليل الجدوى.',
+                includes: [
+                    'تقييم الأفكار الريادية',
+                    'تطوير نماذج الأعمال',
+                    'تحليل الجدوى',
+                    'تطوير الخطط',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['💡', '📊', '🚀', '🎯'],
+                requestTypes: ['تقييم فكرة', 'تطوير نموذج', 'تحليل جدوى', 'توصيات'],
+                faq: [
+                    { q: 'ما هي مكونات نموذج العمل؟', a: 'تشمل عرض القيمة، العملاء، الموارد، والأنشطة الرئيسية.' },
+                    { q: 'كيف يتم تقييم الأفكار؟', a: 'يتم التقييم باستخدام معايير الجدوى، السوق، والتمويل.' }
+                ]
+            },
+            {
+                id: 17,
+                name: 'دراسات الأعمال',
+                enName: 'Business Studies',
+                icon: 'fa-building',
+                category: 'marketing',
+                categoryLabel: 'تسويق',
+                emoji: '🏢',
+                description: 'خدمة متخصصة في تحليل بيئة الأعمال، تشمل دراسة العوامل المؤثرة، تحليل الصناعة، وتطوير الاستراتيجيات.',
+                includes: [
+                    'تحليل بيئة الأعمال',
+                    'دراسة العوامل المؤثرة',
+                    'تحليل الصناعة',
+                    'تطوير الاستراتيجيات',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['🏢', '📊', '📈', '🎯'],
+                requestTypes: ['تحليل بيئة', 'دراسة صناعة', 'استراتيجية', 'توصيات'],
+                faq: [
+                    { q: 'ما هي عناصر بيئة الأعمال؟', a: 'تشمل البيئة الداخلية، الخارجية، والتنافسية.' },
+                    { q: 'كيف يتم تحليل الصناعة؟', a: 'يتم التحليل باستخدام نموذج Porter\'s Five Forces.' }
+                ]
+            },
+            {
+                id: 18,
+                name: 'خطط المشاريع والأعمال',
+                enName: 'Project Plans',
+                icon: 'fa-list-check',
+                category: 'marketing',
+                categoryLabel: 'تسويق',
+                emoji: '📋',
+                description: 'خدمة متخصصة في تطوير خطط المشاريع والأعمال، تشمل تنظيم الفكرة، تحديد الأهداف، وتطوير مراحل التنفيذ.',
+                includes: [
+                    'تنظيم فكرة المشروع',
+                    'تحديد الأهداف',
+                    'تطوير مراحل التنفيذ',
+                    'توضيح الموارد',
+                    'تحسين الخطة النهائية'
+                ],
+                gallery: ['📋', '📊', '🎯', '✅'],
+                requestTypes: ['تطوير خطة', 'مراجعة', 'تحسين', 'توصيات'],
+                faq: [
+                    { q: 'ما هي مكونات خطة المشروع؟', a: 'تشمل الأهداف، الجدول الزمني، الموارد، والميزانية.' },
+                    { q: 'كم تستغرق عملية التطوير؟', a: 'تتراوح بين 3-7 أيام حسب حجم المشروع.' }
+                ]
+            },
+            {
+                id: 19,
+                name: 'دراسات الجدوى',
+                enName: 'Feasibility Studies',
+                icon: 'fa-scale-balanced',
+                category: 'marketing',
+                categoryLabel: 'تسويق',
+                emoji: '⚖️',
+                description: 'خدمة متخصصة في إعداد ومراجعة دراسات الجدوى للمشاريع، تشمل تحليل الجوانب التشغيلية والمالية وتنظيم المعلومات.',
+                includes: [
+                    'مراجعة فكرة المشروع',
+                    'تحليل الجوانب التشغيلية',
+                    'تحليل الجوانب المالية',
+                    'تنظيم المعلومات',
+                    'تحسين الجودة النهائية'
+                ],
+                gallery: ['⚖️', '📊', '📈', '🎯'],
+                requestTypes: ['إعداد دراسة', 'مراجعة', 'تحليل', 'تحسين'],
+                faq: [
+                    { q: 'ما هي أنواع دراسات الجدوى؟', a: 'تشمل الجدوى السوقية، الفنية، المالية، والقانونية.' },
+                    { q: 'كم تستغرق عملية الإعداد؟', a: 'تتراوح بين 5-10 أيام حسب حجم المشروع.' }
+                ]
+            },
+            {
+                id: 20,
+                name: 'نموذج العمل التجاري',
+                enName: 'Business Model Canvas',
+                icon: 'fa-cube',
+                category: 'marketing',
+                categoryLabel: 'تسويق',
+                emoji: '🧊',
+                description: 'خدمة متخصصة في إعداد وتحليل نموذج العمل التجاري، تشمل تحليل المكونات، القيمة المقدمة، والعلاقات الأساسية.',
+                includes: [
+                    'تحليل مكونات المشروع',
+                    'تحديد القيمة المقدمة',
+                    'تحليل الفئات المستفيدة',
+                    'تحليل الموارد والأنشطة',
+                    'تطوير النموذج'
+                ],
+                gallery: ['🧊', '📊', '🎯', '📋'],
+                requestTypes: ['تحليل نموذج', 'تطوير', 'مراجعة', 'تحسين'],
+                faq: [
+                    { q: 'ما هي مكونات Business Model Canvas؟', a: 'تشمل 9 مكونات: العملاء، القيمة، القنوات، العلاقات، الإيرادات، الموارد، الأنشطة، الشركاء، والتكاليف.' },
+                    { q: 'كيف يتم تطوير النموذج؟', a: 'يتم التطوير من خلال تحليل كل مكون وتحديد العلاقات بينها.' }
+                ]
+            },
+            {
+                id: 21,
+                name: 'تقييم أفكار المشاريع',
+                enName: 'Idea Evaluation',
+                icon: 'fa-brain',
+                category: 'marketing',
+                categoryLabel: 'تسويق',
+                emoji: '💡',
+                description: 'خدمة متخصصة في تقييم وتطوير أفكار المشاريع، تشمل تحليل المكونات، تحديد نقاط القوة، وتطوير الصياغة.',
+                includes: [
+                    'تحليل مكونات الفكرة',
+                    'تحديد نقاط القوة',
+                    'تحديد جوانب التحسين',
+                    'تطوير الصياغة',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['💡', '📊', '🎯', '✅'],
+                requestTypes: ['تقييم فكرة', 'تحليل', 'تطوير', 'توصيات'],
+                faq: [
+                    { q: 'ما هي معايير تقييم الأفكار؟', a: 'تشمل الجدوى، الإبداع، السوق، والتمويل.' },
+                    { q: 'كيف يتم تطوير الفكرة؟', a: 'يتم التطوير من خلال تحليل الفجوات وتقديم اقتراحات التحسين.' }
+                ]
+            },
+
+            // ========== القسم: الاقتصاد والتحليل الكمي ==========
+            {
+                id: 22,
+                name: 'الاقتصاد',
+                enName: 'Economics',
+                icon: 'fa-chart-simple',
+                category: 'economics',
+                categoryLabel: 'اقتصاد',
+                emoji: '🌍',
+                description: 'خدمة متخصصة في تحليل المؤشرات الاقتصادية، تشمل دراسة الاتجاهات، تحليل البيانات، وتفسير النتائج.',
+                includes: [
+                    'تحليل المؤشرات الاقتصادية',
+                    'دراسة الاتجاهات',
+                    'تحليل البيانات',
+                    'تفسير النتائج',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['🌍', '📊', '📈', '📋'],
+                requestTypes: ['تحليل مؤشرات', 'دراسة اتجاهات', 'تفسير', 'توصيات'],
+                faq: [
+                    { q: 'ما هي المؤشرات الاقتصادية الرئيسية؟', a: 'تشمل الناتج المحلي، التضخم، البطالة، وميزان المدفوعات.' },
+                    { q: 'كم تستغرق عملية التحليل؟', a: 'تتراوح بين 3-7 أيام حسب حجم البيانات.' }
+                ]
+            },
+            {
+                id: 23,
+                name: 'التحليل الكمي',
+                enName: 'Quantitative Analysis',
+                icon: 'fa-square-root-variable',
+                category: 'economics',
+                categoryLabel: 'اقتصاد',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تحليل البيانات الكمية، تشمل تطبيق الأساليب الإحصائية، تحليل العلاقات، وتفسير النتائج.',
+                includes: [
+                    'تطبيق الأساليب الإحصائية',
+                    'تحليل العلاقات',
+                    'تفسير النتائج',
+                    'تقديم التوصيات',
+                    'مراجعة التحليل'
+                ],
+                gallery: ['📊', '📈', '🔢', '📋'],
+                requestTypes: ['تحليل كمي', 'تطبيق إحصائي', 'تفسير', 'توصيات'],
+                faq: [
+                    { q: 'ما هي الأساليب الإحصائية المستخدمة؟', a: 'تشمل الانحدار، الارتباط، وتحليل التباين.' },
+                    { q: 'ما هي البرامج المستخدمة؟', a: 'تشمل SPSS، Excel، وR حسب الحاجة.' }
+                ]
+            },
+            {
+                id: 24,
+                name: 'بحوث العمليات',
+                enName: 'Operations Research',
+                icon: 'fa-diagram-project',
+                category: 'economics',
+                categoryLabel: 'اقتصاد',
+                emoji: '📐',
+                description: 'خدمة متخصصة في نماذج بحوث العمليات الرياضية، تشمل تحسين القرارات، نمذجة المشكلات، وتطبيق الأساليب الكمية.',
+                includes: [
+                    'نمذجة المشكلات',
+                    'تحسين القرارات',
+                    'تطبيق الأساليب الكمية',
+                    'تفسير النتائج',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['📐', '📊', '🔢', '🎯'],
+                requestTypes: ['نمذجة', 'تحسين', 'تحليل', 'توصيات'],
+                faq: [
+                    { q: 'ما هي أساليب بحوث العمليات؟', a: 'تشمل البرمجة الخطية، المحاكاة، وتحليل القرارات.' },
+                    { q: 'هل تشمل الخدمة تحليل الحساسية؟', a: 'نعم، تشمل تحليل الحساسية وتقييم البدائل.' }
+                ]
+            },
+            {
+                id: 25,
+                name: 'تحليل المؤشرات الاقتصادية',
+                enName: 'Economic Indicators Analysis',
+                icon: 'fa-chart-line',
+                category: 'economics',
+                categoryLabel: 'اقتصاد',
+                emoji: '📈',
+                description: 'خدمة متخصصة في تحليل البيانات والمؤشرات الاقتصادية، تشمل تفسير الاتجاهات وتقديم التحليلات.',
+                includes: [
+                    'تحليل البيانات الاقتصادية',
+                    'تفسير المؤشرات',
+                    'دراسة الاتجاهات',
+                    'تقديم التحليلات',
+                    'تطوير التوصيات'
+                ],
+                gallery: ['📈', '📊', '🌍', '📋'],
+                requestTypes: ['تحليل مؤشرات', 'تفسير', 'توصيات', 'تطوير'],
+                faq: [
+                    { q: 'ما هي مصادر البيانات الاقتصادية؟', a: 'تشمل البنوك المركزية، صندوق النقد، والمنظمات الدولية.' },
+                    { q: 'كم تستغرق عملية التحليل؟', a: 'تتراوح بين 3-5 أيام حسب حجم البيانات.' }
+                ]
+            },
+            {
+                id: 26,
+                name: 'الدراسات الاقتصادية',
+                enName: 'Economic Studies',
+                icon: 'fa-file-signature',
+                category: 'economics',
+                categoryLabel: 'اقتصاد',
+                emoji: '📄',
+                description: 'خدمة متخصصة في إعداد ومراجعة الدراسات الاقتصادية، تشمل تنظيم الإطار العام، تحليل المعلومات، وتطوير المناقشات.',
+                includes: [
+                    'تنظيم الإطار العام',
+                    'تحليل المعلومات',
+                    'تطوير المناقشات',
+                    'تحسين المخرجات',
+                    'مراجعة الدراسة'
+                ],
+                gallery: ['📄', '📊', '🌍', '✅'],
+                requestTypes: ['إعداد دراسة', 'مراجعة', 'تحليل', 'تحسين'],
+                faq: [
+                    { q: 'ما هي مكونات الدراسة الاقتصادية؟', a: 'تشمل المقدمة، الإطار النظري، التحليل، والاستنتاجات.' },
+                    { q: 'كم تستغرق عملية الإعداد؟', a: 'تتراوح بين 5-10 أيام حسب حجم الدراسة.' }
+                ]
+            },
+            {
+                id: 27,
+                name: 'التحليل الإحصائي للأعمال',
+                enName: 'Business Statistical Analysis',
+                icon: 'fa-calculator',
+                category: 'economics',
+                categoryLabel: 'اقتصاد',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تحليل بيانات الأعمال باستخدام الأساليب الإحصائية، تشمل تجهيز البيانات، إجراء التحليلات، وتفسير النتائج.',
+                includes: [
+                    'تجهيز البيانات',
+                    'إجراء التحليلات',
+                    'تفسير النتائج',
+                    'تحسين العرض',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['📊', '📈', '🔢', '📋'],
+                requestTypes: ['تحليل إحصائي', 'تجهيز بيانات', 'تفسير', 'توصيات'],
+                faq: [
+                    { q: 'ما هي أدوات التحليل الإحصائي؟', a: 'تشمل SPSS، Excel، وPython حسب الحاجة.' },
+                    { q: 'هل تشمل الخدمة تحليل الانحدار؟', a: 'نعم، تشمل تحليل الانحدار والارتباط.' }
+                ]
+            },
+            {
+                id: 28,
+                name: 'النماذج الكمية وتحليل القرار',
+                enName: 'Quantitative Decision Models',
+                icon: 'fa-gear',
+                category: 'economics',
+                categoryLabel: 'اقتصاد',
+                emoji: '⚙️',
+                description: 'خدمة متخصصة في إعداد النماذج الكمية وتحليل القرارات، تشمل تنظيم المتغيرات، بناء النموذج، وتفسير النتائج.',
+                includes: [
+                    'تنظيم المتغيرات',
+                    'بناء النموذج',
+                    'تفسير النتائج',
+                    'دعم القرار',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['⚙️', '📊', '📈', '🎯'],
+                requestTypes: ['بناء نموذج', 'تحليل قرار', 'تفسير', 'توصيات'],
+                faq: [
+                    { q: 'ما هي أنواع النماذج الكمية؟', a: 'تشمل نماذج التحسين، المحاكاة، وتحليل القرارات.' },
+                    { q: 'هل تشمل الخدمة تحليل المخاطر؟', a: 'نعم، تشمل تحليل المخاطر وتقييم البدائل.' }
+                ]
+            },
+
+            // ========== القسم: إدارة العمليات ==========
+            {
+                id: 29,
+                name: 'تحليل العمليات التشغيلية',
+                enName: 'Operations Analysis',
+                icon: 'fa-gears',
+                category: 'operations',
+                categoryLabel: 'عمليات',
+                emoji: '⚙️',
+                description: 'خدمة متخصصة في مراجعة وتحليل العمليات التشغيلية، تشمل دراسة الأنظمة، تحديد مجالات التحسين، وتطوير التوصيات.',
+                includes: [
+                    'مراجعة العمليات',
+                    'تحليل الأنظمة',
+                    'تحديد مجالات التحسين',
+                    'تطوير التوصيات',
+                    'متابعة التنفيذ'
+                ],
+                gallery: ['⚙️', '📊', '📈', '🎯'],
+                requestTypes: ['تحليل عمليات', 'مراجعة', 'تحسين', 'توصيات'],
+                faq: [
+                    { q: 'ما هي أدوات تحليل العمليات؟', a: 'تشمل خرائط التدفق، تحليل القيمة، وتحليل السبب الجذري.' },
+                    { q: 'كم تستغرق عملية التحليل؟', a: 'تتراوح بين 3-7 أيام حسب حجم العمليات.' }
+                ]
+            },
+            {
+                id: 30,
+                name: 'تخطيط العمليات والإنتاج',
+                enName: 'Production Planning',
+                icon: 'fa-industry',
+                category: 'operations',
+                categoryLabel: 'عمليات',
+                emoji: '🏭',
+                description: 'خدمة متخصصة في تطوير نماذج تخطيط العمليات والإنتاج، تشمل تحليل القدرات، جدولة الإنتاج، وتحسين الكفاءة.',
+                includes: [
+                    'تحليل القدرات',
+                    'جدولة الإنتاج',
+                    'تحسين الكفاءة',
+                    'تطوير النماذج',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['🏭', '📊', '📈', '🎯'],
+                requestTypes: ['تخطيط إنتاج', 'تحليل قدرات', 'جدولة', 'تحسين'],
+                faq: [
+                    { q: 'ما هي أساليب تخطيط الإنتاج؟', a: 'تشمل MRP، ERP، وتحسين الجدولة.' },
+                    { q: 'هل تشمل الخدمة تحليل الطاقة؟', a: 'نعم، تشمل تحليل القدرات الإنتاجية.' }
+                ]
+            },
+            {
+                id: 31,
+                name: 'إدارة المخزون',
+                enName: 'Inventory Management',
+                icon: 'fa-warehouse',
+                category: 'operations',
+                categoryLabel: 'عمليات',
+                emoji: '📦',
+                description: 'خدمة متخصصة في تطوير نماذج إدارة المخزون، تشمل تحليل الطلب، تحديد كميات الطلب، وتحسين مستويات المخزون.',
+                includes: [
+                    'تحليل الطلب',
+                    'تحديد كميات الطلب',
+                    'تحسين مستويات المخزون',
+                    'تطوير النماذج',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['📦', '📊', '📈', '🎯'],
+                requestTypes: ['تحليل مخزون', 'تطوير نموذج', 'تحسين', 'توصيات'],
+                faq: [
+                    { q: 'ما هي نماذج إدارة المخزون؟', a: 'تشمل EOQ، JIT، ونماذج المراجعة الدورية.' },
+                    { q: 'كم تستغرق عملية التطوير؟', a: 'تتراوح بين 3-5 أيام حسب حجم المخزون.' }
+                ]
+            },
+            {
+                id: 32,
+                name: 'تحليل سلاسل الإمداد',
+                enName: 'Supply Chain Analysis',
+                icon: 'fa-route',
+                category: 'operations',
+                categoryLabel: 'عمليات',
+                emoji: '🚚',
+                description: 'خدمة متخصصة في تحليل سلاسل الإمداد، تشمل دراسة التدفق، تحديد نقاط الضعف، وتطوير استراتيجيات التحسين.',
+                includes: [
+                    'دراسة تدفق الإمداد',
+                    'تحديد نقاط الضعف',
+                    'تطوير استراتيجيات التحسين',
+                    'تحليل التكاليف',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['🚚', '📊', '📈', '🎯'],
+                requestTypes: ['تحليل سلسلة', 'تطوير استراتيجية', 'تحسين', 'توصيات'],
+                faq: [
+                    { q: 'ما هي مكونات سلسلة الإمداد؟', a: 'تشمل الموردين، التصنيع، التوزيع، والعملاء.' },
+                    { q: 'كم تستغرق عملية التحليل؟', a: 'تتراوح بين 5-10 أيام حسب تعقيد السلسلة.' }
+                ]
+            },
+            {
+                id: 33,
+                name: 'تحسين العمليات التشغيلية',
+                enName: 'Process Improvement',
+                icon: 'fa-cogs',
+                category: 'operations',
+                categoryLabel: 'عمليات',
+                emoji: '🔧',
+                description: 'خدمة متخصصة في دراسة وتحسين العمليات التشغيلية، تشمل تحديد مجالات التحسين، تطوير الحلول، ومتابعة التنفيذ.',
+                includes: [
+                    'تحديد مجالات التحسين',
+                    'تطوير الحلول',
+                    'تنفيذ التحسينات',
+                    'متابعة النتائج',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['🔧', '📊', '📈', '✅'],
+                requestTypes: ['تحسين عملية', 'تطوير حل', 'تنفيذ', 'متابعة'],
+                faq: [
+                    { q: 'ما هي منهجيات التحسين؟', a: 'تشمل Lean، Six Sigma، وKaizen.' },
+                    { q: 'كيف يتم قياس التحسين؟', a: 'يتم القياس باستخدام مؤشرات الأداء الرئيسية.' }
+                ]
+            },
+            {
+                id: 34,
+                name: 'خرائط العمليات التشغيلية',
+                enName: 'Process Mapping',
+                icon: 'fa-map',
+                category: 'operations',
+                categoryLabel: 'عمليات',
+                emoji: '🗺️',
+                description: 'خدمة متخصصة في إعداد خرائط العمليات التشغيلية، تشمل تحديد خطوات العمل، تنظيم تدفق العمليات، وتحسين العرض.',
+                includes: [
+                    'تحديد خطوات العمل',
+                    'تنظيم تدفق العمليات',
+                    'تحسين العرض',
+                    'تحليل العمليات',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['🗺️', '📊', '📈', '✅'],
+                requestTypes: ['إعداد خريطة', 'تحليل تدفق', 'تحسين', 'توصيات'],
+                faq: [
+                    { q: 'ما هي أنواع خرائط العمليات؟', a: 'تشمل خرائط التدفق، خرائط القيمة، وخرائط السبب والنتيجة.' },
+                    { q: 'كم تستغرق عملية الإعداد؟', a: 'تتراوح بين 2-4 أيام حسب تعقيد العمليات.' }
+                ]
+            },
+
+            // ========== القسم: الدراسات والتقارير ==========
+            {
+                id: 35,
+                name: 'الدراسات التطبيقية',
+                enName: 'Applied Studies',
+                icon: 'fa-pen-fancy',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📝',
+                description: 'خدمة متخصصة في إعداد الدراسات التطبيقية المتخصصة، تشمل تنظيم المعلومات، تطبيق الأساليب التحليلية، وتقديم المخرجات.',
+                includes: [
+                    'تنظيم المعلومات',
+                    'تطبيق الأساليب التحليلية',
+                    'تقديم المخرجات',
+                    'مراجعة الدراسة',
+                    'تحسين الجودة'
+                ],
+                gallery: ['📝', '📊', '📈', '✅'],
+                requestTypes: ['إعداد دراسة', 'مراجعة', 'تحليل', 'تحسين'],
+                faq: [
+                    { q: 'ما هي أنواع الدراسات التطبيقية؟', a: 'تشمل دراسات الحالة، الدراسات الميدانية، والدراسات التحليلية.' },
+                    { q: 'كم تستغرق عملية الإعداد؟', a: 'تتراوح بين 5-10 أيام حسب حجم الدراسة.' }
+                ]
+            },
+            {
+                id: 36,
+                name: 'التقارير التحليلية',
+                enName: 'Analytical Reports',
+                icon: 'fa-file-lines',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📄',
+                description: 'خدمة متخصصة في إعداد التقارير التحليلية المتخصصة، تشمل تحليل البيانات، تنظيم النتائج، وتقديم التوصيات.',
+                includes: [
+                    'تحليل البيانات',
+                    'تنظيم النتائج',
+                    'تقديم التوصيات',
+                    'مراجعة التقرير',
+                    'تحسين الجودة'
+                ],
+                gallery: ['📄', '📊', '📈', '✅'],
+                requestTypes: ['إعداد تقرير', 'تحليل', 'توصيات', 'مراجعة'],
+                faq: [
+                    { q: 'ما هي مكونات التقرير التحليلي؟', a: 'تشمل المقدمة، المنهجية، النتائج، والتوصيات.' },
+                    { q: 'كم تستغرق عملية الإعداد؟', a: 'تتراوح بين 3-7 أيام حسب حجم التقرير.' }
+                ]
+            },
+            {
+                id: 37,
+                name: 'إعداد ومراجعة التقارير',
+                enName: 'Reports Preparation & Review',
+                icon: 'fa-file-pen',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📑',
+                description: 'خدمة متخصصة في إعداد ومراجعة التقارير التطبيقية، تشمل تنظيم الهيكل، تحسين المحتوى، ومراجعة الجودة.',
+                includes: [
+                    'تنظيم هيكل التقرير',
+                    'تحسين المحتوى',
+                    'مراجعة الجودة',
+                    'تطوير التحليل',
+                    'تحسين المخرجات'
+                ],
+                gallery: ['📑', '📊', '📈', '✅'],
+                requestTypes: ['إعداد تقرير', 'مراجعة', 'تحسين', 'تطوير'],
+                faq: [
+                    { q: 'ما هي معايير جودة التقارير؟', a: 'تشمل الدقة، الوضوح، التنظيم، والشمولية.' },
+                    { q: 'كم تستغرق عملية المراجعة؟', a: 'تستغرق 2-4 أيام حسب حجم التقرير.' }
+                ]
+            },
+            {
+                id: 38,
+                name: 'العروض التقديمية',
+                enName: 'Presentations',
+                icon: 'fa-presentation-screen',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📽️',
+                description: 'خدمة متخصصة في تطوير العروض التقديمية للمشاريع، تشمل تصميم الشرائح، تنظيم المحتوى، وتحسين العرض.',
+                includes: [
+                    'تصميم الشرائح',
+                    'تنظيم المحتوى',
+                    'تحسين العرض',
+                    'مراجعة الجودة',
+                    'تطوير التصميم'
+                ],
+                gallery: ['📽️', '📊', '🎨', '✅'],
+                requestTypes: ['تصميم عرض', 'تنظيم محتوى', 'تحسين', 'مراجعة'],
+                faq: [
+                    { q: 'ما هي أفضل ممارسات التصميم؟', a: 'تشمل استخدام ألوان متناسقة، نصوص واضحة، وعناصر بصرية جذابة.' },
+                    { q: 'كم عدد الشرائح المثالي؟', a: 'يتراوح بين 10-20 شريحة حسب الموضوع.' }
+                ]
+            },
+            {
+                id: 39,
+                name: 'النماذج والجداول التحليلية',
+                enName: 'Analytical Templates',
+                icon: 'fa-table',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تصميم النماذج والجداول التحليلية، تشمل تحسين الهيكل، ترتيب المعلومات، وتطوير طريقة العرض.',
+                includes: [
+                    'تصميم النماذج',
+                    'تطوير الجداول',
+                    'تنظيم المعلومات',
+                    'تحسين العرض',
+                    'مراجعة التصميم'
+                ],
+                gallery: ['📊', '📋', '✏️', '✅'],
+                requestTypes: ['تصميم نموذج', 'تطوير جدول', 'مراجعة', 'تحسين'],
+                faq: [
+                    { q: 'ما هي أنواع النماذج التحليلية؟', a: 'تشمل نماذج التحليل المالي، الإحصائي، واستخراج البيانات.' },
+                    { q: 'هل تشمل الخدمة نماذج Excel؟', a: 'نعم، تشمل تصميم نماذج Excel احترافية.' }
+                ]
+            },
+            {
+                id: 40,
+                name: 'مراجعة وتقييم الأعمال',
+                enName: 'Work Review',
+                icon: 'fa-clipboard-check',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '✅',
+                description: 'خدمة متخصصة في مراجعة وتقييم الأعمال التطبيقية، تشمل تحليل الجودة، تحديد مجالات التحسين، وتقديم التوصيات.',
+                includes: [
+                    'تحليل الجودة',
+                    'تحديد مجالات التحسين',
+                    'تقديم التوصيات',
+                    'مراجعة الأعمال',
+                    'تطوير الخطط'
+                ],
+                gallery: ['✅', '📊', '📈', '🎯'],
+                requestTypes: ['مراجعة أعمال', 'تقييم', 'تحليل', 'توصيات'],
+                faq: [
+                    { q: 'ما هي معايير التقييم؟', a: 'تشمل الجودة، الدقة، الالتزام، والابتكار.' },
+                    { q: 'كم تستغرق عملية المراجعة؟', a: 'تستغرق 2-5 أيام حسب حجم العمل.' }
+                ]
+            },
+            {
+                id: 41,
+                name: 'تحسين المخرجات النهائية',
+                enName: 'Outputs Improvement',
+                icon: 'fa-arrow-up',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '🚀',
+                description: 'خدمة متخصصة في تحسين جودة المخرجات النهائية، تشمل تحليل المخرجات، تطوير التحسينات، ومتابعة الجودة.',
+                includes: [
+                    'تحليل المخرجات',
+                    'تطوير التحسينات',
+                    'متابعة الجودة',
+                    'مراجعة النتائج',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['🚀', '📊', '📈', '✅'],
+                requestTypes: ['تحليل مخرجات', 'تحسين', 'متابعة', 'توصيات'],
+                faq: [
+                    { q: 'ما هي مجالات التحسين؟', a: 'تشمل الجودة، الكفاءة، والفعالية.' },
+                    { q: 'كيف يتم قياس التحسين؟', a: 'يتم القياس باستخدام مؤشرات الأداء الرئيسية.' }
+                ]
+            },
+            {
+                id: 42,
+                name: 'التقارير الإدارية التطبيقية',
+                enName: 'Management Reports',
+                icon: 'fa-file-lines',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📋',
+                description: 'خدمة متخصصة في إعداد ومراجعة التقارير الإدارية التطبيقية، تشمل تنظيم المحتوى، تحسين التحليل، وتطوير العرض.',
+                includes: [
+                    'تنظيم هيكل التقرير',
+                    'تحسين ترابط الأفكار',
+                    'مراجعة المحتوى',
+                    'تطوير التحليل',
+                    'تحسين المخرجات'
+                ],
+                gallery: ['📋', '📊', '📈', '✅'],
+                requestTypes: ['إعداد تقرير', 'مراجعة', 'تحليل', 'تحسين'],
+                faq: [
+                    { q: 'ما هي مكونات التقرير الإداري؟', a: 'تشمل الملخص التنفيذي، التحليل، والتوصيات.' },
+                    { q: 'كم تستغرق عملية الإعداد؟', a: 'تتراوح بين 3-7 أيام حسب حجم التقرير.' }
+                ]
+            },
+            {
+                id: 43,
+                name: 'الدراسات التسويقية',
+                enName: 'Marketing Studies',
+                icon: 'fa-chart-pie',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📊',
+                description: 'خدمة متخصصة في إعداد الدراسات التسويقية، تشمل تحليل السوق، دراسة الفئات المستهدفة، وتنظيم المعلومات.',
+                includes: [
+                    'تحليل السوق',
+                    'دراسة الفئات المستهدفة',
+                    'تنظيم المعلومات التسويقية',
+                    'تحسين المخرجات',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['📊', '🎯', '📈', '📋'],
+                requestTypes: ['إعداد دراسة', 'تحليل سوق', 'توصيات', 'تحسين'],
+                faq: [
+                    { q: 'ما هي مكونات الدراسة التسويقية؟', a: 'تشمل تحليل السوق، المنافسين، والعملاء المستهدفين.' },
+                    { q: 'كم تستغرق عملية الإعداد؟', a: 'تتراوح بين 5-10 أيام حسب حجم الدراسة.' }
+                ]
+            },
+            {
+                id: 44,
+                name: 'الخطط التسويقية',
+                enName: 'Marketing Plans',
+                icon: 'fa-bullhorn',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📋',
+                description: 'خدمة متخصصة في تطوير الخطط التسويقية، تشمل تنظيم الأهداف، تحليل السوق، وتحسين عناصر الخطة.',
+                includes: [
+                    'تنظيم الأهداف',
+                    'تحليل السوق',
+                    'تطوير الأنشطة التسويقية',
+                    'تحسين الخطة النهائية',
+                    'تقديم التوصيات'
+                ],
+                gallery: ['📋', '📊', '🎯', '✅'],
+                requestTypes: ['تطوير خطة', 'تحليل سوق', 'تحسين', 'توصيات'],
+                faq: [
+                    { q: 'ما هي مكونات الخطة التسويقية؟', a: 'تشمل الأهداف، الاستراتيجيات، الأنشطة، والميزانية.' },
+                    { q: 'كم تستغرق عملية التطوير؟', a: 'تتراوح بين 5-10 أيام حسب حجم الخطة.' }
+                ]
+            },
+            {
+                id: 45,
+                name: 'النماذج والجداول التحليلية المتقدمة',
+                enName: 'Advanced Analytical Templates',
+                icon: 'fa-table',
+                category: 'reports',
+                categoryLabel: 'تقارير',
+                emoji: '📊',
+                description: 'خدمة متخصصة في تصميم وتطوير النماذج والجداول التحليلية المتقدمة، تشمل تحسين الهيكل، ترتيب المعلومات، وتطوير طريقة العرض.',
+                includes: [
+                    'تصميم النماذج المتقدمة',
+                    'تطوير الجداول',
+                    'تنظيم المعلومات',
+                    'تحسين العرض',
+                    'مراجعة التصميم'
+                ],
+                gallery: ['📊', '📋', '✏️', '✅'],
+                requestTypes: ['تصميم نموذج', 'تطوير جدول', 'مراجعة', 'تحسين'],
+                faq: [
+                    { q: 'ما هي أنواع النماذج التحليلية المتقدمة؟', a: 'تشمل نماذج المحاكاة، نماذج التنبؤ، ونماذج التحسين.' },
+                    { q: 'هل تشمل الخدمة نماذج متخصصة؟', a: 'نعم، تشمل تصميم نماذج حسب متطلبات العميل.' }
+                ]
+            }
+        ];
+
+        // ============================================================
+        // عرض الخدمات
+        // ============================================================
+        function renderServices(filter = 'all') {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' 
+                ? services 
+                : services.filter(s => s.category === filter);
+
+            // تحديث العدادات
+            document.getElementById('totalCount').textContent = services.length;
+            document.getElementById('managementCount').textContent = services.filter(s => s.category === 'management').length;
+            document.getElementById('financeCount').textContent = services.filter(s => s.category === 'finance').length;
+            document.getElementById('accountingCount').textContent = services.filter(s => s.category === 'accounting').length;
+            document.getElementById('marketingCount').textContent = services.filter(s => s.category === 'marketing').length;
+            document.getElementById('economicsCount').textContent = services.filter(s => s.category === 'economics').length;
+            document.getElementById('operationsCount').textContent = services.filter(s => s.category === 'operations').length;
+            document.getElementById('reportsCount').textContent = services.filter(s => s.category === 'reports').length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">
+                        <i class="fas fa-search" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
+                        <p>لا توجد خدمات في هذا التصنيف</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach((service, index) => {
+                const item = document.createElement('div');
+                item.className = 'service-item fade-in';
+                item.style.animationDelay = `${index * 0.05}s`;
+                item.innerHTML = `
+                    <span class="business-emoji">${service.emoji}</span>
+                    <div class="service-icon"><i class="fas ${service.icon}"></i></div>
+                    <h4>${service.name}</h4>
+                    <span class="en-name">${service.enName}</span>
+                    <span class="tag">${service.categoryLabel}</span>
+                    <span class="service-category-tag">${service.categoryLabel}</span>
+                    <span class="click-hint"><i class="fas fa-arrow-left"></i> اضغط للتفاصيل</span>
+                `;
+                item.onclick = () => showServiceDetails(service.id);
+                grid.appendChild(item);
+            });
+        }
+
+        // ============================================================
+        // تصفية الخدمات
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderServices('all');
+
+            // أحداث الفلتر
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    renderServices(this.dataset.filter);
+                });
+            });
+
+            // تفعيل AOS
+            AOS.init({
+                duration: 600,
+                once: true,
+                offset: 50
+            });
         });
+
+        // ============================================================
+        // عرض تفاصيل الخدمة
+        // ============================================================
+        function showServiceDetails(serviceId) {
+            const service = services.find(s => s.id === serviceId);
+            if (!service) return;
+
+            // إخفاء صفحة الخدمات
+            document.getElementById('servicesPage').style.display = 'none';
+            // إظهار صفحة التفاصيل
+            const detailsPage = document.getElementById('serviceDetailsPage');
+            detailsPage.classList.add('active');
+            detailsPage.scrollIntoView({ behavior: 'smooth' });
+
+            const container = document.getElementById('detailsContainer');
+
+            // بناء HTML لصفحة التفاصيل
+            container.innerHTML = `
+                <!-- رأس التفاصيل -->
+                <div class="details-header">
+                    <div class="icon"><i class="fas ${service.icon}"></i></div>
+                    <div class="info">
+                        <h2>${service.name}</h2>
+                        <div class="en-title">${service.enName}</div>
+                        <span class="category-badge"><i class="fas fa-tag"></i> ${service.categoryLabel}</span>
+                        <span style="margin-right:8px; font-size:1.2rem;">${service.emoji}</span>
+                    </div>
+                </div>
+
+                <!-- وصف الخدمة -->
+                <div class="details-section">
+                    <h3><i class="fas fa-info-circle"></i> وصف الخدمة</h3>
+                    <p>${service.description}</p>
+                </div>
+
+                <!-- ماذا تتضمن الخدمة -->
+                <div class="details-section">
+                    <h3><i class="fas fa-list-check"></i> ماذا تتضمن الخدمة؟</h3>
+                    <ul>
+                        ${service.includes.map(item => `<li><i class="fas fa-check-circle"></i> ${item}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <!-- معرض الصور -->
+                <div class="details-section">
+                    <h3><i class="fas fa-images"></i> معرض الخدمة</h3>
+                    <div class="gallery-grid">
+                        ${service.gallery.map((item, i) => `
+                            <div class="gallery-item" style="background: ${['#7C3AED','#EC4899','#F59E0B','#10B981','#3B82F6','#EF4444','#8B5CF6'][i % 7]}22;">
+                                <span style="font-size:3rem;">${item}</span>
+                                <div class="gallery-label">${['نموذج الخدمة','تحليل','تخطيط','تنفيذ','تقييم','نتائج','توصيات'][i % 7]}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- أنواع الطلبات -->
+                <div class="details-section">
+                    <h3><i class="fas fa-clipboard-list"></i> أنواع الطلبات المتاحة</h3>
+                    <div class="request-types-grid">
+                        ${service.requestTypes.map(type => `
+                            <div class="request-type-item">
+                                <i class="fas fa-${['file','search','pen','chart-line','user-md','briefcase','clipboard','star'][Math.floor(Math.random()*8)]}"></i>
+                                <span>${type}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- الأسئلة الشائعة -->
+                <div class="details-section">
+                    <h3><i class="fas fa-question-circle"></i> الأسئلة الشائعة</h3>
+                    ${service.faq.map((item, index) => `
+                        <div class="faq-item" onclick="toggleFaq(this)">
+                            <div class="question">
+                                <span>${item.q}</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="answer">${item.a}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <!-- نموذج طلب الخدمة -->
+                <div class="details-section">
+                    <h3><i class="fas fa-paper-plane"></i> طلب الخدمة</h3>
+                    <div class="details-form-wrapper">
+                        <form onsubmit="submitDetailsRequest(event, '${service.name}')">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>الاسم الكامل <span class="required">*</span></label>
+                                    <input type="text" id="detailsFullName" placeholder="أدخل اسمك الكامل" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>البريد الإلكتروني <span class="required">*</span></label>
+                                    <input type="email" id="detailsEmail" placeholder="example@email.com" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>رقم التواصل <span class="required">*</span></label>
+                                <input type="tel" id="detailsPhone" placeholder="+966 54 850 4018" required />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>نوع الطلب <span class="required">*</span></label>
+                                    <select id="detailsRequestType" required>
+                                        <option value="">اختر نوع الطلب</option>
+                                        ${service.requestTypes.map(type => `<option value="${type}">${type}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>موعد التسليم <span class="required">*</span></label>
+                                    <input type="date" id="detailsDeliveryDate" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>وصف الطلب <span class="required">*</span></label>
+                                <textarea id="detailsDescription" placeholder="صف طلبك بالتفصيل..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>الملفات المرفقة</label>
+                                <div class="file-upload" onclick="document.getElementById('detailsFileInput').click()">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p><strong>اضغط لرفع الملفات</strong></p>
+                                    <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP</p>
+                                </div>
+                                <input type="file" id="detailsFileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip" style="display: none;" onchange="handleDetailsFiles(this.files)" />
+                                <div class="file-list" id="detailsFileList"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="detailsTermsAgree" required />
+                                    <label for="detailsTermsAgree">
+                                        <strong>أقر بأنني قرأت ووافقت على الشروط والأحكام</strong>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-submit" id="detailsSubmitBtn">
+                                <i class="fas fa-paper-plane"></i> إرسال طلب ${service.name}
+                            </button>
+                            <div class="form-message" id="detailsFormMessage"></div>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+            // تعيين التاريخ الافتراضي
+            const dateInput = document.getElementById('detailsDeliveryDate');
+            const today = new Date();
+            const future = new Date(today);
+            future.setDate(future.getDate() + 7);
+            dateInput.value = future.toISOString().split('T')[0];
+            dateInput.min = today.toISOString().split('T')[0];
+        }
+
+        // ============================================================
+        // العودة إلى صفحة الخدمات
+        // ============================================================
+        function showServicesPage() {
+            document.getElementById('servicesPage').style.display = 'block';
+            document.getElementById('serviceDetailsPage').classList.remove('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // تفعيل/إلغاء الأسئلة الشائعة
+        // ============================================================
+        function toggleFaq(element) {
+            element.classList.toggle('open');
+        }
+
+        // ============================================================
+        // معالجة الملفات في نموذج التفاصيل
+        // ============================================================
+        let detailsSelectedFiles = [];
+
+        function handleDetailsFiles(files) {
+            const list = document.getElementById('detailsFileList');
+            list.innerHTML = '';
+            detailsSelectedFiles = [];
+
+            for (let file of files) {
+                detailsSelectedFiles.push(file);
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                const fileSize = (file.size / 1024).toFixed(1);
+                item.innerHTML = `
+                    <i class="fas fa-file"></i>
+                    <span>${file.name} (${fileSize} KB)</span>
+                    <span class="remove-file" onclick="removeDetailsFile('${file.name}')">&times;</span>
+                `;
+                list.appendChild(item);
+            }
+        }
+
+        function removeDetailsFile(fileName) {
+            detailsSelectedFiles = detailsSelectedFiles.filter(f => f.name !== fileName);
+            const items = document.getElementById('detailsFileList').children;
+            for (let item of items) {
+                if (item.textContent.includes(fileName)) {
+                    item.remove();
+                    break;
+                }
+            }
+        }
+
+        // ============================================================
+        // إرسال طلب التفاصيل
+        // ============================================================
+        async function submitDetailsRequest(event, serviceName) {
+            event.preventDefault();
+
+            const name = document.getElementById('detailsFullName').value.trim();
+            const email = document.getElementById('detailsEmail').value.trim();
+            const phone = document.getElementById('detailsPhone').value.trim();
+            const requestType = document.getElementById('detailsRequestType').value;
+            const deliveryDate = document.getElementById('detailsDeliveryDate').value;
+            const description = document.getElementById('detailsDescription').value.trim();
+            const termsAgreed = document.getElementById('detailsTermsAgree').checked;
+
+            const errors = [];
+            if (!name) errors.push('الاسم الكامل');
+            if (!email) errors.push('البريد الإلكتروني');
+            if (!phone) errors.push('رقم التواصل');
+            if (!requestType) errors.push('نوع الطلب');
+            if (!deliveryDate) errors.push('موعد التسليم');
+            if (!description) errors.push('وصف الطلب');
+            if (!termsAgreed) errors.push('الموافقة على الشروط');
+
+            if (errors.length > 0) {
+                showDetailsMessage(`❌ يرجى تعبئة: ${errors.join('، ')}`, 'error');
+                return;
+            }
+
+            showDetailsMessage('⏳ جاري معالجة الطلب...', 'info');
+
+            const submitBtn = document.getElementById('detailsSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+
+            try {
+                const API_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000/api'
+                    : 'https://irteqa.onrender.com/api';
+
+                const data = {
+                    name, email, phone, requestType,
+                    deliveryDate, description,
+                    serviceName,
+                    termsAgreed,
+                    files: detailsSelectedFiles || [],
+                    category: 'business-details'
+                };
+
+                console.log('📤 إرسال طلب أعمال (تفاصيل):', data);
+
+                const response = await fetch(`${API_URL}/business-orders`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showDetailsMessage(`✅ ${result.message}`, 'success');
+                    document.getElementById('detailsFullName').value = '';
+                    document.getElementById('detailsEmail').value = '';
+                    document.getElementById('detailsPhone').value = '';
+                    document.getElementById('detailsRequestType').value = '';
+                    document.getElementById('detailsDescription').value = '';
+                    document.getElementById('detailsTermsAgree').checked = false;
+                    document.getElementById('detailsFileList').innerHTML = '';
+                    detailsSelectedFiles = [];
+                    
+                    const dateInput = document.getElementById('detailsDeliveryDate');
+                    const today = new Date();
+                    const future = new Date(today);
+                    future.setDate(future.getDate() + 7);
+                    dateInput.value = future.toISOString().split('T')[0];
+                } else {
+                    showDetailsMessage(`❌ ${result.message || 'حدث خطأ'}`, 'error');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showDetailsMessage('❌ حدث خطأ في الاتصال بالخادم.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
+            }
+        }
+
+        function showDetailsMessage(text, type) {
+            const messageEl = document.getElementById('detailsFormMessage');
+            messageEl.textContent = text;
+            messageEl.className = 'form-message ' + type;
+            messageEl.style.display = 'block';
+
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 8000);
+        }
 
         // ============================================================
         // تبديل الوضع
@@ -2268,177 +3167,18 @@
             }
         });
 
-        // ============================================================
-        // فتح نموذج الطلب
-        // ============================================================
-        function openRequestForm(serviceName) {
-            document.getElementById('request-form').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => {
-                document.getElementById('requestDescription').focus();
-            }, 600);
-        }
-
-        // ============================================================
-        // معالجة الملفات
-        // ============================================================
-        let selectedFiles = [];
-
-        function handleFiles(files) {
-            const list = document.getElementById('fileList');
-            list.innerHTML = '';
-            selectedFiles = [];
-
-            for (let file of files) {
-                selectedFiles.push(file);
-                const item = document.createElement('div');
-                item.className = 'file-item';
-                const fileSize = (file.size / 1024).toFixed(1);
-                item.innerHTML = `
-                    <i class="fas fa-file"></i>
-                    <span>${file.name} (${fileSize} KB)</span>
-                    <span class="remove-file" onclick="removeFile('${file.name}')">&times;</span>
-                `;
-                list.appendChild(item);
-            }
-        }
-
-        function removeFile(fileName) {
-            selectedFiles = selectedFiles.filter(f => f.name !== fileName);
-            const items = document.getElementById('fileList').children;
-            for (let item of items) {
-                if (item.textContent.includes(fileName)) {
-                    item.remove();
-                    break;
-                }
-            }
-        }
-
-        // ============================================================
-        // تعيين التاريخ الافتراضي
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateInput = document.getElementById('deliveryDate');
-            const today = new Date();
-            const future = new Date(today);
-            future.setDate(future.getDate() + 7);
-            dateInput.value = future.toISOString().split('T')[0];
-            dateInput.min = today.toISOString().split('T')[0];
-        });
-
-        // ============================================================
-        // عرض الرسائل
-        // ============================================================
-        function showMessage(text, type) {
-            const messageEl = document.getElementById('formMessage');
-            messageEl.textContent = text;
-            messageEl.className = 'form-message ' + type;
-            messageEl.style.display = 'block';
-
-            setTimeout(() => {
-                messageEl.style.display = 'none';
-            }, 8000);
-        }
-
-        // ============================================================
-        // إرسال الطلب
-        // ============================================================
-        async function submitRequest(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('fullName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const department = document.getElementById('department').value;
-            const service = document.getElementById('service').value.trim();
-            const requestType = document.getElementById('requestType').value;
-            const title = document.getElementById('requestTitle').value.trim();
-            const description = document.getElementById('requestDescription').value.trim();
-            const organization = document.getElementById('organization').value.trim();
-            const deliveryDate = document.getElementById('deliveryDate').value;
-            const notes = document.getElementById('additionalNotes').value.trim();
-            const termsAgreed = document.getElementById('termsAgree').checked;
-
-            const errors = [];
-            if (!name) errors.push('الاسم الكامل');
-            if (!email) errors.push('البريد الإلكتروني');
-            if (!phone) errors.push('رقم التواصل');
-            if (!department) errors.push('القسم');
-            if (!service) errors.push('الخدمة');
-            if (!requestType) errors.push('نوع الطلب');
-            if (!title) errors.push('عنوان الطلب');
-            if (!description) errors.push('وصف الطلب');
-            if (!deliveryDate) errors.push('موعد التسليم');
-            if (!termsAgreed) errors.push('الموافقة على الشروط');
-
-            if (errors.length > 0) {
-                showMessage(`❌ يرجى تعبئة: ${errors.join('، ')}`, 'error');
-                return;
-            }
-
-            showMessage('⏳ جاري معالجة الطلب...', 'info');
-
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-
-            try {
-                const API_URL = window.location.hostname === 'localhost' 
-                    ? 'http://localhost:5000/api'
-                    : 'https://irteqa.onrender.com/api';
-
-                const data = {
-                    name, email, phone, department, service, requestType,
-                    title, description, organization: organization || '',
-                    deliveryDate, notes: notes || '',
-                    termsAgreed, files: selectedFiles || []
-                };
-
-                console.log('📤 إرسال الطلب:', data);
-
-                const response = await fetch(`${API_URL}/business-orders`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    showMessage(`✅ ${result.message}`, 'success');
-                    document.getElementById('serviceRequestForm').reset();
-                    document.getElementById('fileList').innerHTML = '';
-                    selectedFiles = [];
-                    
-                    const dateInput = document.getElementById('deliveryDate');
-                    const today = new Date();
-                    const future = new Date(today);
-                    future.setDate(future.getDate() + 7);
-                    dateInput.value = future.toISOString().split('T')[0];
-                } else {
-                    showMessage(`❌ ${result.message || 'حدث خطأ'}`, 'error');
-                }
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showMessage('❌ حدث خطأ في الاتصال بالخادم.', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
-            }
-        }
-
-        console.log('🚀 منصة ارتقاء - خدمات الأعمال والاقتصاد (جميع الخدمات الـ 45)');
-        console.log('📋 8 أقسام رئيسية مع 45 خدمة متخصصة');
-        console.log('✅ تصميم دائري ثلاثي الأبعاد');
-        console.log('📌 توزيع الخدمات:');
-        console.log('  📂 الإدارة والاستراتيجية: 5 خدمات');
-        console.log('  📂 التمويل والاستثمار: 5 خدمات');
-        console.log('  📂 المحاسبة: 4 خدمات');
-        console.log('  📂 التسويق وريادة الأعمال: 7 خدمات');
-        console.log('  📂 الاقتصاد والتحليل الكمي: 7 خدمات');
-        console.log('  📂 العمليات وسلاسل الإمداد: 6 خدمات');
-        console.log('  📂 الدراسات والتقارير: 11 خدمة');
-        console.log('  📂 المشاريع وريادة الأعمال: 4 خدمات (قسم جديد)');
-        console.log('📊 المجموع الكلي: 45 خدمة');
+        console.log('💼 منصة ارتقاء - خدمات الأعمال والاقتصاد');
+        console.log(`📋 ${services.length} خدمة متخصصة`);
+        console.log('📌 التصنيفات:');
+        console.log('  📂 إدارة: 5 خدمات');
+        console.log('  📂 مالية: 5 خدمات');
+        console.log('  📂 محاسبة: 4 خدمات');
+        console.log('  📂 تسويق: 7 خدمات');
+        console.log('  📂 اقتصاد: 7 خدمات');
+        console.log('  📂 عمليات: 6 خدمات');
+        console.log('  📂 تقارير: 11 خدمة');
+        console.log('📊 إجمالي الخدمات: 45 خدمة');
+        console.log('💡 كل خدمة تحتوي على صفحة تفاصيل متكاملة');
     </script>
 </body>
 </html>
