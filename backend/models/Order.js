@@ -1,126 +1,63 @@
-// backend/models/Order.js
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
-    serviceType: {
-        type: String,
-        required: true,
-        default: 'خدمة'
-    },
-    title: {
-        type: String,
-        required: true,
-        default: 'طلب جديد'
-    },
-    description: {
-        type: String,
-        default: ''
-    },
-    deadline: {
-        type: Date,
-        required: true
-    },
-    budget: {
-        type: Number,
-        default: 0
-    },
-    status: {
-        type: String,
+    id: { type: String, unique: true },
+    serviceType: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String },
+    status: { 
+        type: String, 
         enum: ['pending', 'in-progress', 'completed', 'revision', 'cancelled'],
         default: 'pending'
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    assignedExpert: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    assignedAt: { type: Date },
+    deadline: { type: Date },
+    budget: { type: Number, default: 0 },
+    scope: {
+        outputs: { type: String },
+        duration: { type: String },
+        price: { type: String }
     },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    assignedExpert: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    assignedAt: {
-        type: Date
-    },
-    expertNotes: {
-        type: String,
-        default: ''
-    },
-    files: [{
-        filename: String,
-        filePath: String,
-        fileId: String,
-        fileSize: Number,
-        mimeType: String,
-        uploadDate: {
-            type: Date,
-            default: Date.now
-        },
-        publicId: String,
-        cloudinaryUrl: String,
-        storageProvider: {
-            type: String,
-            enum: ['local', 'gridfs'],
-            default: 'local'
-        }
+    timeline: [{
+        event: { type: String },
+        time: { type: Date, default: Date.now }
     }],
-    // حقول طلبات كلية الأعمال
-    orderType: {
-        type: String,
-        enum: ['regular', 'business'],
-        default: 'regular'
-    },
-    name: {
-        type: String,
-        default: ''
-    },
-    email: {
-        type: String,
-        default: ''
-    },
-    phone: {
-        type: String,
-        default: ''
-    },
-    department: {
-        type: String,
-        default: ''
-    },
-    service: {
-        type: String,
-        default: ''
-    },
-    requestType: {
-        type: String,
-        default: ''
-    },
-    organization: {
-        type: String,
-        default: ''
-    },
-    deliveryDate: {
-        type: String,
-        default: ''
-    },
-    notes: {
-        type: String,
-        default: ''
-    },
-    termsAgreed: {
-        type: Boolean,
-        default: false
-    }
+    files: [{
+        name: { type: String },
+        filename: { type: String },
+        fileId: { type: String },
+        fileSize: { type: String },
+        size: { type: String },
+        type: { type: String, enum: ['user', 'work', 'final'] },
+        icon: { type: String },
+        url: { type: String },
+        path: { type: String }
+    }],
+    // بيانات إضافية للطلبات
+    name: { type: String },
+    email: { type: String },
+    phone: { type: String },
+    department: { type: String },
+    service: { type: String },
+    requestType: { type: String },
+    organization: { type: String },
+    deliveryDate: { type: Date },
+    notes: { type: String },
+    termsAgreed: { type: Boolean, default: false },
+    orderType: { type: String, enum: ['general', 'business', 'health'], default: 'general' }
 }, {
     timestamps: true
 });
 
-// فهارس للبحث السريع
-OrderSchema.index({ user: 1 });
-OrderSchema.index({ assignedExpert: 1 });
-OrderSchema.index({ status: 1 });
-OrderSchema.index({ createdAt: -1 });
-OrderSchema.index({ orderType: 1 });
+// إنشاء رقم طلب تلقائي
+OrderSchema.pre('save', async function(next) {
+    if (!this.id) {
+        const count = await mongoose.model('Order').countDocuments();
+        this.id = `REQ-${String(count + 1).padStart(4, '0')}`;
+    }
+    next();
+});
 
 module.exports = mongoose.model('Order', OrderSchema);
