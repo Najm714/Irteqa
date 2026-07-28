@@ -1535,7 +1535,88 @@ app.get('/api/business-orders/files/:fileId', protect, async (req, res) => {
         });
     }
 });
+// ============================================================
+// 📁 عرض ملفات طلبات الأعمال
+// ============================================================
+app.get('/uploads/business-orders/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(businessOrdersDir, filename);
+    
+    console.log(`📁 طلب ملف: ${filename}`);
+    console.log(`📂 المسار: ${filePath}`);
+    
+    if (fs.existsSync(filePath)) {
+        console.log(`✅ تم العثور على الملف: ${filename}`);
+        // تحديد نوع الملف بناءً على الامتداد
+        const ext = path.extname(filename).toLowerCase();
+        const mimeTypes = {
+            '.pdf': 'application/pdf',
+            '.doc': 'application/msword',
+            '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.xls': 'application/vnd.ms-excel',
+            '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            '.ppt': 'application/vnd.ms-powerpoint',
+            '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.zip': 'application/zip',
+            '.rar': 'application/x-rar-compressed',
+            '.txt': 'text/plain'
+        };
+        const contentType = mimeTypes[ext] || 'application/octet-stream';
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+        res.sendFile(filePath);
+    } else {
+        console.error(`❌ الملف غير موجود: ${filename}`);
+        console.log(`📂 المسار المطلوب: ${filePath}`);
+        // محاولة البحث في المجلد
+        try {
+            const files = fs.readdirSync(businessOrdersDir);
+            console.log(`📁 الملفات الموجودة في المجلد:`, files);
+        } catch (err) {
+            console.error('❌ خطأ في قراءة المجلد:', err);
+        }
+        res.status(404).json({
+            success: false,
+            message: 'الملف غير موجود',
+            filename: filename
+        });
+    }
+});
 
+// ============================================================
+// 🔍 مسار لفحص الملفات في المجلد (للتشخيص)
+// ============================================================
+app.get('/api/business-orders/files/list', protect, authorize('admin'), (req, res) => {
+    try {
+        const files = fs.readdirSync(businessOrdersDir);
+        const fileList = files.map(filename => {
+            const filePath = path.join(businessOrdersDir, filename);
+            const stats = fs.statSync(filePath);
+            return {
+                filename,
+                size: stats.size,
+                created: stats.birthtime,
+                modified: stats.mtime
+            };
+        });
+        res.status(200).json({
+            success: true,
+            count: fileList.length,
+            data: fileList,
+            directory: businessOrdersDir
+        });
+    } catch (error) {
+        console.error('❌ خطأ في قراءة المجلد:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
 // ============================================================
 // 5. مسارات المستخدمين (USERS)
 // ============================================================
