@@ -1320,10 +1320,65 @@ app.put('/api/orders/:id/assign-expert', protect, authorize('admin'), async (req
         res.status(500).json({ success: false, message: error.message });
     }
 });
- // ============================================================
+// ============================================================
 // 4.5 مسارات طلبات كلية الأعمال (BUSINESS ORDERS)
 // ============================================================
 
+// ✅ جلب جميع طلبات الأعمال (للمدير)
+app.get('/api/business-orders', protect, authorize('admin'), async (req, res) => {
+    try {
+        console.log('📡 جلب طلبات الأعمال...');
+        
+        const orders = await Order.find({
+            $or: [
+                { orderType: 'business' },
+                { department: { $exists: true, $ne: '' } }
+            ]
+        })
+        .sort({ createdAt: -1 });
+        
+        console.log(`✅ تم جلب ${orders.length} طلب`);
+        
+        res.status(200).json({ 
+            success: true, 
+            count: orders.length, 
+            data: orders 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب طلبات الأعمال:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
+    }
+});
+
+// ✅ جلب طلب أعمال محدد
+app.get('/api/business-orders/:id', protect, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+            
+        if (!order) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الطلب غير موجود' 
+            });
+        }
+        
+        res.status(200).json({ 
+            success: true, 
+            data: order 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الطلب:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
+    }
+});
+
+// ✅ إنشاء طلب أعمال جديد (بدون مصادقة)
 app.post('/api/business-orders', async (req, res) => {
     try {
         const { 
@@ -1332,10 +1387,9 @@ app.post('/api/business-orders', async (req, res) => {
             notes, termsAgreed, files 
         } = req.body;
 
-        console.log('📥 استلام طلب جديد:');
+        console.log('📥 استلام طلب أعمال جديد:');
         console.log(`👤 الاسم: ${name}`);
         console.log(`📧 البريد: ${email}`);
-        console.log(`📞 الهاتف: ${phone}`);
         console.log(`📁 عدد الملفات: ${files ? files.length : 0}`);
 
         // ============================================================
@@ -1372,7 +1426,6 @@ app.post('/api/business-orders', async (req, res) => {
                         continue;
                     }
                     
-                    // استخراج البيانات من Base64
                     let base64Data = file.fileData;
                     if (base64Data.includes(';base64,')) {
                         base64Data = base64Data.split(';base64,').pop();
@@ -1390,7 +1443,6 @@ app.post('/api/business-orders', async (req, res) => {
                         continue;
                     }
                     
-                    // إنشاء اسم ملف فريد
                     const originalName = file.filename || 'ملف';
                     const ext = path.extname(originalName);
                     const timestamp = Date.now();
@@ -1398,7 +1450,6 @@ app.post('/api/business-orders', async (req, res) => {
                     const fileName = `business-${timestamp}-${random}${ext}`;
                     const filePath = path.join(businessOrdersDir, fileName);
                     
-                    // ✅ حفظ الملف
                     fs.writeFileSync(filePath, buffer);
                     console.log(`✅ تم حفظ الملف: ${fileName} (${(buffer.length / 1024).toFixed(1)} KB)`);
                     
@@ -1428,7 +1479,6 @@ app.post('/api/business-orders', async (req, res) => {
             status: 'pending',
             orderType: 'business',
             
-            // بيانات العميل
             name: name.trim(),
             email: email.trim(),
             phone: phone.trim(),
@@ -1440,17 +1490,14 @@ app.post('/api/business-orders', async (req, res) => {
             notes: notes ? notes.trim() : '',
             termsAgreed: termsAgreed === true || termsAgreed === 'true',
             
-            // الملفات
             files: savedFiles,
             
-            // سجل زمني
             timeline: [{
                 event: 'تم إنشاء الطلب',
                 time: new Date()
             }]
         });
 
-        // ✅ حفظ الطلب في قاعدة البيانات
         await order.save();
         
         console.log(`✅ تم إنشاء طلب جديد: ${order.id}`);
@@ -1465,7 +1512,6 @@ app.post('/api/business-orders', async (req, res) => {
     } catch (error) {
         console.error('❌ خطأ في إنشاء الطلب:', error);
         
-        // معالجة أخطاء التحقق من صحة النموذج
         if (error.name === 'ValidationError') {
             const errors = Object.values(error.errors).map(e => e.message);
             return res.status(400).json({ 
@@ -1474,10 +1520,130 @@ app.post('/api/business-orders', async (req, res) => {
             });
         }
         
-        // معالجة أخطاء أخرى
         res.status(500).json({ 
             success: false, 
             message: error.message || 'حدث خطأ في إنشاء الطلب' 
+        });
+    }
+});
+
+// ✅ تحديث حالة طلب أعمال
+app.put('/api/business-orders/:id/status', protect, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'in-progress', 'completed', 'revision', 'cancelled'];
+        
+        if (!status || !validStatuses.includes(status)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'حالة غير صالحة' 
+            });
+        }
+        
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الطلب غير موجود ❌' 
+            });
+        }
+        
+        order.status = status;
+        order.timeline = order.timeline || [];
+        order.timeline.push({
+            event: `تم تغيير الحالة إلى ${status}`,
+            time: new Date()
+        });
+        
+        await order.save();
+        
+        res.status(200).json({ 
+            success: true, 
+            message: `تم تحديث حالة الطلب إلى ${status} ✅`, 
+            data: order 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث حالة الطلب:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
+    }
+});
+
+// ✅ حذف طلب أعمال
+app.delete('/api/business-orders/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الطلب غير موجود ❌' 
+            });
+        }
+        
+        // حذف الملفات المرتبطة
+        if (order.files && order.files.length > 0) {
+            for (const file of order.files) {
+                const filePath = path.join(businessOrdersDir, file.fileId || file.filename);
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                    console.log(`🗑️ تم حذف الملف: ${file.filename}`);
+                }
+            }
+        }
+        
+        await order.deleteOne();
+        
+        res.status(200).json({ 
+            success: true, 
+            message: 'تم حذف الطلب بنجاح 🗑️' 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في حذف الطلب:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
+    }
+});
+
+// ✅ مسار لعرض الملفات المرفوعة
+app.get('/uploads/business-orders/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(businessOrdersDir, filename);
+    
+    console.log(`📁 طلب ملف: ${filename}`);
+    
+    if (fs.existsSync(filePath)) {
+        console.log(`✅ تم العثور على الملف: ${filename}`);
+        const ext = path.extname(filename).toLowerCase();
+        const mimeTypes = {
+            '.pdf': 'application/pdf',
+            '.doc': 'application/msword',
+            '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.xls': 'application/vnd.ms-excel',
+            '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            '.ppt': 'application/vnd.ms-powerpoint',
+            '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.zip': 'application/zip',
+            '.rar': 'application/x-rar-compressed',
+            '.txt': 'text/plain'
+        };
+        const contentType = mimeTypes[ext] || 'application/octet-stream';
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+        res.sendFile(filePath);
+    } else {
+        console.error(`❌ الملف غير موجود: ${filename}`);
+        res.status(404).json({
+            success: false,
+            message: 'الملف غير موجود',
+            filename: filename
         });
     }
 });
