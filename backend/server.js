@@ -1357,8 +1357,8 @@ app.get('/api/business-orders/:id', protect, async (req, res) => {
 
 app.post('/api/business-orders', async (req, res) => {
     try {
-        const { name, email, phone, department, service, requestType, title, description, organization, deliveryDate, notes, termsAgreed, files } = req.body;
-        const required = { name, email, phone, department, service, requestType, title, description, deliveryDate };
+        const { name, email, phone, requestType, description, organization, deliveryDate, notes, termsAgreed, files } = req.body;
+        const required = { name, email, phone, requestType, description, deliveryDate };
         const missing = Object.entries(required).filter(([k, v]) => !v || v.trim() === '').map(([k]) => k);
         if (missing.length > 0) {
             return res.status(400).json({ success: false, message: `الحقول المطلوبة غير مكتملة: ${missing.join('، ')}` });
@@ -1393,15 +1393,12 @@ app.post('/api/business-orders', async (req, res) => {
 
         const order = new Order({
             serviceType: 'خدمة كلية الأعمال',
-            title: title.trim(),
             description: description.trim(),
             deadline: new Date(deliveryDate),
             budget: 0,
             name: name.trim(),
             email: email.trim(),
             phone: phone.trim(),
-            department: department.trim(),
-            service: service.trim(),
             requestType: requestType.trim(),
             organization: organization ? organization.trim() : '',
             deliveryDate: deliveryDate,
