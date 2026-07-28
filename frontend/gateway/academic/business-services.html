@@ -512,100 +512,99 @@
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
         }
-/* ============================================================
-   تصميم منطقة رفع الملفات
-   ============================================================ */
-.file-upload {
-    border: 2px dashed var(--border-color);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: var(--transition);
-    background: var(--bg-card);
-}
 
-.file-upload:hover {
-    border-color: var(--primary);
-    background: rgba(124, 58, 237, 0.05);
-    transform: translateY(-2px);
-}
+        /* ============================================================
+           تصميم منطقة رفع الملفات
+           ============================================================ */
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-card);
+        }
 
-.file-upload i {
-    font-size: 2.5rem;
-    color: var(--primary);
-    display: block;
-    margin-bottom: 8px;
-}
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.05);
+            transform: translateY(-2px);
+        }
 
-.file-upload p {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    margin: 4px 0;
-}
+        .file-upload i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 8px;
+        }
 
-.file-upload .supported-formats {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    margin-top: 3px;
-}
+        .file-upload p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 4px 0;
+        }
 
-/* ============================================================
-   قائمة الملفات المرفوعة
-   ============================================================ */
-.file-list {
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    min-height: 30px;
-    padding: 4px;
-}
+        .file-upload .supported-formats {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
 
-.file-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 6px 14px 6px 10px;
-    font-size: 0.78rem;
-    color: var(--text-color);
-    transition: var(--transition);
-    animation: fadeInItem 0.3s ease;
-}
+        .file-list {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 30px;
+            padding: 4px;
+        }
 
-.file-item:hover {
-    border-color: var(--primary);
-    background: rgba(124, 58, 237, 0.05);
-}
+        .file-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 6px 14px 6px 10px;
+            font-size: 0.78rem;
+            color: var(--text-color);
+            transition: var(--transition);
+            animation: fadeInItem 0.3s ease;
+        }
 
-.file-item i {
-    color: var(--primary);
-    font-size: 0.9rem;
-}
+        .file-item:hover {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.05);
+        }
 
-.file-item .remove-file {
-    cursor: pointer;
-    color: #EF4444;
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-left: 4px;
-    transition: var(--transition);
-    line-height: 1;
-    opacity: 0.7;
-}
+        .file-item i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
 
-.file-item .remove-file:hover {
-    opacity: 1;
-    transform: scale(1.3);
-}
+        .file-item .remove-file {
+            cursor: pointer;
+            color: #EF4444;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-left: 4px;
+            transition: var(--transition);
+            line-height: 1;
+            opacity: 0.7;
+        }
 
-@keyframes fadeInItem {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
+        .file-item .remove-file:hover {
+            opacity: 1;
+            transform: scale(1.3);
+        }
+
+        @keyframes fadeInItem {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
         .service-item {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -1070,65 +1069,6 @@
         .details-form-wrapper .form-group textarea {
             min-height: 70px;
             resize: vertical;
-        }
-
-        .details-form-wrapper .file-upload {
-            border: 2px dashed var(--border-color);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            background: var(--bg-card);
-        }
-
-        .details-form-wrapper .file-upload:hover {
-            border-color: var(--primary);
-            background: rgba(124, 58, 237, 0.05);
-        }
-
-        .details-form-wrapper .file-upload i {
-            font-size: 1.5rem;
-            color: var(--primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .details-form-wrapper .file-upload p {
-            color: var(--text-muted);
-            font-size: 0.7rem;
-        }
-
-        .details-form-wrapper .file-list {
-            margin-top: 6px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .details-form-wrapper .file-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 3px 10px 3px 6px;
-            font-size: 0.65rem;
-            color: var(--text-color);
-        }
-
-        .details-form-wrapper .file-item .remove-file {
-            cursor: pointer;
-            color: #EF4444;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-right: 3px;
-            transition: var(--transition);
-        }
-
-        .details-form-wrapper .file-item .remove-file:hover {
-            transform: scale(1.2);
         }
 
         .details-form-wrapper .checkbox-group {
@@ -1818,6 +1758,7 @@
     ============================================================ -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+       
         // ============================================================
         // بيانات الخدمات - 30 خدمة حسب البيانات المرسلة
         // ============================================================
@@ -2734,104 +2675,179 @@
                 ]
             }
         ];
+        // ============================================================
+        // المتغيرات العامة
+        // ============================================================
+        let detailsSelectedFiles = [];
+        let isDark = false;
 
         // ============================================================
-        // عرض الخدمات
+        // دالة تحويل الملف إلى Base64
         // ============================================================
-        function renderServices(filter = 'all') {
-            const grid = document.getElementById('servicesGrid');
-            grid.innerHTML = '';
-
-            const filtered = filter === 'all' 
-                ? services 
-                : services.filter(s => s.category === filter);
-
-            // تحديث العدادات
-            document.getElementById('totalCount').textContent = services.length;
-            document.getElementById('managementCount').textContent = services.filter(s => s.category === 'management').length;
-            document.getElementById('financeCount').textContent = services.filter(s => s.category === 'finance').length;
-            document.getElementById('accountingCount').textContent = services.filter(s => s.category === 'accounting').length;
-            document.getElementById('marketingCount').textContent = services.filter(s => s.category === 'marketing').length;
-            document.getElementById('economicsCount').textContent = services.filter(s => s.category === 'economics').length;
-            document.getElementById('operationsCount').textContent = services.filter(s => s.category === 'operations').length;
-            document.getElementById('reportsCount').textContent = services.filter(s => s.category === 'reports').length;
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">
-                        <i class="fas fa-search" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
-                        <p>لا توجد خدمات في هذا التصنيف</p>
-                    </div>
-                `;
-                return;
-            }
-
-            filtered.forEach((service, index) => {
-                const item = document.createElement('div');
-                item.className = 'service-item fade-in';
-                item.style.animationDelay = `${index * 0.05}s`;
-                item.innerHTML = `
-                    <span class="business-emoji">${service.emoji}</span>
-                    <div class="service-icon"><i class="fas ${service.icon}"></i></div>
-                    <h4>${service.name}</h4>
-                    <span class="en-name">${service.enName}</span>
-                    <span class="tag">${service.categoryLabel}</span>
-                    <span class="service-category-tag">${service.categoryLabel}</span>
-                    <span class="click-hint"><i class="fas fa-arrow-left"></i> اضغط للتفاصيل</span>
-                `;
-                item.onclick = () => showServiceDetails(service.id);
-                grid.appendChild(item);
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
             });
         }
 
-// ============================================================
-// ربط الأحداث - استخدم هذه الطريقة الآمنة
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔍 DOM loaded - بدء ربط الأحداث');
-    
-    // ✅ الطريقة الأولى: ربط الحدث مباشرة
-    const fileInput = document.getElementById('detailsFileInput');
-    if (fileInput) {
-        console.log('✅ تم العثور على detailsFileInput');
-        fileInput.addEventListener('change', function(e) {
-            console.log('🔄 حدث change تم تشغيله');
-            console.log('📁 عدد الملفات المحددة:', this.files.length);
-            
-            if (this.files && this.files.length > 0) {
-                handleDetailsFiles(this.files);
-            } else {
-                console.warn('⚠️ لا توجد ملفات محددة');
-            }
-            
-            // ✅ إعادة تعيين input للسماح برفع نفس الملف مرة أخرى
-            this.value = '';
-        });
-    } else {
-        console.error('❌ عنصر detailsFileInput غير موجود');
-    }
-    
-    // ✅ الطريقة الثانية: ربط منطقة الرفع
-    const fileUploadArea = document.querySelector('.file-upload');
-    if (fileUploadArea) {
-        console.log('✅ تم العثور على منطقة الرفع');
-        fileUploadArea.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const input = document.getElementById('detailsFileInput');
-            if (input) {
-                console.log('🔄 فتح نافذة اختيار الملفات');
-                input.click();
-            }
-        });
-    } else {
-        console.error('❌ منطقة الرفع غير موجودة');
-    }
-    
-    console.log('✅ تم ربط جميع الأحداث');
-});
         // ============================================================
-        // عرض تفاصيل الخدمة
+        // دالة معالجة الملفات المرفوعة (المصححة)
+        // ============================================================
+        function handleDetailsFiles(files) {
+            console.log('🔍 دالة handleDetailsFiles تم استدعاؤها');
+            console.log('📁 عدد الملفات المستلمة:', files ? files.length : 0);
+            
+            const list = document.getElementById('detailsFileList');
+            if (!list) {
+                console.error('❌ عنصر detailsFileList غير موجود');
+                return;
+            }
+            
+            list.innerHTML = '';
+            
+            if (!files || files.length === 0) {
+                list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">لا توجد ملفات مرفوعة</div>';
+                return;
+            }
+
+            detailsSelectedFiles = [];
+
+            for (let file of files) {
+                console.log(`📄 معالجة الملف: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
+                
+                if (file.size > 50 * 1024 * 1024) {
+                    showDetailsMessage(`⚠️ الملف "${file.name}" كبير جداً (الحد الأقصى 50MB)`, 'error');
+                    continue;
+                }
+                
+                detailsSelectedFiles.push(file);
+                console.log(`✅ تمت إضافة الملف: ${file.name} (المجموع: ${detailsSelectedFiles.length})`);
+                
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                const fileSize = (file.size / 1024).toFixed(1);
+                const iconClass = getFileIcon(file.name);
+                item.innerHTML = `
+                    <i class="fas ${iconClass}"></i>
+                    <span>${file.name}</span>
+                    <span style="color: var(--text-muted); font-size: 0.6rem;">(${fileSize} KB)</span>
+                    <span class="remove-file" onclick="removeDetailsFile('${file.name}')">&times;</span>
+                `;
+                list.appendChild(item);
+            }
+            
+            updateFileCounter();
+            console.log(`✅ تمت معالجة ${detailsSelectedFiles.length} ملفات بنجاح`);
+        }
+
+        // ============================================================
+        // دالة حذف ملف (المصححة)
+        // ============================================================
+        function removeDetailsFile(fileName) {
+            console.log(`🗑️ حذف الملف: ${fileName}`);
+            detailsSelectedFiles = detailsSelectedFiles.filter(f => f.name !== fileName);
+            
+            const list = document.getElementById('detailsFileList');
+            if (list) {
+                const items = list.children;
+                for (let item of items) {
+                    if (item.textContent.includes(fileName)) {
+                        item.remove();
+                        break;
+                    }
+                }
+                if (detailsSelectedFiles.length === 0) {
+                    list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">لا توجد ملفات مرفوعة</div>';
+                }
+            }
+            
+            updateFileCounter();
+        }
+
+        // ============================================================
+        // دالة تحديث العداد (المصححة)
+        // ============================================================
+        function updateFileCounter() {
+            const counter = document.getElementById('fileCounter');
+            if (counter) {
+                counter.textContent = detailsSelectedFiles.length;
+                counter.style.color = detailsSelectedFiles.length > 0 ? '#10B981' : 'var(--text-muted)';
+            }
+        }
+
+        // ============================================================
+        // دالة الحصول على أيقونة الملف
+        // ============================================================
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const iconMap = {
+                'pdf': 'fa-file-pdf',
+                'doc': 'fa-file-word',
+                'docx': 'fa-file-word',
+                'xls': 'fa-file-excel',
+                'xlsx': 'fa-file-excel',
+                'ppt': 'fa-file-powerpoint',
+                'pptx': 'fa-file-powerpoint',
+                'zip': 'fa-file-archive',
+                'rar': 'fa-file-archive',
+                'jpg': 'fa-file-image',
+                'jpeg': 'fa-file-image',
+                'png': 'fa-file-image',
+                'gif': 'fa-file-image',
+                'txt': 'fa-file-alt'
+            };
+            return iconMap[ext] || 'fa-file';
+        }
+
+        // ============================================================
+        // ربط الأحداث - استخدم هذه الطريقة الآمنة
+        // ============================================================
+        function setupFileUploadEvents() {
+            console.log('🔍 setupFileUploadEvents - بدء ربط الأحداث');
+            
+            const fileInput = document.getElementById('detailsFileInput');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            
+            if (fileInput) {
+                console.log('✅ تم العثور على detailsFileInput');
+                fileInput.addEventListener('change', function(e) {
+                    console.log('🔄 حدث change تم تشغيله');
+                    console.log('📁 عدد الملفات المحددة:', this.files.length);
+                    
+                    if (this.files && this.files.length > 0) {
+                        handleDetailsFiles(this.files);
+                    } else {
+                        console.warn('⚠️ لا توجد ملفات محددة');
+                    }
+                    this.value = '';
+                });
+            } else {
+                console.error('❌ عنصر detailsFileInput غير موجود');
+            }
+            
+            if (fileUploadArea) {
+                console.log('✅ تم العثور على منطقة الرفع');
+                fileUploadArea.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const input = document.getElementById('detailsFileInput');
+                    if (input) {
+                        console.log('🔄 فتح نافذة اختيار الملفات');
+                        input.click();
+                    }
+                });
+            } else {
+                console.error('❌ منطقة الرفع غير موجودة');
+            }
+            
+            console.log('✅ تم ربط أحداث الملفات');
+        }
+
+        // ============================================================
+        // دالة عرض تفاصيل الخدمة (مع عناصر رفع الملفات)
         // ============================================================
         function showServiceDetails(serviceId) {
             const service = services.find(s => s.id === serviceId);
@@ -2932,7 +2948,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     `).join('')}
                 </div>
 
-                <!-- نموذج طلب الخدمة -->
+                <!-- نموذج طلب الخدمة مع رفع الملفات -->
                 <div class="details-section">
                     <h3><i class="fas fa-paper-plane"></i> طلب الخدمة</h3>
                     <div class="details-form-wrapper">
@@ -2969,34 +2985,34 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <textarea id="detailsDescription" placeholder="صف طلبك بالتفصيل..." required></textarea>
                             </div>
                             
-<div class="form-group">
-    <label>
-        الملفات المرفقة 
-        <span style="font-size: 0.7rem; color: var(--text-muted);">(اختياري)</span>
-        <span id="fileCounter" style="font-size: 0.7rem; color: var(--primary); font-weight: 700; margin-right: 8px;">0</span>
-    </label>
-    <div class="file-upload" id="fileUploadArea">
-        <i class="fas fa-cloud-upload-alt"></i>
-        <p><strong>اضغط لرفع الملفات</strong></p>
-        <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP, صور</p>
-        <p style="font-size: 0.6rem; color: var(--text-muted); margin-top: 4px;">
-            الحد الأقصى: 50MB لكل ملف
-        </p>
-    </div>
-    <input 
-        type="file" 
-        id="detailsFileInput" 
-        multiple 
-        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.jpg,.jpeg,.png,.gif,.txt" 
-        style="display: none;" 
-    />
-    <div class="file-list" id="detailsFileList">
-        <!-- سيتم عرض الملفات المرفوعة هنا -->
-        <div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">
-            لا توجد ملفات مرفوعة
-        </div>
-    </div>
-</div>
+                            <!-- منطقة رفع الملفات -->
+                            <div class="form-group">
+                                <label>
+                                    الملفات المرفقة 
+                                    <span style="font-size: 0.7rem; color: var(--text-muted);">(اختياري)</span>
+                                    <span id="fileCounter" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-right: 8px;">0</span>
+                                </label>
+                                <div class="file-upload" id="fileUploadArea">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p><strong>اضغط لرفع الملفات</strong></p>
+                                    <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP, صور</p>
+                                    <p style="font-size: 0.6rem; color: var(--text-muted); margin-top: 4px;">
+                                        الحد الأقصى: 50MB لكل ملف
+                                    </p>
+                                </div>
+                                <input 
+                                    type="file" 
+                                    id="detailsFileInput" 
+                                    multiple 
+                                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.jpg,.jpeg,.png,.gif,.txt" 
+                                    style="display: none;" 
+                                />
+                                <div class="file-list" id="detailsFileList">
+                                    <div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">
+                                        لا توجد ملفات مرفوعة
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <div class="checkbox-group">
@@ -3015,12 +3031,184 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
 
+            // تعيين التاريخ الافتراضي
             const dateInput = document.getElementById('detailsDeliveryDate');
             const today = new Date();
             const future = new Date(today);
             future.setDate(future.getDate() + 7);
             dateInput.value = future.toISOString().split('T')[0];
             dateInput.min = today.toISOString().split('T')[0];
+
+            // ربط أحداث الملفات
+            setupFileUploadEvents();
+        }
+
+        // ============================================================
+        // إرسال طلب التفاصيل - النسخة النهائية (المصححة)
+        // ============================================================
+        async function submitDetailsRequest(event, serviceName) {
+            event.preventDefault();
+
+            // جمع البيانات
+            const fullName = document.getElementById('detailsFullName').value.trim();
+            const email = document.getElementById('detailsEmail').value.trim();
+            const phone = document.getElementById('detailsPhone').value.trim();
+            const requestType = document.getElementById('detailsRequestType').value;
+            const deliveryDate = document.getElementById('detailsDeliveryDate').value;
+            const description = document.getElementById('detailsDescription').value.trim();
+            const termsAgreed = document.getElementById('detailsTermsAgree').checked;
+
+            // التحقق من الحقول
+            const errors = [];
+            if (!fullName) errors.push('الاسم الكامل');
+            if (!email) errors.push('البريد الإلكتروني');
+            if (!phone) errors.push('رقم التواصل');
+            if (!requestType) errors.push('نوع الطلب');
+            if (!deliveryDate) errors.push('موعد التسليم');
+            if (!description) errors.push('وصف الطلب');
+            if (!termsAgreed) errors.push('الموافقة على الشروط');
+
+            if (errors.length > 0) {
+                showDetailsMessage(`❌ يرجى تعبئة: ${errors.join('، ')}`, 'error');
+                return;
+            }
+
+            // التحقق من البريد الإلكتروني
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showDetailsMessage('❌ يرجى إدخال بريد إلكتروني صحيح', 'error');
+                return;
+            }
+
+            showDetailsMessage('⏳ جاري معالجة الطلب...', 'info');
+
+            const submitBtn = document.getElementById('detailsSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+
+            try {
+                // تحديد مسار API
+                const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ?
+                    'http://localhost:5000/api' :
+                    'https://irteqa.onrender.com/api';
+
+                // تحويل الملفات إلى Base64
+                const filesData = [];
+                console.log(`📁 عدد الملفات المرفوعة: ${detailsSelectedFiles.length}`);
+                console.log('📄 الملفات:', detailsSelectedFiles.map(f => f.name));
+
+                for (const file of detailsSelectedFiles) {
+                    try {
+                        console.log(`🔄 تحويل الملف: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
+                        const base64Data = await fileToBase64(file);
+                        filesData.push({
+                            filename: file.name,
+                            fileSize: file.size,
+                            fileType: file.type,
+                            fileData: base64Data
+                        });
+                        console.log(`✅ تم تحويل الملف: ${file.name}`);
+                    } catch (error) {
+                        console.error(`❌ خطأ في تحويل الملف ${file.name}:`, error);
+                        showDetailsMessage(`⚠️ خطأ في تحويل الملف: ${file.name}`, 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
+                        return;
+                    }
+                }
+
+                console.log(`📤 عدد الملفات المحولة: ${filesData.length}`);
+
+                // بناء بيانات الطلب
+                const orderData = {
+                    name: fullName,
+                    email: email,
+                    phone: phone,
+                    department: 'Business Administration & Economics',
+                    service: serviceName,
+                    requestType: requestType,
+                    title: `Service Request: ${serviceName}`,
+                    description: description,
+                    organization: '',
+                    deliveryDate: deliveryDate,
+                    notes: '',
+                    termsAgreed: termsAgreed,
+                    files: filesData
+                };
+
+                console.log('📤 إرسال الطلب:', {
+                    ...orderData,
+                    files: filesData.map(f => ({ filename: f.filename, size: f.fileSize }))
+                });
+
+                // إرسال الطلب
+                const response = await fetch(`${API_URL}/business-orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                // قراءة الاستجابة
+                const responseText = await response.text();
+                console.log('📄 الاستجابة:', responseText);
+                
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('❌ خطأ في التحليل:', parseError);
+                    throw new Error('استجابة غير صالحة من الخادم');
+                }
+
+                if (response.ok && result.success) {
+                    showDetailsMessage(`✅ ${result.message || 'تم إرسال الطلب بنجاح'}`, 'success');
+                    
+                    // إعادة تعيين النموذج
+                    document.getElementById('detailsFullName').value = '';
+                    document.getElementById('detailsEmail').value = '';
+                    document.getElementById('detailsPhone').value = '';
+                    document.getElementById('detailsRequestType').value = '';
+                    document.getElementById('detailsDescription').value = '';
+                    document.getElementById('detailsTermsAgree').checked = false;
+                    
+                    // إعادة تعيين الملفات
+                    detailsSelectedFiles = [];
+                    const list = document.getElementById('detailsFileList');
+                    list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">لا توجد ملفات مرفوعة</div>';
+                    updateFileCounter();
+
+                    // إعادة تعيين التاريخ
+                    const dateInput = document.getElementById('detailsDeliveryDate');
+                    const today = new Date();
+                    const future = new Date(today);
+                    future.setDate(future.getDate() + 7);
+                    dateInput.value = future.toISOString().split('T')[0];
+                } else {
+                    showDetailsMessage(`❌ ${result.message || 'حدث خطأ'}`, 'error');
+                }
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                showDetailsMessage(`❌ حدث خطأ في الاتصال بالخادم: ${error.message}`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
+            }
+        }
+
+        // ============================================================
+        // عرض الرسائل
+        // ============================================================
+        function showDetailsMessage(text, type) {
+            const messageEl = document.getElementById('detailsFormMessage');
+            messageEl.textContent = text;
+            messageEl.className = 'form-message ' + type;
+            messageEl.style.display = 'block';
+
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 8000);
         }
 
         // ============================================================
@@ -3039,383 +3227,9 @@ document.addEventListener('DOMContentLoaded', function() {
             element.classList.toggle('open');
         }
 
-// ============================================================
-// المتغيرات العامة - تأكد من تعريفها في أعلى الملف
-// ============================================================
-let detailsSelectedFiles = [];  // ✅ تأكد من أنها let وليست const
-
-// ============================================================
-// دالة معالجة الملفات - النسخة النهائية
-// ============================================================
-function handleDetailsFiles(files) {
-    console.log('🔍 دالة handleDetailsFiles تم استدعاؤها');
-    console.log('📁 عدد الملفات المستلمة:', files ? files.length : 0);
-    
-    const list = document.getElementById('detailsFileList');
-    if (!list) {
-        console.error('❌ عنصر detailsFileList غير موجود');
-        return;
-    }
-    
-    // ✅ إفراغ القائمة مع الاحتفاظ بالعنصر
-    list.innerHTML = '';
-    
-    if (!files || files.length === 0) {
-        console.warn('⚠️ لا توجد ملفات');
-        list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">لا توجد ملفات مرفوعة</div>';
-        return;
-    }
-
-    // ✅ إعادة تعيين المصفوفة (استخدام let وليس const)
-    detailsSelectedFiles = [];
-
-    for (let file of files) {
-        console.log(`📄 معالجة الملف: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
-        
-        // ✅ التحقق من الحجم
-        if (file.size > 50 * 1024 * 1024) {
-            showDetailsMessage(`⚠️ الملف "${file.name}" كبير جداً (الحد الأقصى 50MB)`, 'error');
-            continue;
-        }
-        
-        // ✅ إضافة الملف
-        detailsSelectedFiles.push(file);
-        console.log(`✅ تمت إضافة الملف: ${file.name} (المجموع: ${detailsSelectedFiles.length})`);
-        
-        // ✅ عرض الملف
-        const item = document.createElement('div');
-        item.className = 'file-item';
-        const fileSize = (file.size / 1024).toFixed(1);
-        const iconClass = getFileIcon(file.name);
-        item.innerHTML = `
-            <i class="fas ${iconClass}"></i>
-            <span>${file.name}</span>
-            <span style="color: var(--text-muted); font-size: 0.6rem;">(${fileSize} KB)</span>
-            <span class="remove-file" onclick="removeDetailsFile('${file.name}')">&times;</span>
-        `;
-        list.appendChild(item);
-    }
-    
-    // ✅ تحديث العداد
-    updateFileCounter();
-    
-    console.log(`✅ تمت معالجة ${detailsSelectedFiles.length} ملفات بنجاح`);
-    console.log('📄 محتويات detailsSelectedFiles:', detailsSelectedFiles.map(f => f.name));
-}
-
-// ============================================================
-// دالة حذف ملف
-// ============================================================
-function removeDetailsFile(fileName) {
-    console.log(`🗑️ حذف الملف: ${fileName}`);
-    
-    // ✅ تصفية الملفات
-    detailsSelectedFiles = detailsSelectedFiles.filter(f => f.name !== fileName);
-    console.log(`📁 المتبقي: ${detailsSelectedFiles.length} ملفات`);
-    
-    // ✅ إزالة من الواجهة
-    const items = document.getElementById('detailsFileList').children;
-    for (let item of items) {
-        if (item.textContent.includes(fileName)) {
-            item.remove();
-            break;
-        }
-    }
-    
-    // ✅ تحديث العداد
-    updateFileCounter();
-    
-    // ✅ إذا أصبحت القائمة فارغة، عرض رسالة
-    if (detailsSelectedFiles.length === 0) {
-        const list = document.getElementById('detailsFileList');
-        list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">لا توجد ملفات مرفوعة</div>';
-    }
-}
-
-// ============================================================
-// دالة تحديث العداد
-// ============================================================
-function updateFileCounter() {
-    const counter = document.getElementById('fileCounter');
-    if (counter) {
-        counter.textContent = detailsSelectedFiles.length;
-        counter.style.color = detailsSelectedFiles.length > 0 ? 'var(--success)' : 'var(--text-muted)';
-    }
-}
-
-// ============================================================
-// دالة الحصول على أيقونة الملف
-// ============================================================
-function getFileIcon(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    const iconMap = {
-        'pdf': 'fa-file-pdf',
-        'doc': 'fa-file-word',
-        'docx': 'fa-file-word',
-        'xls': 'fa-file-excel',
-        'xlsx': 'fa-file-excel',
-        'ppt': 'fa-file-powerpoint',
-        'pptx': 'fa-file-powerpoint',
-        'zip': 'fa-file-archive',
-        'rar': 'fa-file-archive',
-        'jpg': 'fa-file-image',
-        'jpeg': 'fa-file-image',
-        'png': 'fa-file-image',
-        'gif': 'fa-file-image',
-        'txt': 'fa-file-alt',
-        'csv': 'fa-file-csv'
-    };
-    return iconMap[ext] || 'fa-file';
-}
-// ============================================================
-// دالة الحصول على أيقونة الملف
-// ============================================================
-function getFileIcon(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    const iconMap = {
-        'pdf': 'fa-file-pdf',
-        'doc': 'fa-file-word',
-        'docx': 'fa-file-word',
-        'xls': 'fa-file-excel',
-        'xlsx': 'fa-file-excel',
-        'ppt': 'fa-file-powerpoint',
-        'pptx': 'fa-file-powerpoint',
-        'zip': 'fa-file-archive',
-        'rar': 'fa-file-archive',
-        'jpg': 'fa-file-image',
-        'jpeg': 'fa-file-image',
-        'png': 'fa-file-image',
-        'gif': 'fa-file-image',
-        'txt': 'fa-file-alt',
-        'csv': 'fa-file-csv'
-    };
-    return iconMap[ext] || 'fa-file';
-}
-
-// ============================================================
-// دالة تحديث عداد الملفات (اختياري)
-// ============================================================
-function updateFileCounter() {
-    const counter = document.getElementById('fileCounter');
-    if (counter) {
-        counter.textContent = detailsSelectedFiles.length;
-    }
-}
-
-// ============================================================
-// دالة حذف ملف من القائمة
-// ============================================================
-function removeDetailsFile(fileName) {
-    console.log(`🗑️ حذف الملف: ${fileName}`);
-    
-    detailsSelectedFiles = detailsSelectedFiles.filter(f => f.name !== fileName);
-    console.log(`📁 المتبقي: ${detailsSelectedFiles.length} ملفات`);
-    
-    const items = document.getElementById('detailsFileList').children;
-    for (let item of items) {
-        if (item.textContent.includes(fileName)) {
-            item.remove();
-            break;
-        }
-    }
-    
-    updateFileCounter();
-}
-function removeDetailsFile(fileName) {
-    detailsSelectedFiles = detailsSelectedFiles.filter(f => f.name !== fileName);
-    const items = document.getElementById('detailsFileList').children;
-    for (let item of items) {
-        if (item.textContent.includes(fileName)) {
-            item.remove();
-            break;
-        }
-    }
-    console.log(`🗑️ تم حذف الملف: ${fileName}`);
-}
- 
-// ============================================================
-// إرسال طلب التفاصيل - النسخة النهائية
-// ============================================================
-async function submitDetailsRequest(event, serviceName) {
-    event.preventDefault();
-
-    // جمع البيانات
-    const fullName = document.getElementById('detailsFullName').value.trim();
-    const email = document.getElementById('detailsEmail').value.trim();
-    const phone = document.getElementById('detailsPhone').value.trim();
-    const requestType = document.getElementById('detailsRequestType').value;
-    const deliveryDate = document.getElementById('detailsDeliveryDate').value;
-    const description = document.getElementById('detailsDescription').value.trim();
-    const termsAgreed = document.getElementById('detailsTermsAgree').checked;
-
-    // ✅ التحقق من الحقول
-    const errors = [];
-    if (!fullName) errors.push('Full Name');
-    if (!email) errors.push('Email');
-    if (!phone) errors.push('Phone Number');
-    if (!requestType) errors.push('Request Type');
-    if (!deliveryDate) errors.push('Delivery Date');
-    if (!description) errors.push('Description');
-    if (!termsAgreed) errors.push('Terms Agreement');
-
-    if (errors.length > 0) {
-        showDetailsMessage(`❌ Please fill in: ${errors.join(', ')}`, 'error');
-        return;
-    }
-
-    // ✅ التحقق من البريد الإلكتروني
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        showDetailsMessage('❌ Please enter a valid email address', 'error');
-        return;
-    }
-
-    // ✅ إظهار حالة التحميل
-    showDetailsMessage('⏳ Processing your request...', 'info');
-
-    const submitBtn = document.getElementById('detailsSubmitBtn');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-
-    try {
-        // ✅ تحديد مسار API
-        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ?
-            'http://localhost:5000/api' :
-            'https://irteqa.onrender.com/api';
-
-        // ✅ تحويل الملفات إلى Base64
-        const filesData = [];
-        console.log(`📁 عدد الملفات المرفوعة: ${detailsSelectedFiles.length}`);
-        console.log('📄 الملفات:', detailsSelectedFiles.map(f => f.name));
-
-        for (const file of detailsSelectedFiles) {
-            try {
-                console.log(`🔄 تحويل الملف: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
-                const base64Data = await fileToBase64(file);
-                filesData.push({
-                    filename: file.name,
-                    fileSize: file.size,
-                    fileType: file.type,
-                    fileData: base64Data
-                });
-                console.log(`✅ تم تحويل الملف: ${file.name}`);
-            } catch (error) {
-                console.error(`❌ خطأ في تحويل الملف ${file.name}:`, error);
-                showDetailsMessage(`⚠️ Error converting file: ${file.name}`, 'error');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
-                return;
-            }
-        }
-
-        console.log(`📤 عدد الملفات المحولة: ${filesData.length}`);
-
-        // ✅ بناء بيانات الطلب
-        const orderData = {
-            name: fullName,
-            email: email,
-            phone: phone,
-            department: 'Business Administration & Economics',
-            service: serviceName,
-            requestType: requestType,
-            title: `Service Request: ${serviceName}`,
-            description: description,
-            organization: '',
-            deliveryDate: deliveryDate,
-            notes: '',
-            termsAgreed: termsAgreed,
-            files: filesData
-        };
-
-        console.log('📤 Sending request:', {
-            ...orderData,
-            files: filesData.map(f => ({ filename: f.filename, size: f.fileSize }))
-        });
-
-        // ✅ إرسال الطلب
-        const response = await fetch(`${API_URL}/business-orders`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(orderData)
-        });
-
-        // ✅ قراءة الاستجابة
-        const responseText = await response.text();
-        console.log('📄 Response:', responseText);
-        
-        let result;
-        try {
-            result = JSON.parse(responseText);
-        } catch (parseError) {
-            console.error('❌ Parse error:', parseError);
-            throw new Error('Invalid server response');
-        }
-
-        if (response.ok && result.success) {
-            showDetailsMessage(`✅ ${result.message || 'Request submitted successfully!'}`, 'success');
-            
-            // ✅ إعادة تعيين النموذج
-            document.getElementById('detailsFullName').value = '';
-            document.getElementById('detailsEmail').value = '';
-            document.getElementById('detailsPhone').value = '';
-            document.getElementById('detailsRequestType').value = '';
-            document.getElementById('detailsDescription').value = '';
-            document.getElementById('detailsTermsAgree').checked = false;
-            
-            // ✅ إعادة تعيين الملفات
-            detailsSelectedFiles = [];
-            const list = document.getElementById('detailsFileList');
-            list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">No files attached</div>';
-            updateFileCounter();
-
-            // ✅ إعادة تعيين التاريخ
-            const dateInput = document.getElementById('detailsDeliveryDate');
-            const today = new Date();
-            const future = new Date(today);
-            future.setDate(future.getDate() + 7);
-            dateInput.value = future.toISOString().split('T')[0];
-        } else {
-            showDetailsMessage(`❌ ${result.message || 'An error occurred'}`, 'error');
-        }
-    } catch (error) {
-        console.error('❌ Error:', error);
-        showDetailsMessage(`❌ Server connection error: ${error.message}`, 'error');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
-    }
-}
-
-// ============================================================
-// دالة تحويل الملف إلى Base64
-// ============================================================
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-    });
-}
-
-        function showDetailsMessage(text, type) {
-            const messageEl = document.getElementById('detailsFormMessage');
-            messageEl.textContent = text;
-            messageEl.className = 'form-message ' + type;
-            messageEl.style.display = 'block';
-
-            setTimeout(() => {
-                messageEl.style.display = 'none';
-            }, 8000);
-        }
-
         // ============================================================
         // تبديل الوضع
         // ============================================================
-        let isDark = false;
-
         function toggleTheme() {
             isDark = !isDark;
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -3439,18 +3253,89 @@ function fileToBase64(file) {
             }
         });
 
-        console.log('💼 منصة ارتقاء - خدمات الأعمال والاقتصاد');
-        console.log(`📋 ${services.length} خدمة متخصصة`);
-        console.log('📌 التصنيفات:');
-        console.log('  📂 إدارة: 5 خدمات');
-        console.log('  📂 مالية: 5 خدمات');
-        console.log('  📂 محاسبة: 1 خدمة');
-        console.log('  📂 تسويق: 4 خدمات');
-        console.log('  📂 اقتصاد: 4 خدمات');
-        console.log('  📂 عمليات: 5 خدمات');
-        console.log('  📂 تقارير: 6 خدمات');
-        console.log('📊 إجمالي الخدمات: 30 خدمة');
-        console.log('💡 كل خدمة تحتوي على صفحة تفاصيل متكاملة');
+        // ============================================================
+        // عرض الخدمات
+        // ============================================================
+        function renderServices(filter = 'all') {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' ? services : services.filter(s => s.category === filter);
+
+            // تحديث العدادات
+            document.getElementById('totalCount').textContent = services.length;
+            document.getElementById('managementCount').textContent = services.filter(s => s.category === 'management').length;
+            document.getElementById('financeCount').textContent = services.filter(s => s.category === 'finance').length;
+            document.getElementById('accountingCount').textContent = services.filter(s => s.category === 'accounting').length;
+            document.getElementById('marketingCount').textContent = services.filter(s => s.category === 'marketing').length;
+            document.getElementById('economicsCount').textContent = services.filter(s => s.category === 'economics').length;
+            document.getElementById('operationsCount').textContent = services.filter(s => s.category === 'operations').length;
+            document.getElementById('reportsCount').textContent = services.filter(s => s.category === 'reports').length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">
+                        <i class="fas fa-search" style="font-size:2rem; display:block; margin-bottom:10px;"></i>
+                        <p>لا توجد خدمات في هذا التصنيف</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach((service, index) => {
+                const item = document.createElement('div');
+                item.className = 'service-item fade-in';
+                item.style.animationDelay = `${index * 0.05}s`;
+                item.innerHTML = `
+                    <span class="business-emoji">${service.emoji}</span>
+                    <div class="service-icon"><i class="fas ${service.icon}"></i></div>
+                    <h4>${service.name}</h4>
+                    <span class="en-name">${service.enName}</span>
+                    <span class="tag">${service.categoryLabel}</span>
+                    <span class="service-category-tag">${service.categoryLabel}</span>
+                    <span class="click-hint"><i class="fas fa-arrow-left"></i> اضغط للتفاصيل</span>
+                `;
+                item.onclick = () => showServiceDetails(service.id);
+                grid.appendChild(item);
+            });
+        }
+
+        // ============================================================
+        // أحداث الفلتر
+        // ============================================================
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderServices(this.dataset.filter);
+            });
+        });
+
+        // ============================================================
+        // تحميل الصفحة
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderServices('all');
+
+            AOS.init({
+                duration: 600,
+                once: true,
+                offset: 50
+            });
+
+            console.log('💼 منصة ارتقاء - خدمات الأعمال والاقتصاد');
+            console.log(`📋 ${services.length} خدمة متخصصة`);
+            console.log('📌 التصنيفات:');
+            console.log('  📂 إدارة: 5 خدمات');
+            console.log('  📂 مالية: 5 خدمات');
+            console.log('  📂 محاسبة: 1 خدمة');
+            console.log('  📂 تسويق: 4 خدمات');
+            console.log('  📂 اقتصاد: 4 خدمات');
+            console.log('  📂 عمليات: 5 خدمات');
+            console.log('  📂 تقارير: 6 خدمات');
+            console.log('📊 إجمالي الخدمات: 30 خدمة');
+            console.log('💡 كل خدمة تحتوي على صفحة تفاصيل متكاملة');
+        });
     </script>
 </body>
 </html>
