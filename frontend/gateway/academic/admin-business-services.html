@@ -1299,87 +1299,106 @@
             filterOrders();
             document.querySelector('.table-wrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-
-        // ============================================================
-        // عرض تفاصيل الطلب مع الملفات
-        // ============================================================
-        async function viewOrder(id) {
-            try {
-                const token = getToken();
-                if (!token) {
-                    showToast('❌ يرجى تسجيل الدخول', 'error');
-                    return;
-                }
-
-                const url = `${API_BASE_URL}/business-orders/${id}`;
-                console.log('📡 جلب تفاصيل الطلب:', url);
-
-                const response = await fetch(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`خطأ ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (!data.success) {
-                    showToast('❌ ' + data.message, 'error');
-                    return;
-                }
-
-                const order = data.data;
-
-                document.getElementById('modalOrderId').textContent = order._id.toString().slice(-6);
-
-                const statusMap = {
-                    'pending': { label: 'قيد الانتظار', class: 'pending' },
-                    'in-progress': { label: 'قيد التنفيذ', class: 'in-progress' },
-                    'completed': { label: 'مكتملة', class: 'completed' },
-                    'cancelled': { label: 'ملغية', class: 'cancelled' },
-                    'revision': { label: 'مراجعة', class: 'pending' }
-                };
-                const statusInfo = statusMap[order.status] || statusMap['pending'];
-// ✅ عرض الملفات المرفوعة مع روابط تحميل
-let filesHtml = '<span style="color: var(--text-muted);">لا توجد ملفات</span>';
-if (order.files && order.files.length > 0) {
-    console.log(`📁 عدد الملفات في الطلب: ${order.files.length}`);
-    filesHtml = order.files.map((file, index) => {
-        const fileExtension = (file.filename || '').split('.').pop().toLowerCase();
-        const iconMap = {
-            'pdf': 'fa-file-pdf',
-            'doc': 'fa-file-word',
-            'docx': 'fa-file-word',
-            'xls': 'fa-file-excel',
-            'xlsx': 'fa-file-excel',
-            'ppt': 'fa-file-powerpoint',
-            'pptx': 'fa-file-powerpoint',
-            'zip': 'fa-file-archive',
-            'rar': 'fa-file-archive',
-            'txt': 'fa-file-alt'
-        };
-        const icon = iconMap[fileExtension] || 'fa-file';
-
-        // ✅ بناء رابط الملف
-        const baseUrl = API_BASE_URL.replace('/api', '');
-        const fileUrl = `${baseUrl}/uploads/business-orders/${file.fileId}`;
         
-        console.log(`🔗 رابط الملف ${index+1}:`, fileUrl);
+// ============================================================
+// عرض تفاصيل الطلب مع الملفات
+// ============================================================
+async function viewOrder(id) {
+    try {
+        const token = getToken();
+        if (!token) {
+            showToast('❌ يرجى تسجيل الدخول', 'error');
+            return;
+        }
 
-        return `
-            <a href="${fileUrl}" target="_blank" class="file-link" onclick="event.stopPropagation();">
-                <i class="fas ${icon}"></i>
-                ${file.filename || 'ملف'}
-                <i class="fas fa-external-link-alt" style="font-size: 0.6rem;"></i>
-            </a>
-        `;
-    }).join(' ');
-} else {
-    console.log('⚠️ لا توجد ملفات في هذا الطلب');
-}
+        const url = `${API_BASE_URL}/business-orders/${id}`;
+        console.log('📡 جلب تفاصيل الطلب:', url);
+
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`خطأ ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            showToast('❌ ' + data.message, 'error');
+            return;
+        }
+
+        const order = data.data;
+        
+        // ✅ عرض معلومات الملفات للتشخيص
+        console.log('📁 معلومات الملفات:', order.files);
+
+        document.getElementById('modalOrderId').textContent = order._id.toString().slice(-6);
+
+        const statusMap = {
+            'pending': { label: 'قيد الانتظار', class: 'pending' },
+            'in-progress': { label: 'قيد التنفيذ', class: 'in-progress' },
+            'completed': { label: 'مكتملة', class: 'completed' },
+            'cancelled': { label: 'ملغية', class: 'cancelled' },
+            'revision': { label: 'مراجعة', class: 'pending' }
+        };
+        const statusInfo = statusMap[order.status] || statusMap['pending'];
+
+        // ✅ عرض الملفات المرفوعة مع روابط تحميل
+        let filesHtml = '<span style="color: var(--text-muted);">لا توجد ملفات</span>';
+        if (order.files && order.files.length > 0) {
+            console.log(`📁 عدد الملفات في الطلب: ${order.files.length}`);
+            
+            // ✅ استخدام المسار الصحيح للملفات
+            const baseUrl = API_BASE_URL.replace('/api', '');
+            
+            filesHtml = order.files.map((file, index) => {
+                // تحديد نوع الملف للحصول على الأيقونة المناسبة
+                const filename = file.filename || file.name || 'ملف';
+                const fileExtension = filename.split('.').pop().toLowerCase();
+                const iconMap = {
+                    'pdf': 'fa-file-pdf',
+                    'doc': 'fa-file-word',
+                    'docx': 'fa-file-word',
+                    'xls': 'fa-file-excel',
+                    'xlsx': 'fa-file-excel',
+                    'ppt': 'fa-file-powerpoint',
+                    'pptx': 'fa-file-powerpoint',
+                    'zip': 'fa-file-archive',
+                    'rar': 'fa-file-archive',
+                    'txt': 'fa-file-alt',
+                    'jpg': 'fa-file-image',
+                    'jpeg': 'fa-file-image',
+                    'png': 'fa-file-image',
+                    'gif': 'fa-file-image',
+                    'mp4': 'fa-file-video',
+                    'mp3': 'fa-file-audio'
+                };
+                const icon = iconMap[fileExtension] || 'fa-file';
+
+                // ✅ بناء رابط الملف - استخدام fileId أو filename
+                const fileId = file.fileId || file.filename || file.name;
+                // ✅ المسار الصحيح للملفات
+                const fileUrl = `${baseUrl}/uploads/business-orders/${fileId}`;
+                
+                console.log(`🔗 رابط الملف ${index+1}:`, fileUrl);
+                console.log(`📄 اسم الملف:`, filename);
+                console.log(`🆔 fileId:`, fileId);
+
+                return `
+                    <a href="${fileUrl}" target="_blank" class="file-link" onclick="event.stopPropagation();" title="فتح الملف">
+                        <i class="fas ${icon}"></i>
+                        ${filename}
+                        <i class="fas fa-external-link-alt" style="font-size: 0.6rem;"></i>
+                    </a>
+                `;
+            }).join(' ');
+        } else {
+            console.log('⚠️ لا توجد ملفات في هذا الطلب');
+        }
                 const createdAt = order.createdAt ? new Date(order.createdAt).toLocaleString('ar-SA') : 'غير محدد';
                 const updatedAt = order.updatedAt ? new Date(order.updatedAt).toLocaleString('ar-SA') : 'غير محدد';
 
