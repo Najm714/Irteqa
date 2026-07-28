@@ -3,14 +3,12 @@ const mongoose = require('mongoose');
 const OrderSchema = new mongoose.Schema({
     id: { type: String, unique: true },
     serviceType: { type: String, required: true },
-    title: { type: String, required: true },
     description: { type: String },
     status: { 
         type: String, 
         enum: ['pending', 'in-progress', 'completed', 'revision', 'cancelled'],
         default: 'pending'
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     assignedExpert: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     assignedAt: { type: Date },
     deadline: { type: Date },
@@ -39,8 +37,6 @@ const OrderSchema = new mongoose.Schema({
     name: { type: String },
     email: { type: String },
     phone: { type: String },
-    department: { type: String },
-    service: { type: String },
     requestType: { type: String },
     organization: { type: String },
     deliveryDate: { type: Date },
