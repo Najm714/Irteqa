@@ -2968,33 +2968,36 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <label>وصف الطلب <span class="required">*</span></label>
                                 <textarea id="detailsDescription" placeholder="صف طلبك بالتفصيل..." required></textarea>
                             </div>
-                                    <div class="form-group">
-            <label>
-                Attached Files 
-                <span style="font-size: 0.7rem; color: var(--text-muted);">(optional)</span>
-                <span id="fileCounter" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-right: 8px;">0</span>
-            </label>
-            <div class="file-upload" id="fileUploadArea">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p><strong>Click to upload files</strong></p>
-                <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP, Images</p>
-                <p style="font-size: 0.6rem; color: var(--text-muted); margin-top: 4px;">
-                    Max: 50MB per file
-                </p>
-            </div>
-            <input 
-                type="file" 
-                id="detailsFileInput" 
-                multiple 
-                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.jpg,.jpeg,.png,.gif,.txt" 
-                style="display: none;" 
-            />
-            <div class="file-list" id="detailsFileList">
-                <div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">
-                    No files attached
-                </div>
-            </div>
+                            
+<div class="form-group">
+    <label>
+        الملفات المرفقة 
+        <span style="font-size: 0.7rem; color: var(--text-muted);">(اختياري)</span>
+        <span id="fileCounter" style="font-size: 0.7rem; color: var(--primary); font-weight: 700; margin-right: 8px;">0</span>
+    </label>
+    <div class="file-upload" id="fileUploadArea">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p><strong>اضغط لرفع الملفات</strong></p>
+        <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP, صور</p>
+        <p style="font-size: 0.6rem; color: var(--text-muted); margin-top: 4px;">
+            الحد الأقصى: 50MB لكل ملف
+        </p>
+    </div>
+    <input 
+        type="file" 
+        id="detailsFileInput" 
+        multiple 
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.jpg,.jpeg,.png,.gif,.txt" 
+        style="display: none;" 
+    />
+    <div class="file-list" id="detailsFileList">
+        <!-- سيتم عرض الملفات المرفوعة هنا -->
+        <div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">
+            لا توجد ملفات مرفوعة
         </div>
+    </div>
+</div>
+
                             <div class="form-group">
                                 <div class="checkbox-group">
                                     <input type="checkbox" id="detailsTermsAgree" required />
@@ -3229,6 +3232,7 @@ function removeDetailsFile(fileName) {
     }
     console.log(`🗑️ تم حذف الملف: ${fileName}`);
 }
+ 
 // ============================================================
 // إرسال طلب التفاصيل - النسخة النهائية
 // ============================================================
