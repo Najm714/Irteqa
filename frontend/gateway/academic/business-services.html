@@ -2783,32 +2783,41 @@
                 grid.appendChild(item);
             });
         }
- // ============================================================
-// ربط الأحداث عند تحميل الصفحة
+
+// ============================================================
+// ربط الأحداث - استخدم هذه الطريقة الآمنة
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔍 DOM loaded - ربط أحداث الملفات');
+    console.log('🔍 DOM loaded - بدء ربط الأحداث');
     
-    // ✅ ربط حدث رفع الملفات عبر input
+    // ✅ الطريقة الأولى: ربط الحدث مباشرة
     const fileInput = document.getElementById('detailsFileInput');
     if (fileInput) {
         console.log('✅ تم العثور على detailsFileInput');
         fileInput.addEventListener('change', function(e) {
             console.log('🔄 حدث change تم تشغيله');
             console.log('📁 عدد الملفات المحددة:', this.files.length);
-            handleDetailsFiles(this.files);
-            this.value = ''; // إعادة تعيين input
+            
+            if (this.files && this.files.length > 0) {
+                handleDetailsFiles(this.files);
+            } else {
+                console.warn('⚠️ لا توجد ملفات محددة');
+            }
+            
+            // ✅ إعادة تعيين input للسماح برفع نفس الملف مرة أخرى
+            this.value = '';
         });
     } else {
         console.error('❌ عنصر detailsFileInput غير موجود');
     }
     
-    // ✅ ربط حدث رفع الملفات عبر منطقة الرفع
+    // ✅ الطريقة الثانية: ربط منطقة الرفع
     const fileUploadArea = document.querySelector('.file-upload');
     if (fileUploadArea) {
         console.log('✅ تم العثور على منطقة الرفع');
         fileUploadArea.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             const input = document.getElementById('detailsFileInput');
             if (input) {
                 console.log('🔄 فتح نافذة اختيار الملفات');
@@ -2817,13 +2826,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } else {
         console.error('❌ منطقة الرفع غير موجودة');
-    }
-    
-    // ✅ ربط حدث إرسال النموذج
-    const form = document.getElementById('serviceRequestForm');
-    if (form) {
-        console.log('✅ تم العثور على النموذج');
-        // سيتم التعامل مع الإرسال عبر زر submit
     }
     
     console.log('✅ تم ربط جميع الأحداث');
@@ -2966,35 +2968,33 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <label>وصف الطلب <span class="required">*</span></label>
                                 <textarea id="detailsDescription" placeholder="صف طلبك بالتفصيل..." required></textarea>
                             </div>
-<div class="form-group">
-    <label>
-        الملفات المرفقة 
-        <span style="font-size: 0.7rem; color: var(--text-muted);">(اختياري)</span>
-        <span id="fileCounter" style="font-size: 0.7rem; color: var(--primary); font-weight: 700; margin-right: 8px;">0</span>
-    </label>
-    <div class="file-upload" id="fileUploadArea">
-        <i class="fas fa-cloud-upload-alt"></i>
-        <p><strong>اضغط لرفع الملفات</strong></p>
-        <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP, صور</p>
-        <p style="font-size: 0.6rem; color: var(--text-muted); margin-top: 4px;">
-            الحد الأقصى: 50MB لكل ملف
-        </p>
-    </div>
-    <input 
-        type="file" 
-        id="detailsFileInput" 
-        multiple 
-        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.jpg,.jpeg,.png,.gif,.txt" 
-        style="display: none;" 
-    />
-    <div class="file-list" id="detailsFileList">
-        <!-- سيتم عرض الملفات المرفوعة هنا -->
-        <div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">
-            لا توجد ملفات مرفوعة
+                                    <div class="form-group">
+            <label>
+                Attached Files 
+                <span style="font-size: 0.7rem; color: var(--text-muted);">(optional)</span>
+                <span id="fileCounter" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-right: 8px;">0</span>
+            </label>
+            <div class="file-upload" id="fileUploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p><strong>Click to upload files</strong></p>
+                <p class="supported-formats">PDF, Word, Excel, PowerPoint, ZIP, Images</p>
+                <p style="font-size: 0.6rem; color: var(--text-muted); margin-top: 4px;">
+                    Max: 50MB per file
+                </p>
+            </div>
+            <input 
+                type="file" 
+                id="detailsFileInput" 
+                multiple 
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.jpg,.jpeg,.png,.gif,.txt" 
+                style="display: none;" 
+            />
+            <div class="file-list" id="detailsFileList">
+                <div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">
+                    No files attached
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-
                             <div class="form-group">
                                 <div class="checkbox-group">
                                     <input type="checkbox" id="detailsTermsAgree" required />
@@ -3036,12 +3036,14 @@ document.addEventListener('DOMContentLoaded', function() {
             element.classList.toggle('open');
         }
 
-
- // ============================================================
-// معالجة الملفات في نموذج التفاصيل - النسخة المحدثة
 // ============================================================
-let detailsSelectedFiles = [];
+// المتغيرات العامة - تأكد من تعريفها في أعلى الملف
+// ============================================================
+let detailsSelectedFiles = [];  // ✅ تأكد من أنها let وليست const
 
+// ============================================================
+// دالة معالجة الملفات - النسخة النهائية
+// ============================================================
 function handleDetailsFiles(files) {
     console.log('🔍 دالة handleDetailsFiles تم استدعاؤها');
     console.log('📁 عدد الملفات المستلمة:', files ? files.length : 0);
@@ -3052,41 +3054,32 @@ function handleDetailsFiles(files) {
         return;
     }
     
-    // إعادة تعيين القائمة
+    // ✅ إفراغ القائمة مع الاحتفاظ بالعنصر
     list.innerHTML = '';
     
     if (!files || files.length === 0) {
-        console.warn('⚠️ لا توجد ملفات مرفوعة');
+        console.warn('⚠️ لا توجد ملفات');
+        list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">لا توجد ملفات مرفوعة</div>';
         return;
     }
 
-    // ✅ إعادة تعيين المصفوفة
+    // ✅ إعادة تعيين المصفوفة (استخدام let وليس const)
     detailsSelectedFiles = [];
 
     for (let file of files) {
         console.log(`📄 معالجة الملف: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
         
-        // ✅ التحقق من حجم الملف (حد أقصى 50MB)
+        // ✅ التحقق من الحجم
         if (file.size > 50 * 1024 * 1024) {
             showDetailsMessage(`⚠️ الملف "${file.name}" كبير جداً (الحد الأقصى 50MB)`, 'error');
             continue;
         }
         
-        // ✅ التحقق من نوع الملف
-        const allowedExtensions = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.zip', '.rar', '.jpg', '.jpeg', '.png', '.gif', '.txt'];
-        const fileName = file.name;
-        const fileExt = '.' + fileName.split('.').pop().toLowerCase();
-        
-        if (!allowedExtensions.includes(fileExt)) {
-            showDetailsMessage(`⚠️ نوع الملف "${file.name}" غير مدعوم`, 'error');
-            continue;
-        }
-        
-        // ✅ إضافة الملف إلى المصفوفة
+        // ✅ إضافة الملف
         detailsSelectedFiles.push(file);
         console.log(`✅ تمت إضافة الملف: ${file.name} (المجموع: ${detailsSelectedFiles.length})`);
         
-        // ✅ عرض الملف في الواجهة
+        // ✅ عرض الملف
         const item = document.createElement('div');
         item.className = 'file-item';
         const fileSize = (file.size / 1024).toFixed(1);
@@ -3100,12 +3093,77 @@ function handleDetailsFiles(files) {
         list.appendChild(item);
     }
     
-    console.log(`✅ تمت معالجة ${detailsSelectedFiles.length} ملفات بنجاح`);
-    
-    // ✅ تحديث عداد الملفات في الواجهة (اختياري)
+    // ✅ تحديث العداد
     updateFileCounter();
+    
+    console.log(`✅ تمت معالجة ${detailsSelectedFiles.length} ملفات بنجاح`);
+    console.log('📄 محتويات detailsSelectedFiles:', detailsSelectedFiles.map(f => f.name));
 }
 
+// ============================================================
+// دالة حذف ملف
+// ============================================================
+function removeDetailsFile(fileName) {
+    console.log(`🗑️ حذف الملف: ${fileName}`);
+    
+    // ✅ تصفية الملفات
+    detailsSelectedFiles = detailsSelectedFiles.filter(f => f.name !== fileName);
+    console.log(`📁 المتبقي: ${detailsSelectedFiles.length} ملفات`);
+    
+    // ✅ إزالة من الواجهة
+    const items = document.getElementById('detailsFileList').children;
+    for (let item of items) {
+        if (item.textContent.includes(fileName)) {
+            item.remove();
+            break;
+        }
+    }
+    
+    // ✅ تحديث العداد
+    updateFileCounter();
+    
+    // ✅ إذا أصبحت القائمة فارغة، عرض رسالة
+    if (detailsSelectedFiles.length === 0) {
+        const list = document.getElementById('detailsFileList');
+        list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">لا توجد ملفات مرفوعة</div>';
+    }
+}
+
+// ============================================================
+// دالة تحديث العداد
+// ============================================================
+function updateFileCounter() {
+    const counter = document.getElementById('fileCounter');
+    if (counter) {
+        counter.textContent = detailsSelectedFiles.length;
+        counter.style.color = detailsSelectedFiles.length > 0 ? 'var(--success)' : 'var(--text-muted)';
+    }
+}
+
+// ============================================================
+// دالة الحصول على أيقونة الملف
+// ============================================================
+function getFileIcon(filename) {
+    const ext = filename.split('.').pop().toLowerCase();
+    const iconMap = {
+        'pdf': 'fa-file-pdf',
+        'doc': 'fa-file-word',
+        'docx': 'fa-file-word',
+        'xls': 'fa-file-excel',
+        'xlsx': 'fa-file-excel',
+        'ppt': 'fa-file-powerpoint',
+        'pptx': 'fa-file-powerpoint',
+        'zip': 'fa-file-archive',
+        'rar': 'fa-file-archive',
+        'jpg': 'fa-file-image',
+        'jpeg': 'fa-file-image',
+        'png': 'fa-file-image',
+        'gif': 'fa-file-image',
+        'txt': 'fa-file-alt',
+        'csv': 'fa-file-csv'
+    };
+    return iconMap[ext] || 'fa-file';
+}
 // ============================================================
 // دالة الحصول على أيقونة الملف
 // ============================================================
@@ -3172,43 +3230,160 @@ function removeDetailsFile(fileName) {
     console.log(`🗑️ تم حذف الملف: ${fileName}`);
 }
 // ============================================================
-// إرسال طلب التفاصيل مع الملفات - النسخة المحدثة
+// إرسال طلب التفاصيل - النسخة النهائية
 // ============================================================
 async function submitDetailsRequest(event, serviceName) {
     event.preventDefault();
 
-    // ... جمع البيانات ...
+    // جمع البيانات
+    const fullName = document.getElementById('detailsFullName').value.trim();
+    const email = document.getElementById('detailsEmail').value.trim();
+    const phone = document.getElementById('detailsPhone').value.trim();
+    const requestType = document.getElementById('detailsRequestType').value;
+    const deliveryDate = document.getElementById('detailsDeliveryDate').value;
+    const description = document.getElementById('detailsDescription').value.trim();
+    const termsAgreed = document.getElementById('detailsTermsAgree').checked;
 
-    console.log('🔍 قبل تحويل الملفات:');
-    console.log(`📁 عدد الملفات في detailsSelectedFiles: ${detailsSelectedFiles.length}`);
-    console.log('📄 تفاصيل الملفات:', detailsSelectedFiles.map(f => f.name));
+    // ✅ التحقق من الحقول
+    const errors = [];
+    if (!fullName) errors.push('Full Name');
+    if (!email) errors.push('Email');
+    if (!phone) errors.push('Phone Number');
+    if (!requestType) errors.push('Request Type');
+    if (!deliveryDate) errors.push('Delivery Date');
+    if (!description) errors.push('Description');
+    if (!termsAgreed) errors.push('Terms Agreement');
 
-    // ✅ تحويل الملفات إلى Base64
-    const filesData = [];
-    for (const file of detailsSelectedFiles) {
-        try {
-            console.log(`🔄 تحويل الملف: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
-            const base64Data = await fileToBase64(file);
-            filesData.push({
-                filename: file.name,
-                fileSize: file.size,
-                fileType: file.type,
-                fileData: base64Data
-            });
-            console.log(`✅ تم تحويل الملف: ${file.name}`);
-        } catch (error) {
-            console.error(`❌ خطأ في تحويل الملف ${file.name}:`, error);
-            showDetailsMessage(`⚠️ خطأ في تحويل الملف: ${file.name}`, 'error');
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
-            return;
-        }
+    if (errors.length > 0) {
+        showDetailsMessage(`❌ Please fill in: ${errors.join(', ')}`, 'error');
+        return;
     }
 
-    console.log(`📤 عدد الملفات المحولة: ${filesData.length}`);
+    // ✅ التحقق من البريد الإلكتروني
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showDetailsMessage('❌ Please enter a valid email address', 'error');
+        return;
+    }
 
-    // ... إرسال الطلب ...
+    // ✅ إظهار حالة التحميل
+    showDetailsMessage('⏳ Processing your request...', 'info');
+
+    const submitBtn = document.getElementById('detailsSubmitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+    try {
+        // ✅ تحديد مسار API
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ?
+            'http://localhost:5000/api' :
+            'https://irteqa.onrender.com/api';
+
+        // ✅ تحويل الملفات إلى Base64
+        const filesData = [];
+        console.log(`📁 عدد الملفات المرفوعة: ${detailsSelectedFiles.length}`);
+        console.log('📄 الملفات:', detailsSelectedFiles.map(f => f.name));
+
+        for (const file of detailsSelectedFiles) {
+            try {
+                console.log(`🔄 تحويل الملف: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
+                const base64Data = await fileToBase64(file);
+                filesData.push({
+                    filename: file.name,
+                    fileSize: file.size,
+                    fileType: file.type,
+                    fileData: base64Data
+                });
+                console.log(`✅ تم تحويل الملف: ${file.name}`);
+            } catch (error) {
+                console.error(`❌ خطأ في تحويل الملف ${file.name}:`, error);
+                showDetailsMessage(`⚠️ Error converting file: ${file.name}`, 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+                return;
+            }
+        }
+
+        console.log(`📤 عدد الملفات المحولة: ${filesData.length}`);
+
+        // ✅ بناء بيانات الطلب
+        const orderData = {
+            name: fullName,
+            email: email,
+            phone: phone,
+            department: 'Business Administration & Economics',
+            service: serviceName,
+            requestType: requestType,
+            title: `Service Request: ${serviceName}`,
+            description: description,
+            organization: '',
+            deliveryDate: deliveryDate,
+            notes: '',
+            termsAgreed: termsAgreed,
+            files: filesData
+        };
+
+        console.log('📤 Sending request:', {
+            ...orderData,
+            files: filesData.map(f => ({ filename: f.filename, size: f.fileSize }))
+        });
+
+        // ✅ إرسال الطلب
+        const response = await fetch(`${API_URL}/business-orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        });
+
+        // ✅ قراءة الاستجابة
+        const responseText = await response.text();
+        console.log('📄 Response:', responseText);
+        
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch (parseError) {
+            console.error('❌ Parse error:', parseError);
+            throw new Error('Invalid server response');
+        }
+
+        if (response.ok && result.success) {
+            showDetailsMessage(`✅ ${result.message || 'Request submitted successfully!'}`, 'success');
+            
+            // ✅ إعادة تعيين النموذج
+            document.getElementById('detailsFullName').value = '';
+            document.getElementById('detailsEmail').value = '';
+            document.getElementById('detailsPhone').value = '';
+            document.getElementById('detailsRequestType').value = '';
+            document.getElementById('detailsDescription').value = '';
+            document.getElementById('detailsTermsAgree').checked = false;
+            
+            // ✅ إعادة تعيين الملفات
+            detailsSelectedFiles = [];
+            const list = document.getElementById('detailsFileList');
+            list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.7rem; text-align: center; padding: 4px;">No files attached</div>';
+            updateFileCounter();
+
+            // ✅ إعادة تعيين التاريخ
+            const dateInput = document.getElementById('detailsDeliveryDate');
+            const today = new Date();
+            const future = new Date(today);
+            future.setDate(future.getDate() + 7);
+            dateInput.value = future.toISOString().split('T')[0];
+        } else {
+            showDetailsMessage(`❌ ${result.message || 'An error occurred'}`, 'error');
+        }
+    } catch (error) {
+        console.error('❌ Error:', error);
+        showDetailsMessage(`❌ Server connection error: ${error.message}`, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+    }
 }
+
 // ============================================================
 // دالة تحويل الملف إلى Base64
 // ============================================================
