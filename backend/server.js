@@ -1937,152 +1937,385 @@ app.delete('/api/explanations/materials/:id', protect, authorize('admin'), async
     }
 });
 // ============================================================
-// 📁 عرض ملفات طلبات الأعمال من التخزين المحلي
+// 📋 جلب جميع طلبات المستخدم (من جميع المصادر)
+// ============================================================
+app.get('/api/orders/all', protect, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const userEmail = req.user.email;
+        const userName = req.user.name;
+        
+        console.log(`📋 جلب جميع الطلبات للمستخدم: ${userName} (${userEmail})`);
+        
+        // ✅ جلب طلبات الأعمال (business-orders)
+        const businessOrders = await Order.find({
+            $or: [
+                { user: userId },
+                { email: userEmail },
+                { name: userName },
+                { orderType: 'business' }
+            ]
+        }).sort({ createdAt: -1 });
+
+        // ✅ جلب طلبات البحث العلمي (من نموذج AcademicOrder إذا كان موجوداً)
+        let academicOrders = [];
+        try {
+            const AcademicOrder = mongoose.model('AcademicOrder');
+            if (AcademicOrder) {
+                academicOrders = await AcademicOrder.find({
+                    $or: [
+                        { user: userId },
+                        { email: userEmail },
+                        { name: userName }
+                    ]
+                }).sort({ createdAt: -1 });
+                console.log(`📚 تم جلب ${academicOrders.length} طلب أكاديمي`);
+            }
+        } catch (e) {
+            console.log('ℹ️ نموذج AcademicOrder غير موجود');
+        }
+
+        // ✅ جلب طلبات الخدمات الصحية (من نموذج HealthOrder إذا كان موجوداً)
+        let healthOrders = [];
+        try {
+            const HealthOrder = mongoose.model('HealthOrder');
+            if (HealthOrder) {
+                healthOrders = await HealthOrder.find({
+                    $or: [
+                        { user: userId },
+                        { email: userEmail },
+                        { name: userName }
+                    ]
+                }).sort({ createdAt: -1 });
+                console.log(`🏥 تم جلب ${healthOrders.length} طلب صحي`);
+            }
+        } catch (e) {
+            console.log('ℹ️ نموذج HealthOrder غير موجود');
+        }
+
+        // ✅ دمج جميع الطلبات
+        const allOrders = [...businessOrders, ...academicOrders, ...healthOrders];
+        
+        // ✅ ترتيب حسب التاريخ (الأحدث أولاً)
+        allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // ✅ إضافة مصدر كل طلب
+        const formattedOrders = allOrders.map(order => {
+            const orderObj = order.toObject ? order.toObject() : order;
+            
+            // تحديد المصدر بناءً على الحقول المتاحة
+            let source = 'business';
+            let sourceLabel = '💼 أعمال';
+            
+            if (orderObj.orderType === 'academic' || 
+                orderObj.department === 'الخدمات الأكاديمية' || 
+                orderObj.serviceType === 'academic') {
+                source = 'academic';
+                sourceLabel = '🔬 بحث علمي';
+            } else if (orderObj.orderType === 'health' || 
+                       orderObj.department === 'الخدمات الصحية') {
+                source = 'health';
+                sourceLabel = '🏥 صحي';
+            } else if (orderObj.orderType === 'business' || 
+                       orderObj.department === 'إدارة الأعمال والاقتصاد' || 
+                       orderObj.department === 'Business Administration & Economics') {
+                source = 'business';
+                sourceLabel = '💼 أعمال';
+            }
+            
+            return {
+                ...orderObj,
+                source: source,
+                sourceLabel: sourceLabel
+            };
+        });
+
+        console.log(`✅ تم جلب ${formattedOrders.length} طلب من جميع المصادر`);
+        
+        res.status(200).json({
+            success: true,
+            count: formattedOrders.length,
+            data: formattedOrders
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في جلب جميع الطلبات:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+// ============================================================
+// 📁 عرض ملفات طلبات الأعمال من GridFS
 // ============================================================
 app.get('/api/business-orders/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
-        
-        console.log(`📁 طلب ملف: ${fileId}`);
-        
-        // ✅ البحث عن الملف في مجلد business-orders
-        const filePath = path.join(businessOrdersDir, fileId);
-        
-        // ✅ التحقق من وجود الملف
-        if (fs.existsSync(filePath)) {
-            console.log(`✅ تم العثور على الملف: ${fileId}`);
-            
-            // تحديد نوع الملف
-            const ext = path.extname(fileId).toLowerCase();
-            const mimeTypes = {
-                '.pdf': 'application/pdf',
-                '.doc': 'application/msword',
-                '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                '.xls': 'application/vnd.ms-excel',
-                '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                '.ppt': 'application/vnd.ms-powerpoint',
-                '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                '.jpg': 'image/jpeg',
-                '.jpeg': 'image/jpeg',
-                '.png': 'image/png',
-                '.gif': 'image/gif',
-                '.zip': 'application/zip',
-                '.rar': 'application/x-rar-compressed',
-                '.txt': 'text/plain'
-            };
-            
-            const contentType = mimeTypes[ext] || 'application/octet-stream';
-            
-            // ✅ إعداد رؤوس الاستجابة
-            res.setHeader('Content-Type', contentType);
-            res.setHeader('Content-Disposition', `inline; filename="${path.basename(fileId)}"`);
-            res.setHeader('Cache-Control', 'public, max-age=86400');
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            
-            // ✅ إرسال الملف
-            return res.sendFile(filePath, (err) => {
-                if (err) {
-                    console.error(`❌ خطأ في إرسال الملف:`, err);
-                    if (!res.headersSent) {
-                        res.status(500).json({
-                            success: false,
-                            message: 'حدث خطأ في إرسال الملف'
-                        });
-                    }
-                }
+        const ObjectId = require('mongodb').ObjectId;
+
+        console.log(`📁 طلب ملف من GridFS: ${fileId}`);
+
+        // ✅ التحقق من صحة المعرف
+        if (!ObjectId.isValid(fileId)) {
+            console.error(`❌ معرف غير صالح: ${fileId}`);
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
             });
         }
+
+        // ✅ جلب معلومات الملف من GridFS
+        const fileInfo = await getFileInfo(fileId);
+        if (!fileInfo) {
+            console.error(`❌ الملف غير موجود في GridFS: ${fileId}`);
+            return res.status(404).json({
+                success: false,
+                message: 'الملف غير موجود',
+                fileId: fileId
+            });
+        }
+
+        console.log(`✅ تم العثور على الملف في GridFS: ${fileInfo.filename}`);
+        console.log(`📋 نوع الملف: ${fileInfo.contentType}`);
+        console.log(`📏 حجم الملف: ${(fileInfo.length / 1024).toFixed(1)} KB`);
+
+        // ✅ تحديد نوع الملف
+        const contentType = fileInfo.contentType || 'application/octet-stream';
         
-        // ✅ إذا لم يتم العثور على الملف، حاول البحث في GridFS
-        try {
-            const ObjectId = require('mongodb').ObjectId;
-            if (ObjectId.isValid(fileId)) {
-                const fileInfo = await getFileInfo(fileId);
-                if (fileInfo) {
-                    console.log(`✅ تم العثور على الملف في GridFS: ${fileId}`);
-                    const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
-                    return res.redirect(`${baseUrl}/api/files/${fileId}`);
-                }
+        // ✅ إعداد رؤوس الاستجابة
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Length', fileInfo.length);
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        // ✅ إذا كان PDF، نضيف رأس للعرض المباشر
+        if (contentType === 'application/pdf') {
+            res.setHeader('Content-Disposition', 'inline; filename="' + fileInfo.filename + '"');
+        }
+
+        // ✅ بث الملف من GridFS
+        const bucket = getGridFSBucket();
+        if (!bucket) {
+            console.error('❌ GridFS غير مهيأ');
+            return res.status(500).json({
+                success: false,
+                message: 'GridFS غير مهيأ'
+            });
+        }
+
+        const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+        
+        downloadStream.on('error', (error) => {
+            console.error('❌ خطأ في بث الملف:', error);
+            if (!res.headersSent) {
+                res.status(500).json({
+                    success: false,
+                    message: 'حدث خطأ في عرض الملف: ' + error.message
+                });
             }
-        } catch (gridError) {
-            console.log('⚠️ GridFS غير متاح أو الملف غير موجود');
-        }
-        
-        // ✅ إذا لم يتم العثور على الملف في أي مكان
-        console.error(`❌ الملف غير موجود: ${fileId}`);
-        
-        // عرض الملفات الموجودة للمساعدة في التشخيص
-        try {
-            const files = fs.readdirSync(businessOrdersDir);
-            console.log(`📁 الملفات الموجودة في المجلد (${files.length}):`, files.slice(0, 10));
-        } catch (err) {
-            console.error('❌ خطأ في قراءة المجلد:', err);
-        }
-        
-        res.status(404).json({
-            success: false,
-            message: 'الملف غير موجود',
-            fileId: fileId,
-            directory: businessOrdersDir
         });
-        
+
+        downloadStream.pipe(res);
+
     } catch (error) {
         console.error('❌ خطأ في عرض الملف:', error);
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: error.message || 'حدث خطأ في عرض الملف'
+            });
+        }
+    }
+});
+// ============================================================
+// 📤 رفع ملفات للطلب - يدعم جميع أنواع الطلبات
+// ============================================================
+app.post('/api/orders/:orderId/upload', protect, async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const userId = req.user.id;
+        
+        console.log(`📤 رفع ملفات للطلب: ${orderId}`);
+
+        // ✅ التحقق من وجود الطلب في أي من النماذج
+        let order = await Order.findById(orderId);
+        
+        if (!order) {
+            try {
+                const AcademicOrder = mongoose.model('AcademicOrder');
+                if (AcademicOrder) {
+                    order = await AcademicOrder.findById(orderId);
+                }
+            } catch (e) {}
+        }
+        
+        if (!order) {
+            try {
+                const HealthOrder = mongoose.model('HealthOrder');
+                if (HealthOrder) {
+                    order = await HealthOrder.findById(orderId);
+                }
+            } catch (e) {}
+        }
+        
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: 'الطلب غير موجود'
+            });
+        }
+
+        // ✅ التحقق من صلاحية المستخدم
+        if (order.user && order.user.toString() !== userId) {
+            // التحقق من البريد الإلكتروني كبديل
+            if (order.email && order.email !== req.user.email) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'ليس لديك صلاحية لرفع ملفات لهذا الطلب'
+                });
+            }
+        }
+
+        // ✅ معالجة الملفات المرفوعة
+        const uploadedFiles = [];
+        
+        if (req.files && req.files.length > 0) {
+            for (const file of req.files) {
+                try {
+                    // ✅ رفع الملف إلى GridFS
+                    const result = await uploadToGridFS(file, {
+                        type: 'order_file',
+                        orderId: orderId,
+                        uploadedBy: req.user.id,
+                        uploadedByName: req.user.name,
+                        originalName: file.originalname
+                    });
+
+                    if (result) {
+                        const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
+                        uploadedFiles.push({
+                            filename: file.originalname,
+                            fileId: result.fileId,
+                            fileSize: file.size,
+                            mimeType: file.mimetype,
+                            url: `${baseUrl}/api/business-orders/files/${result.fileId}`,
+                            storageProvider: 'gridfs',
+                            uploadDate: new Date()
+                        });
+                        console.log(`✅ تم رفع الملف إلى GridFS: ${file.originalname} (${result.fileId})`);
+                    }
+                } catch (error) {
+                    console.error(`❌ خطأ في رفع الملف ${file.originalname}:`, error);
+                }
+            }
+        }
+
+        // ✅ تحديث الطلب بإضافة الملفات
+        if (uploadedFiles.length > 0) {
+            order.files = order.files || [];
+            order.files.push(...uploadedFiles);
+            await order.save();
+            console.log(`✅ تم تحديث الطلب بـ ${uploadedFiles.length} ملفات`);
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `تم رفع ${uploadedFiles.length} ملف بنجاح`,
+            data: {
+                files: uploadedFiles,
+                total: uploadedFiles.length
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في رفع الملفات:', error);
         res.status(500).json({
             success: false,
-            message: error.message || 'حدث خطأ في عرض الملف'
+            message: error.message || 'حدث خطأ في رفع الملفات'
         });
     }
 });
-
 // ============================================================
-// 📋 مسار لعرض قائمة الملفات (للتشخيص)
+// 📋 مسار لعرض قائمة الملفات في GridFS (للتشخيص - للمدير فقط)
 // ============================================================
 app.get('/api/business-orders/files/list', protect, authorize('admin'), async (req, res) => {
     try {
-        // ✅ التأكد من وجود المجلد
-        if (!fs.existsSync(businessOrdersDir)) {
-            return res.status(200).json({
-                success: true,
-                message: 'مجلد الملفات غير موجود',
-                directory: businessOrdersDir,
-                exists: false,
-                files: []
-            });
-        }
+        const db = mongoose.connection.db;
+        const files = await db.collection('uploads.files')
+            .find({ 
+                $or: [
+                    { 'metadata.type': 'business_order_file' },
+                    { 'metadata.type': 'order_file' },
+                    { 'metadata.type': 'business_order_file_migrated' }
+                ]
+            })
+            .sort({ uploadDate: -1 })
+            .toArray();
         
-        const files = fs.readdirSync(businessOrdersDir);
-        const fileList = files.map(filename => {
-            const filePath = path.join(businessOrdersDir, filename);
-            const stats = fs.statSync(filePath);
-            const ext = path.extname(filename).toLowerCase();
-            const sizeKB = (stats.size / 1024).toFixed(1);
-            return {
-                filename,
-                size: stats.size,
-                sizeKB: sizeKB + ' KB',
-                created: stats.birthtime,
-                modified: stats.mtime,
-                extension: ext || 'بدون امتداد'
-            };
-        });
-        
-        // ✅ ترتيب حسب تاريخ التعديل (الأحدث أولاً)
-        fileList.sort((a, b) => b.modified - a.modified);
+        const fileList = files.map(file => ({
+            id: file._id,
+            filename: file.filename,
+            contentType: file.contentType,
+            size: file.length,
+            sizeKB: (file.length / 1024).toFixed(1) + ' KB',
+            uploadDate: file.uploadDate,
+            metadata: file.metadata
+        }));
         
         res.status(200).json({
             success: true,
             count: fileList.length,
-            data: fileList,
-            directory: businessOrdersDir,
-            exists: true
+            data: fileList
         });
     } catch (error) {
-        console.error('❌ خطأ في قراءة المجلد:', error);
+        console.error('❌ خطأ في جلب قائمة الملفات:', error);
         res.status(500).json({
             success: false,
-            message: error.message,
-            stack: error.stack
+            message: error.message
+        });
+    }
+});
+// ============================================================
+// 🗑️ حذف ملف من GridFS (للمدير فقط)
+// ============================================================
+app.delete('/api/business-orders/files/:fileId', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'معرف ملف غير صالح'
+            });
+        }
+
+        const result = await deleteFile(fileId);
+        
+        if (!result.success) {
+            return res.status(500).json({
+                success: false,
+                message: result.error || 'فشل حذف الملف'
+            });
+        }
+
+        // ✅ حذف الملف من الطلبات
+        await Order.updateMany(
+            { 'files.fileId': fileId },
+            { $pull: { files: { fileId: fileId } } }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'تم حذف الملف بنجاح'
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في حذف الملف:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
         });
     }
 });
