@@ -1936,7 +1936,156 @@ app.delete('/api/explanations/materials/:id', protect, authorize('admin'), async
         res.status(500).json({ success: false, message: error.message });
     }
 });
+// ============================================================
+// 📁 عرض ملفات طلبات الأعمال من التخزين المحلي
+// ============================================================
+app.get('/api/business-orders/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        
+        console.log(`📁 طلب ملف: ${fileId}`);
+        
+        // ✅ البحث عن الملف في مجلد business-orders
+        const filePath = path.join(businessOrdersDir, fileId);
+        
+        // ✅ التحقق من وجود الملف
+        if (fs.existsSync(filePath)) {
+            console.log(`✅ تم العثور على الملف: ${fileId}`);
+            
+            // تحديد نوع الملف
+            const ext = path.extname(fileId).toLowerCase();
+            const mimeTypes = {
+                '.pdf': 'application/pdf',
+                '.doc': 'application/msword',
+                '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                '.xls': 'application/vnd.ms-excel',
+                '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                '.ppt': 'application/vnd.ms-powerpoint',
+                '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                '.jpg': 'image/jpeg',
+                '.jpeg': 'image/jpeg',
+                '.png': 'image/png',
+                '.gif': 'image/gif',
+                '.zip': 'application/zip',
+                '.rar': 'application/x-rar-compressed',
+                '.txt': 'text/plain'
+            };
+            
+            const contentType = mimeTypes[ext] || 'application/octet-stream';
+            
+            // ✅ إعداد رؤوس الاستجابة
+            res.setHeader('Content-Type', contentType);
+            res.setHeader('Content-Disposition', `inline; filename="${path.basename(fileId)}"`);
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            
+            // ✅ إرسال الملف
+            return res.sendFile(filePath, (err) => {
+                if (err) {
+                    console.error(`❌ خطأ في إرسال الملف:`, err);
+                    if (!res.headersSent) {
+                        res.status(500).json({
+                            success: false,
+                            message: 'حدث خطأ في إرسال الملف'
+                        });
+                    }
+                }
+            });
+        }
+        
+        // ✅ إذا لم يتم العثور على الملف، حاول البحث في GridFS
+        try {
+            const ObjectId = require('mongodb').ObjectId;
+            if (ObjectId.isValid(fileId)) {
+                const fileInfo = await getFileInfo(fileId);
+                if (fileInfo) {
+                    console.log(`✅ تم العثور على الملف في GridFS: ${fileId}`);
+                    const baseUrl = process.env.BASE_URL || 'https://irteqa.onrender.com';
+                    return res.redirect(`${baseUrl}/api/files/${fileId}`);
+                }
+            }
+        } catch (gridError) {
+            console.log('⚠️ GridFS غير متاح أو الملف غير موجود');
+        }
+        
+        // ✅ إذا لم يتم العثور على الملف في أي مكان
+        console.error(`❌ الملف غير موجود: ${fileId}`);
+        
+        // عرض الملفات الموجودة للمساعدة في التشخيص
+        try {
+            const files = fs.readdirSync(businessOrdersDir);
+            console.log(`📁 الملفات الموجودة في المجلد (${files.length}):`, files.slice(0, 10));
+        } catch (err) {
+            console.error('❌ خطأ في قراءة المجلد:', err);
+        }
+        
+        res.status(404).json({
+            success: false,
+            message: 'الملف غير موجود',
+            fileId: fileId,
+            directory: businessOrdersDir
+        });
+        
+    } catch (error) {
+        console.error('❌ خطأ في عرض الملف:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'حدث خطأ في عرض الملف'
+        });
+    }
+});
 
+// ============================================================
+// 📋 مسار لعرض قائمة الملفات (للتشخيص)
+// ============================================================
+app.get('/api/business-orders/files/list', protect, authorize('admin'), async (req, res) => {
+    try {
+        // ✅ التأكد من وجود المجلد
+        if (!fs.existsSync(businessOrdersDir)) {
+            return res.status(200).json({
+                success: true,
+                message: 'مجلد الملفات غير موجود',
+                directory: businessOrdersDir,
+                exists: false,
+                files: []
+            });
+        }
+        
+        const files = fs.readdirSync(businessOrdersDir);
+        const fileList = files.map(filename => {
+            const filePath = path.join(businessOrdersDir, filename);
+            const stats = fs.statSync(filePath);
+            const ext = path.extname(filename).toLowerCase();
+            const sizeKB = (stats.size / 1024).toFixed(1);
+            return {
+                filename,
+                size: stats.size,
+                sizeKB: sizeKB + ' KB',
+                created: stats.birthtime,
+                modified: stats.mtime,
+                extension: ext || 'بدون امتداد'
+            };
+        });
+        
+        // ✅ ترتيب حسب تاريخ التعديل (الأحدث أولاً)
+        fileList.sort((a, b) => b.modified - a.modified);
+        
+        res.status(200).json({
+            success: true,
+            count: fileList.length,
+            data: fileList,
+            directory: businessOrdersDir,
+            exists: true
+        });
+    } catch (error) {
+        console.error('❌ خطأ في قراءة المجلد:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            stack: error.stack
+        });
+    }
+});
 // ============================================================
 // 8. مسارات الملخصات (SUMMARIES)
 // ============================================================
