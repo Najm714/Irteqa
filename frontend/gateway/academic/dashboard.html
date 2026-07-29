@@ -16,7 +16,7 @@
     
     <style>
         /* ============================================================
-           المتغيرات - نفس ألوان الصفحة الرئيسية
+           المتغيرات
            ============================================================ */
         :root {
             --primary: #7C3AED;
@@ -45,9 +45,6 @@
             --gold: #F59E0B;
         }
 
-        /* ============================================================
-           وضع الظلام
-           ============================================================ */
         [data-theme="dark"] {
             --bg-body: #0F172A;
             --bg-card: #1E293B;
@@ -58,9 +55,6 @@
             --shadow-hover: 0 20px 60px rgba(124, 58, 237, 0.3);
         }
 
-        /* ============================================================
-           الإعدادات العامة
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -86,9 +80,6 @@
             padding: 0 20px;
         }
 
-        /* ============================================================
-           شريط التمرير المخصص
-           ============================================================ */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -100,9 +91,6 @@
             border-radius: 10px;
         }
 
-        /* ============================================================
-           زر تبديل الوضع
-           ============================================================ */
         .theme-toggle {
             position: fixed;
             bottom: 30px;
@@ -131,9 +119,6 @@
             color: #fff;
         }
 
-        /* ============================================================
-           زر العودة للأعلى
-           ============================================================ */
         .back-to-top {
             position: fixed;
             bottom: 95px;
@@ -163,9 +148,6 @@
             box-shadow: var(--shadow-hover);
         }
 
-        /* ============================================================
-           الهيدر
-           ============================================================ */
         .dashboard-header {
             background: var(--bg-card);
             padding: 15px 0;
@@ -234,24 +216,6 @@
             transform: translateY(-2px);
         }
 
-        .btn-primary {
-            background: var(--gradient-main);
-            color: #fff;
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            display: inline-block;
-            font-family: 'Cairo', sans-serif;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
-        }
-
         .btn-danger {
             background: #EF4444;
             color: #fff;
@@ -291,9 +255,6 @@
             color: #fff;
         }
 
-        /* ============================================================
-           المحتوى الرئيسي
-           ============================================================ */
         .dashboard-content {
             padding: 30px 0 60px;
         }
@@ -333,9 +294,6 @@
             margin-left: 8px;
         }
 
-        /* ============================================================
-           إحصائيات سريعة
-           ============================================================ */
         .quick-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -396,9 +354,6 @@
 
         .stat-card .stat-icon { color: var(--primary); }
 
-        /* ============================================================
-           رسائل التنبيه
-           ============================================================ */
         .alert {
             padding: 15px 20px;
             border-radius: 12px;
@@ -428,9 +383,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ============================================================
-           قائمة الخدمات المنسدلة (Dropdown)
-           ============================================================ */
         .services-dropdown-wrapper {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -569,7 +521,6 @@
             box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
         }
 
-        /* زر عرض/إخفاء الخدمات */
         .toggle-services-btn {
             background: var(--gradient-main);
             color: #fff;
@@ -599,9 +550,6 @@
             transform: rotate(180deg);
         }
 
-        /* ============================================================
-           مودال عرض النماذج السابقة
-           ============================================================ */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -726,16 +674,6 @@
             color: var(--primary);
         }
 
-        .modal-box .model-item .model-info .model-meta-modal .tag-sm.service-tag-sm {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--accent);
-        }
-
-        .modal-box .model-item .model-info .model-meta-modal .tag-sm.sub-tag-sm {
-            background: rgba(236, 72, 153, 0.1);
-            color: var(--secondary);
-        }
-
         .modal-box .model-item .btn-view-model-modal {
             background: var(--gradient-secondary);
             color: #fff;
@@ -788,9 +726,6 @@
             color: var(--primary);
         }
 
-        /* ============================================================
-           قائمة الطلبات
-           ============================================================ */
         .orders-section {
             margin-top: 10px;
             background: var(--bg-card);
@@ -1006,9 +941,6 @@
             transform: translateY(-2px);
         }
 
-        /* ============================================================
-           قسم النماذج (للعميل)
-           ============================================================ */
         .models-section {
             padding: 35px 0 0;
         }
@@ -1470,7 +1402,7 @@
         });
 
         // ============================================================
-        // تعريف الرابط الأساسي للـ API حسب البيئة
+        // تعريف الرابط الأساسي للـ API
         // ============================================================
         const API_URL = window.location.hostname === 'localhost' 
             ? 'http://localhost:5000' 
@@ -1479,7 +1411,7 @@
         console.log('🌐 API_URL:', API_URL);
 
         // ============================================================
-        // قائمة الخدمات - بشكل مباشر بدون خدمات رئيسية وفرعية
+        // قائمة الخدمات
         // ============================================================
         const SERVICES_LIST = [
             { id: 'consulting', icon: 'fa-handshake', name: 'الاستشارات الأكاديمية' },
@@ -1538,7 +1470,7 @@
         let servicesVisible = false;
 
         // ============================================================
-        // تبديل الوضع (Dark/Light)
+        // تبديل الوضع
         // ============================================================
         let isDark = false;
 
@@ -1658,7 +1590,7 @@
         }
 
         // ============================================================
-        // جلب النماذج من قاعدة البيانات
+        // جلب النماذج
         // ============================================================
         async function loadModels() {
             try {
@@ -1708,7 +1640,7 @@
         }
 
         // ============================================================
-        // فتح مودال النماذج حسب الخدمة
+        // فتح مودال النماذج
         // ============================================================
         async function openModelsModal(serviceId) {
             const modal = document.getElementById('modelsModal');
@@ -1733,15 +1665,10 @@
             title.textContent = `📄 نماذج ${serviceName}`;
             subtitle.textContent = 'نماذج سابقة مرتبطة بهذه الخدمة';
 
-            console.log('🔍 البحث عن نماذج للخدمة:', serviceId);
-            console.log('📦 جميع النماذج:', cachedModels);
-
             const filteredModels = cachedModels.filter(m => {
                 if (!m.mainService) return false;
                 return m.mainService.toLowerCase() === serviceId.toLowerCase();
             });
-
-            console.log('📊 النماذج المطابقة:', filteredModels.length);
 
             if (filteredModels.length === 0) {
                 list.innerHTML = `
@@ -1749,7 +1676,6 @@
                         <i class="fas fa-file-alt"></i>
                         <h4>لا توجد نماذج سابقة</h4>
                         <p>لا توجد نماذج مرتبطة بخدمة "${serviceName}" حالياً</p>
-                        <p style="font-size:0.85rem; margin-top:10px;">📤 يمكنك طلب الخدمة للحصول على نموذج جديد</p>
                     </div>
                 `;
             } else {
@@ -1926,7 +1852,7 @@
         }
 
         // ============================================================
-        // ✅ تحميل الطلبات من مسار business-orders
+        // ✅ تحميل جميع الطلبات من جميع المصادر
         // ============================================================
         async function loadOrders() {
             const ordersList = document.getElementById('ordersList');
@@ -1943,8 +1869,8 @@
             }
 
             try {
-                // ✅ استخدام مسار business-orders
-                const response = await fetch(`${API_URL}/api/business-orders`, {
+                // ✅ استخدام مسار جلب جميع الطلبات
+                const response = await fetch(`${API_URL}/api/orders/all`, {
                     headers: { 
                         'Authorization': `Bearer ${currentToken}`,
                         'Content-Type': 'application/json'
@@ -1977,59 +1903,60 @@
                 allOrders = data.data;
                 document.getElementById('ordersCount').textContent = allOrders.length + ' طلب';
 
-                ordersList.innerHTML = allOrders.map(order => `
-                    <div class="order-card" data-aos="fade-up">
-                        <div class="order-header">
-                            <div class="order-title">
-                                <h4>${order.title || 'طلب بدون عنوان'}</h4>
-                                <div class="order-sub">
-                                    ${order.description ? order.description.substring(0, 80) + (order.description.length > 80 ? '...' : '') : 'لا يوجد وصف'}
+                // ✅ عرض جميع الطلبات مع الملفات والمصدر
+                ordersList.innerHTML = allOrders.map(order => {
+                    const status = order.status || 'pending';
+                    const statusText = getStatusText(status);
+                    const statusClass = `status-${status}`;
+                    
+                    // ✅ تحديد مصدر الطلب
+                    const sourceLabel = getSourceLabel(order);
+                    const sourceIcon = getSourceIcon(order);
+                    
+                    // ✅ عرض الملفات
+                    const filesHtml = renderOrderFiles(order.files);
+
+                    return `
+                        <div class="order-card" data-aos="fade-up">
+                            <div class="order-header">
+                                <div class="order-title">
+                                    <h4>${order.title || 'طلب بدون عنوان'}</h4>
+                                    <div class="order-sub">
+                                        ${order.description ? order.description.substring(0, 80) + (order.description.length > 80 ? '...' : '') : 'لا يوجد وصف'}
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                    <span class="status ${statusClass}">${statusText}</span>
+                                    <span style="font-size:0.7rem; background:var(--bg-body); padding:3px 12px; border-radius:20px; color:var(--text-muted); display:inline-flex; align-items:center; gap:4px;">
+                                        <i class="fas ${sourceIcon}"></i>
+                                        ${sourceLabel}
+                                    </span>
                                 </div>
                             </div>
-                            <span class="status status-${order.status || 'pending'}">${getStatusText(order.status)}</span>
+                            <div class="order-body">
+                                <span><i class="fas fa-tag"></i> ${order.service || order.serviceType || 'خدمة'}</span>
+                                <span><i class="fas fa-calendar"></i> التسليم: ${order.deliveryDate || order.deadline ? new Date(order.deliveryDate || order.deadline).toLocaleDateString('ar-SA') : 'غير محدد'}</span>
+                                ${order.budget ? `<span><i class="fas fa-money-bill"></i> ${order.budget} ريال</span>` : ''}
+                                <span><i class="fas fa-user"></i> ${order.name || 'مستخدم'}</span>
+                            </div>
+                            ${filesHtml}
+                            <div class="order-footer">
+                                <span class="order-meta">
+                                    <i class="fas fa-calendar-alt"></i> ${new Date(order.createdAt).toLocaleDateString('ar-SA')}
+                                    ${order.source ? `<span style="margin-right:10px;"><i class="fas fa-folder-open"></i> ${sourceLabel}</span>` : ''}
+                                </span>
+                                <div class="order-actions">
+                                    <button onclick="uploadFiles('${order._id}')" class="btn-upload">
+                                        <i class="fas fa-upload"></i> رفع ملفات
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="order-body">
-                            <span><i class="fas fa-tag"></i> ${order.service || order.serviceType || 'خدمة'}</span>
-                            <span><i class="fas fa-calendar"></i> التسليم: ${order.deliveryDate || order.deadline ? new Date(order.deliveryDate || order.deadline).toLocaleDateString('ar-SA') : 'غير محدد'}</span>
-                            ${order.budget ? `<span><i class="fas fa-money-bill"></i> ${order.budget} ريال</span>` : ''}
-                            <span><i class="fas fa-user"></i> ${order.name || 'مستخدم'}</span>
-                        </div>
-                        ${order.files && order.files.length > 0 ? `
-                            <div class="order-files-section">
-                                <div class="files-title">
-                                    <i class="fas fa-paperclip"></i> الملفات المرفقة (${order.files.length})
-                                </div>
-                                <div class="files-grid">
-                                    ${order.files.map(file => `
-                                        <a href="${getFileUrl(file)}" target="_blank" class="file-tag" title="فتح الملف">
-                                            <i class="fas ${getFileIcon(file.filename || file.name)}"></i>
-                                            ${file.filename || file.name || 'ملف'}
-                                        </a>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        ` : `
-                            <div class="order-files-section">
-                                <div class="files-title">
-                                    <i class="fas fa-paperclip"></i> الملفات المرفقة
-                                </div>
-                                <span class="no-files">لا توجد ملفات مرفقة</span>
-                            </div>
-                        `}
-                        <div class="order-footer">
-                            <span class="order-meta">
-                                <i class="fas fa-calendar-alt"></i> ${new Date(order.createdAt).toLocaleDateString('ar-SA')}
-                            </span>
-                            <div class="order-actions">
-                                <button onclick="uploadFiles('${order._id}')" class="btn-upload">
-                                    <i class="fas fa-upload"></i> رفع ملفات
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
 
                 updateStats();
+
             } catch (error) {
                 console.error('❌ خطأ في تحميل الطلبات:', error);
                 ordersList.innerHTML = `
@@ -2037,25 +1964,95 @@
                         <i class="fas fa-exclamation-circle" style="color:#EF4444;"></i>
                         <h3>حدث خطأ</h3>
                         <p>تعذر تحميل الطلبات: ${error.message}</p>
+                        <button onclick="loadOrders()" class="btn-primary" style="margin-top:15px; padding:10px 25px; border-radius:50px; border:none; background:var(--gradient-main); color:#fff; cursor:pointer; font-family:'Cairo', sans-serif;">
+                            <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                        </button>
                     </div>
                 `;
             }
         }
 
         // ============================================================
-        // ✅ الحصول على رابط الملف
+        // ✅ عرض الملفات في بطاقة الطلب
         // ============================================================
-        function getFileUrl(file) {
-            const baseUrl = API_URL.replace('/api', '');
-            const fileId = file.fileId || file.filename || file.name;
-            
-            // إذا كان الملف مخزناً في GridFS
-            if (file.storageProvider === 'gridfs' || file.fileId) {
-                return `${baseUrl}/api/business-orders/files/${fileId}`;
+        function renderOrderFiles(files) {
+            if (!files || files.length === 0) {
+                return `
+                    <div class="order-files-section">
+                        <div class="files-title">
+                            <i class="fas fa-paperclip"></i> الملفات المرفقة
+                        </div>
+                        <span class="no-files">لا توجد ملفات مرفقة</span>
+                    </div>
+                `;
             }
+
+            const baseUrl = API_URL.replace('/api', '');
             
-            // إذا كان الملف مخزناً محلياً
-            return `${baseUrl}/uploads/business-orders/${fileId}`;
+            const filesHtml = files.map(file => {
+                const fileId = file.fileId || file._id || file.filename;
+                const filename = file.filename || file.name || 'ملف';
+                const icon = getFileIcon(filename);
+                
+                // ✅ بناء رابط الملف (يدعم GridFS والتخزين المحلي)
+                let fileUrl;
+                if (file.storageProvider === 'gridfs' || file.fileId) {
+                    fileUrl = `${baseUrl}/api/business-orders/files/${fileId}`;
+                } else {
+                    fileUrl = `${baseUrl}/uploads/business-orders/${fileId}`;
+                }
+                
+                return `
+                    <a href="${fileUrl}" target="_blank" class="file-tag" title="فتح الملف">
+                        <i class="fas ${icon}"></i>
+                        ${filename}
+                        <i class="fas fa-external-link-alt" style="font-size: 0.5rem;"></i>
+                    </a>
+                `;
+            }).join('');
+
+            return `
+                <div class="order-files-section">
+                    <div class="files-title">
+                        <i class="fas fa-paperclip"></i> الملفات المرفقة (${files.length})
+                    </div>
+                    <div class="files-grid">
+                        ${filesHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // ✅ تحديد مصدر الطلب
+        // ============================================================
+        function getSourceLabel(order) {
+            if (order.orderType === 'academic' || order.department === 'الخدمات الأكاديمية' || order.serviceType === 'academic') {
+                return '🔬 بحث علمي';
+            }
+            if (order.orderType === 'health' || order.department === 'الخدمات الصحية') {
+                return '🏥 صحي';
+            }
+            if (order.orderType === 'business' || order.department === 'إدارة الأعمال والاقتصاد' || order.department === 'Business Administration & Economics') {
+                return '💼 أعمال';
+            }
+            return '📋 عام';
+        }
+
+        // ============================================================
+        // ✅ تحديد أيقونة المصدر
+        // ============================================================
+        function getSourceIcon(order) {
+            if (order.orderType === 'academic' || order.department === 'الخدمات الأكاديمية') {
+                return 'fa-flask';
+            }
+            if (order.orderType === 'health' || order.department === 'الخدمات الصحية') {
+                return 'fa-heartbeat';
+            }
+            if (order.orderType === 'business' || order.department === 'إدارة الأعمال والاقتصاد') {
+                return 'fa-briefcase';
+            }
+            return 'fa-file-alt';
         }
 
         // ============================================================
@@ -2098,17 +2095,47 @@
         }
 
         // ============================================================
+        // دوال مساعدة
+        // ============================================================
+        function getStatusText(status) {
+            const map = {
+                'pending': '⏳ قيد الانتظار',
+                'in-progress': '⚡ قيد التنفيذ',
+                'completed': '✅ مكتمل',
+                'revision': '🔄 مراجعة',
+                'cancelled': '❌ ملغي',
+                'done': '✅ مكتمل'
+            };
+            return map[status] || status || '⏳ قيد الانتظار';
+        }
+
+        // ============================================================
         // رفع الملفات
         // ============================================================
         async function uploadFiles(orderId) {
+            if (!currentToken || !currentUser) {
+                showAlert('❌ يرجى تسجيل الدخول أولاً', 'danger');
+                return;
+            }
+
             const input = document.createElement('input');
             input.type = 'file';
             input.multiple = true;
-            input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.png,.zip,.rar';
+            input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif,.zip,.rar';
 
             input.onchange = async function() {
                 const files = this.files;
                 if (files.length === 0) return;
+
+                // ✅ التحقق من حجم الملفات
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].size > 50 * 1024 * 1024) {
+                        showAlert(`⚠️ الملف "${files[i].name}" حجمه يتجاوز 50 ميجابايت`, 'danger');
+                        return;
+                    }
+                }
+
+                showAlert(`⏳ جاري رفع ${files.length} ملف...`, 'info');
 
                 const formData = new FormData();
                 for (let i = 0; i < files.length; i++) {
@@ -2127,33 +2154,18 @@
                     const data = await response.json();
 
                     if (data.success) {
-                        showAlert(`✅ تم رفع ${files.length} ملف بنجاح!`, 'success');
+                        showAlert(`✅ تم رفع ${data.data.total || files.length} ملف بنجاح!`, 'success');
                         loadOrders();
                     } else {
                         showAlert('❌ خطأ: ' + (data.message || 'غير معروف'), 'danger');
                     }
                 } catch (error) {
-                    console.error(error);
-                    showAlert('❌ حدث خطأ في رفع الملفات', 'danger');
+                    console.error('❌ خطأ في رفع الملفات:', error);
+                    showAlert('❌ حدث خطأ في رفع الملفات: ' + error.message, 'danger');
                 }
             };
 
             input.click();
-        }
-
-        // ============================================================
-        // دوال مساعدة
-        // ============================================================
-        function getStatusText(status) {
-            const map = {
-                'pending': '⏳ قيد الانتظار',
-                'in-progress': '⚡ قيد التنفيذ',
-                'completed': '✅ مكتمل',
-                'revision': '🔄 مراجعة',
-                'cancelled': '❌ ملغي',
-                'done': '✅ مكتمل'
-            };
-            return map[status] || status || '⏳ قيد الانتظار';
         }
 
         // ============================================================
@@ -2167,6 +2179,8 @@
         window.loadModels = loadModels;
         window.toggleServices = toggleServices;
         window.requestService = requestService;
+        window.loadOrders = loadOrders;
+        window.uploadFiles = uploadFiles;
 
         // ============================================================
         // تشغيل التطبيق
