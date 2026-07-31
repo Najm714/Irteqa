@@ -41,7 +41,6 @@ const {
 // خدمة الملفات الثابتة (Frontend)
 // ============================================================
 app.use(express.static(path.join(__dirname, '../frontend')));
-
 // ============================================================
 // إنشاء مجلدات uploads
 // ============================================================
@@ -50,7 +49,8 @@ const videosDir = path.join(uploadsDir, 'videos');
 const ordersDir = path.join(uploadsDir, 'orders');
 const summariesDir = path.join(uploadsDir, 'summaries');
 const businessOrdersDir = path.join(uploadsDir, 'business-orders');
-const healthordersDir = path.join(uploadsDir, 'health-orders');
+const healthOrdersDir = path.join(uploadsDir, 'health-orders');
+const academicOrdersDir = path.join(uploadsDir, 'academic-orders');
 const chatFilesDir = path.join(uploadsDir, 'chat-files');
 const tempDir = path.join(uploadsDir, 'temp');
 
@@ -60,7 +60,8 @@ const dirs = [
     { path: ordersDir, name: 'orders' },
     { path: summariesDir, name: 'summaries' },
     { path: businessOrdersDir, name: 'business-orders' },
-    { path: healthordersDir, name: 'health-orders' },
+    { path: healthOrdersDir, name: 'health-orders' },
+    { path: academicOrdersDir, name: 'academic-orders' },
     { path: chatFilesDir, name: 'chat-files' },
     { path: tempDir, name: 'temp' }
 ];
@@ -80,8 +81,10 @@ app.use('/uploads/videos', express.static(videosDir));
 app.use('/uploads/orders', express.static(ordersDir));
 app.use('/uploads/summaries', express.static(summariesDir));
 app.use('/uploads/business-orders', express.static(businessOrdersDir));
-app.use('/uploads/health-orders', express.static(healthordersDir));
+app.use('/uploads/health-orders', express.static(healthOrdersDir));      // ✅ أضف هذا
+app.use('/uploads/academic-orders', express.static(academicOrdersDir));  // ✅ أضف هذا
 app.use('/uploads/chat-files', express.static(chatFilesDir));
+
 
 console.log('✅ تم تهيئة خدمة الملفات الثابتة للمجلدات:');
 console.log('📁 مسار uploads:', uploadsDir);
@@ -89,7 +92,8 @@ console.log('📁 مسار videos:', videosDir);
 console.log('📁 مسار summaries:', summariesDir);
 console.log('📁 مسار chat-files:', chatFilesDir);
 console.log('📁 مسار business-orders:', businessOrdersDir);
-console.log('📁 مسار health-orders:', healthordersDir);
+console.log('📁 مسار health-orders:', healthOrdersDir);
+console.log('📁 مسار academic-orders:', academicOrdersDir);
 
 // ============================================================
 // الاتصال بقاعدة البيانات
@@ -1350,51 +1354,81 @@ app.get('/api/academic-orders/export/csv', protect, authorize('admin'), async (r
         res.status(500).json({ success: false, message: error.message });
     }
 });
-
 // ============================================================
-// 4.5 مسارات طلبات العلوم الصحية (HEALTH ORDERS)
+// 4.8 مسارات طلبات العلوم الصحية (HEALTH ORDERS)
 // ============================================================
 
-// جلب جميع طلبات العلوم الصحية  (للمدير)
+// جلب جميع طلبات العلوم الصحية (للمدير)
 app.get('/api/health-orders', protect, authorize('admin'), async (req, res) => {
     try {
         const orders = await Order.find({
             $or: [
                 { orderType: 'health' },
-                { department: { $exists: true, $ne: '' } }
+                { department: { $regex: /Health Sciences|Nursing|Medical|Clinical|Midwifery|Pediatric|Psychiatric|Community Health/i, $options: 'i' } },
+                { serviceCategory: { $regex: /Clinical|Nursing|Documentation|Reports|Presentations|Health/i, $options: 'i' } }
             ]
         }).sort({ createdAt: -1 });
-        res.status(200).json({ success: true, count: orders.length, data: orders });
+        
+        res.status(200).json({ 
+            success: true, 
+            count: orders.length, 
+            data: orders 
+        });
     } catch (error) {
-        console.error('❌ خطأ في جلب طلبات العلوم الصحية :', error);
+        console.error('❌ خطأ في جلب طلبات العلوم الصحية:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// جلب طلب صحة  محدد
+// جلب طلب علوم صحية محدد
 app.get('/api/health-orders/:id', protect, async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
         if (!order) {
-            return res.status(404).json({ success: false, message: 'الطلب غير موجود' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الطلب غير موجود' 
+            });
         }
         res.status(200).json({ success: true, data: order });
     } catch (error) {
-        console.error('❌ خطأ في جلب الطلب:', error);
+        console.error('❌ خطأ في جلب طلب العلوم الصحية:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// إنشاء طلب صحة جديد
+// إنشاء طلب علوم صحية جديد
 app.post('/api/health-orders', async (req, res) => {
     try {
-        const { name, email, phone, department, service, requestType, title, description, organization, deliveryDate, notes, termsAgreed, files } = req.body;
+        const { 
+            name, email, phone, department, service, requestType, 
+            title, description, organization, deliveryDate, notes, 
+            termsAgreed, files, serviceCategory 
+        } = req.body;
 
         // التحقق من الحقول المطلوبة
-        const required = { name, email, phone, department, service, requestType, title, description, deliveryDate };
-        const missing = Object.entries(required).filter(([k, v]) => !v || v.trim() === '').map(([k]) => k);
+        const required = { 
+            name, email, phone, department, service, requestType, 
+            title, description, deliveryDate 
+        };
+        const missing = Object.entries(required)
+            .filter(([k, v]) => !v || v.trim() === '')
+            .map(([k]) => k);
+            
         if (missing.length > 0) {
-            return res.status(400).json({ success: false, message: `الحقول المطلوبة غير مكتملة: ${missing.join('، ')}` });
+            return res.status(400).json({ 
+                success: false, 
+                message: `الحقول المطلوبة غير مكتملة: ${missing.join('، ')}` 
+            });
+        }
+
+        // التحقق من صيغة البريد الإلكتروني
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'صيغة البريد الإلكتروني غير صحيحة' 
+            });
         }
 
         // حفظ الملفات
@@ -1403,6 +1437,7 @@ app.post('/api/health-orders', async (req, res) => {
             for (const file of files) {
                 try {
                     if (!file.fileData || !file.fileData.includes(';base64,')) continue;
+                    
                     const base64Data = file.fileData.split(';base64,').pop();
                     const buffer = Buffer.from(base64Data, 'base64');
                     if (buffer.length === 0) continue;
@@ -1426,14 +1461,26 @@ app.post('/api/health-orders', async (req, res) => {
             }
         }
 
+        // تحديد التصنيف بناءً على نوع الخدمة
+        const serviceCategories = {
+            clinical: 'سريري',
+            nursing: 'تمريض',
+            documentation: 'توثيق',
+            reports: 'تقارير',
+            presentations: 'عروض تقديمية'
+        };
+
+        const category = serviceCategory || serviceCategories[service] || 'العلوم الصحية';
+
         const order = new Order({
-            serviceType: service || 'خدمة كلية العلوم الصحية ',
+            serviceType: service || 'خدمة العلوم الصحية',
             title: title.trim(),
             description: description.trim(),
             deadline: new Date(deliveryDate),
             budget: 0,
             status: 'pending',
             orderType: 'health',
+            serviceCategory: category,
             name: name.trim(),
             email: email.trim(),
             phone: phone.trim(),
@@ -1445,71 +1492,113 @@ app.post('/api/health-orders', async (req, res) => {
             notes: notes ? notes.trim() : '',
             termsAgreed: termsAgreed === true || termsAgreed === 'true',
             files: savedFiles,
-            timeline: [{ event: 'تم إنشاء الطلب', time: new Date() }]
+            timeline: [{ 
+                event: 'تم إنشاء طلب العلوم الصحية', 
+                time: new Date() 
+            }]
         });
 
         await order.save();
-        res.status(201).json({ success: true, message: 'تم إرسال الطلب بنجاح ✅', data: order });
+        res.status(201).json({ 
+            success: true, 
+            message: 'تم إرسال طلب العلوم الصحية بنجاح ✅', 
+            data: order 
+        });
 
     } catch (error) {
-        console.error('❌ خطأ في إنشاء الطلب:', error);
+        console.error('❌ خطأ في إنشاء طلب العلوم الصحية:', error);
         if (error.name === 'ValidationError') {
             const errors = Object.values(error.errors).map(e => e.message);
-            return res.status(400).json({ success: false, message: `خطأ في البيانات: ${errors.join('، ')}` });
+            return res.status(400).json({ 
+                success: false, 
+                message: `خطأ في البيانات: ${errors.join('، ')}` 
+            });
         }
-        res.status(500).json({ success: false, message: error.message || 'حدث خطأ في إنشاء الطلب' });
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'حدث خطأ في إنشاء طلب العلوم الصحية' 
+        });
     }
 });
 
-// تحديث حالة طلب صحة
+// تحديث حالة طلب علوم صحية
 app.put('/api/health-orders/:id/status', protect, async (req, res) => {
     try {
         const { status } = req.body;
         const validStatuses = ['pending', 'in-progress', 'completed', 'revision', 'cancelled'];
+        
         if (!status || !validStatuses.includes(status)) {
-            return res.status(400).json({ success: false, message: 'حالة غير صالحة' });
+            return res.status(400).json({ 
+                success: false, 
+                message: 'حالة غير صالحة. الحالات المتاحة: ' + validStatuses.join('، ') 
+            });
         }
+        
         const order = await Order.findById(req.params.id);
         if (!order) {
-            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الطلب غير موجود ❌' 
+            });
         }
+        
         order.status = status;
         order.timeline = order.timeline || [];
-        order.timeline.push({ event: `تم تغيير الحالة إلى ${status}`, time: new Date() });
+        order.timeline.push({ 
+            event: `تم تغيير الحالة إلى ${status}`, 
+            time: new Date() 
+        });
+        
         await order.save();
-        res.status(200).json({ success: true, message: `تم تحديث حالة الطلب إلى ${status} ✅`, data: order });
+        res.status(200).json({ 
+            success: true, 
+            message: `تم تحديث حالة الطلب إلى ${status} ✅`, 
+            data: order 
+        });
     } catch (error) {
-        console.error('❌ خطأ في تحديث حالة الطلب:', error);
+        console.error('❌ خطأ في تحديث حالة طلب العلوم الصحية:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// حذف طلب صحة
+// حذف طلب علوم صحية (للمدير فقط)
 app.delete('/api/health-orders/:id', protect, authorize('admin'), async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
         if (!order) {
-            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الطلب غير موجود ❌' 
+            });
         }
+        
+        // حذف الملفات المرتبطة
         if (order.files && order.files.length > 0) {
             for (const file of order.files) {
                 const filePath = path.join(healthOrdersDir, file.fileId || file.filename);
-                if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                    console.log(`🗑️ تم حذف الملف: ${filePath}`);
+                }
             }
         }
+        
         await order.deleteOne();
-        res.status(200).json({ success: true, message: 'تم حذف الطلب بنجاح 🗑️' });
+        res.status(200).json({ 
+            success: true, 
+            message: 'تم حذف طلب العلوم الصحية بنجاح 🗑️' 
+        });
     } catch (error) {
-        console.error('❌ خطأ في حذف الطلب:', error);
+        console.error('❌ خطأ في حذف طلب العلوم الصحية:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
 // ============================================================
-// 📁 مسارات الملفات لطلبات العلوم الصحية 
+// 📁 مسارات الملفات لطلبات العلوم الصحية
 // ============================================================
 
-// عرض ملفات طلبات العلوم الصحية  (يدعم التخزين المحلي و GridFS)
+// عرض ملفات طلبات العلوم الصحية (يدعم التخزين المحلي و GridFS)
 app.get('/api/health-orders/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
@@ -1520,11 +1609,24 @@ app.get('/api/health-orders/files/:fileId', async (req, res) => {
         if (fs.existsSync(localPath)) {
             const ext = path.extname(fileId).toLowerCase();
             const mimeTypes = {
-                '.pdf': 'application/pdf', '.doc': 'application/msword', '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                '.xls': 'application/vnd.ms-excel', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                '.ppt': 'application/vnd.ms-powerpoint', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif',
-                '.zip': 'application/zip', '.rar': 'application/x-rar-compressed', '.txt': 'text/plain'
+                '.pdf': 'application/pdf',
+                '.doc': 'application/msword',
+                '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                '.xls': 'application/vnd.ms-excel',
+                '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                '.ppt': 'application/vnd.ms-powerpoint',
+                '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                '.jpg': 'image/jpeg',
+                '.jpeg': 'image/jpeg',
+                '.png': 'image/png',
+                '.gif': 'image/gif',
+                '.zip': 'application/zip',
+                '.rar': 'application/x-rar-compressed',
+                '.txt': 'text/plain',
+                '.csv': 'text/csv',
+                '.xml': 'application/xml',
+                '.json': 'application/json',
+                '.md': 'text/markdown'
             };
             const contentType = mimeTypes[ext] || 'application/octet-stream';
             res.setHeader('Content-Type', contentType);
@@ -1547,9 +1649,13 @@ app.get('/api/health-orders/files/:fileId', async (req, res) => {
             }
         }
 
-        res.status(404).json({ success: false, message: 'الملف غير موجود', fileId });
+        res.status(404).json({ 
+            success: false, 
+            message: 'الملف غير موجود', 
+            fileId 
+        });
     } catch (error) {
-        console.error('❌ خطأ في عرض الملف:', error);
+        console.error('❌ خطأ في عرض ملف العلوم الصحية:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
@@ -1562,18 +1668,35 @@ app.get('/uploads/health-orders/:filename', (req, res) => {
     if (fs.existsSync(filePath)) {
         const ext = path.extname(filename).toLowerCase();
         const mimeTypes = {
-            '.pdf': 'application/pdf', '.doc': 'application/msword', '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            '.xls': 'application/vnd.ms-excel', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            '.ppt': 'application/vnd.ms-powerpoint', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif',
-            '.zip': 'application/zip', '.rar': 'application/x-rar-compressed', '.txt': 'text/plain'
+            '.pdf': 'application/pdf',
+            '.doc': 'application/msword',
+            '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.xls': 'application/vnd.ms-excel',
+            '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            '.ppt': 'application/vnd.ms-powerpoint',
+            '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.zip': 'application/zip',
+            '.rar': 'application/x-rar-compressed',
+            '.txt': 'text/plain',
+            '.csv': 'text/csv',
+            '.xml': 'application/xml',
+            '.json': 'application/json',
+            '.md': 'text/markdown'
         };
         const contentType = mimeTypes[ext] || 'application/octet-stream';
         res.setHeader('Content-Type', contentType);
         res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
         res.sendFile(filePath);
     } else {
-        res.status(404).json({ success: false, message: 'الملف غير موجود', filename });
+        res.status(404).json({ 
+            success: false, 
+            message: 'الملف غير موجود', 
+            filename 
+        });
     }
 });
 
@@ -1584,15 +1707,254 @@ app.get('/api/health-orders/files/list', protect, authorize('admin'), async (req
         const fileList = files.map(filename => {
             const filePath = path.join(healthOrdersDir, filename);
             const stats = fs.statSync(filePath);
-            return { filename, size: stats.size, created: stats.birthtime, modified: stats.mtime };
+            return {
+                filename,
+                size: stats.size,
+                sizeKB: (stats.size / 1024).toFixed(2),
+                sizeMB: (stats.size / (1024 * 1024)).toFixed(2),
+                created: stats.birthtime,
+                modified: stats.mtime
+            };
         });
-        res.status(200).json({ success: true, count: fileList.length, data: fileList, directory: healthOrdersDir });
+        res.status(200).json({
+            success: true,
+            count: fileList.length,
+            data: fileList,
+            directory: healthOrdersDir
+        });
     } catch (error) {
-        console.error('❌ خطأ في قراءة المجلد:', error);
+        console.error('❌ خطأ في قراءة مجلد ملفات العلوم الصحية:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
+// ============================================================
+// 📊 إحصائيات طلبات العلوم الصحية (للمدير)
+// ============================================================
+
+app.get('/api/health-orders/stats', protect, authorize('admin'), async (req, res) => {
+    try {
+        const baseQuery = {
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /Clinical|Nursing|Documentation|Reports|Presentations|Health/i, $options: 'i' } }
+            ]
+        };
+
+        const total = await Order.countDocuments(baseQuery);
+        const pending = await Order.countDocuments({ ...baseQuery, status: 'pending' });
+        const inProgress = await Order.countDocuments({ ...baseQuery, status: 'in-progress' });
+        const completed = await Order.countDocuments({ ...baseQuery, status: 'completed' });
+        const revision = await Order.countDocuments({ ...baseQuery, status: 'revision' });
+        const cancelled = await Order.countDocuments({ ...baseQuery, status: 'cancelled' });
+
+        // إحصائيات حسب التصنيف
+        const categoryStats = await Order.aggregate([
+            { $match: baseQuery },
+            { $group: { _id: '$serviceCategory', count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]);
+
+        // إحصائيات حسب الشهر
+        const monthlyStats = await Order.aggregate([
+            { $match: baseQuery },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: '$createdAt' },
+                        month: { $month: '$createdAt' }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { '_id.year': -1, '_id.month': -1 } },
+            { $limit: 12 }
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                total,
+                pending,
+                inProgress,
+                completed,
+                revision,
+                cancelled,
+                categoryStats,
+                monthlyStats
+            }
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب إحصائيات طلبات العلوم الصحية:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 🔍 البحث والتصفية لطلبات العلوم الصحية (للمدير)
+// ============================================================
+
+app.get('/api/health-orders/search', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { q, status, category, fromDate, toDate } = req.query;
+        const query = { 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /Clinical|Nursing|Documentation|Reports|Presentations|Health/i, $options: 'i' } }
+            ]
+        };
+
+        // البحث النصي
+        if (q) {
+            query.$and = query.$and || [];
+            query.$and.push({
+                $or: [
+                    { name: { $regex: q, $options: 'i' } },
+                    { email: { $regex: q, $options: 'i' } },
+                    { title: { $regex: q, $options: 'i' } },
+                    { description: { $regex: q, $options: 'i' } },
+                    { service: { $regex: q, $options: 'i' } },
+                    { requestType: { $regex: q, $options: 'i' } },
+                    { department: { $regex: q, $options: 'i' } }
+                ]
+            });
+        }
+
+        // تصفية حسب الحالة
+        if (status) {
+            query.status = status;
+        }
+
+        // تصفية حسب التصنيف
+        if (category) {
+            query.serviceCategory = { $regex: category, $options: 'i' };
+        }
+
+        // تصفية حسب التاريخ
+        if (fromDate || toDate) {
+            query.createdAt = {};
+            if (fromDate) query.createdAt.$gte = new Date(fromDate);
+            if (toDate) query.createdAt.$lte = new Date(toDate);
+        }
+
+        const orders = await Order.find(query).sort({ createdAt: -1 });
+        res.status(200).json({
+            success: true,
+            count: orders.length,
+            data: orders
+        });
+    } catch (error) {
+        console.error('❌ خطأ في البحث عن طلبات العلوم الصحية:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📥 تصدير طلبات العلوم الصحية (CSV) (للمدير)
+// ============================================================
+
+app.get('/api/health-orders/export/csv', protect, authorize('admin'), async (req, res) => {
+    try {
+        const orders = await Order.find({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /Clinical|Nursing|Documentation|Reports|Presentations|Health/i, $options: 'i' } }
+            ]
+        }).sort({ createdAt: -1 });
+        
+        // تحويل البيانات إلى CSV
+        let csv = 'الرقم,الاسم,البريد الإلكتروني,الهاتف,القسم,الخدمة,نوع الطلب,التصنيف,الحالة,تاريخ التسليم,تاريخ الإنشاء,الملاحظات\n';
+        orders.forEach(order => {
+            csv += `${order._id},${order.name},${order.email},${order.phone},${order.department || ''},${order.service},${order.requestType},${order.serviceCategory || 'علوم صحية'},${order.status},${order.deliveryDate},${order.createdAt},${order.notes || ''}\n`;
+        });
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=health-orders-${Date.now()}.csv`);
+        res.send(csv);
+    } catch (error) {
+        console.error('❌ خطأ في تصدير CSV لطلبات العلوم الصحية:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📊 لوحة تحكم طلبات العلوم الصحية (للمدير)
+// ============================================================
+
+app.get('/api/health-orders/dashboard', protect, authorize('admin'), async (req, res) => {
+    try {
+        // نطاق اليوم
+        const today = new Date();
+        const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+        const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+        
+        // بداية الأسبوع
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        // بداية الشهر
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+        const baseQuery = {
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /Clinical|Nursing|Documentation|Reports|Presentations|Health/i, $options: 'i' } }
+            ]
+        };
+
+        // الإحصائيات
+        const total = await Order.countDocuments(baseQuery);
+        const todayCount = await Order.countDocuments({
+            ...baseQuery,
+            createdAt: { $gte: startOfDay, $lte: endOfDay }
+        });
+        const weekCount = await Order.countDocuments({
+            ...baseQuery,
+            createdAt: { $gte: startOfWeek }
+        });
+        const monthCount = await Order.countDocuments({
+            ...baseQuery,
+            createdAt: { $gte: startOfMonth }
+        });
+
+        // أحدث الطلبات
+        const recentOrders = await Order.find(baseQuery)
+            .sort({ createdAt: -1 })
+            .limit(10);
+
+        // توزيع الحالات
+        const statusDistribution = await Order.aggregate([
+            { $match: baseQuery },
+            { $group: { _id: '$status', count: { $sum: 1 } } }
+        ]);
+
+        // توزيع التصنيفات
+        const categoryDistribution = await Order.aggregate([
+            { $match: baseQuery },
+            { $group: { _id: '$serviceCategory', count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                totals: {
+                    total,
+                    today: todayCount,
+                    week: weekCount,
+                    month: monthCount
+                },
+                statusDistribution,
+                categoryDistribution,
+                recentOrders
+            }
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب لوحة تحكم العلوم الصحية:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 // ============================================================
 // 📤 رفع ملفات للطلب
