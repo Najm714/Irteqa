@@ -2205,20 +2205,56 @@ app.delete('/api/specialties/:id', protect, authorize('admin'), async (req, res)
         });
     }
 });
-
+ // ============================================================
+// 4.8 مسارات المواد (MATERIALS) - موحد
 // ============================================================
-// 4.8 تحديث مسارات المواد (MATERIALS) لإضافة specialtyId
-// ============================================================
 
-// تحديث مسار إضافة مادة
+// جلب جميع المواد
+app.get('/api/explanations/materials', async (req, res) => {
+    try {
+        const materials = await ExplanationMaterial.find()
+            .populate('universityId', 'name icon')
+            .populate('collegeId', 'name icon')
+            .populate('specialtyId', 'name icon')
+            .sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: materials });
+    } catch (error) {
+        console.error('❌ خطأ في جلب المواد:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب مادة محددة
+app.get('/api/explanations/materials/:id', async (req, res) => {
+    try {
+        const material = await ExplanationMaterial.findById(req.params.id)
+            .populate('universityId', 'name icon')
+            .populate('collegeId', 'name icon')
+            .populate('specialtyId', 'name icon');
+        
+        if (!material) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'المادة غير موجودة' 
+            });
+        }
+        res.status(200).json({ success: true, data: material });
+    } catch (error) {
+        console.error('❌ خطأ في جلب المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// إضافة مادة جديدة (للمدير فقط) - ✅ النسخة الموحدة
 app.post('/api/explanations/materials', protect, authorize('admin'), async (req, res) => {
     try {
         const { 
             title, code, instructor, universityId, collegeId, specialtyId,
-            icon, videos, description, isFeatured, price, image,
+            icon, description, isFeatured, price, image,
             studentsCount, rating, duration, quizzes, instructorBio, features, units
         } = req.body;
 
+        // ✅ التحقق من جميع الحقول المطلوبة
         if (!title || !code || !instructor || !universityId || !collegeId || !specialtyId) {
             return res.status(400).json({ 
                 success: false, 
@@ -2253,16 +2289,6 @@ app.post('/api/explanations/materials', protect, authorize('admin'), async (req,
             });
         }
 
-        // حساب عدد الفيديوهات من الوحدات
-        let videoCount = 0;
-        if (units && Array.isArray(units)) {
-            units.forEach(unit => {
-                if (unit.videos && Array.isArray(unit.videos)) {
-                    videoCount += unit.videos.length;
-                }
-            });
-        }
-
         const material = new ExplanationMaterial({
             title,
             code,
@@ -2271,7 +2297,6 @@ app.post('/api/explanations/materials', protect, authorize('admin'), async (req,
             collegeId,
             specialtyId,
             icon: icon || 'fa-book',
-            videos: videoCount || videos || 0,
             description: description || '',
             isFeatured: isFeatured || false,
             price: price || 99,
@@ -2303,6 +2328,63 @@ app.post('/api/explanations/materials', protect, authorize('admin'), async (req,
     }
 });
 
+// تحديث مادة (للمدير فقط)
+app.put('/api/explanations/materials/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const material = await ExplanationMaterial.findById(req.params.id);
+        if (!material) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'المادة غير موجودة' 
+            });
+        }
+
+        const updates = req.body;
+        Object.keys(updates).forEach(key => {
+            if (updates[key] !== undefined) {
+                material[key] = updates[key];
+            }
+        });
+
+        await material.save();
+        res.status(200).json({ 
+            success: true, 
+            message: 'تم تحديث المادة بنجاح', 
+            data: material 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// حذف مادة (للمدير فقط)
+app.delete('/api/explanations/materials/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const material = await ExplanationMaterial.findById(req.params.id);
+        if (!material) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'المادة غير موجودة' 
+            });
+        }
+
+        // تحديث عدد المواد في التخصص
+        await Specialty.findByIdAndUpdate(material.specialtyId, {
+            $inc: { count: -1 }
+        });
+
+        await material.deleteOne();
+        res.status(200).json({ 
+            success: true, 
+            message: 'تم حذف المادة بنجاح 🗑️' 
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في حذف المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 // تحديث مسار جلب المواد
 app.get('/api/explanations/materials', async (req, res) => {
     try {
@@ -2521,72 +2603,6 @@ app.get('/api/explanations/materials/:id', async (req, res) => {
         res.status(200).json({ success: true, data: material });
     } catch (error) {
         console.error('❌ خطأ في جلب المادة:', error);
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
- app.post('/api/explanations/materials', protect, authorize('admin'), async (req, res) => {
-    try {
-        const { 
-            title, code, instructor, universityId, collegeId,  // ✅ إضافة collegeId
-            icon, videos, description, isFeatured, price 
-        } = req.body;
-
-        // التحقق من الحقول المطلوبة
-        if (!title || !code || !instructor || !universityId || !collegeId) {  // ✅ إضافة collegeId
-            return res.status(400).json({ 
-                success: false, 
-                message: 'جميع الحقول المطلوبة غير مكتملة' 
-            });
-        }
-
-        // التحقق من وجود الجامعة
-        const university = await University.findById(universityId);
-        if (!university) {
-            return res.status(404).json({ 
-                success: false, 
-                message: 'الجامعة غير موجودة' 
-            });
-        }
-
-        // التحقق من وجود الكلية
-        const college = await College.findById(collegeId);
-        if (!college) {
-            return res.status(404).json({ 
-                success: false, 
-                message: 'الكلية غير موجودة' 
-            });
-        }
-
-        const material = new ExplanationMaterial({
-            title,
-            code,
-            instructor,
-            universityId,
-            collegeId,    // ✅ إضافة هذا
-            icon: icon || 'fa-book',
-            videos: videos || 0,
-            description: description || '',
-            isFeatured: isFeatured || false,
-            price: price || 99
-        });
-
-        await material.save();
-
-        // تحديث عدد المواد في الجامعة والكلية
-        await University.findByIdAndUpdate(universityId, { 
-            $inc: { count: 1 } 
-        });
-        await College.findByIdAndUpdate(collegeId, { 
-            $inc: { count: 1 } 
-        });
-
-        res.status(201).json({ 
-            success: true, 
-            message: 'تم إضافة المادة بنجاح', 
-            data: material 
-        });
-    } catch (error) {
-        console.error('❌ خطأ في إضافة المادة:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
