@@ -43,6 +43,7 @@
             --gradient-hero: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #2D1B69 100%);
             --success: #10B981;
             --danger: #EF4444;
+            --warning: #F59E0B;
         }
 
         [data-theme="dark"] {
@@ -192,6 +193,12 @@
             border: 1px solid #93C5FD;
         }
 
+        .alert-warning {
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FCD34D;
+        }
+
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -306,7 +313,7 @@
         }
 
         /* ============================================================
-           قسم البطل
+           قسم البطل - تفاصيل المادة
            ============================================================ */
         .material-hero {
             background: var(--gradient-hero);
@@ -1005,7 +1012,7 @@
                     <i class="fas fa-book-open"></i> الشروحات
                 </a>
                 <span class="btn-subscription-status" id="subscriptionStatus">
-                    <i class="fas fa-check-circle"></i> مفعل
+                    <i class="fas fa-spinner fa-spin"></i> جاري التحقق
                 </span>
             </div>
         </div>
@@ -1018,14 +1025,14 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <span class="material-code" id="materialCode"><i class="fas fa-book"></i> MATH-101</span>
-                    <h1 id="materialTitle">رياضيات <span>١</span></h1>
+                    <span class="material-code" id="materialCode"><i class="fas fa-book"></i> جاري التحميل...</span>
+                    <h1 id="materialTitle">تحميل <span>المادة</span></h1>
                     <div class="instructor">
                         <i class="fas fa-user-graduate"></i>
-                        <span id="materialInstructor">د. خالد المنصور</span>
+                        <span id="materialInstructor">جاري التحميل...</span>
                     </div>
                     <p class="description" id="materialDescription">
-                        دراسة التفاضل والتكامل، النهايات، الاشتقاق، وتطبيقاتها في الهندسة.
+                        جاري تحميل وصف المادة...
                     </p>
                     <div class="hero-stats">
                         <div class="stat">
@@ -1037,15 +1044,15 @@
                             <span class="label"><i class="fas fa-users"></i> طالب</span>
                         </div>
                         <div class="stat">
-                            <span class="number" id="ratingCount">4.9</span>
+                            <span class="number" id="ratingCount">0.0</span>
                             <span class="label"><i class="fas fa-star"></i> تقييم</span>
                         </div>
                     </div>
                 </div>
                 <div class="hero-badge">
-                    <span class="badge-icon"><i class="fas fa-check-circle" style="color: #22C55E;"></i></span>
-                    <span class="badge-text">مفعل</span>
-                    <span class="badge-sub">اشتراك نشط</span>
+                    <span class="badge-icon" id="statusIcon"><i class="fas fa-clock" style="color: var(--accent);"></i></span>
+                    <span class="badge-text" id="statusText">جاري التحقق</span>
+                    <span class="badge-sub" id="statusSub">يرجى الانتظار</span>
                 </div>
             </div>
         </div>
@@ -1193,64 +1200,213 @@
         // 6. المتغيرات
         // ============================================================
         let videos = [];
+        let materialData = null;
         let currentMaterialId = null;
-        let currentSubscriptionStatus = 'active';
+        let currentSubscriptionStatus = 'checking';
+        let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+        let currentToken = localStorage.getItem('token') || '';
+        let universities = [];
+        let colleges = [];
 
         // ============================================================
-        // 7. تحميل بيانات المادة من الرابط
+        // 7. تحميل بيانات المادة من الخادم
         // ============================================================
-        function loadMaterialData() {
+        async function loadMaterialData() {
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id') || '';
-            const title = decodeURIComponent(params.get('title') || 'المادة');
-            const code = decodeURIComponent(params.get('code') || '');
-            const instructor = decodeURIComponent(params.get('instructor') || '');
-            const description = decodeURIComponent(params.get('description') || '');
-            const status = params.get('status') || 'active';
+
+            if (!id) {
+                showAlert('❌ لم يتم تحديد المادة', 'danger');
+                document.getElementById('materialTitle').innerHTML = 'لم يتم <span>تحديد المادة</span>';
+                document.getElementById('materialCode').innerHTML = '<i class="fas fa-exclamation-circle"></i> خطأ';
+                return;
+            }
 
             currentMaterialId = id;
-            currentSubscriptionStatus = status;
 
-            document.getElementById('materialTitle').innerHTML = title + ' <span>الأكاديمية</span>';
-            document.getElementById('materialCode').innerHTML = `<i class="fas fa-book"></i> ${code || 'المادة'}`;
-            document.getElementById('materialInstructor').textContent = instructor || 'المحاضر';
-            document.getElementById('materialDescription').textContent = description || 'لا يوجد وصف للمادة';
+            try {
+                // جلب بيانات المادة
+                const response = await fetch(`${API_URL}/api/explanations/materials/${id}`);
+                const data = await response.json();
 
-            updateSubscriptionStatus(status);
-            document.title = `📚 ${title} - منصة ارتقاء`;
-        }
-
-        // ============================================================
-        // 8. تحديث حالة الاشتراك
-        // ============================================================
-        function updateSubscriptionStatus(status) {
-            const badge = document.getElementById('subscriptionStatus');
-            switch (status) {
-                case 'active':
-                    badge.className = 'btn-subscription-status';
-                    badge.innerHTML = '<i class="fas fa-check-circle"></i> مفعل';
-                    break;
-                case 'pending':
-                    badge.className = 'btn-subscription-status pending';
-                    badge.innerHTML = '<i class="fas fa-clock"></i> قيد الانتظار';
-                    break;
-                case 'cancelled':
-                    badge.className = 'btn-subscription-status cancelled';
-                    badge.innerHTML = '<i class="fas fa-times-circle"></i> ملغي';
-                    break;
-                default:
-                    badge.className = 'btn-subscription-status';
-                    badge.innerHTML = '<i class="fas fa-check-circle"></i> مفعل';
+                if (data.success && data.data) {
+                    materialData = data.data;
+                    console.log('📦 بيانات المادة:', materialData);
+                    
+                    // جلب الجامعات والكليات
+                    await fetchUniversities();
+                    await fetchColleges();
+                    
+                    renderMaterialInfo();
+                    await loadVideos();
+                    await checkSubscriptionStatus();
+                } else {
+                    showAlert('❌ تعذر تحميل بيانات المادة', 'danger');
+                }
+            } catch (error) {
+                console.error('❌ خطأ في تحميل المادة:', error);
+                showAlert('❌ حدث خطأ في تحميل البيانات', 'danger');
             }
         }
 
         // ============================================================
-        // 9. جلب فيديوهات المادة من الخادم
+        // 8. جلب الجامعات
+        // ============================================================
+        async function fetchUniversities() {
+            try {
+                const response = await fetch(`${API_URL}/api/universities`);
+                const data = await response.json();
+                if (data.success) {
+                    universities = data.data || [];
+                }
+            } catch (error) {
+                console.error('❌ خطأ في جلب الجامعات:', error);
+            }
+        }
+
+        // ============================================================
+        // 9. جلب الكليات
+        // ============================================================
+        async function fetchColleges() {
+            try {
+                const response = await fetch(`${API_URL}/api/colleges`);
+                const data = await response.json();
+                if (data.success) {
+                    colleges = data.data || [];
+                }
+            } catch (error) {
+                console.error('❌ خطأ في جلب الكليات:', error);
+            }
+        }
+
+        // ============================================================
+        // 10. عرض معلومات المادة
+        // ============================================================
+        function renderMaterialInfo() {
+            const m = materialData;
+            const uni = universities.find(u => u._id === m.universityId);
+            const college = colleges.find(c => c._id === m.collegeId);
+
+            document.getElementById('materialTitle').innerHTML = m.title + ' <span>الأكاديمية</span>';
+            document.getElementById('materialCode').innerHTML = `<i class="fas fa-book"></i> ${m.code || 'المادة'}`;
+            document.getElementById('materialInstructor').textContent = m.instructor || 'المحاضر';
+            document.getElementById('materialDescription').textContent = m.description || 'لا يوجد وصف للمادة';
+
+            // تحديث الإحصائيات
+            const units = m.units || [];
+            const totalVideos = units.reduce((acc, u) => acc + (u.videos?.length || 0), 0);
+            document.getElementById('videosCount').textContent = totalVideos;
+            document.getElementById('studentsCount').textContent = m.studentsCount || 0;
+            document.getElementById('ratingCount').textContent = m.rating || '4.5';
+
+            document.title = `📚 ${m.title} - منصة ارتقاء`;
+        }
+
+        // ============================================================
+        // 11. التحقق من حالة الاشتراك
+        // ============================================================
+        async function checkSubscriptionStatus() {
+            const badge = document.getElementById('subscriptionStatus');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusText = document.getElementById('statusText');
+            const statusSub = document.getElementById('statusSub');
+
+            if (!currentToken || !materialData) {
+                currentSubscriptionStatus = 'not_subscribed';
+                updateUI('not_subscribed');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/subscriptions/my`, {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    currentSubscriptionStatus = 'not_subscribed';
+                    updateUI('not_subscribed');
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    const subscriptions = data.data || [];
+                    const found = subscriptions.find(sub => 
+                        String(sub.materialId) === String(materialData._id)
+                    );
+
+                    if (found) {
+                        currentSubscriptionStatus = found.status || 'pending';
+                    } else {
+                        currentSubscriptionStatus = 'not_subscribed';
+                    }
+                    updateUI(currentSubscriptionStatus);
+                } else {
+                    currentSubscriptionStatus = 'not_subscribed';
+                    updateUI('not_subscribed');
+                }
+            } catch (error) {
+                console.error('❌ خطأ في التحقق من الاشتراك:', error);
+                currentSubscriptionStatus = 'not_subscribed';
+                updateUI('not_subscribed');
+            }
+        }
+
+        // ============================================================
+        // 12. تحديث واجهة المستخدم حسب حالة الاشتراك
+        // ============================================================
+        function updateUI(status) {
+            const badge = document.getElementById('subscriptionStatus');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusText = document.getElementById('statusText');
+            const statusSub = document.getElementById('statusSub');
+
+            switch (status) {
+                case 'active':
+                    badge.className = 'btn-subscription-status';
+                    badge.innerHTML = '<i class="fas fa-check-circle"></i> مفعل';
+                    statusIcon.innerHTML = '<i class="fas fa-check-circle" style="color: var(--success);"></i>';
+                    statusText.textContent = 'مفعل';
+                    statusSub.textContent = 'اشتراك نشط';
+                    break;
+                case 'pending':
+                    badge.className = 'btn-subscription-status pending';
+                    badge.innerHTML = '<i class="fas fa-clock"></i> قيد الانتظار';
+                    statusIcon.innerHTML = '<i class="fas fa-clock" style="color: var(--accent);"></i>';
+                    statusText.textContent = 'قيد الانتظار';
+                    statusSub.textContent = 'جاري مراجعة الطلب';
+                    break;
+                case 'cancelled':
+                    badge.className = 'btn-subscription-status cancelled';
+                    badge.innerHTML = '<i class="fas fa-times-circle"></i> ملغي';
+                    statusIcon.innerHTML = '<i class="fas fa-times-circle" style="color: var(--danger);"></i>';
+                    statusText.textContent = 'ملغي';
+                    statusSub.textContent = 'تم إلغاء الاشتراك';
+                    break;
+                case 'not_subscribed':
+                default:
+                    badge.className = 'btn-subscription-status';
+                    badge.innerHTML = '<i class="fas fa-lock"></i> غير مشترك';
+                    statusIcon.innerHTML = '<i class="fas fa-lock" style="color: var(--text-muted);"></i>';
+                    statusText.textContent = 'غير مشترك';
+                    statusSub.textContent = 'اشترك للوصول للمحتوى';
+                    // إضافة زر اشتراك
+                    statusText.style.cursor = 'pointer';
+                    statusText.onclick = () => {
+                        window.location.href = `subscription.html?id=${materialData._id}&type=material&title=${encodeURIComponent(materialData.title)}&price=${materialData.price || 99}`;
+                    };
+                    break;
+            }
+        }
+
+        // ============================================================
+        // 13. جلب فيديوهات المادة من الخادم
         // ============================================================
         async function loadVideos() {
             const grid = document.getElementById('videosGrid');
             const countLabel = document.getElementById('videosCountLabel');
-            const countStat = document.getElementById('videosCount');
 
             grid.innerHTML = `
                 <div class="loading-center">
@@ -1269,16 +1425,15 @@
 
                 if (data.success) {
                     const allVideos = data.data || [];
+                    // تصفية الفيديوهات حسب المادة
                     videos = allVideos.filter(v => String(v.subjectId) === String(currentMaterialId));
                     
                     console.log('📽️ الفيديوهات المفلترة:', videos);
                     
-                    countStat.textContent = videos.length;
                     countLabel.textContent = `${videos.length} فيديو`;
                     renderVideos(videos);
                 } else {
                     videos = [];
-                    countStat.textContent = '0';
                     countLabel.textContent = '0 فيديو';
                     grid.innerHTML = `
                         <div class="no-videos">
@@ -1302,7 +1457,7 @@
         }
 
         // ============================================================
-        // 10. عرض الفيديوهات
+        // 14. عرض الفيديوهات مع صور حقيقية
         // ============================================================
         function renderVideos(videosList) {
             const grid = document.getElementById('videosGrid');
@@ -1319,11 +1474,27 @@
             }
 
             grid.innerHTML = videosList.map((video, index) => {
-                const thumbnail = video.thumbnail || 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg';
+                // ✅ استخدام الصورة الحقيقية للفيديو
+                let thumbnail = video.thumbnail || video.thumbnailUrl || '';
+                
+                // إذا لم توجد صورة مصغرة، استخدم إطار من الفيديو أو صورة افتراضية
+                if (!thumbnail) {
+                    if (video.fileId) {
+                        // محاولة استخدام أول إطار من الفيديو كصورة مصغرة
+                        thumbnail = `${API_URL}/api/thumbnails/${video.fileId}`;
+                    } else {
+                        // صورة افتراضية تعكس نوع المحتوى
+                        const colors = ['#7C3AED', '#EC4899', '#F59E0B', '#10B981', '#3B82F6', '#EF4444', '#8B5CF6'];
+                        const color = colors[index % colors.length];
+                        thumbnail = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='320' y='190' font-family='Arial' font-size='40' fill='white' text-anchor='middle'%3E🎬%3C/text%3E%3C/svg%3E`;
+                    }
+                }
+
                 return `
                     <div class="video-card" data-aos="fade-up" data-aos-delay="${Math.min(index * 50, 300)}" onclick="openVideo('${video._id}')">
                         <div class="video-thumbnail">
-                            <img src="${thumbnail}" alt="${video.title}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg'" />
+                            <img src="${thumbnail}" alt="${video.title}" loading="lazy" 
+                                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 640 360\\'%3E%3Crect width=\\'640\\' height=\\'360\\' fill=\\'%237C3AED\\'/%3E%3Ctext x=\\'320\\' y=\\'190\\' font-family=\\'Arial\\' font-size=\\'40\\' fill=\\'white\\' text-anchor=\\'middle\\'%3E🎬%3C/text%3E%3C/svg%3E'" />
                             <div class="play-overlay"><i class="fas fa-play"></i></div>
                             <span class="duration"><i class="fas fa-clock"></i> ${video.duration || '00:00'}</span>
                             <span class="views-badge"><i class="fas fa-eye"></i> ${video.views || 0}</span>
@@ -1345,12 +1516,27 @@
         }
 
         // ============================================================
-        // 11. فتح الفيديو في المودال - مع دعم GridFS
+        // 15. فتح الفيديو في المودال - مع دعم GridFS
         // ============================================================
         function openVideo(videoId) {
             const video = videos.find(v => v._id === videoId);
             if (!video) {
                 showAlert('❌ الفيديو غير موجود', 'danger');
+                return;
+            }
+
+            // ✅ التحقق من الاشتراك قبل تشغيل الفيديو (باستثناء الفيديوهات المجانية)
+            const isFree = video.isFree || false;
+            if (!isFree && currentSubscriptionStatus !== 'active') {
+                showAlert('🔒 هذا الفيديو متاح فقط للمشتركين. اشترك الآن للوصول للمحتوى الكامل.', 'warning');
+                // عرض زر الانتقال للاشتراك
+                if (materialData) {
+                    setTimeout(() => {
+                        if (confirm('هل تريد الانتقال إلى صفحة الاشتراك؟')) {
+                            window.location.href = `subscription.html?id=${materialData._id}&type=material&title=${encodeURIComponent(materialData.title)}&price=${materialData.price || 99}`;
+                        }
+                    }, 500);
+                }
                 return;
             }
 
@@ -1378,7 +1564,6 @@
             // الطريقة 2: استخدام filePath
             else if (video.filePath) {
                 if (video.filePath.includes('/api/files/')) {
-                    // استخراج fileId من المسار
                     const match = video.filePath.match(/\/([a-fA-F0-9]{24})/);
                     if (match && match[1]) {
                         fileId = match[1];
@@ -1420,6 +1605,11 @@
                 videoUrl = video.fileData;
                 console.log('✅ باستخدام fileData (base64)');
             }
+            // الطريقة 5: استخدام url مباشر
+            else if (video.url) {
+                videoUrl = video.url;
+                console.log('✅ باستخدام url مباشر:', videoUrl);
+            }
 
             console.log('🔗 الرابط النهائي:', videoUrl);
 
@@ -1429,14 +1619,16 @@
                 <span><i class="fas fa-eye"></i> ${video.views || 0} مشاهدة</span>
                 <span><i class="fas fa-tag"></i> ${video.subjectName || 'مادة'}</span>
                 ${fileId ? `<span><i class="fas fa-database"></i> GridFS</span>` : ''}
+                ${video.isFree ? `<span style="color: var(--success);"><i class="fas fa-gem"></i> مجاني</span>` : ''}
             `;
 
             if (videoUrl) {
                 player.innerHTML = `
                     <video controls autoplay style="width:100%; height:100%; object-fit:contain;" 
-                           onerror="this.parentElement.innerHTML='<div class=\\'placeholder\\'><i class=\\'fas fa-exclamation-circle error-icon\\'></i><p style=\\'color:#EF4444;\\'>❌ تعذر تحميل الفيديو</p><p style=\\'font-size:0.9rem; opacity:0.7;\\'>الملف غير موجود على الخادم</p></div>'">
+                           onerror="this.parentElement.innerHTML='<div class=\\'placeholder\\'><i class=\\'fas fa-exclamation-circle error-icon\\'></i><p style=\\'color:#EF4444;\\'>❌ تعذر تحميل الفيديو</p><p style=\\'font-size:0.9rem; opacity:0.7;\\'>الملف غير موجود على الخادم</p><p style=\\'font-size:0.8rem; opacity:0.5;\\'>الرابط: ${videoUrl.substring(0, 50)}...</p></div>'">
                         <source src="${videoUrl}" type="video/mp4">
                         <source src="${videoUrl}" type="video/webm">
+                        <source src="${videoUrl}" type="video/ogg">
                         متصفحك لا يدعم تشغيل الفيديو
                     </video>
                 `;
@@ -1446,16 +1638,43 @@
                         <i class="fas fa-exclamation-circle error-icon"></i>
                         <p style="color:#EF4444;">❌ لا يوجد مسار للفيديو</p>
                         <p style="font-size:0.9rem; opacity:0.7;">يرجى التأكد من رفع الفيديو بشكل صحيح</p>
+                        <p style="font-size:0.8rem; opacity:0.5;">معرف الفيديو: ${video._id}</p>
                     </div>
                 `;
             }
 
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // ✅ تحديث عدد المشاهدات
+            updateVideoViews(videoId);
         }
 
         // ============================================================
-        // 12. إغلاق مودال الفيديو
+        // 16. تحديث عدد مشاهدات الفيديو
+        // ============================================================
+        async function updateVideoViews(videoId) {
+            try {
+                const response = await fetch(`${API_URL}/api/videos/${videoId}/views`, {
+                    method: 'PUT'
+                });
+                const data = await response.json();
+                if (data.success) {
+                    // تحديث عدد المشاهدات في الواجهة
+                    const video = videos.find(v => v._id === videoId);
+                    if (video) {
+                        video.views = (video.views || 0) + 1;
+                        // إعادة عرض الفيديوهات لتحديث العدد
+                        renderVideos(videos);
+                    }
+                }
+            } catch (error) {
+                console.error('❌ خطأ في تحديث المشاهدات:', error);
+            }
+        }
+
+        // ============================================================
+        // 17. إغلاق مودال الفيديو
         // ============================================================
         function closeVideoModal() {
             const modal = document.getElementById('videoModal');
@@ -1481,25 +1700,24 @@
         }
 
         // ============================================================
-        // 13. إغلاق المودال عند الضغط خارج المحتوى
+        // 18. إغلاق المودال عند الضغط خارج المحتوى
         // ============================================================
         document.getElementById('videoModal').addEventListener('click', function(e) {
             if (e.target === this) closeVideoModal();
         });
 
         // ============================================================
-        // 14. إغلاق المودال بالضغط على Escape
+        // 19. إغلاق المودال بالضغط على Escape
         // ============================================================
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeVideoModal();
         });
 
         // ============================================================
-        // 15. تشغيل التطبيق
+        // 20. تشغيل التطبيق
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             loadMaterialData();
-            loadVideos();
 
             console.log('📚 تم تحميل صفحة محتوى المادة بنجاح!');
             console.log('🌐 API_URL:', API_URL);
@@ -1507,7 +1725,7 @@
         });
 
         // ============================================================
-        // 16. دالة مساعدة للتحقق من وجود الفيديو (للاختبار)
+        // 21. دالة مساعدة للتحقق من وجود الفيديو (للاختبار)
         // ============================================================
         async function checkVideoExists(videoId) {
             try {
@@ -1543,6 +1761,7 @@
         window.checkVideoExists = checkVideoExists;
         window.videos = videos;
         window.loadVideos = loadVideos;
+        window.materialData = materialData;
     </script>
 
 </body>

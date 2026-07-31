@@ -115,12 +115,12 @@ const Model = require('./models/Model');
 const Order = require('./models/Order');
 const User = require('./models/User');
 const University = require('./models/University');
+const College = require('./models/College');  // ✅ إضافة هذا
 const ExplanationMaterial = require('./models/ExplanationMaterial');
 const Summary = require('./models/Summary');
 const Subscription = require('./models/Subscription');
 const Conversation = require('./models/Conversation');
 const Message = require('./models/Message');
-
 // ============================================================
 // استيراد الميدل وير
 // ============================================================
@@ -2155,28 +2155,67 @@ app.get('/api/explanations/materials/:id', async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
-
-app.post('/api/explanations/materials', protect, authorize('admin'), async (req, res) => {
+ app.post('/api/explanations/materials', protect, authorize('admin'), async (req, res) => {
     try {
-        const { title, code, instructor, universityId, icon, videos, description, isFeatured, price } = req.body;
-        if (!title || !code || !instructor || !universityId) {
-            return res.status(400).json({ success: false, message: 'جميع الحقول المطلوبة غير مكتملة' });
+        const { 
+            title, code, instructor, universityId, collegeId,  // ✅ إضافة collegeId
+            icon, videos, description, isFeatured, price 
+        } = req.body;
+
+        // التحقق من الحقول المطلوبة
+        if (!title || !code || !instructor || !universityId || !collegeId) {  // ✅ إضافة collegeId
+            return res.status(400).json({ 
+                success: false, 
+                message: 'جميع الحقول المطلوبة غير مكتملة' 
+            });
         }
+
+        // التحقق من وجود الجامعة
         const university = await University.findById(universityId);
         if (!university) {
-            return res.status(404).json({ success: false, message: 'الجامعة غير موجودة' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الجامعة غير موجودة' 
+            });
         }
+
+        // التحقق من وجود الكلية
+        const college = await College.findById(collegeId);
+        if (!college) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الكلية غير موجودة' 
+            });
+        }
+
         const material = new ExplanationMaterial({
-            title, code, instructor, universityId,
+            title,
+            code,
+            instructor,
+            universityId,
+            collegeId,    // ✅ إضافة هذا
             icon: icon || 'fa-book',
             videos: videos || 0,
             description: description || '',
             isFeatured: isFeatured || false,
             price: price || 99
         });
+
         await material.save();
-        await University.findByIdAndUpdate(universityId, { $inc: { count: 1 } });
-        res.status(201).json({ success: true, message: 'تم إضافة المادة بنجاح', data: material });
+
+        // تحديث عدد المواد في الجامعة والكلية
+        await University.findByIdAndUpdate(universityId, { 
+            $inc: { count: 1 } 
+        });
+        await College.findByIdAndUpdate(collegeId, { 
+            $inc: { count: 1 } 
+        });
+
+        res.status(201).json({ 
+            success: true, 
+            message: 'تم إضافة المادة بنجاح', 
+            data: material 
+        });
     } catch (error) {
         console.error('❌ خطأ في إضافة المادة:', error);
         res.status(500).json({ success: false, message: error.message });
@@ -2442,7 +2481,300 @@ app.get('/api/auth/me', protect, async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+// ============================================================
+// 4.9 مسارات الكليات (COLLEGES)
+// ============================================================
 
+// جلب جميع الكليات
+app.get('/api/colleges', async (req, res) => {
+    try {
+        const colleges = await College.find()
+            .populate('universityId', 'name icon')
+            .sort({ name: 1 });
+        res.status(200).json({ 
+            success: true, 
+            count: colleges.length, 
+            data: colleges 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الكليات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب كلية محددة
+app.get('/api/colleges/:id', async (req, res) => {
+    try {
+        const college = await College.findById(req.params.id)
+            .populate('universityId', 'name icon');
+        
+        if (!college) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الكلية غير موجودة' 
+            });
+        }
+        res.status(200).json({ success: true, data: college });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الكلية:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب كليات جامعة محددة
+app.get('/api/colleges/university/:universityId', async (req, res) => {
+    try {
+        const colleges = await College.find({ 
+            universityId: req.params.universityId 
+        }).sort({ name: 1 });
+        
+        res.status(200).json({ 
+            success: true, 
+            count: colleges.length, 
+            data: colleges 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب كليات الجامعة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// إضافة كلية جديدة (للمدير فقط)
+app.post('/api/colleges', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { name, universityId, icon, count, description } = req.body;
+
+        // التحقق من الحقول المطلوبة
+        if (!name || !universityId) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'اسم الكلية ومعرف الجامعة مطلوبان' 
+            });
+        }
+
+        // التحقق من وجود الجامعة
+        const university = await University.findById(universityId);
+        if (!university) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الجامعة غير موجودة' 
+            });
+        }
+
+        // التحقق من عدم وجود كلية بنفس الاسم لنفس الجامعة
+        const existingCollege = await College.findOne({ 
+            name: name.trim(), 
+            universityId: universityId 
+        });
+        
+        if (existingCollege) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'هذه الكلية موجودة بالفعل في هذه الجامعة' 
+            });
+        }
+
+        const college = new College({
+            name: name.trim(),
+            universityId,
+            icon: icon || 'fa-school',
+            count: count || 0,
+            description: description || ''
+        });
+
+        await college.save();
+
+        // تحديث عدد الكليات في الجامعة
+        await University.findByIdAndUpdate(universityId, {
+            $inc: { count: 1 }
+        });
+
+        res.status(201).json({ 
+            success: true, 
+            message: 'تم إضافة الكلية بنجاح ✅', 
+            data: college 
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في إضافة الكلية:', error);
+        if (error.code === 11000) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'هذه الكلية موجودة بالفعل في هذه الجامعة' 
+            });
+        }
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'حدث خطأ في إضافة الكلية' 
+        });
+    }
+});
+
+// تحديث كلية (للمدير فقط)
+app.put('/api/colleges/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { name, icon, count, description, universityId } = req.body;
+        const college = await College.findById(req.params.id);
+
+        if (!college) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الكلية غير موجودة' 
+            });
+        }
+
+        // إذا تم تغيير الجامعة، تحديث العدادات
+        if (universityId && universityId !== college.universityId.toString()) {
+            // تقليل عدد الكليات في الجامعة القديمة
+            await University.findByIdAndUpdate(college.universityId, {
+                $inc: { count: -1 }
+            });
+            
+            // زيادة عدد الكليات في الجامعة الجديدة
+            await University.findByIdAndUpdate(universityId, {
+                $inc: { count: 1 }
+            });
+        }
+
+        // تحديث الحقول
+        if (name) college.name = name.trim();
+        if (icon) college.icon = icon;
+        if (count !== undefined) college.count = count;
+        if (description !== undefined) college.description = description;
+        if (universityId) college.universityId = universityId;
+
+        await college.save();
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'تم تحديث الكلية بنجاح ✅', 
+            data: college 
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في تحديث الكلية:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'حدث خطأ في تحديث الكلية' 
+        });
+    }
+});
+
+// حذف كلية (للمدير فقط)
+app.delete('/api/colleges/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const college = await College.findById(req.params.id);
+
+        if (!college) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الكلية غير موجودة' 
+            });
+        }
+
+        // تحديث عدد الكليات في الجامعة
+        await University.findByIdAndUpdate(college.universityId, {
+            $inc: { count: -1 }
+        });
+
+        // حذف الكلية
+        await college.deleteOne();
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'تم حذف الكلية بنجاح 🗑️' 
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في حذف الكلية:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'حدث خطأ في حذف الكلية' 
+        });
+    }
+});
+
+// ============================================================
+// 📊 إحصائيات الكليات (للمدير)
+// ============================================================
+
+app.get('/api/colleges/stats', protect, authorize('admin'), async (req, res) => {
+    try {
+        const total = await College.countDocuments();
+        const byUniversity = await College.aggregate([
+            {
+                $group: {
+                    _id: '$universityId',
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'universities',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'university'
+                }
+            },
+            {
+                $unwind: '$university'
+            },
+            {
+                $project: {
+                    universityName: '$university.name',
+                    count: 1
+                }
+            },
+            { $sort: { count: -1 } }
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                total,
+                byUniversity
+            }
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب إحصائيات الكليات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 🔍 البحث في الكليات (للمدير)
+// ============================================================
+
+app.get('/api/colleges/search', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { q, universityId } = req.query;
+        const query = {};
+
+        if (q) {
+            query.$or = [
+                { name: { $regex: q, $options: 'i' } },
+                { description: { $regex: q, $options: 'i' } }
+            ];
+        }
+
+        if (universityId) {
+            query.universityId = universityId;
+        }
+
+        const colleges = await College.find(query)
+            .populate('universityId', 'name icon')
+            .sort({ name: 1 });
+
+        res.status(200).json({
+            success: true,
+            count: colleges.length,
+            data: colleges
+        });
+    } catch (error) {
+        console.error('❌ خطأ في البحث عن الكليات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 // ============================================================
 // 🗨️ مسارات الدردشة (Chat Routes)
 // ============================================================

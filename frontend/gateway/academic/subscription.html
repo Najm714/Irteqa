@@ -416,6 +416,17 @@
             font-weight: 600;
         }
 
+        .material-details .material-college {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
         /* ============================================================
            نموذج الدفع (الجانبي)
            ============================================================ */
@@ -1393,7 +1404,6 @@
             const token = localStorage.getItem('token');
             const user = JSON.parse(localStorage.getItem('user') || 'null');
             
-            // التحقق من أن المستخدم مدير
             if (token && user && user.role === 'admin') {
                 return true;
             }
@@ -1416,7 +1426,7 @@
         }
 
         // ============================================================
-        // 8. تحميل بيانات المادة من الرابط
+        // 8. تحميل بيانات المادة من الرابط مع دعم الكلية
         // ============================================================
         function loadMaterialData() {
             const params = new URLSearchParams(window.location.search);
@@ -1426,6 +1436,7 @@
             const code = decodeURIComponent(params.get('code') || '');
             const instructor = decodeURIComponent(params.get('instructor') || 'اسم المحاضر');
             const university = decodeURIComponent(params.get('university') || 'الجامعة');
+            const college = decodeURIComponent(params.get('college') || ''); // ✅ جديد
             const description = decodeURIComponent(params.get('description') || 'وصف المادة');
             const price = params.get('price') || '99';
 
@@ -1435,7 +1446,6 @@
 
             if (isAdmin) {
                 adminBadge.classList.add('show');
-                // إخفاء نموذج الدفع للمدير
                 document.getElementById('subscriptionForm').style.opacity = '0.5';
                 document.getElementById('subscriptionForm').style.pointerEvents = 'none';
                 document.getElementById('subscribeBtn').disabled = true;
@@ -1473,6 +1483,12 @@
                 `;
             }
 
+            // ✅ عرض الكلية إذا كانت موجودة
+            let collegeHTML = '';
+            if (college) {
+                collegeHTML = `<span class="material-college"><i class="fas fa-school"></i> ${college}</span>`;
+            }
+
             container.innerHTML = `
                 <span class="material-badge">${badgeText}</span>
                 <span class="material-icon">${iconHTML}</span>
@@ -1484,7 +1500,10 @@
                 </div>
                 <p class="material-description">${description}</p>
                 <ul class="material-features">${featuresHTML}</ul>
-                <span class="material-university"><i class="fas fa-university"></i> ${university}</span>
+                <div>
+                    <span class="material-university"><i class="fas fa-university"></i> ${university}</span>
+                    ${collegeHTML}
+                </div>
             `;
 
             // تحديث السعر
@@ -1555,7 +1574,6 @@
         document.getElementById('subscriptionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // ✅ منع المدير من الاشتراك
             if (checkAdminAccess()) {
                 showAlert('🔓 أنت مدير، يمكنك الدخول مجاناً', 'info');
                 return;
@@ -1567,20 +1585,17 @@
             const notes = document.getElementById('notes').value.trim();
             const activeMethod = document.querySelector('.payment-method.active');
 
-            // التحقق من الحقول المطلوبة
             if (!name || !email || !phone) {
                 showAlert('❌ يرجى ملء جميع الحقول المطلوبة', 'danger');
                 return;
             }
 
-            // التحقق من البريد الإلكتروني
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showAlert('❌ يرجى إدخال بريد إلكتروني صحيح', 'danger');
                 return;
             }
 
-            // التحقق من رقم الجوال
             const phoneRegex = /^[0-9]{10,15}$/;
             if (!phoneRegex.test(phone.replace(/[^0-9]/g, ''))) {
                 showAlert('❌ يرجى إدخال رقم جوال صحيح', 'danger');
@@ -1592,7 +1607,6 @@
                 return;
             }
 
-            // جمع بيانات الاشتراك من الرابط
             const params = new URLSearchParams(window.location.search);
             const subscriptionData = {
                 name: name,

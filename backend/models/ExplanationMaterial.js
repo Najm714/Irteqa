@@ -1,4 +1,3 @@
-// backend/models/ExplanationMaterial.js
 const mongoose = require('mongoose');
 
 const ExplanationMaterialSchema = new mongoose.Schema({
@@ -20,6 +19,11 @@ const ExplanationMaterialSchema = new mongoose.Schema({
     universityId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'University',
+        required: true
+    },
+    collegeId: {                                    // ✅ إضافة هذا الحقل
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'College',
         required: true
     },
     icon: {
@@ -46,8 +50,11 @@ const ExplanationMaterialSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// فهرس للبحث
-ExplanationMaterialSchema.index({ title: 'text', code: 'text' });
+// فهارس للبحث
+ExplanationMaterialSchema.index({ title: 1 });
+ExplanationMaterialSchema.index({ code: 1 });
 ExplanationMaterialSchema.index({ universityId: 1 });
+ExplanationMaterialSchema.index({ collegeId: 1 });   // ✅ إضافة هذا
+ExplanationMaterialSchema.index({ isFeatured: 1 });
 
 module.exports = mongoose.model('ExplanationMaterial', ExplanationMaterialSchema);
