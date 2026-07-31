@@ -3037,11 +3037,82 @@ document.getElementById('addMaterialForm').addEventListener('submit', async func
     }
 });
 // ============================================================
-// 25. رفع فيديو - النسخة المصححة
+// دالة معالجة اختيار ملف الفيديو - النسخة المصححة
+// ============================================================
+function handleVideoFile(file) {
+    console.log('📁 تم اختيار ملف:', file.name, 'حجمه:', file.size);
+    
+    const allowedTypes = ['video/mp4', 'video/avi', 'video/quicktime', 'video/x-msvideo', 'video/webm', 'video/x-matroska'];
+    const validExtensions = ['.mp4', '.avi', '.mov', '.webm', '.mkv'];
+    const ext = '.' + file.name.split('.').pop().toLowerCase();
+
+    if (!allowedTypes.includes(file.type) && !validExtensions.includes(ext)) {
+        showAlert('❌ نوع الملف غير مدعوم. يرجى رفع فيديو بصيغة MP4, AVI, MOV, WEBM أو MKV', 'danger');
+        document.getElementById('videoFile').value = '';
+        return;
+    }
+
+    if (file.size > 100 * 1024 * 1024) {
+        showAlert('❌ حجم الملف كبير جداً. الحد الأقصى 100MB', 'danger');
+        document.getElementById('videoFile').value = '';
+        return;
+    }
+
+    // ✅ حفظ الملف في المتغير العام
+    uploadedVideoFile = file;
+    console.log('✅ تم حفظ الملف في المتغير uploadedVideoFile:', uploadedVideoFile.name);
+    
+    // تحديث واجهة المستخدم
+    document.getElementById('videoFileName').textContent = file.name;
+    document.getElementById('videoFileSize').textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+    document.getElementById('videoFileInfo').classList.add('show');
+
+    const uploadArea = document.getElementById('videoUploadArea');
+    if (uploadArea) {
+        uploadArea.querySelector('h4').textContent = `🎬 ${file.name}`;
+        uploadArea.querySelector('p').textContent = `حجم الملف: ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+    }
+    
+    // ✅ إظهار رسالة تأكيد
+    showAlert('✅ تم اختيار الملف: ' + file.name, 'success');
+}
+// ============================================================
+// دالة إزالة ملف الفيديو
+// ============================================================
+function removeVideoFile() {
+    console.log('🗑️ إزالة ملف الفيديو');
+    uploadedVideoFile = null;
+    document.getElementById('videoFile').value = '';
+    document.getElementById('videoFileInfo').classList.remove('show');
+
+    const uploadArea = document.getElementById('videoUploadArea');
+    if (uploadArea) {
+        uploadArea.querySelector('h4').textContent = 'اسحب ملف الفيديو هنا أو انقر للاختيار';
+        uploadArea.querySelector('p').textContent = 'يدعم ملفات MP4, AVI, MOV, WEBM (الحد الأقصى 100MB)';
+    }
+}
+// ============================================================
+// 25. رفع فيديو - النسخة المصححة بالكامل
 // ============================================================
 document.getElementById('addVideoForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
+    // ✅ التحقق من وجود الملف قبل أي شيء
+    console.log('🔍 التحقق من uploadedVideoFile:', uploadedVideoFile);
+    
+    if (!uploadedVideoFile) {
+        showAlert('❌ يرجى اختيار ملف فيديو أولاً', 'danger');
+        // ✅ تسليط الضوء على منطقة رفع الملفات
+        document.getElementById('videoUploadArea').style.borderColor = '#EF4444';
+        document.getElementById('videoUploadArea').style.background = 'rgba(239, 68, 68, 0.05)';
+        setTimeout(() => {
+            document.getElementById('videoUploadArea').style.borderColor = '';
+            document.getElementById('videoUploadArea').style.background = '';
+        }, 3000);
+        return;
+    }
+
+    // جمع البيانات من النموذج
     const title = document.getElementById('videoTitle').value.trim();
     const universityId = document.getElementById('videoUniversity').value;
     const collegeId = document.getElementById('videoCollege').value;
@@ -3049,25 +3120,32 @@ document.getElementById('addVideoForm').addEventListener('submit', async functio
     const materialId = document.getElementById('videoMaterial').value;
     const color = document.getElementById('videoColor').value;
     const description = document.getElementById('videoDescription').value.trim();
-    const file = uploadedVideoFile;
 
-    console.log('📤 بيانات الفيديو المرسلة:', { title, universityId, collegeId, specialtyId, materialId, color, description });
+    console.log('📤 بيانات الفيديو المرسلة:', { 
+        title, 
+        universityId, 
+        collegeId, 
+        specialtyId, 
+        materialId, 
+        color, 
+        description,
+        fileName: uploadedVideoFile.name,
+        fileSize: uploadedVideoFile.size
+    });
 
+    // ✅ التحقق من الحقول المطلوبة
     if (!title || !universityId || !collegeId || !specialtyId || !materialId) {
         showAlert('❌ يرجى إدخال عنوان الفيديو واختيار الجامعة والكلية والتخصص والمادة', 'danger');
         return;
     }
 
-    if (!file) {
-        showAlert('❌ يرجى اختيار ملف فيديو', 'danger');
-        return;
-    }
-
+    // البحث عن البيانات المرتبطة
     const material = materials.find(m => m._id === materialId);
     const university = universities.find(u => u._id === universityId);
     const college = colleges.find(c => c._id === collegeId);
     const specialty = specialties.find(s => s._id === specialtyId);
 
+    // ✅ بناء FormData
     const formData = new FormData();
     formData.append('title', title);
     formData.append('subjectId', String(materialId));
@@ -3077,13 +3155,14 @@ document.getElementById('addVideoForm').addEventListener('submit', async functio
     formData.append('collegeName', college ? college.name : '');
     formData.append('description', description);
     formData.append('color', color);
-    formData.append('video', file);
+    formData.append('video', uploadedVideoFile);  // ✅ الملف
     
-    // ✅ إضافة معرفات الربط كـ String
+    // ✅ إضافة معرفات الربط
     formData.append('universityId', String(universityId));
     formData.append('collegeId', String(collegeId));
     formData.append('specialtyId', String(specialtyId));
 
+    // ✅ تعطيل الزر أثناء الرفع
     const btn = this.querySelector('button[type="submit"]');
     const originalText = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
@@ -3103,23 +3182,86 @@ document.getElementById('addVideoForm').addEventListener('submit', async functio
 
         if (data.success) {
             showAlert('✅ تم رفع الفيديو "' + title + '" بنجاح!', 'success');
+            
+            // ✅ إعادة تعيين النموذج
             this.reset();
             removeVideoFile();
             document.getElementById('videoColor').value = '#7C3AED';
             document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
             document.querySelector('.color-option').classList.add('active');
+            
+            // ✅ إعادة تحميل البيانات
             await fetchAllData();
+            
         } else {
             showAlert('❌ خطأ: ' + data.message, 'danger');
         }
     } catch (error) {
         console.error('❌ خطأ:', error);
-        showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+        showAlert('❌ حدث خطأ في الاتصال بالخادم: ' + error.message, 'danger');
     } finally {
+        // ✅ إعادة تفعيل الزر
         btn.innerHTML = originalText;
         btn.disabled = false;
     }
 });
+// ============================================================
+// ربط حدث تغيير ملف الفيديو - النسخة المصححة
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    // ✅ ربط حدث اختيار ملف الفيديو
+    const videoFileInput = document.getElementById('videoFile');
+    if (videoFileInput) {
+        // إزالة المستمع القديم لتجنب التكرار
+        videoFileInput.removeEventListener('change', videoFileChangeHandler);
+        videoFileInput.addEventListener('change', videoFileChangeHandler);
+        console.log('✅ تم ربط حدث تغيير ملف الفيديو');
+    }
+    
+    // ✅ ربط منطقة السحب والإفلات
+    const videoUploadArea = document.getElementById('videoUploadArea');
+    if (videoUploadArea) {
+        videoUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--primary)';
+            this.style.background = 'rgba(124, 58, 237, 0.05)';
+        });
+        
+        videoUploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--border-color)';
+            this.style.background = 'var(--bg-body)';
+        });
+        
+        videoUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--border-color)';
+            this.style.background = 'var(--bg-body)';
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                // تحديث input file
+                const fileInput = document.getElementById('videoFile');
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                fileInput.files = dt.files;
+                // معالجة الملف
+                handleVideoFile(file);
+            }
+        });
+    }
+});
+
+// ✅ دالة معالج تغيير ملف الفيديو
+function videoFileChangeHandler(e) {
+    console.log('🔄 حدث change لملف الفيديو');
+    if (this.files && this.files.length > 0) {
+        const file = this.files[0];
+        console.log('📁 الملف المحدد:', file.name, file.size);
+        handleVideoFile(file);
+    } else {
+        console.warn('⚠️ لم يتم اختيار أي ملف');
+    }
+}
         // ============================================================
         // 26. دوال الحذف
         // ============================================================
