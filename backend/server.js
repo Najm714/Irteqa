@@ -50,6 +50,7 @@ const videosDir = path.join(uploadsDir, 'videos');
 const ordersDir = path.join(uploadsDir, 'orders');
 const summariesDir = path.join(uploadsDir, 'summaries');
 const businessOrdersDir = path.join(uploadsDir, 'business-orders');
+const healthordersDir = path.join(uploadsDir, 'health-orders');
 const chatFilesDir = path.join(uploadsDir, 'chat-files');
 const tempDir = path.join(uploadsDir, 'temp');
 
@@ -59,6 +60,7 @@ const dirs = [
     { path: ordersDir, name: 'orders' },
     { path: summariesDir, name: 'summaries' },
     { path: businessOrdersDir, name: 'business-orders' },
+    { path: healthordersDir, name: 'health-orders' },
     { path: chatFilesDir, name: 'chat-files' },
     { path: tempDir, name: 'temp' }
 ];
@@ -78,6 +80,7 @@ app.use('/uploads/videos', express.static(videosDir));
 app.use('/uploads/orders', express.static(ordersDir));
 app.use('/uploads/summaries', express.static(summariesDir));
 app.use('/uploads/business-orders', express.static(businessOrdersDir));
+app.use('/uploads/health-orders', express.static(healthordersDir));
 app.use('/uploads/chat-files', express.static(chatFilesDir));
 
 console.log('✅ تم تهيئة خدمة الملفات الثابتة للمجلدات:');
@@ -86,6 +89,7 @@ console.log('📁 مسار videos:', videosDir);
 console.log('📁 مسار summaries:', summariesDir);
 console.log('📁 مسار chat-files:', chatFilesDir);
 console.log('📁 مسار business-orders:', businessOrdersDir);
+console.log('📁 مسار health-orders:', healthordersDir);
 
 // ============================================================
 // الاتصال بقاعدة البيانات
@@ -895,6 +899,250 @@ app.get('/api/business-orders/files/list', protect, authorize('admin'), async (r
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
+
+// ============================================================
+// 4.5 مسارات طلبات العلوم الصحية (HEALTH ORDERS)
+// ============================================================
+
+// جلب جميع طلبات العلوم الصحية  (للمدير)
+app.get('/api/health-orders', protect, authorize('admin'), async (req, res) => {
+    try {
+        const orders = await Order.find({
+            $or: [
+                { orderType: 'health' },
+                { department: { $exists: true, $ne: '' } }
+            ]
+        }).sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: orders.length, data: orders });
+    } catch (error) {
+        console.error('❌ خطأ في جلب طلبات العلوم الصحية :', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب طلب صحة  محدد
+app.get('/api/health-orders/:id', protect, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود' });
+        }
+        res.status(200).json({ success: true, data: order });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// إنشاء طلب صحة جديد
+app.post('/api/health-orders', async (req, res) => {
+    try {
+        const { name, email, phone, department, service, requestType, title, description, organization, deliveryDate, notes, termsAgreed, files } = req.body;
+
+        // التحقق من الحقول المطلوبة
+        const required = { name, email, phone, department, service, requestType, title, description, deliveryDate };
+        const missing = Object.entries(required).filter(([k, v]) => !v || v.trim() === '').map(([k]) => k);
+        if (missing.length > 0) {
+            return res.status(400).json({ success: false, message: `الحقول المطلوبة غير مكتملة: ${missing.join('، ')}` });
+        }
+
+        // حفظ الملفات
+        const savedFiles = [];
+        if (files && Array.isArray(files) && files.length > 0) {
+            for (const file of files) {
+                try {
+                    if (!file.fileData || !file.fileData.includes(';base64,')) continue;
+                    const base64Data = file.fileData.split(';base64,').pop();
+                    const buffer = Buffer.from(base64Data, 'base64');
+                    if (buffer.length === 0) continue;
+                    
+                    const ext = path.extname(file.filename || 'ملف');
+                    const fileName = `health-${Date.now()}-${Math.round(Math.random() * 10000)}${ext}`;
+                    const filePath = path.join(healthOrdersDir, fileName);
+                    fs.writeFileSync(filePath, buffer);
+                    
+                    savedFiles.push({
+                        filename: file.filename || 'ملف',
+                        filePath: filePath,
+                        fileId: fileName,
+                        fileSize: file.fileSize || buffer.length,
+                        mimeType: file.fileType || file.type || 'application/octet-stream',
+                        uploadDate: new Date()
+                    });
+                } catch (error) {
+                    console.error(`❌ خطأ في حفظ الملف:`, error);
+                }
+            }
+        }
+
+        const order = new Order({
+            serviceType: service || 'خدمة كلية العلوم الصحية ',
+            title: title.trim(),
+            description: description.trim(),
+            deadline: new Date(deliveryDate),
+            budget: 0,
+            status: 'pending',
+            orderType: 'health',
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            department: department.trim(),
+            service: service.trim(),
+            requestType: requestType.trim(),
+            organization: organization ? organization.trim() : '',
+            deliveryDate: deliveryDate,
+            notes: notes ? notes.trim() : '',
+            termsAgreed: termsAgreed === true || termsAgreed === 'true',
+            files: savedFiles,
+            timeline: [{ event: 'تم إنشاء الطلب', time: new Date() }]
+        });
+
+        await order.save();
+        res.status(201).json({ success: true, message: 'تم إرسال الطلب بنجاح ✅', data: order });
+
+    } catch (error) {
+        console.error('❌ خطأ في إنشاء الطلب:', error);
+        if (error.name === 'ValidationError') {
+            const errors = Object.values(error.errors).map(e => e.message);
+            return res.status(400).json({ success: false, message: `خطأ في البيانات: ${errors.join('، ')}` });
+        }
+        res.status(500).json({ success: false, message: error.message || 'حدث خطأ في إنشاء الطلب' });
+    }
+});
+
+// تحديث حالة طلب صحة
+app.put('/api/health-orders/:id/status', protect, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'in-progress', 'completed', 'revision', 'cancelled'];
+        if (!status || !validStatuses.includes(status)) {
+            return res.status(400).json({ success: false, message: 'حالة غير صالحة' });
+        }
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        order.status = status;
+        order.timeline = order.timeline || [];
+        order.timeline.push({ event: `تم تغيير الحالة إلى ${status}`, time: new Date() });
+        await order.save();
+        res.status(200).json({ success: true, message: `تم تحديث حالة الطلب إلى ${status} ✅`, data: order });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث حالة الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// حذف طلب صحة
+app.delete('/api/health-orders/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        if (order.files && order.files.length > 0) {
+            for (const file of order.files) {
+                const filePath = path.join(healthOrdersDir, file.fileId || file.filename);
+                if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+            }
+        }
+        await order.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف الطلب بنجاح 🗑️' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📁 مسارات الملفات لطلبات العلوم الصحية 
+// ============================================================
+
+// عرض ملفات طلبات العلوم الصحية  (يدعم التخزين المحلي و GridFS)
+app.get('/api/health-orders/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        // البحث في التخزين المحلي أولاً
+        const localPath = path.join(healthOrdersDir, fileId);
+        if (fs.existsSync(localPath)) {
+            const ext = path.extname(fileId).toLowerCase();
+            const mimeTypes = {
+                '.pdf': 'application/pdf', '.doc': 'application/msword', '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                '.xls': 'application/vnd.ms-excel', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                '.ppt': 'application/vnd.ms-powerpoint', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif',
+                '.zip': 'application/zip', '.rar': 'application/x-rar-compressed', '.txt': 'text/plain'
+            };
+            const contentType = mimeTypes[ext] || 'application/octet-stream';
+            res.setHeader('Content-Type', contentType);
+            res.setHeader('Content-Disposition', `inline; filename="${fileId}"`);
+            return res.sendFile(localPath);
+        }
+
+        // البحث في GridFS
+        if (ObjectId.isValid(fileId)) {
+            const fileInfo = await getFileInfo(fileId);
+            if (fileInfo) {
+                const bucket = getGridFSBucket();
+                if (bucket) {
+                    res.setHeader('Content-Type', fileInfo.contentType || 'application/octet-stream');
+                    res.setHeader('Content-Length', fileInfo.length);
+                    const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+                    downloadStream.pipe(res);
+                    return;
+                }
+            }
+        }
+
+        res.status(404).json({ success: false, message: 'الملف غير موجود', fileId });
+    } catch (error) {
+        console.error('❌ خطأ في عرض الملف:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// عرض الملفات من التخزين المحلي
+app.get('/uploads/health-orders/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(healthOrdersDir, filename);
+    
+    if (fs.existsSync(filePath)) {
+        const ext = path.extname(filename).toLowerCase();
+        const mimeTypes = {
+            '.pdf': 'application/pdf', '.doc': 'application/msword', '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.xls': 'application/vnd.ms-excel', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            '.ppt': 'application/vnd.ms-powerpoint', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif',
+            '.zip': 'application/zip', '.rar': 'application/x-rar-compressed', '.txt': 'text/plain'
+        };
+        const contentType = mimeTypes[ext] || 'application/octet-stream';
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+        res.sendFile(filePath);
+    } else {
+        res.status(404).json({ success: false, message: 'الملف غير موجود', filename });
+    }
+});
+
+// قائمة الملفات (للمدير)
+app.get('/api/health-orders/files/list', protect, authorize('admin'), async (req, res) => {
+    try {
+        const files = fs.readdirSync(healthOrdersDir);
+        const fileList = files.map(filename => {
+            const filePath = path.join(healthOrdersDir, filename);
+            const stats = fs.statSync(filePath);
+            return { filename, size: stats.size, created: stats.birthtime, modified: stats.mtime };
+        });
+        res.status(200).json({ success: true, count: fileList.length, data: fileList, directory: healthOrdersDir });
+    } catch (error) {
+        console.error('❌ خطأ في قراءة المجلد:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 
 // ============================================================
 // 📤 رفع ملفات للطلب
