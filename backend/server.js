@@ -1350,69 +1350,122 @@ app.get('/api/academic-orders/export/csv', protect, authorize('admin'), async (r
         res.status(500).json({ success: false, message: error.message });
     }
 });
-// ============================================================
-// 4.5 مسارات طلبات العلوم الصحية (HEALTH ORDERS)
+ // ============================================================
+// 📁 4.7 Health Sciences Orders Routes (HEALTH ORDERS)
 // ============================================================
 
-// جلب جميع طلبات العلوم الصحية  (للمدير)
-app.get('/api/health-orders', protect, authorize('admin'), async (req, res) => {
+const express = require('express');
+const router = express.Router();
+const path = require('path');
+const fs = require('fs');
+const Order = require('../models/Order');
+const { protect, authorize } = require('../middleware/auth');
+
+// ============================================================
+// 📂 Setup Health Orders Directory
+// ============================================================
+const healthOrdersDir = process.env.HEALTH_ORDERS_DIR || path.join(__dirname, '..', 'uploads', 'health-orders');
+
+// Ensure directory exists
+if (!fs.existsSync(healthOrdersDir)) {
+    fs.mkdirSync(healthOrdersDir, { recursive: true });
+    console.log(`📁 Health orders directory created: ${healthOrdersDir}`);
+}
+
+// ============================================================
+// 📋 Get All Health Orders (Admin only)
+// ============================================================
+router.get('/api/health-orders', protect, authorize('admin'), async (req, res) => {
     try {
         const orders = await Order.find({
             $or: [
                 { orderType: 'health' },
-                { department: { $exists: true, $ne: '' } }
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } },
+                { department: { $regex: /Health Sciences|Nursing|Medical|Clinical/i, $options: 'i' } }
             ]
         }).sort({ createdAt: -1 });
-        res.status(200).json({ success: true, count: orders.length, data: orders });
+        
+        res.status(200).json({ 
+            success: true, 
+            count: orders.length, 
+            data: orders 
+        });
     } catch (error) {
-        console.error('❌ خطأ في جلب طلبات العلوم الصحية :', error);
+        console.error('❌ Error fetching health orders:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// جلب طلب صحة  محدد
-app.get('/api/health-orders/:id', protect, async (req, res) => {
+// ============================================================
+// 📋 Get Single Health Order
+// ============================================================
+router.get('/api/health-orders/:id', protect, async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
         if (!order) {
-            return res.status(404).json({ success: false, message: 'الطلب غير موجود' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Order not found' 
+            });
         }
         res.status(200).json({ success: true, data: order });
     } catch (error) {
-        console.error('❌ خطأ في جلب الطلب:', error);
+        console.error('❌ Error fetching health order:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// إنشاء طلب صحة جديد
-app.post('/api/health-orders', async (req, res) => {
+// ============================================================
+// 📝 Create New Health Order
+// ============================================================
+router.post('/api/health-orders', async (req, res) => {
     try {
-        const { name, email, phone, department, service, requestType, title, description, organization, deliveryDate, notes, termsAgreed, files } = req.body;
+        const { 
+            name, email, phone, department, service, requestType, 
+            title, description, organization, deliveryDate, notes, 
+            termsAgreed, files, serviceCategory 
+        } = req.body;
 
-        // التحقق من الحقول المطلوبة
+        // Validate required fields
         const required = { name, email, phone, department, service, requestType, title, description, deliveryDate };
-        const missing = Object.entries(required).filter(([k, v]) => !v || v.trim() === '').map(([k]) => k);
+        const missing = Object.entries(required)
+            .filter(([k, v]) => !v || v.trim() === '')
+            .map(([k]) => k);
+            
         if (missing.length > 0) {
-            return res.status(400).json({ success: false, message: `الحقول المطلوبة غير مكتملة: ${missing.join('، ')}` });
+            return res.status(400).json({ 
+                success: false, 
+                message: `Missing required fields: ${missing.join(', ')}` 
+            });
         }
 
-        // حفظ الملفات
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Invalid email format' 
+            });
+        }
+
+        // Save files
         const savedFiles = [];
         if (files && Array.isArray(files) && files.length > 0) {
             for (const file of files) {
                 try {
                     if (!file.fileData || !file.fileData.includes(';base64,')) continue;
+                    
                     const base64Data = file.fileData.split(';base64,').pop();
                     const buffer = Buffer.from(base64Data, 'base64');
                     if (buffer.length === 0) continue;
                     
-                    const ext = path.extname(file.filename || 'ملف');
+                    const ext = path.extname(file.filename || 'file');
                     const fileName = `health-${Date.now()}-${Math.round(Math.random() * 10000)}${ext}`;
                     const filePath = path.join(healthOrdersDir, fileName);
                     fs.writeFileSync(filePath, buffer);
                     
                     savedFiles.push({
-                        filename: file.filename || 'ملف',
+                        filename: file.filename || 'file',
                         filePath: filePath,
                         fileId: fileName,
                         fileSize: file.fileSize || buffer.length,
@@ -1420,19 +1473,32 @@ app.post('/api/health-orders', async (req, res) => {
                         uploadDate: new Date()
                     });
                 } catch (error) {
-                    console.error(`❌ خطأ في حفظ الملف:`, error);
+                    console.error(`❌ Error saving file:`, error);
                 }
             }
         }
 
+        // Determine category if not provided
+        const serviceCategories = {
+            clinical: 'Clinical',
+            nursing: 'Nursing',
+            documentation: 'Documentation',
+            reports: 'Reports',
+            presentations: 'Presentations'
+        };
+
+        const category = serviceCategory || serviceCategories[service] || 'Health Sciences';
+
+        // Create order
         const order = new Order({
-            serviceType: service || 'خدمة كلية العلوم الصحية ',
+            serviceType: service || 'Health Service',
             title: title.trim(),
             description: description.trim(),
             deadline: new Date(deliveryDate),
             budget: 0,
             status: 'pending',
             orderType: 'health',
+            serviceCategory: category,
             name: name.trim(),
             email: email.trim(),
             phone: phone.trim(),
@@ -1444,86 +1510,146 @@ app.post('/api/health-orders', async (req, res) => {
             notes: notes ? notes.trim() : '',
             termsAgreed: termsAgreed === true || termsAgreed === 'true',
             files: savedFiles,
-            timeline: [{ event: 'تم إنشاء الطلب', time: new Date() }]
+            timeline: [{ 
+                event: 'Health order created', 
+                time: new Date() 
+            }]
         });
 
         await order.save();
-        res.status(201).json({ success: true, message: 'تم إرسال الطلب بنجاح ✅', data: order });
+        
+        res.status(201).json({ 
+            success: true, 
+            message: 'Health order submitted successfully ✅', 
+            data: order 
+        });
 
     } catch (error) {
-        console.error('❌ خطأ في إنشاء الطلب:', error);
+        console.error('❌ Error creating health order:', error);
         if (error.name === 'ValidationError') {
             const errors = Object.values(error.errors).map(e => e.message);
-            return res.status(400).json({ success: false, message: `خطأ في البيانات: ${errors.join('، ')}` });
+            return res.status(400).json({ 
+                success: false, 
+                message: `Validation error: ${errors.join(', ')}` 
+            });
         }
-        res.status(500).json({ success: false, message: error.message || 'حدث خطأ في إنشاء الطلب' });
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'Error creating health order' 
+        });
     }
 });
 
-// تحديث حالة طلب صحة
-app.put('/api/health-orders/:id/status', protect, async (req, res) => {
+// ============================================================
+// 🔄 Update Health Order Status
+// ============================================================
+router.put('/api/health-orders/:id/status', protect, async (req, res) => {
     try {
         const { status } = req.body;
         const validStatuses = ['pending', 'in-progress', 'completed', 'revision', 'cancelled'];
+        
         if (!status || !validStatuses.includes(status)) {
-            return res.status(400).json({ success: false, message: 'حالة غير صالحة' });
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Invalid status. Valid statuses: ' + validStatuses.join(', ') 
+            });
         }
+        
         const order = await Order.findById(req.params.id);
         if (!order) {
-            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Order not found ❌' 
+            });
         }
+        
         order.status = status;
         order.timeline = order.timeline || [];
-        order.timeline.push({ event: `تم تغيير الحالة إلى ${status}`, time: new Date() });
+        order.timeline.push({ 
+            event: `Status changed to ${status}`, 
+            time: new Date() 
+        });
+        
         await order.save();
-        res.status(200).json({ success: true, message: `تم تحديث حالة الطلب إلى ${status} ✅`, data: order });
+        res.status(200).json({ 
+            success: true, 
+            message: `Order status updated to ${status} ✅`, 
+            data: order 
+        });
     } catch (error) {
-        console.error('❌ خطأ في تحديث حالة الطلب:', error);
+        console.error('❌ Error updating health order status:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// حذف طلب صحة
-app.delete('/api/health-orders/:id', protect, authorize('admin'), async (req, res) => {
+// ============================================================
+// 🗑️ Delete Health Order (Admin only)
+// ============================================================
+router.delete('/api/health-orders/:id', protect, authorize('admin'), async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
         if (!order) {
-            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Order not found ❌' 
+            });
         }
+        
+        // Delete associated files
         if (order.files && order.files.length > 0) {
             for (const file of order.files) {
                 const filePath = path.join(healthOrdersDir, file.fileId || file.filename);
-                if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                    console.log(`🗑️ Deleted file: ${filePath}`);
+                }
             }
         }
+        
         await order.deleteOne();
-        res.status(200).json({ success: true, message: 'تم حذف الطلب بنجاح 🗑️' });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Health order deleted successfully 🗑️' 
+        });
     } catch (error) {
-        console.error('❌ خطأ في حذف الطلب:', error);
+        console.error('❌ Error deleting health order:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
 // ============================================================
-// 📁 مسارات الملفات لطلبات العلوم الصحية 
+// 📁 File Routes for Health Orders
 // ============================================================
 
-// عرض ملفات طلبات العلوم الصحية  (يدعم التخزين المحلي و GridFS)
-app.get('/api/health-orders/files/:fileId', async (req, res) => {
+// View Health Order Files
+router.get('/api/health-orders/files/:fileId', async (req, res) => {
     try {
         const { fileId } = req.params;
         const ObjectId = require('mongodb').ObjectId;
 
-        // البحث في التخزين المحلي أولاً
+        // Check local storage first
         const localPath = path.join(healthOrdersDir, fileId);
         if (fs.existsSync(localPath)) {
             const ext = path.extname(fileId).toLowerCase();
             const mimeTypes = {
-                '.pdf': 'application/pdf', '.doc': 'application/msword', '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                '.xls': 'application/vnd.ms-excel', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                '.ppt': 'application/vnd.ms-powerpoint', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif',
-                '.zip': 'application/zip', '.rar': 'application/x-rar-compressed', '.txt': 'text/plain'
+                '.pdf': 'application/pdf',
+                '.doc': 'application/msword',
+                '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                '.xls': 'application/vnd.ms-excel',
+                '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                '.ppt': 'application/vnd.ms-powerpoint',
+                '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                '.jpg': 'image/jpeg',
+                '.jpeg': 'image/jpeg',
+                '.png': 'image/png',
+                '.gif': 'image/gif',
+                '.zip': 'application/zip',
+                '.rar': 'application/x-rar-compressed',
+                '.txt': 'text/plain',
+                '.csv': 'text/csv',
+                '.xml': 'application/xml',
+                '.json': 'application/json',
+                '.md': 'text/markdown'
             };
             const contentType = mimeTypes[ext] || 'application/octet-stream';
             res.setHeader('Content-Type', contentType);
@@ -1531,7 +1657,7 @@ app.get('/api/health-orders/files/:fileId', async (req, res) => {
             return res.sendFile(localPath);
         }
 
-        // البحث في GridFS
+        // Check GridFS
         if (ObjectId.isValid(fileId)) {
             const fileInfo = await getFileInfo(fileId);
             if (fileInfo) {
@@ -1546,52 +1672,386 @@ app.get('/api/health-orders/files/:fileId', async (req, res) => {
             }
         }
 
-        res.status(404).json({ success: false, message: 'الملف غير موجود', fileId });
+        res.status(404).json({ 
+            success: false, 
+            message: 'File not found', 
+            fileId 
+        });
     } catch (error) {
-        console.error('❌ خطأ في عرض الملف:', error);
+        console.error('❌ Error viewing health file:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// عرض الملفات من التخزين المحلي
-app.get('/uploads/health-orders/:filename', (req, res) => {
+// Serve files from local storage
+router.get('/uploads/health-orders/:filename', (req, res) => {
     const filename = req.params.filename;
     const filePath = path.join(healthOrdersDir, filename);
     
     if (fs.existsSync(filePath)) {
         const ext = path.extname(filename).toLowerCase();
         const mimeTypes = {
-            '.pdf': 'application/pdf', '.doc': 'application/msword', '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            '.xls': 'application/vnd.ms-excel', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            '.ppt': 'application/vnd.ms-powerpoint', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif',
-            '.zip': 'application/zip', '.rar': 'application/x-rar-compressed', '.txt': 'text/plain'
+            '.pdf': 'application/pdf',
+            '.doc': 'application/msword',
+            '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.xls': 'application/vnd.ms-excel',
+            '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            '.ppt': 'application/vnd.ms-powerpoint',
+            '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.zip': 'application/zip',
+            '.rar': 'application/x-rar-compressed',
+            '.txt': 'text/plain',
+            '.csv': 'text/csv',
+            '.xml': 'application/xml',
+            '.json': 'application/json',
+            '.md': 'text/markdown'
         };
         const contentType = mimeTypes[ext] || 'application/octet-stream';
         res.setHeader('Content-Type', contentType);
         res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
         res.sendFile(filePath);
     } else {
-        res.status(404).json({ success: false, message: 'الملف غير موجود', filename });
+        res.status(404).json({ 
+            success: false, 
+            message: 'File not found', 
+            filename 
+        });
     }
 });
 
-// قائمة الملفات (للمدير)
-app.get('/api/health-orders/files/list', protect, authorize('admin'), async (req, res) => {
+// List all health order files (Admin only)
+router.get('/api/health-orders/files/list', protect, authorize('admin'), async (req, res) => {
     try {
         const files = fs.readdirSync(healthOrdersDir);
         const fileList = files.map(filename => {
             const filePath = path.join(healthOrdersDir, filename);
             const stats = fs.statSync(filePath);
-            return { filename, size: stats.size, created: stats.birthtime, modified: stats.mtime };
+            return {
+                filename,
+                size: stats.size,
+                sizeKB: (stats.size / 1024).toFixed(2),
+                sizeMB: (stats.size / (1024 * 1024)).toFixed(2),
+                created: stats.birthtime,
+                modified: stats.mtime
+            };
         });
-        res.status(200).json({ success: true, count: fileList.length, data: fileList, directory: healthOrdersDir });
+        res.status(200).json({
+            success: true,
+            count: fileList.length,
+            data: fileList,
+            directory: healthOrdersDir
+        });
     } catch (error) {
-        console.error('❌ خطأ في قراءة المجلد:', error);
+        console.error('❌ Error reading health files directory:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
+// ============================================================
+// 📊 Health Orders Statistics (Admin only)
+// ============================================================
+router.get('/api/health-orders/stats', protect, authorize('admin'), async (req, res) => {
+    try {
+        const total = await Order.countDocuments({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ]
+        });
+        const pending = await Order.countDocuments({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ],
+            status: 'pending' 
+        });
+        const inProgress = await Order.countDocuments({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ],
+            status: 'in-progress' 
+        });
+        const completed = await Order.countDocuments({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ],
+            status: 'completed' 
+        });
+        const revision = await Order.countDocuments({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ],
+            status: 'revision' 
+        });
+        const cancelled = await Order.countDocuments({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ],
+            status: 'cancelled' 
+        });
+
+        // Category statistics
+        const categoryStats = await Order.aggregate([
+            { 
+                $match: { 
+                    $or: [
+                        { orderType: 'health' },
+                        { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+                    ]
+                } 
+            },
+            { $group: { _id: '$serviceCategory', count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]);
+
+        // Monthly statistics
+        const monthlyStats = await Order.aggregate([
+            { 
+                $match: { 
+                    $or: [
+                        { orderType: 'health' },
+                        { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+                    ]
+                } 
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: '$createdAt' },
+                        month: { $month: '$createdAt' }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { '_id.year': -1, '_id.month': -1 } },
+            { $limit: 12 }
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                total,
+                pending,
+                inProgress,
+                completed,
+                revision,
+                cancelled,
+                categoryStats,
+                monthlyStats
+            }
+        });
+    } catch (error) {
+        console.error('❌ Error fetching health statistics:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 🔍 Search Health Orders (Admin only)
+// ============================================================
+router.get('/api/health-orders/search', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { q, status, category, fromDate, toDate } = req.query;
+        const query = { 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ]
+        };
+
+        // Text search
+        if (q) {
+            query.$and = query.$and || [];
+            query.$and.push({
+                $or: [
+                    { name: { $regex: q, $options: 'i' } },
+                    { email: { $regex: q, $options: 'i' } },
+                    { title: { $regex: q, $options: 'i' } },
+                    { description: { $regex: q, $options: 'i' } },
+                    { service: { $regex: q, $options: 'i' } },
+                    { requestType: { $regex: q, $options: 'i' } }
+                ]
+            });
+        }
+
+        // Filter by status
+        if (status) {
+            query.status = status;
+        }
+
+        // Filter by category
+        if (category) {
+            query.serviceCategory = { $regex: category, $options: 'i' };
+        }
+
+        // Filter by date range
+        if (fromDate || toDate) {
+            query.createdAt = {};
+            if (fromDate) query.createdAt.$gte = new Date(fromDate);
+            if (toDate) query.createdAt.$lte = new Date(toDate);
+        }
+
+        const orders = await Order.find(query).sort({ createdAt: -1 });
+        res.status(200).json({
+            success: true,
+            count: orders.length,
+            data: orders
+        });
+    } catch (error) {
+        console.error('❌ Error searching health orders:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📥 Export Health Orders to CSV (Admin only)
+// ============================================================
+router.get('/api/health-orders/export/csv', protect, authorize('admin'), async (req, res) => {
+    try {
+        const orders = await Order.find({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ]
+        }).sort({ createdAt: -1 });
+        
+        // Convert to CSV
+        let csv = 'ID,Name,Email,Phone,Service,Request Type,Category,Status,Delivery Date,Created At\n';
+        orders.forEach(order => {
+            csv += `${order._id},${order.name},${order.email},${order.phone},${order.service},${order.requestType},${order.serviceCategory || 'Health'},${order.status},${order.deliveryDate},${order.createdAt}\n`;
+        });
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=health-orders-${Date.now()}.csv`);
+        res.send(csv);
+    } catch (error) {
+        console.error('❌ Error exporting health orders to CSV:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📥 Export Health Orders to Excel (Admin only)
+// ============================================================
+router.get('/api/health-orders/export/excel', protect, authorize('admin'), async (req, res) => {
+    try {
+        const orders = await Order.find({ 
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ]
+        }).sort({ createdAt: -1 });
+        
+        // For Excel export, you would use a library like 'exceljs' or 'xlsx'
+        // This is a placeholder for the Excel export functionality
+        
+        const XLSX = require('xlsx');
+        const data = orders.map(order => ({
+            ID: order._id.toString(),
+            Name: order.name,
+            Email: order.email,
+            Phone: order.phone,
+            Service: order.service,
+            'Request Type': order.requestType,
+            Category: order.serviceCategory || 'Health',
+            Status: order.status,
+            'Delivery Date': order.deliveryDate,
+            'Created At': order.createdAt
+        }));
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Health Orders');
+        const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename=health-orders-${Date.now()}.xlsx`);
+        res.send(excelBuffer);
+    } catch (error) {
+        console.error('❌ Error exporting health orders to Excel:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📊 Health Orders Dashboard Summary (Admin only)
+// ============================================================
+router.get('/api/health-orders/dashboard', protect, authorize('admin'), async (req, res) => {
+    try {
+        // Get today's date range
+        const today = new Date();
+        const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+        const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+        
+        // Get this week's start
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        // Get this month's start
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+        const baseQuery = {
+            $or: [
+                { orderType: 'health' },
+                { serviceCategory: { $regex: /health|clinical|nursing|medical/i, $options: 'i' } }
+            ]
+        };
+
+        // Counts
+        const total = await Order.countDocuments(baseQuery);
+        const todayCount = await Order.countDocuments({
+            ...baseQuery,
+            createdAt: { $gte: startOfDay, $lte: endOfDay }
+        });
+        const weekCount = await Order.countDocuments({
+            ...baseQuery,
+            createdAt: { $gte: startOfWeek }
+        });
+        const monthCount = await Order.countDocuments({
+            ...baseQuery,
+            createdAt: { $gte: startOfMonth }
+        });
+
+        // Recent orders
+        const recentOrders = await Order.find(baseQuery)
+            .sort({ createdAt: -1 })
+            .limit(10);
+
+        // Status distribution
+        const statusDistribution = await Order.aggregate([
+            { $match: baseQuery },
+            { $group: { _id: '$status', count: { $sum: 1 } } }
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                totals: {
+                    total,
+                    today: todayCount,
+                    week: weekCount,
+                    month: monthCount
+                },
+                statusDistribution,
+                recentOrders
+            }
+        });
+    } catch (error) {
+        console.error('❌ Error fetching health dashboard:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+module.exports = router;
 
 // ============================================================
 // 📤 رفع ملفات للطلب
