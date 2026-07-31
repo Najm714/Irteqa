@@ -2869,17 +2869,31 @@ app.get('/api/auth/me', protect, async (req, res) => {
 // ============================================================
 // 4.9 مسارات الكليات (COLLEGES)
 // ============================================================
-
+// ============================================================
 // جلب جميع الكليات
+// ============================================================
 app.get('/api/colleges', async (req, res) => {
     try {
         const colleges = await College.find()
             .populate('universityId', 'name icon')
             .sort({ name: 1 });
+        
+        // ✅ تحويل البيانات إلى صيغة نظيفة
+        const cleanData = colleges.map(col => ({
+            _id: col._id,
+            name: col.name,
+            universityId: col.universityId ? col.universityId._id : null,
+            universityName: col.universityId ? col.universityId.name : null,
+            icon: col.icon,
+            description: col.description,
+            createdAt: col.createdAt,
+            updatedAt: col.updatedAt
+        }));
+        
         res.status(200).json({ 
             success: true, 
             count: colleges.length, 
-            data: colleges 
+            data: cleanData 
         });
     } catch (error) {
         console.error('❌ خطأ في جلب الكليات:', error);
@@ -2923,13 +2937,16 @@ app.get('/api/colleges/university/:universityId', async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
-
+// ============================================================
 // إضافة كلية جديدة (للمدير فقط)
+// ============================================================
 app.post('/api/colleges', protect, authorize('admin'), async (req, res) => {
     try {
-        const { name, universityId, icon, count, description } = req.body;
+        const { name, universityId, icon, description } = req.body;
 
-        // التحقق من الحقول المطلوبة
+        console.log('📥 استلام طلب إضافة كلية:', { name, universityId, icon, description });
+
+        // ✅ التحقق من الحقول المطلوبة
         if (!name || !universityId) {
             return res.status(400).json({ 
                 success: false, 
@@ -2937,8 +2954,14 @@ app.post('/api/colleges', protect, authorize('admin'), async (req, res) => {
             });
         }
 
-        // التحقق من وجود الجامعة
-        const university = await University.findById(universityId);
+        // ✅ التأكد من أن universityId هو معرف صحيح
+        let uniId = universityId;
+        if (typeof universityId === 'object' && universityId._id) {
+            uniId = universityId._id;
+        }
+
+        // ✅ التحقق من وجود الجامعة
+        const university = await University.findById(uniId);
         if (!university) {
             return res.status(404).json({ 
                 success: false, 
@@ -2946,10 +2969,10 @@ app.post('/api/colleges', protect, authorize('admin'), async (req, res) => {
             });
         }
 
-        // التحقق من عدم وجود كلية بنفس الاسم لنفس الجامعة
+        // ✅ التحقق من عدم وجود كلية بنفس الاسم لنفس الجامعة
         const existingCollege = await College.findOne({ 
             name: name.trim(), 
-            universityId: universityId 
+            universityId: uniId 
         });
         
         if (existingCollege) {
@@ -2961,23 +2984,21 @@ app.post('/api/colleges', protect, authorize('admin'), async (req, res) => {
 
         const college = new College({
             name: name.trim(),
-            universityId,
+            universityId: uniId,
             icon: icon || 'fa-school',
-            count: count || 0,
             description: description || ''
         });
 
         await college.save();
 
-        // تحديث عدد الكليات في الجامعة
-        await University.findByIdAndUpdate(universityId, {
-            $inc: { count: 1 }
-        });
+        // ✅ إعادة الكلية مع populate
+        const populatedCollege = await College.findById(college._id)
+            .populate('universityId', 'name icon');
 
         res.status(201).json({ 
             success: true, 
             message: 'تم إضافة الكلية بنجاح ✅', 
-            data: college 
+            data: populatedCollege 
         });
 
     } catch (error) {

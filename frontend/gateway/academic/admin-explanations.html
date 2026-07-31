@@ -2016,7 +2016,7 @@ async function fetchAllData() {
             container.innerHTML = html;
         }
 // ============================================================
-// 17. عرض الكليات - النسخة المحسنة
+// 17. عرض الكليات - النسخة المصححة
 // ============================================================
 function renderColleges() {
     const container = document.getElementById('collegesList');
@@ -2032,10 +2032,6 @@ function renderColleges() {
         return;
     }
 
-    // ✅ تحقق من وجود الجامعات
-    console.log('📊 عدد الجامعات المتاحة:', universities.length);
-    console.log('📊 عدد الكليات:', colleges.length);
-
     let html = `
         <div class="content-list-header">
             <span>الكلية</span>
@@ -2046,15 +2042,27 @@ function renderColleges() {
     `;
 
     colleges.forEach((col) => {
-        // ✅ البحث عن الجامعة المرتبطة بالكلية
-        const uni = universities.find(u => String(u._id) === String(col.universityId));
+        // ✅ التحقق من نوع universityId والتعامل معه
+        let uniId = col.universityId;
         
-        // ✅ عرض اسم الجامعة أو "غير محددة" مع تحذير
-        const uniName = uni ? uni.name : '⚠️ غير محددة';
+        // ✅ إذا كان universityId كائن، استخرج الـ _id
+        if (typeof uniId === 'object' && uniId !== null) {
+            if (uniId._id) {
+                uniId = uniId._id;
+            } else if (uniId.toString) {
+                uniId = uniId.toString();
+            }
+        }
         
-        // ✅ إذا كانت الجامعة غير محددة، سجل معلومات للتصحيح
-        if (!uni) {
-            console.warn(`⚠️ الكلية "${col.name}" (ID: ${col._id}) ليس لها جامعة مرتبطة. universityId: ${col.universityId}`);
+        // ✅ البحث عن الجامعة
+        const uni = universities.find(u => String(u._id) === String(uniId));
+        
+        // ✅ عرض اسم الجامعة
+        let uniName = '⚠️ غير محددة';
+        if (uni) {
+            uniName = uni.name;
+        } else {
+            console.warn(`⚠️ الكلية "${col.name}" (ID: ${col._id}) ليس لها جامعة مرتبطة. universityId:`, col.universityId);
         }
         
         const specCount = specialties.filter(s => s.collegeId === col._id).length;
@@ -2294,15 +2302,17 @@ function renderColleges() {
             }
         });
 // ============================================================
-// 22. إضافة كلية - النسخة المعدلة
+// 22. إضافة كلية - النسخة المصححة
 // ============================================================
 document.getElementById('addCollegeForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const name = document.getElementById('collegeName').value.trim();
-    const universityId = document.getElementById('collegeUniversity').value;
+    const universityId = document.getElementById('collegeUniversity').value;  // ✅ هذا هو المعرف الصحيح
     const icon = document.getElementById('collegeIcon').value;
     const description = document.getElementById('collegeDescription').value.trim();
+
+    console.log('📤 بيانات الكلية المرسلة:', { name, universityId, icon, description });
 
     if (!name || !universityId) {
         showAlert('❌ يرجى إدخال اسم الكلية واختيار الجامعة', 'danger');
@@ -2321,24 +2331,25 @@ document.getElementById('addCollegeForm').addEventListener('submit', async funct
                 'Authorization': `Bearer ${currentToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, universityId, icon, description })
+            // ✅ تأكد من إرسال universityId كقيمة نصية (String)
+            body: JSON.stringify({
+                name: name,
+                universityId: String(universityId),  // ✅ تحويل إلى نص
+                icon: icon,
+                description: description
+            })
         });
 
         const data = await response.json();
+        console.log('📥 استجابة الخادم:', data);
 
         if (data.success) {
             showAlert('✅ تم إضافة الكلية "' + name + '" بنجاح!', 'success');
             this.reset();
             document.getElementById('collegeDescription').value = '';
             
-            // ✅ إعادة تحميل جميع البيانات من الخادم
+            // ✅ تحديث البيانات
             await fetchAllData();
-            
-            // ✅ التأكد من تحديث القوائم المنسدلة
-            populateAllSelects();
-            
-            // ✅ التأكد من عرض الكليات بشكل صحيح
-            renderColleges();
             
         } else {
             showAlert('❌ خطأ: ' + data.message, 'danger');
@@ -2351,7 +2362,6 @@ document.getElementById('addCollegeForm').addEventListener('submit', async funct
         btn.disabled = false;
     }
 });
-
         // ============================================================
         // 23. إضافة تخصص
         // ============================================================
