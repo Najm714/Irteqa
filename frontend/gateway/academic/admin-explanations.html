@@ -1688,81 +1688,41 @@ async function fetchVideos() {
     }
 }
 // ============================================================
-// 15. تعبئة جميع القوائم المنسدلة
+// 15. تعبئة جميع القوائم المنسدلة - النسخة النهائية
 // ============================================================
 function populateAllSelects() {
     console.log('🔄 بدء تعبئة القوائم المنسدلة...');
     
-    // ... باقي الكود (تعبئة القوائم) ...
+    // ✅ تعبئة قوائم الكليات
+    populateCollegeSelects();
+    
+    // ✅ تعبئة قوائم التخصصات
+    populateSpecialtySelects();
+    
+    // ✅ تعبئة قوائم المواد
+    populateMaterialSelects();
+    
+    // ✅ تعبئة قوائم الفيديوهات
+    populateVideoSelects();
 
     // ✅ ربط التحديثات التلقائية
     setupSelectListeners();
     
     console.log('✅ تم تعبئة جميع القوائم المنسدلة');
 }
-
 // ============================================================
-// ✅ ربط مستمعي الأحداث للقوائم المنسدلة
+// 15.1 تعبئة قوائم الكليات
 // ============================================================
-function setupSelectListeners() {
-    // نموذج التخصصات
-    const specUniSelect = document.getElementById('specialtyUniversity');
-    if (specUniSelect) {
-        specUniSelect.onchange = function() {
-            updateSpecialtyCollegeOptions();
-        };
+function populateCollegeSelects() {
+    const collegeUniSelect = document.getElementById('collegeUniversity');
+    if (collegeUniSelect) {
+        collegeUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
+        universities.forEach(uni => {
+            collegeUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
+        });
+        console.log('✅ تم تعبئة قائمة الجامعات في نموذج الكليات');
     }
-    
-    // نموذج المواد
-    const matUniSelect = document.getElementById('matUniversity');
-    const matCollegeSelect = document.getElementById('matCollege');
-    if (matUniSelect) {
-        matUniSelect.onchange = function() {
-            updateMaterialCollegeOptions();
-        };
-    }
-    if (matCollegeSelect) {
-        matCollegeSelect.onchange = function() {
-            updateSpecialtiesByCollege();
-        };
-    }
-    
-    // نموذج الفيديوهات
-    const vidUniSelect = document.getElementById('videoUniversity');
-    const vidCollegeSelect = document.getElementById('videoCollege');
-    const vidSpecSelect = document.getElementById('videoSpecialty');
-    
-    if (vidUniSelect) {
-        vidUniSelect.onchange = function() {
-            updateVideoDependentSelects();
-        };
-    }
-    if (vidCollegeSelect) {
-        vidCollegeSelect.onchange = function() {
-            updateVideoDependentSelects();
-        };
-    }
-    if (vidSpecSelect) {
-        vidSpecSelect.onchange = function() {
-            updateVideoMaterials();
-        };
-    }
-    
-    console.log('✅ تم ربط مستمعي الأحداث');
 }
-        // ============================================================
-        // 15.1 تعبئة قوائم الكليات
-        // ============================================================
-        function populateCollegeSelects() {
-            const collegeUniSelect = document.getElementById('collegeUniversity');
-            if (collegeUniSelect) {
-                collegeUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
-                universities.forEach(uni => {
-                    collegeUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
-                });
-                console.log('✅ تم تعبئة قائمة الجامعات في نموذج الكليات');
-            }
-        }
 // ============================================================
 // 15.2 تعبئة قوائم التخصصات (مع الربط التلقائي) - النسخة المصححة
 // ============================================================
@@ -1825,20 +1785,20 @@ function populateSpecialtySelects() {
     }
 }
 // ============================================================
-// 4. تحديث الكليات حسب الجامعة في نموذج المواد
+// ✅ دالة تحديث الكليات حسب الجامعة في نموذج المواد
 // ============================================================
 function updateMaterialCollegeOptions() {
     const uniId = document.getElementById('matUniversity').value;
     const collegeSelect = document.getElementById('matCollege');
     
-    console.log('🔄 تحديث الكليات للجامعة:', uniId);
+    console.log('🔄 تحديث الكليات للجامعة (مواد):', uniId);
     
     collegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
     
     if (!uniId) {
         // عرض جميع الكليات
         colleges.forEach(col => {
-            const uni = universities.find(u => String(u._id) === String(col.universityId));
+            const uni = universities.find(u => u._id === col.universityId);
             collegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : 'جامعة غير محددة'})</option>`;
         });
         // تحديث التخصصات
@@ -1863,93 +1823,89 @@ function updateMaterialCollegeOptions() {
     updateSpecialtiesByCollege();
 }
 // ============================================================
-// ✅ دالة تحديث قائمة التخصصات حسب الكلية المختارة
+// ✅ دالة تحديث قائمة الكليات حسب الجامعة في نموذج التخصصات
 // ============================================================
 function updateSpecialtyCollegeOptions() {
-    const collegeId = document.getElementById('specialtyCollege').value;
-    const specSelect = document.getElementById('specialtySpecialty'); // إذا وجد
+    const uniId = document.getElementById('specialtyUniversity').value;
+    const collegeSelect = document.getElementById('specialtyCollege');
     
-    // إذا كنت في نموذج التخصصات، لا يوجد حقل تخصص
-    // هذه الدالة تستخدم في نموذج المواد والفيديوهات
-    updateSpecialtiesByCollege();
+    console.log('🔄 تحديث الكليات للجامعة (تخصصات):', uniId);
+    
+    collegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
+    
+    if (!uniId) {
+        // عرض جميع الكليات
+        colleges.forEach(col => {
+            const uni = universities.find(u => u._id === col.universityId);
+            collegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : 'جامعة غير محددة'})</option>`;
+        });
+        return;
+    }
+
+    // تصفية الكليات حسب الجامعة
+    const filteredColleges = colleges.filter(c => String(c.universityId) === String(uniId));
+    if (filteredColleges.length === 0) {
+        collegeSelect.innerHTML = '<option value="">لا توجد كليات في هذه الجامعة</option>';
+        return;
+    }
+    
+    filteredColleges.forEach(col => {
+        const uni = universities.find(u => String(u._id) === String(col.universityId));
+        collegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
+    });
 }
-        // ============================================================
-        // 15.3 تعبئة قوائم المواد (مع الربط التلقائي)
-        // ============================================================
-        function populateMaterialSelects() {
-            const matUniSelect = document.getElementById('matUniversity');
-            const matCollegeSelect = document.getElementById('matCollege');
-            const matSpecSelect = document.getElementById('matSpecialty');
+// ============================================================
+// 15.3 تعبئة قوائم المواد (مع الربط التلقائي) - النسخة المصححة
+// ============================================================
+function populateMaterialSelects() {
+    const matUniSelect = document.getElementById('matUniversity');
+    const matCollegeSelect = document.getElementById('matCollege');
+    const matSpecSelect = document.getElementById('matSpecialty');
 
-            // تعبئة الجامعات
-            if (matUniSelect) {
-                matUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
-                universities.forEach(uni => {
-                    matUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
-                });
-                console.log('✅ تم تعبئة قائمة الجامعات في نموذج المواد');
-            }
+    // تعبئة الجامعات
+    if (matUniSelect) {
+        matUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
+        universities.forEach(uni => {
+            matUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
+        });
+        console.log('✅ تم تعبئة قائمة الجامعات في نموذج المواد');
+    }
 
-            // تعبئة الكليات الأولية
-            if (matCollegeSelect) {
-                matCollegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
-                colleges.forEach(col => {
-                    const uni = universities.find(u => u._id === col.universityId);
-                    matCollegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : 'جامعة غير محددة'})</option>`;
-                });
-                console.log('✅ تم تعبئة قائمة الكليات في نموذج المواد');
-            }
+    // تعبئة الكليات الأولية
+    if (matCollegeSelect) {
+        matCollegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
+        colleges.forEach(col => {
+            const uni = universities.find(u => u._id === col.universityId);
+            matCollegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : 'جامعة غير محددة'})</option>`;
+        });
+        console.log('✅ تم تعبئة قائمة الكليات في نموذج المواد');
+    }
 
-            // تعبئة التخصصات الأولية
-            if (matSpecSelect) {
-                matSpecSelect.innerHTML = '<option value="">اختر التخصص</option>';
-                specialties.forEach(spec => {
-                    const col = colleges.find(c => c._id === spec.collegeId);
-                    const uni = universities.find(u => u._id === spec.universityId);
-                    matSpecSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
-                });
-                console.log('✅ تم تعبئة قائمة التخصصات في نموذج المواد');
-            }
+    // تعبئة التخصصات الأولية
+    if (matSpecSelect) {
+        matSpecSelect.innerHTML = '<option value="">اختر التخصص</option>';
+        specialties.forEach(spec => {
+            const col = colleges.find(c => c._id === spec.collegeId);
+            const uni = universities.find(u => u._id === spec.universityId);
+            matSpecSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
+        });
+        console.log('✅ تم تعبئة قائمة التخصصات في نموذج المواد');
+    }
 
-            // ✅ ربط الجامعة ← الكلية في نموذج المواد
-            if (matUniSelect) {
-                matUniSelect.onchange = function() {
-                    const selectedUniId = this.value;
-                    const collegeSelect = document.getElementById('matCollege');
-                    collegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
-                    
-                    if (!selectedUniId) {
-                        colleges.forEach(col => {
-                            const uni = universities.find(u => u._id === col.universityId);
-                            collegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : 'جامعة غير محددة'})</option>`;
-                        });
-                        document.getElementById('matSpecialty').innerHTML = '<option value="">اختر التخصص</option>';
-                        return;
-                    }
+    // ✅ ربط الجامعة ← الكلية في نموذج المواد
+    if (matUniSelect) {
+        matUniSelect.onchange = function() {
+            updateMaterialCollegeOptions();
+        };
+    }
 
-                    const filteredColleges = colleges.filter(c => c.universityId === selectedUniId);
-                    if (filteredColleges.length === 0) {
-                        collegeSelect.innerHTML = '<option value="">لا توجد كليات في هذه الجامعة</option>';
-                        document.getElementById('matSpecialty').innerHTML = '<option value="">اختر التخصص</option>';
-                        return;
-                    }
-                    filteredColleges.forEach(col => {
-                        const uni = universities.find(u => u._id === col.universityId);
-                        collegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
-                    });
-                    
-                    // تحديث التخصصات بعد تغيير الكلية
-                    updateSpecialtiesByCollege();
-                };
-            }
-
-            // ✅ ربط الكلية ← التخصص في نموذج المواد
-            if (matCollegeSelect) {
-                matCollegeSelect.onchange = function() {
-                    updateSpecialtiesByCollege();
-                };
-            }
-        }
+    // ✅ ربط الكلية ← التخصص في نموذج المواد
+    if (matCollegeSelect) {
+        matCollegeSelect.onchange = function() {
+            updateSpecialtiesByCollege();
+        };
+    }
+}
 
 // ============================================================
 // 15.3.1 تحديث التخصصات حسب الكلية - النسخة النهائية المصححة
@@ -2154,70 +2110,6 @@ function updateVideoSpecialtiesAndMaterials() {
     }
     
     // تحديث المواد
-    updateVideoMaterials();
-}
-// ============================================================
-// ✅ دوال تحديث القوائم المنسدلة للفيديوهات
-// ============================================================
-
-// ============================================================
-// 1. تحديث القوائم المعتمدة في نموذج الفيديو
-// ============================================================
-function updateVideoDependentSelects() {
-    const uniId = document.getElementById('videoUniversity').value;
-    const colId = document.getElementById('videoCollege').value;
-    const specId = document.getElementById('videoSpecialty').value;
-
-    console.log('🔄 تحديث القوائم المعتمدة:', { uniId, colId, specId });
-
-    // تحديث الكليات حسب الجامعة
-    const collegeSelect = document.getElementById('videoCollege');
-    const currentCol = collegeSelect.value;
-    collegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
-    
-    let filteredColleges = colleges;
-    if (uniId) {
-        filteredColleges = colleges.filter(c => String(c.universityId) === String(uniId));
-    }
-    
-    if (filteredColleges.length === 0) {
-        collegeSelect.innerHTML = '<option value="">لا توجد كليات</option>';
-    } else {
-        filteredColleges.forEach(col => {
-            const uni = universities.find(u => String(u._id) === String(col.universityId));
-            collegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
-        });
-        if (currentCol && filteredColleges.some(c => String(c._id) === String(currentCol))) {
-            collegeSelect.value = currentCol;
-        }
-    }
-
-    // تحديث التخصصات حسب الكلية أو الجامعة
-    const specSelect = document.getElementById('videoSpecialty');
-    const currentSpec = specSelect.value;
-    specSelect.innerHTML = '<option value="">اختر التخصص</option>';
-    
-    let filteredSpecialties = specialties;
-    if (colId) {
-        filteredSpecialties = specialties.filter(s => String(s.collegeId) === String(colId));
-    } else if (uniId) {
-        filteredSpecialties = specialties.filter(s => String(s.universityId) === String(uniId));
-    }
-    
-    if (filteredSpecialties.length === 0) {
-        specSelect.innerHTML = '<option value="">لا توجد تخصصات</option>';
-    } else {
-        filteredSpecialties.forEach(spec => {
-            const col = colleges.find(c => String(c._id) === String(spec.collegeId));
-            const uni = universities.find(u => String(u._id) === String(spec.universityId));
-            specSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
-        });
-        if (currentSpec && filteredSpecialties.some(s => String(s._id) === String(currentSpec))) {
-            specSelect.value = currentSpec;
-        }
-    }
-
-    // تحديث المواد حسب التخصص أو الكلية أو الجامعة
     updateVideoMaterials();
 }
 
