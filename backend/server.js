@@ -349,23 +349,29 @@ app.get('/api/chat/files/:fileId', async (req, res) => {
         }
     }
 });
-
 // ============================================================
-// 📹 مسارات الفيديوهات
+// 📹 رفع فيديو - النسخة الصحيحة
 // ============================================================
-
 app.post('/api/videos/upload', protect, authorize('admin'), gridfsUpload.single('video'), async (req, res) => {
     try {
+        console.log('📥 استلام طلب رفع فيديو');
+        console.log('📦 req.body:', req.body);
+        console.log('📁 req.file:', req.file ? { name: req.file.originalname, size: req.file.size } : 'لا يوجد ملف');
+
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'يرجى اختيار فيديو' });
         }
 
-        const { title, subjectId, subjectName, specialtyName, universityName, description } = req.body;
+        const { 
+            title, subjectId, subjectName, specialtyName, universityName, collegeName,
+            description, color, universityId, collegeId, specialtyId 
+        } = req.body;
 
         if (!title || !subjectId || !subjectName) {
             return res.status(400).json({ success: false, message: 'العنوان، معرف المادة، واسم المادة مطلوبون' });
         }
 
+        // ✅ رفع الملف إلى GridFS
         const fileResult = await uploadFileToGridFS(req.file, {
             title: title,
             subjectId: subjectId,
@@ -378,13 +384,16 @@ app.post('/api/videos/upload', protect, authorize('admin'), gridfsUpload.single(
             return res.status(500).json({ success: false, message: 'فشل رفع الفيديو إلى GridFS' });
         }
 
+        // ✅ حفظ بيانات الفيديو في قاعدة البيانات مع جميع المعرفات
         const video = new Video({
             title: title,
             subjectId: String(subjectId),
-            subjectName: subjectName,
+            subjectName: subjectName || '',
             specialtyName: specialtyName || '',
             universityName: universityName || '',
+            collegeName: collegeName || '',
             description: description || '',
+            color: color || '#7C3AED',
             fileName: req.file.originalname,
             filePath: `/api/files/${fileResult.fileId}`,
             fileSize: (req.file.size / (1024 * 1024)).toFixed(2) + ' MB',
@@ -393,18 +402,27 @@ app.post('/api/videos/upload', protect, authorize('admin'), gridfsUpload.single(
             duration: '00:00',
             uploadDate: new Date(),
             views: 0,
-            storageProvider: 'gridfs'
+            storageProvider: 'gridfs',
+            // ✅ إضافة معرفات الربط
+            universityId: universityId || null,
+            collegeId: collegeId || null,
+            specialtyId: specialtyId || null
         });
 
         await video.save();
-        res.status(201).json({ success: true, message: '✅ تم رفع الفيديو بنجاح', data: video });
+        console.log('✅ تم حفظ الفيديو في قاعدة البيانات:', video._id);
+        
+        res.status(201).json({ 
+            success: true, 
+            message: '✅ تم رفع الفيديو بنجاح', 
+            data: video 
+        });
 
     } catch (error) {
         console.error('❌ خطأ في رفع الفيديو:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
-
 app.get('/api/videos/all', async (req, res) => {
     try {
         const videos = await Video.find().sort({ uploadDate: -1 });
@@ -2090,11 +2108,12 @@ app.get('/api/specialties/college/:collegeId', async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
-
-// إضافة تخصص جديد (للمدير فقط)
+// ============================================================
+// إضافة تخصص جديد (للمدير فقط) - النسخة المصححة
+// ============================================================
 app.post('/api/specialties', protect, authorize('admin'), async (req, res) => {
     try {
-        const { name, universityId, collegeId, icon, count, description } = req.body;
+        const { name, universityId, collegeId, icon, description } = req.body;  // ✅ حذف count
 
         if (!name || !universityId || !collegeId) {
             return res.status(400).json({ 
@@ -2139,24 +2158,25 @@ app.post('/api/specialties', protect, authorize('admin'), async (req, res) => {
             universityId,
             collegeId,
             icon: icon || 'fa-tag',
-            count: count || 0,
             description: description || ''
         });
 
         await specialty.save();
 
-        // تحديث عدد التخصصات في الكلية
+        // ✅ تحديث عدد التخصصات في الكلية
         await College.findByIdAndUpdate(collegeId, {
             $inc: { count: 1 }
         });
 
-        // تحديث عدد التخصصات في الجامعة (اختياري)
-        // يمكن إضافة حقل count في الجامعة إذا أردت
+        // ✅ إعادة التخصص مع populate
+        const populatedSpecialty = await Specialty.findById(specialty._id)
+            .populate('universityId', 'name icon')
+            .populate('collegeId', 'name icon');
 
         res.status(201).json({ 
             success: true, 
             message: 'تم إضافة التخصص بنجاح ✅', 
-            data: specialty 
+            data: populatedSpecialty 
         });
 
     } catch (error) {
@@ -2385,21 +2405,6 @@ app.delete('/api/explanations/materials/:id', protect, authorize('admin'), async
         res.status(500).json({ success: false, message: error.message });
     }
 });
-// تحديث مسار جلب المواد
-app.get('/api/explanations/materials', async (req, res) => {
-    try {
-        const materials = await ExplanationMaterial.find()
-            .populate('universityId', 'name icon')
-            .populate('collegeId', 'name icon')
-            .populate('specialtyId', 'name icon')
-            .sort({ createdAt: -1 });
-        res.status(200).json({ success: true, data: materials });
-    } catch (error) {
-        console.error('❌ خطأ في جلب المواد:', error);
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
-
 // جلب مواد تخصص محدد
 app.get('/api/explanations/materials/specialty/:specialtyId', async (req, res) => {
     try {
