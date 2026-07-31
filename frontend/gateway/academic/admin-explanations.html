@@ -2087,174 +2087,205 @@ function renderColleges() {
 
     container.innerHTML = html;
 }
-        // ============================================================
-        // 18. عرض التخصصات
-        // ============================================================
-        function renderSpecialties() {
-            const container = document.getElementById('specialtiesList');
-            if (specialties.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-tag"></i>
-                        <h3>لا توجد تخصصات</h3>
-                        <p>أضف تخصص جديد باستخدام النموذج أعلاه</p>
-                    </div>
-                `;
-                return;
-            }
+// ============================================================
+// 18. عرض التخصصات - النسخة المصححة
+// ============================================================
+function renderSpecialties() {
+    const container = document.getElementById('specialtiesList');
+    
+    if (specialties.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-tag"></i>
+                <h3>لا توجد تخصصات</h3>
+                <p>أضف تخصص جديد باستخدام النموذج أعلاه</p>
+            </div>
+        `;
+        return;
+    }
 
-            let html = `
-                <div class="content-list-header">
-                    <span>التخصص</span>
-                    <span>الكلية / الجامعة</span>
-                    <span>عدد المواد</span>
-                    <span>الإجراءات</span>
-                </div>
-            `;
+    let html = `
+        <div class="content-list-header">
+            <span>التخصص</span>
+            <span>الكلية / الجامعة</span>
+            <span>عدد المواد</span>
+            <span>الإجراءات</span>
+        </div>
+    `;
 
-            specialties.forEach((spec) => {
-                // ✅ البحث عن الكلية والجامعة المرتبطة بالتخصص
-                const col = colleges.find(c => c._id === spec.collegeId);
-                const uni = universities.find(u => u._id === spec.universityId);
-                const matCount = materials.filter(m => m.specialtyId === spec._id).length;
-                html += `
-                    <div class="content-list-item">
-                        <div>
-                            <div class="item-title"><i class="fas ${spec.icon}"></i> ${spec.name}</div>
-                            <div style="font-size:0.8rem;color:var(--text-muted);">${spec.description || ''}</div>
-                        </div>
-                        <div style="font-size:0.9rem;color:var(--text-muted);">
-                            <i class="fas fa-school"></i> ${col ? col.name : '⚠️ غير محددة'}
-                            <br><i class="fas fa-university"></i> ${uni ? uni.name : ''}
-                        </div>
-                        <div style="font-size:0.9rem;color:var(--text-muted);">${matCount} مادة</div>
-                        <div class="item-actions">
-                            <button class="btn-delete" onclick="deleteSpecialty('${spec._id}')"><i class="fas fa-trash"></i></button>
-                            <button class="btn-view" onclick="viewSpecialty('${spec._id}')"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
+    specialties.forEach((spec) => {
+        // ✅ التعامل مع collegeId
+        let colId = spec.collegeId;
+        if (typeof colId === 'object' && colId !== null) {
+            colId = colId._id || colId.toString();
         }
-
-        // ============================================================
-        // 19. عرض المواد
-        // ============================================================
-        function renderMaterials() {
-            const container = document.getElementById('materialsList');
-            if (materials.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-book-open"></i>
-                        <h3>لا توجد مواد</h3>
-                        <p>أضف مادة جديدة باستخدام النموذج أعلاه</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = `
-                <div class="content-list-header">
-                    <span>المادة</span>
-                    <span>المحاضر / التخصص</span>
-                    <span>عدد الفيديوهات</span>
-                    <span>السعر</span>
-                    <span>الإجراءات</span>
-                </div>
-            `;
-
-            materials.forEach((mat) => {
-                // ✅ البحث عن التخصص المرتبط بالمادة
-                const spec = specialties.find(s => s._id === mat.specialtyId);
-                const videoCount = videos.filter(v => String(v.subjectId) === String(mat._id)).length;
-                html += `
-                    <div class="content-list-item">
-                        <div>
-                            <div class="item-title"><i class="fas ${mat.icon}"></i> ${mat.title}</div>
-                            <div style="font-size:0.8rem;color:var(--text-muted);">${mat.code}</div>
-                            ${mat.isFeatured ? '<span style="color:var(--accent);font-size:0.7rem;"><i class="fas fa-star"></i> مميز</span>' : ''}
-                        </div>
-                        <div>
-                            <div style="font-weight:600;">${mat.instructor}</div>
-                            <div style="font-size:0.8rem;color:var(--text-muted);">
-                                <i class="fas fa-tag"></i> ${spec ? spec.name : '⚠️ غير محددة'}
-                            </div>
-                        </div>
-                        <div style="font-size:0.9rem;color:var(--text-muted);">${videoCount} فيديو</div>
-                        <div>
-                            <span style="font-size:0.85rem;color:var(--primary);font-weight:700;">
-                                ${mat.price || 99} ريال
-                            </span>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-delete" onclick="deleteMaterial('${mat._id}')"><i class="fas fa-trash"></i></button>
-                            <button class="btn-view" onclick="viewMaterial('${mat._id}')"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
+        
+        // ✅ التعامل مع universityId
+        let uniId = spec.universityId;
+        if (typeof uniId === 'object' && uniId !== null) {
+            uniId = uniId._id || uniId.toString();
         }
-
-        // ============================================================
-        // 20. عرض الفيديوهات
-        // ============================================================
-        function renderVideos() {
-            const container = document.getElementById('videosList');
-            if (videos.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-video"></i>
-                        <h3>لا توجد فيديوهات</h3>
-                        <p>قم برفع فيديو جديد باستخدام النموذج أعلاه</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = `
-                <div class="content-list-header">
-                    <span>الفيديو</span>
-                    <span>المادة</span>
-                    <span>البيانات</span>
-                    <span>المشاهدات</span>
-                    <span>الإجراءات</span>
+        
+        const col = colleges.find(c => String(c._id) === String(colId));
+        const uni = universities.find(u => String(u._id) === String(uniId));
+        
+        const colName = col ? col.name : '⚠️ غير محددة';
+        const uniName = uni ? uni.name : '';
+        const matCount = materials.filter(m => m.specialtyId === spec._id).length;
+        
+        html += `
+            <div class="content-list-item">
+                <div>
+                    <div class="item-title"><i class="fas ${spec.icon || 'fa-tag'}"></i> ${spec.name}</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">${spec.description || ''}</div>
                 </div>
-            `;
+                <div style="font-size:0.9rem;color:${col ? 'var(--text-muted)' : 'var(--danger)'};">
+                    <i class="fas fa-school"></i> ${colName}
+                    ${uni ? `<br><i class="fas fa-university"></i> ${uniName}` : ''}
+                </div>
+                <div style="font-size:0.9rem;color:var(--text-muted);">${matCount} مادة</div>
+                <div class="item-actions">
+                    <button class="btn-delete" onclick="deleteSpecialty('${spec._id}')"><i class="fas fa-trash"></i></button>
+                    <button class="btn-view" onclick="viewSpecialty('${spec._id}')"><i class="fas fa-eye"></i></button>
+                </div>
+            </div>
+        `;
+    });
 
-            videos.forEach((video) => {
-                // ✅ البحث عن المادة المرتبطة بالفيديو
-                const material = materials.find(m => String(m._id) === String(video.subjectId));
-                html += `
-                    <div class="content-list-item">
-                        <div>
-                            <div class="item-title"><i class="fas fa-video" style="color:${video.color || '#7C3AED'};"></i> ${video.title}</div>
-                            <div style="font-size:0.8rem;color:var(--text-muted);">
-                                <i class="fas fa-clock"></i> ${video.duration || '00:00'}
-                            </div>
-                        </div>
-                        <div style="font-size:0.9rem;color:var(--text-muted);">${material ? material.title : video.subjectName || '⚠️ غير محددة'}</div>
-                        <div>
-                            <span style="font-size:0.85rem;color:var(--text-muted);">
-                                <i class="fas fa-calendar-alt"></i> ${new Date(video.uploadDate || video.createdAt).toLocaleDateString('ar-SA')}
-                                <br><i class="fas fa-weight-hanging"></i> ${video.fileSize || 'غير معروف'}
-                            </span>
-                        </div>
-                        <div style="font-size:0.9rem;font-weight:600;color:#3B82F6;">${video.views || 0} 👁️</div>
-                        <div class="item-actions">
-                            <button class="btn-view" onclick="viewVideo('${video._id}')"><i class="fas fa-eye"></i></button>
-                            <button class="btn-delete" onclick="deleteVideo('${video._id}')"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
+    container.innerHTML = html;
+}
+// ============================================================
+// 19. عرض المواد - النسخة المصححة
+// ============================================================
+function renderMaterials() {
+    const container = document.getElementById('materialsList');
+    
+    if (materials.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-book-open"></i>
+                <h3>لا توجد مواد</h3>
+                <p>أضف مادة جديدة باستخدام النموذج أعلاه</p>
+            </div>
+        `;
+        return;
+    }
 
-            container.innerHTML = html;
+    let html = `
+        <div class="content-list-header">
+            <span>المادة</span>
+            <span>المحاضر / التخصص</span>
+            <span>عدد الفيديوهات</span>
+            <span>السعر</span>
+            <span>الإجراءات</span>
+        </div>
+    `;
+
+    materials.forEach((mat) => {
+        // ✅ التعامل مع specialtyId
+        let specId = mat.specialtyId;
+        if (typeof specId === 'object' && specId !== null) {
+            specId = specId._id || specId.toString();
         }
+        
+        const spec = specialties.find(s => String(s._id) === String(specId));
+        const specName = spec ? spec.name : '⚠️ غير محددة';
+        const videoCount = videos.filter(v => String(v.subjectId) === String(mat._id)).length;
+        
+        html += `
+            <div class="content-list-item">
+                <div>
+                    <div class="item-title"><i class="fas ${mat.icon || 'fa-book'}"></i> ${mat.title}</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">${mat.code}</div>
+                    ${mat.isFeatured ? '<span style="color:var(--accent);font-size:0.7rem;"><i class="fas fa-star"></i> مميز</span>' : ''}
+                </div>
+                <div>
+                    <div style="font-weight:600;">${mat.instructor}</div>
+                    <div style="font-size:0.8rem;color:${spec ? 'var(--text-muted)' : 'var(--danger)'};">
+                        <i class="fas fa-tag"></i> ${specName}
+                    </div>
+                </div>
+                <div style="font-size:0.9rem;color:var(--text-muted);">${videoCount} فيديو</div>
+                <div>
+                    <span style="font-size:0.85rem;color:var(--primary);font-weight:700;">
+                        ${mat.price || 99} ريال
+                    </span>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-delete" onclick="deleteMaterial('${mat._id}')"><i class="fas fa-trash"></i></button>
+                    <button class="btn-view" onclick="viewMaterial('${mat._id}')"><i class="fas fa-eye"></i></button>
+                </div>
+            </div>
+        `;
+    });
 
+    container.innerHTML = html;
+}
+// ============================================================
+// 20. عرض الفيديوهات - النسخة المصححة
+// ============================================================
+function renderVideos() {
+    const container = document.getElementById('videosList');
+    
+    if (videos.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-video"></i>
+                <h3>لا توجد فيديوهات</h3>
+                <p>قم برفع فيديو جديد باستخدام النموذج أعلاه</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = `
+        <div class="content-list-header">
+            <span>الفيديو</span>
+            <span>المادة</span>
+            <span>البيانات</span>
+            <span>المشاهدات</span>
+            <span>الإجراءات</span>
+        </div>
+    `;
+
+    videos.forEach((video) => {
+        // ✅ التعامل مع subjectId
+        let subId = video.subjectId;
+        if (typeof subId === 'object' && subId !== null) {
+            subId = subId._id || subId.toString();
+        }
+        
+        const material = materials.find(m => String(m._id) === String(subId));
+        const matName = material ? material.title : video.subjectName || '⚠️ غير محددة';
+        
+        html += `
+            <div class="content-list-item">
+                <div>
+                    <div class="item-title"><i class="fas fa-video" style="color:${video.color || '#7C3AED'};"></i> ${video.title}</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">
+                        <i class="fas fa-clock"></i> ${video.duration || '00:00'}
+                    </div>
+                </div>
+                <div style="font-size:0.9rem;color:${material ? 'var(--text-muted)' : 'var(--danger)'};">
+                    ${matName}
+                </div>
+                <div>
+                    <span style="font-size:0.85rem;color:var(--text-muted);">
+                        <i class="fas fa-calendar-alt"></i> ${new Date(video.uploadDate || video.createdAt).toLocaleDateString('ar-SA')}
+                        <br><i class="fas fa-weight-hanging"></i> ${video.fileSize || 'غير معروف'}
+                    </span>
+                </div>
+                <div style="font-size:0.9rem;font-weight:600;color:#3B82F6;">${video.views || 0} 👁️</div>
+                <div class="item-actions">
+                    <button class="btn-view" onclick="viewVideo('${video._id}')"><i class="fas fa-eye"></i></button>
+                    <button class="btn-delete" onclick="deleteVideo('${video._id}')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
         // ============================================================
         // 21. إضافة جامعة
         // ============================================================
@@ -2362,308 +2393,229 @@ document.getElementById('addCollegeForm').addEventListener('submit', async funct
         btn.disabled = false;
     }
 });
-        // ============================================================
-        // 23. إضافة تخصص
-        // ============================================================
-        document.getElementById('addSpecialtyForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+// ============================================================
+// 23. إضافة تخصص - النسخة المصححة
+// ============================================================
+document.getElementById('addSpecialtyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-            const name = document.getElementById('specialtyName').value.trim();
-            const universityId = document.getElementById('specialtyUniversity').value;
-            const collegeId = document.getElementById('specialtyCollege').value;
-            const icon = document.getElementById('specialtyIcon').value;
-            const description = document.getElementById('specialtyDescription').value.trim();
+    const name = document.getElementById('specialtyName').value.trim();
+    const universityId = document.getElementById('specialtyUniversity').value;
+    const collegeId = document.getElementById('specialtyCollege').value;
+    const icon = document.getElementById('specialtyIcon').value;
+    const description = document.getElementById('specialtyDescription').value.trim();
 
-            if (!name || !universityId || !collegeId) {
-                showAlert('❌ يرجى إدخال اسم التخصص واختيار الجامعة والكلية', 'danger');
-                return;
-            }
+    console.log('📤 بيانات التخصص المرسلة:', { name, universityId, collegeId, icon, description });
 
-            const btn = this.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
-            btn.disabled = true;
+    if (!name || !universityId || !collegeId) {
+        showAlert('❌ يرجى إدخال اسم التخصص واختيار الجامعة والكلية', 'danger');
+        return;
+    }
 
-            try {
-                const response = await fetch(`${API_URL}/api/specialties`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${currentToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name, universityId, collegeId, icon, description })
-                });
+    const btn = this.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+    btn.disabled = true;
 
-                const data = await response.json();
-
-                if (data.success) {
-                    showAlert('✅ تم إضافة التخصص "' + name + '" بنجاح!', 'success');
-                    this.reset();
-                    document.getElementById('specialtyDescription').value = '';
-                    await fetchAllData();
-                } else {
-                    showAlert('❌ خطأ: ' + data.message, 'danger');
-                }
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
+    try {
+        const response = await fetch(`${API_URL}/api/specialties`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${currentToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                universityId: String(universityId),
+                collegeId: String(collegeId),
+                icon: icon,
+                description: description
+            })
         });
 
-        // ============================================================
-        // 24. إضافة مادة مع صورة
-        // ============================================================
-        document.getElementById('materialImage').addEventListener('change', function() {
-            if (this.files.length) {
-                const file = this.files[0];
-                if (file.size > 5 * 1024 * 1024) {
-                    showAlert('❌ حجم الصورة كبير جداً. الحد الأقصى 5MB', 'danger');
-                    this.value = '';
-                    return;
-                }
-                uploadedMaterialImage = file;
-                document.getElementById('materialImageName').textContent = file.name;
-                document.getElementById('materialImageSize').textContent = (file.size / 1024).toFixed(2) + ' KB';
-                document.getElementById('materialImageInfo').classList.add('show');
-            }
-        });
+        const data = await response.json();
+        console.log('📥 استجابة الخادم:', data);
 
-        function removeMaterialImage() {
-            uploadedMaterialImage = null;
-            document.getElementById('materialImage').value = '';
-            document.getElementById('materialImageInfo').classList.remove('show');
+        if (data.success) {
+            showAlert('✅ تم إضافة التخصص "' + name + '" بنجاح!', 'success');
+            this.reset();
+            document.getElementById('specialtyDescription').value = '';
+            await fetchAllData();
+        } else {
+            showAlert('❌ خطأ: ' + data.message, 'danger');
+        }
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
+// ============================================================
+// 24. إضافة مادة - النسخة المصححة
+// ============================================================
+document.getElementById('addMaterialForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById('matTitle').value.trim();
+    const code = document.getElementById('matCode').value.trim();
+    const instructor = document.getElementById('matInstructor').value.trim();
+    const universityId = document.getElementById('matUniversity').value;
+    const collegeId = document.getElementById('matCollege').value;
+    const specialtyId = document.getElementById('matSpecialty').value;
+    const icon = document.getElementById('matIcon').value;
+    const isFeatured = document.getElementById('matFeatured').value === 'true';
+    const price = parseInt(document.getElementById('matPrice').value) || 99;
+    const description = document.getElementById('matDescription').value.trim();
+
+    console.log('📤 بيانات المادة المرسلة:', { title, code, instructor, universityId, collegeId, specialtyId, icon, isFeatured, price, description });
+
+    if (!title || !code || !instructor || !universityId || !collegeId || !specialtyId || !description) {
+        showAlert('❌ يرجى ملء جميع الحقول المطلوبة', 'danger');
+        return;
+    }
+
+    const btn = this.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+    btn.disabled = true;
+
+    try {
+        let imageData = '';
+        if (uploadedMaterialImage) {
+            const reader = new FileReader();
+            imageData = await new Promise((resolve) => {
+                reader.onload = (e) => resolve(e.target.result);
+                reader.readAsDataURL(uploadedMaterialImage);
+            });
         }
 
-        document.getElementById('addMaterialForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const title = document.getElementById('matTitle').value.trim();
-            const code = document.getElementById('matCode').value.trim();
-            const instructor = document.getElementById('matInstructor').value.trim();
-            const universityId = document.getElementById('matUniversity').value;
-            const collegeId = document.getElementById('matCollege').value;
-            const specialtyId = document.getElementById('matSpecialty').value;
-            const icon = document.getElementById('matIcon').value;
-            const isFeatured = document.getElementById('matFeatured').value === 'true';
-            const price = parseInt(document.getElementById('matPrice').value) || 99;
-            const description = document.getElementById('matDescription').value.trim();
-
-            if (!title || !code || !instructor || !universityId || !collegeId || !specialtyId || !description) {
-                showAlert('❌ يرجى ملء جميع الحقول المطلوبة', 'danger');
-                return;
-            }
-
-            const btn = this.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
-            btn.disabled = true;
-
-            try {
-                let imageData = '';
-                if (uploadedMaterialImage) {
-                    const reader = new FileReader();
-                    imageData = await new Promise((resolve) => {
-                        reader.onload = (e) => resolve(e.target.result);
-                        reader.readAsDataURL(uploadedMaterialImage);
-                    });
-                }
-
-                const response = await fetch(`${API_URL}/api/explanations/materials`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${currentToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        title,
-                        code,
-                        instructor,
-                        universityId,
-                        collegeId,
-                        specialtyId,
-                        icon,
-                        description,
-                        isFeatured,
-                        price,
-                        image: imageData
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showAlert('✅ تم إضافة المادة "' + title + '" بنجاح!', 'success');
-                    this.reset();
-                    document.getElementById('matPrice').value = 99;
-                    removeMaterialImage();
-                    await fetchAllData();
-                } else {
-                    showAlert('❌ خطأ: ' + data.message, 'danger');
-                }
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
+        const response = await fetch(`${API_URL}/api/explanations/materials`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${currentToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: title,
+                code: code,
+                instructor: instructor,
+                universityId: String(universityId),
+                collegeId: String(collegeId),
+                specialtyId: String(specialtyId),
+                icon: icon,
+                description: description,
+                isFeatured: isFeatured,
+                price: price,
+                image: imageData
+            })
         });
 
-        // ============================================================
-        // 25. رفع فيديو
-        // ============================================================
-        document.getElementById('videoFile').addEventListener('change', function() {
-            if (this.files.length) {
-                handleVideoFile(this.files[0]);
-            }
-        });
+        const data = await response.json();
+        console.log('📥 استجابة الخادم:', data);
 
-        const videoUploadArea = document.getElementById('videoUploadArea');
-        videoUploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            this.style.borderColor = 'var(--primary)';
-            this.style.background = 'rgba(124, 58, 237, 0.05)';
-        });
-        videoUploadArea.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            this.style.borderColor = 'var(--border-color)';
-            this.style.background = 'var(--bg-body)';
-        });
-        videoUploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            this.style.borderColor = 'var(--border-color)';
-            this.style.background = 'var(--bg-body)';
-            if (e.dataTransfer.files.length) {
-                document.getElementById('videoFile').files = e.dataTransfer.files;
-                handleVideoFile(e.dataTransfer.files[0]);
-            }
-        });
-
-        function handleVideoFile(file) {
-            const allowedTypes = ['video/mp4', 'video/avi', 'video/quicktime', 'video/x-msvideo', 'video/webm', 'video/x-matroska'];
-            const validExtensions = ['.mp4', '.avi', '.mov', '.webm', '.mkv'];
-            const ext = '.' + file.name.split('.').pop().toLowerCase();
-
-            if (!allowedTypes.includes(file.type) && !validExtensions.includes(ext)) {
-                showAlert('❌ نوع الملف غير مدعوم. يرجى رفع فيديو بصيغة MP4, AVI, MOV, WEBM أو MKV', 'danger');
-                document.getElementById('videoFile').value = '';
-                return;
-            }
-
-            if (file.size > 100 * 1024 * 1024) {
-                showAlert('❌ حجم الملف كبير جداً. الحد الأقصى 100MB', 'danger');
-                document.getElementById('videoFile').value = '';
-                return;
-            }
-
-            uploadedVideoFile = file;
-            document.getElementById('videoFileName').textContent = file.name;
-            document.getElementById('videoFileSize').textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
-            document.getElementById('videoFileInfo').classList.add('show');
-
-            const uploadArea = document.getElementById('videoUploadArea');
-            uploadArea.querySelector('h4').textContent = `🎬 ${file.name}`;
-            uploadArea.querySelector('p').textContent = `حجم الملف: ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+        if (data.success) {
+            showAlert('✅ تم إضافة المادة "' + title + '" بنجاح!', 'success');
+            this.reset();
+            document.getElementById('matPrice').value = 99;
+            removeMaterialImage();
+            await fetchAllData();
+        } else {
+            showAlert('❌ خطأ: ' + data.message, 'danger');
         }
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
+// ============================================================
+// 25. رفع فيديو - النسخة المصححة
+// ============================================================
+document.getElementById('addVideoForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-        function removeVideoFile() {
-            uploadedVideoFile = null;
-            document.getElementById('videoFile').value = '';
-            document.getElementById('videoFileInfo').classList.remove('show');
+    const title = document.getElementById('videoTitle').value.trim();
+    const universityId = document.getElementById('videoUniversity').value;
+    const collegeId = document.getElementById('videoCollege').value;
+    const specialtyId = document.getElementById('videoSpecialty').value;
+    const materialId = document.getElementById('videoMaterial').value;
+    const color = document.getElementById('videoColor').value;
+    const description = document.getElementById('videoDescription').value.trim();
+    const file = uploadedVideoFile;
 
-            const uploadArea = document.getElementById('videoUploadArea');
-            uploadArea.querySelector('h4').textContent = 'اسحب ملف الفيديو هنا أو انقر للاختيار';
-            uploadArea.querySelector('p').textContent = 'يدعم ملفات MP4, AVI, MOV, WEBM (الحد الأقصى 100MB)';
-        }
+    console.log('📤 بيانات الفيديو المرسلة:', { title, universityId, collegeId, specialtyId, materialId, color, description });
 
-        function selectColor(element) {
+    if (!title || !universityId || !collegeId || !specialtyId || !materialId) {
+        showAlert('❌ يرجى إدخال عنوان الفيديو واختيار الجامعة والكلية والتخصص والمادة', 'danger');
+        return;
+    }
+
+    if (!file) {
+        showAlert('❌ يرجى اختيار ملف فيديو', 'danger');
+        return;
+    }
+
+    const material = materials.find(m => m._id === materialId);
+    const university = universities.find(u => u._id === universityId);
+    const college = colleges.find(c => c._id === collegeId);
+    const specialty = specialties.find(s => s._id === specialtyId);
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('subjectId', String(materialId));
+    formData.append('subjectName', material ? material.title : '');
+    formData.append('specialtyName', specialty ? specialty.name : '');
+    formData.append('universityName', university ? university.name : '');
+    formData.append('collegeName', college ? college.name : '');
+    formData.append('description', description);
+    formData.append('color', color);
+    formData.append('video', file);
+    
+    // ✅ إضافة معرفات الربط كـ String
+    formData.append('universityId', String(universityId));
+    formData.append('collegeId', String(collegeId));
+    formData.append('specialtyId', String(specialtyId));
+
+    const btn = this.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch(`${API_URL}/api/videos/upload`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${currentToken}`
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+        console.log('📥 استجابة الخادم:', data);
+
+        if (data.success) {
+            showAlert('✅ تم رفع الفيديو "' + title + '" بنجاح!', 'success');
+            this.reset();
+            removeVideoFile();
+            document.getElementById('videoColor').value = '#7C3AED';
             document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            document.getElementById('videoColor').value = element.dataset.color;
+            document.querySelector('.color-option').classList.add('active');
+            await fetchAllData();
+        } else {
+            showAlert('❌ خطأ: ' + data.message, 'danger');
         }
-
-        document.getElementById('addVideoForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const title = document.getElementById('videoTitle').value.trim();
-            const universityId = document.getElementById('videoUniversity').value;
-            const collegeId = document.getElementById('videoCollege').value;
-            const specialtyId = document.getElementById('videoSpecialty').value;
-            const materialId = document.getElementById('videoMaterial').value;
-            const color = document.getElementById('videoColor').value;
-            const description = document.getElementById('videoDescription').value.trim();
-            const file = uploadedVideoFile;
-
-            if (!title || !universityId || !collegeId || !specialtyId || !materialId) {
-                showAlert('❌ يرجى إدخال عنوان الفيديو واختيار الجامعة والكلية والتخصص والمادة', 'danger');
-                return;
-            }
-
-            if (!file) {
-                showAlert('❌ يرجى اختيار ملف فيديو', 'danger');
-                return;
-            }
-
-            const material = materials.find(m => m._id === materialId);
-            const university = universities.find(u => u._id === universityId);
-            const college = colleges.find(c => c._id === collegeId);
-            const specialty = specialties.find(s => s._id === specialtyId);
-
-            const formData = new FormData();
-            formData.append('title', title);
-            formData.append('subjectId', materialId);
-            formData.append('subjectName', material ? material.title : '');
-            formData.append('specialtyName', specialty ? specialty.name : '');
-            formData.append('universityName', university ? university.name : '');
-            formData.append('collegeName', college ? college.name : '');
-            formData.append('description', description);
-            formData.append('color', color);
-            formData.append('video', file);
-
-            // ✅ إضافة معرفات الربط
-            formData.append('universityId', universityId);
-            formData.append('collegeId', collegeId);
-            formData.append('specialtyId', specialtyId);
-
-            const btn = this.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
-            btn.disabled = true;
-
-            try {
-                const response = await fetch(`${API_URL}/api/videos/upload`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${currentToken}`
-                    },
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showAlert('✅ تم رفع الفيديو "' + title + '" بنجاح!', 'success');
-                    this.reset();
-                    removeVideoFile();
-                    document.getElementById('videoColor').value = '#7C3AED';
-                    document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
-                    document.querySelector('.color-option').classList.add('active');
-                    await fetchAllData();
-                } else {
-                    showAlert('❌ خطأ: ' + data.message, 'danger');
-                }
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        });
-
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
         // ============================================================
         // 26. دوال الحذف
         // ============================================================
