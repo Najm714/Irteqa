@@ -1375,18 +1375,68 @@
                 return false;
             }
         }
-
-        // ============================================================
-        // 7. جلب جميع البيانات بالترتيب
-        // ============================================================
-        async function fetchAllData() {
-            await fetchUniversities();
-            await fetchColleges();
-            await fetchSpecialties();
-            await fetchMaterials();
-            await fetchVideos();
-            populateAllSelects();
+// ============================================================
+// 7. جلب جميع البيانات بالترتيب - النسخة النهائية
+// ============================================================
+async function fetchAllData() {
+    console.log('🔄 بدء جلب جميع البيانات...');
+    
+    try {
+        // 1. جلب الجامعات أولاً (لأن الكليات تعتمد عليها)
+        const response1 = await fetch(`${API_URL}/api/universities`);
+        const data1 = await response1.json();
+        if (data1.success) {
+            universities = data1.data;
+            console.log('✅ تم جلب الجامعات:', universities.length);
         }
+        
+        // 2. جلب الكليات
+        const response2 = await fetch(`${API_URL}/api/colleges`);
+        const data2 = await response2.json();
+        if (data2.success) {
+            colleges = data2.data;
+            console.log('✅ تم جلب الكليات:', colleges.length);
+        }
+        
+        // 3. جلب التخصصات
+        const response3 = await fetch(`${API_URL}/api/specialties`);
+        const data3 = await response3.json();
+        if (data3.success) {
+            specialties = data3.data;
+            console.log('✅ تم جلب التخصصات:', specialties.length);
+        }
+        
+        // 4. جلب المواد
+        const response4 = await fetch(`${API_URL}/api/explanations/materials`);
+        const data4 = await response4.json();
+        if (data4.success) {
+            materials = data4.data;
+            console.log('✅ تم جلب المواد:', materials.length);
+        }
+        
+        // 5. جلب الفيديوهات
+        const response5 = await fetch(`${API_URL}/api/videos/all`);
+        const data5 = await response5.json();
+        if (data5.success) {
+            videos = data5.data || [];
+            console.log('✅ تم جلب الفيديوهات:', videos.length);
+        }
+        
+        // ✅ تحديث جميع العروض
+        renderUniversities();
+        renderColleges();
+        renderSpecialties();
+        renderMaterials();
+        renderVideos();
+        populateAllSelects();
+        
+        console.log('✅ تم تحديث جميع البيانات بنجاح!');
+        
+    } catch (error) {
+        console.error('❌ خطأ في جلب البيانات:', error);
+        showAlert('❌ حدث خطأ في تحميل البيانات', 'danger');
+    }
+}
 
         // ============================================================
         // 8. تسجيل الخروج
@@ -1965,57 +2015,70 @@
 
             container.innerHTML = html;
         }
+// ============================================================
+// 17. عرض الكليات - النسخة المحسنة
+// ============================================================
+function renderColleges() {
+    const container = document.getElementById('collegesList');
+    
+    if (colleges.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-school"></i>
+                <h3>لا توجد كليات</h3>
+                <p>أضف كلية جديدة باستخدام النموذج أعلاه</p>
+            </div>
+        `;
+        return;
+    }
 
-        // ============================================================
-        // 17. عرض الكليات
-        // ============================================================
-        function renderColleges() {
-            const container = document.getElementById('collegesList');
-            if (colleges.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-school"></i>
-                        <h3>لا توجد كليات</h3>
-                        <p>أضف كلية جديدة باستخدام النموذج أعلاه</p>
-                    </div>
-                `;
-                return;
-            }
+    // ✅ تحقق من وجود الجامعات
+    console.log('📊 عدد الجامعات المتاحة:', universities.length);
+    console.log('📊 عدد الكليات:', colleges.length);
 
-            let html = `
-                <div class="content-list-header">
-                    <span>الكلية</span>
-                    <span>الجامعة</span>
-                    <span>عدد التخصصات</span>
-                    <span>الإجراءات</span>
-                </div>
-            `;
+    let html = `
+        <div class="content-list-header">
+            <span>الكلية</span>
+            <span>الجامعة</span>
+            <span>عدد التخصصات</span>
+            <span>الإجراءات</span>
+        </div>
+    `;
 
-            colleges.forEach((col) => {
-                // ✅ البحث عن الجامعة المرتبطة بالكلية
-                const uni = universities.find(u => u._id === col.universityId);
-                const specCount = specialties.filter(s => s.collegeId === col._id).length;
-                html += `
-                    <div class="content-list-item">
-                        <div>
-                            <div class="item-title"><i class="fas ${col.icon}"></i> ${col.name}</div>
-                            <div style="font-size:0.8rem;color:var(--text-muted);">${col.description || ''}</div>
-                        </div>
-                        <div style="font-size:0.9rem;color:var(--text-muted);">
-                            <i class="fas fa-university"></i> ${uni ? uni.name : '⚠️ غير محددة'}
-                        </div>
-                        <div style="font-size:0.9rem;color:var(--text-muted);">${specCount} تخصص</div>
-                        <div class="item-actions">
-                            <button class="btn-delete" onclick="deleteCollege('${col._id}')"><i class="fas fa-trash"></i></button>
-                            <button class="btn-view" onclick="viewCollege('${col._id}')"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
+    colleges.forEach((col) => {
+        // ✅ البحث عن الجامعة المرتبطة بالكلية
+        const uni = universities.find(u => String(u._id) === String(col.universityId));
+        
+        // ✅ عرض اسم الجامعة أو "غير محددة" مع تحذير
+        const uniName = uni ? uni.name : '⚠️ غير محددة';
+        
+        // ✅ إذا كانت الجامعة غير محددة، سجل معلومات للتصحيح
+        if (!uni) {
+            console.warn(`⚠️ الكلية "${col.name}" (ID: ${col._id}) ليس لها جامعة مرتبطة. universityId: ${col.universityId}`);
         }
+        
+        const specCount = specialties.filter(s => s.collegeId === col._id).length;
+        
+        html += `
+            <div class="content-list-item">
+                <div>
+                    <div class="item-title"><i class="fas ${col.icon || 'fa-school'}"></i> ${col.name}</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">${col.description || ''}</div>
+                </div>
+                <div style="font-size:0.9rem;color:${uni ? 'var(--text-muted)' : 'var(--danger)'};">
+                    <i class="fas fa-university"></i> ${uniName}
+                </div>
+                <div style="font-size:0.9rem;color:var(--text-muted);">${specCount} تخصص</div>
+                <div class="item-actions">
+                    <button class="btn-delete" onclick="deleteCollege('${col._id}')"><i class="fas fa-trash"></i></button>
+                    <button class="btn-view" onclick="viewCollege('${col._id}')"><i class="fas fa-eye"></i></button>
+                </div>
+            </div>
+        `;
+    });
 
+    container.innerHTML = html;
+}
         // ============================================================
         // 18. عرض التخصصات
         // ============================================================
@@ -2230,56 +2293,64 @@
                 btn.disabled = false;
             }
         });
+// ============================================================
+// 22. إضافة كلية - النسخة المعدلة
+// ============================================================
+document.getElementById('addCollegeForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-        // ============================================================
-        // 22. إضافة كلية
-        // ============================================================
-        document.getElementById('addCollegeForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+    const name = document.getElementById('collegeName').value.trim();
+    const universityId = document.getElementById('collegeUniversity').value;
+    const icon = document.getElementById('collegeIcon').value;
+    const description = document.getElementById('collegeDescription').value.trim();
 
-            const name = document.getElementById('collegeName').value.trim();
-            const universityId = document.getElementById('collegeUniversity').value;
-            const icon = document.getElementById('collegeIcon').value;
-            const description = document.getElementById('collegeDescription').value.trim();
+    if (!name || !universityId) {
+        showAlert('❌ يرجى إدخال اسم الكلية واختيار الجامعة', 'danger');
+        return;
+    }
 
-            if (!name || !universityId) {
-                showAlert('❌ يرجى إدخال اسم الكلية واختيار الجامعة', 'danger');
-                return;
-            }
+    const btn = this.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+    btn.disabled = true;
 
-            const btn = this.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
-            btn.disabled = true;
-
-            try {
-                const response = await fetch(`${API_URL}/api/colleges`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${currentToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name, universityId, icon, description })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showAlert('✅ تم إضافة الكلية "' + name + '" بنجاح!', 'success');
-                    this.reset();
-                    document.getElementById('collegeDescription').value = '';
-                    await fetchAllData();
-                } else {
-                    showAlert('❌ خطأ: ' + data.message, 'danger');
-                }
-            } catch (error) {
-                console.error('❌ خطأ:', error);
-                showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
+    try {
+        const response = await fetch(`${API_URL}/api/colleges`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${currentToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, universityId, icon, description })
         });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showAlert('✅ تم إضافة الكلية "' + name + '" بنجاح!', 'success');
+            this.reset();
+            document.getElementById('collegeDescription').value = '';
+            
+            // ✅ إعادة تحميل جميع البيانات من الخادم
+            await fetchAllData();
+            
+            // ✅ التأكد من تحديث القوائم المنسدلة
+            populateAllSelects();
+            
+            // ✅ التأكد من عرض الكليات بشكل صحيح
+            renderColleges();
+            
+        } else {
+            showAlert('❌ خطأ: ' + data.message, 'danger');
+        }
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        showAlert('❌ حدث خطأ في الاتصال بالخادم', 'danger');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
 
         // ============================================================
         // 23. إضافة تخصص
