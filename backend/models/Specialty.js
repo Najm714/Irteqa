@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const CollegeSchema = new mongoose.Schema({
+const SpecialtySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -11,9 +11,14 @@ const CollegeSchema = new mongoose.Schema({
         ref: 'University',
         required: true
     },
+    collegeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'College',
+        required: true
+    },
     icon: {
         type: String,
-        default: 'fa-school'
+        default: 'fa-tag'
     },
     count: {
         type: Number,
@@ -28,8 +33,9 @@ const CollegeSchema = new mongoose.Schema({
 });
 
 // فهارس للبحث
-CollegeSchema.index({ name: 1 });
-CollegeSchema.index({ universityId: 1 });
-CollegeSchema.index({ name: 1, universityId: 1 }, { unique: true });
+SpecialtySchema.index({ name: 1 });
+SpecialtySchema.index({ universityId: 1 });
+SpecialtySchema.index({ collegeId: 1 });
+SpecialtySchema.index({ name: 1, collegeId: 1 }, { unique: true });
 
-module.exports = mongoose.model('College', CollegeSchema);
+module.exports = mongoose.model('Specialty', SpecialtySchema);

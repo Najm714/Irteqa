@@ -1,4 +1,3 @@
-// backend/models/Video.js
 const mongoose = require('mongoose');
 
 const VideoSchema = new mongoose.Schema({
@@ -8,23 +7,29 @@ const VideoSchema = new mongoose.Schema({
         trim: true
     },
     subjectId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ExplanationMaterial',
         required: true
     },
     subjectName: {
         type: String,
-        required: true,
-        trim: true
+        default: ''
     },
     specialtyName: {
         type: String,
-        default: '',
-        trim: true
+        default: ''
     },
     universityName: {
         type: String,
-        default: '',
-        trim: true
+        default: ''
+    },
+    collegeName: {
+        type: String,
+        default: ''
+    },
+    color: {
+        type: String,
+        default: '#7C3AED'
     },
     description: {
         type: String,
@@ -32,11 +37,11 @@ const VideoSchema = new mongoose.Schema({
     },
     fileName: {
         type: String,
-        required: true
+        default: ''
     },
     filePath: {
         type: String,
-        required: true
+        default: ''
     },
     fileSize: {
         type: String,
@@ -47,33 +52,67 @@ const VideoSchema = new mongoose.Schema({
         default: 'video/mp4'
     },
     fileId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'uploads.files'
+        type: String,
+        default: ''
     },
     duration: {
         type: String,
         default: '00:00'
     },
-    uploadDate: {
-        type: Date,
-        default: Date.now
-    },
     views: {
         type: Number,
         default: 0
     },
+    thumbnail: {
+        type: String,
+        default: ''
+    },
+    tags: {
+        type: [String],
+        default: []
+    },
+    isFree: {
+        type: Boolean,
+        default: false
+    },
+    uploadDate: {
+        type: Date,
+        default: Date.now
+    },
+    uploadedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    uploadedByName: {
+        type: String,
+        default: ''
+    },
     storageProvider: {
         type: String,
-        enum: ['local', 'gridfs', 'cloudinary'],
         default: 'gridfs'
+    },
+    // ✅ إضافة حقول للربط
+    universityId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'University'
+    },
+    collegeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'College'
+    },
+    specialtyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Specialty'
     }
 }, {
     timestamps: true
 });
 
-// فهارس للبحث السريع
+// فهارس للبحث
+VideoSchema.index({ title: 1 });
 VideoSchema.index({ subjectId: 1 });
-VideoSchema.index({ uploadDate: -1 });
-VideoSchema.index({ title: 'text', subjectName: 'text' });
+VideoSchema.index({ universityId: 1 });
+VideoSchema.index({ collegeId: 1 });
+VideoSchema.index({ specialtyId: 1 });
 
 module.exports = mongoose.model('Video', VideoSchema);

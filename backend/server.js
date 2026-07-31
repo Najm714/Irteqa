@@ -9,6 +9,7 @@ const WebSocket = require('ws');
 const http = require('http');
 const multer = require('multer');
 
+
 // تحميل متغيرات البيئة
 dotenv.config();
 
@@ -116,6 +117,7 @@ const Order = require('./models/Order');
 const User = require('./models/User');
 const University = require('./models/University');
 const College = require('./models/College');  // ✅ إضافة هذا
+const Specialty = require('./models/Specialty');  
 const ExplanationMaterial = require('./models/ExplanationMaterial');
 const Summary = require('./models/Summary');
 const Subscription = require('./models/Subscription');
@@ -2011,7 +2013,374 @@ app.post('/api/orders/:orderId/upload', protect, async (req, res) => {
         res.status(500).json({ success: false, message: error.message || 'حدث خطأ في رفع الملفات' });
     }
 });
+// ============================================================
+// 4.7 مسارات التخصصات (SPECIALTIES) - جديد
+// ============================================================
 
+// جلب جميع التخصصات
+app.get('/api/specialties', async (req, res) => {
+    try {
+        const specialties = await Specialty.find()
+            .populate('universityId', 'name icon')
+            .populate('collegeId', 'name icon')
+            .sort({ name: 1 });
+        res.status(200).json({ 
+            success: true, 
+            count: specialties.length, 
+            data: specialties 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب التخصصات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب تخصص محدد
+app.get('/api/specialties/:id', async (req, res) => {
+    try {
+        const specialty = await Specialty.findById(req.params.id)
+            .populate('universityId', 'name icon')
+            .populate('collegeId', 'name icon');
+        
+        if (!specialty) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'التخصص غير موجود' 
+            });
+        }
+        res.status(200).json({ success: true, data: specialty });
+    } catch (error) {
+        console.error('❌ خطأ في جلب التخصص:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب تخصصات جامعة محددة
+app.get('/api/specialties/university/:universityId', async (req, res) => {
+    try {
+        const specialties = await Specialty.find({ 
+            universityId: req.params.universityId 
+        }).populate('collegeId', 'name').sort({ name: 1 });
+        
+        res.status(200).json({ 
+            success: true, 
+            count: specialties.length, 
+            data: specialties 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب تخصصات الجامعة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب تخصصات كلية محددة
+app.get('/api/specialties/college/:collegeId', async (req, res) => {
+    try {
+        const specialties = await Specialty.find({ 
+            collegeId: req.params.collegeId 
+        }).populate('universityId', 'name').sort({ name: 1 });
+        
+        res.status(200).json({ 
+            success: true, 
+            count: specialties.length, 
+            data: specialties 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب تخصصات الكلية:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// إضافة تخصص جديد (للمدير فقط)
+app.post('/api/specialties', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { name, universityId, collegeId, icon, count, description } = req.body;
+
+        if (!name || !universityId || !collegeId) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'اسم التخصص، معرف الجامعة، ومعرف الكلية مطلوبون' 
+            });
+        }
+
+        // التحقق من وجود الجامعة
+        const university = await University.findById(universityId);
+        if (!university) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الجامعة غير موجودة' 
+            });
+        }
+
+        // التحقق من وجود الكلية
+        const college = await College.findById(collegeId);
+        if (!college) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الكلية غير موجودة' 
+            });
+        }
+
+        // التحقق من عدم وجود تخصص بنفس الاسم لنفس الكلية
+        const existingSpecialty = await Specialty.findOne({ 
+            name: name.trim(), 
+            collegeId: collegeId 
+        });
+        
+        if (existingSpecialty) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'هذا التخصص موجود بالفعل في هذه الكلية' 
+            });
+        }
+
+        const specialty = new Specialty({
+            name: name.trim(),
+            universityId,
+            collegeId,
+            icon: icon || 'fa-tag',
+            count: count || 0,
+            description: description || ''
+        });
+
+        await specialty.save();
+
+        // تحديث عدد التخصصات في الكلية
+        await College.findByIdAndUpdate(collegeId, {
+            $inc: { count: 1 }
+        });
+
+        // تحديث عدد التخصصات في الجامعة (اختياري)
+        // يمكن إضافة حقل count في الجامعة إذا أردت
+
+        res.status(201).json({ 
+            success: true, 
+            message: 'تم إضافة التخصص بنجاح ✅', 
+            data: specialty 
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في إضافة التخصص:', error);
+        if (error.code === 11000) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'هذا التخصص موجود بالفعل في هذه الكلية' 
+            });
+        }
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'حدث خطأ في إضافة التخصص' 
+        });
+    }
+});
+
+// حذف تخصص (للمدير فقط)
+app.delete('/api/specialties/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const specialty = await Specialty.findById(req.params.id);
+        if (!specialty) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'التخصص غير موجود' 
+            });
+        }
+
+        // تحديث عدد التخصصات في الكلية
+        await College.findByIdAndUpdate(specialty.collegeId, {
+            $inc: { count: -1 }
+        });
+
+        await specialty.deleteOne();
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'تم حذف التخصص بنجاح 🗑️' 
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في حذف التخصص:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'حدث خطأ في حذف التخصص' 
+        });
+    }
+});
+
+// ============================================================
+// 4.8 تحديث مسارات المواد (MATERIALS) لإضافة specialtyId
+// ============================================================
+
+// تحديث مسار إضافة مادة
+app.post('/api/explanations/materials', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { 
+            title, code, instructor, universityId, collegeId, specialtyId,
+            icon, videos, description, isFeatured, price, image,
+            studentsCount, rating, duration, quizzes, instructorBio, features, units
+        } = req.body;
+
+        if (!title || !code || !instructor || !universityId || !collegeId || !specialtyId) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'جميع الحقول المطلوبة غير مكتملة' 
+            });
+        }
+
+        // التحقق من وجود الجامعة
+        const university = await University.findById(universityId);
+        if (!university) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الجامعة غير موجودة' 
+            });
+        }
+
+        // التحقق من وجود الكلية
+        const college = await College.findById(collegeId);
+        if (!college) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'الكلية غير موجودة' 
+            });
+        }
+
+        // التحقق من وجود التخصص
+        const specialty = await Specialty.findById(specialtyId);
+        if (!specialty) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'التخصص غير موجود' 
+            });
+        }
+
+        // حساب عدد الفيديوهات من الوحدات
+        let videoCount = 0;
+        if (units && Array.isArray(units)) {
+            units.forEach(unit => {
+                if (unit.videos && Array.isArray(unit.videos)) {
+                    videoCount += unit.videos.length;
+                }
+            });
+        }
+
+        const material = new ExplanationMaterial({
+            title,
+            code,
+            instructor,
+            universityId,
+            collegeId,
+            specialtyId,
+            icon: icon || 'fa-book',
+            videos: videoCount || videos || 0,
+            description: description || '',
+            isFeatured: isFeatured || false,
+            price: price || 99,
+            image: image || '',
+            studentsCount: studentsCount || 0,
+            rating: rating || 4.5,
+            duration: duration || 0,
+            quizzes: quizzes || 0,
+            instructorBio: instructorBio || '',
+            features: features || [],
+            units: units || []
+        });
+
+        await material.save();
+
+        // تحديث عدد المواد في التخصص
+        await Specialty.findByIdAndUpdate(specialtyId, { 
+            $inc: { count: 1 } 
+        });
+
+        res.status(201).json({ 
+            success: true, 
+            message: 'تم إضافة المادة بنجاح', 
+            data: material 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في إضافة المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// تحديث مسار جلب المواد
+app.get('/api/explanations/materials', async (req, res) => {
+    try {
+        const materials = await ExplanationMaterial.find()
+            .populate('universityId', 'name icon')
+            .populate('collegeId', 'name icon')
+            .populate('specialtyId', 'name icon')
+            .sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: materials });
+    } catch (error) {
+        console.error('❌ خطأ في جلب المواد:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب مواد تخصص محدد
+app.get('/api/explanations/materials/specialty/:specialtyId', async (req, res) => {
+    try {
+        const materials = await ExplanationMaterial.find({ 
+            specialtyId: req.params.specialtyId 
+        }).populate('universityId', 'name').populate('collegeId', 'name').sort({ title: 1 });
+        
+        res.status(200).json({ 
+            success: true, 
+            count: materials.length, 
+            data: materials 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب مواد التخصص:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 4.9 تحديث مسارات الفيديوهات (VIDEOS) لإضافة الربط
+// ============================================================
+
+// تحديث مسار رفع الفيديو
+app.post('/api/videos/upload', protect, authorize('admin'), async (req, res) => {
+    try {
+        // ... الكود الموجود لرفع الفيديو ...
+        
+        // بعد حفظ الفيديو، تأكد من حفظ المعرفات
+        const video = new Video({
+            title: req.body.title,
+            subjectId: req.body.subjectId,
+            subjectName: req.body.subjectName || '',
+            specialtyName: req.body.specialtyName || '',
+            universityName: req.body.universityName || '',
+            collegeName: req.body.collegeName || '',
+            color: req.body.color || '#7C3AED',
+            description: req.body.description || '',
+            // ... باقي الحقول
+            // ✅ إضافة معرفات الربط
+            universityId: req.body.universityId,
+            collegeId: req.body.collegeId,
+            specialtyId: req.body.specialtyId
+        });
+        
+        await video.save();
+        // ... باقي الكود
+    } catch (error) {
+        // ... معالجة الخطأ
+    }
+});
+
+// جلب فيديوهات حسب المادة
+app.get('/api/videos/material/:materialId', async (req, res) => {
+    try {
+        const videos = await Video.find({ 
+            subjectId: req.params.materialId 
+        }).sort({ uploadDate: -1 });
+        res.status(200).json({ success: true, count: videos.length, data: videos });
+    } catch (error) {
+        console.error('❌ خطأ في جلب فيديوهات المادة:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 // ============================================================
 // 5. مسارات المستخدمين (USERS)
 // ============================================================

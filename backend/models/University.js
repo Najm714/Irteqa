@@ -1,4 +1,3 @@
-// backend/models/University.js
 const mongoose = require('mongoose');
 
 const UniversitySchema = new mongoose.Schema({
