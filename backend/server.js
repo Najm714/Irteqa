@@ -2051,8 +2051,6 @@ router.get('/api/health-orders/dashboard', protect, authorize('admin'), async (r
     }
 });
 
-module.exports = router;
-
 // ============================================================
 // 📤 رفع ملفات للطلب
 // ============================================================
