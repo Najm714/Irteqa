@@ -1424,97 +1424,126 @@ function showSpecialtiesByCollege(collegeId) {
     }).join('');
 
     document.getElementById('specialtiesSection').scrollIntoView({ behavior: 'smooth' });
-}
-        // ============================================================
-        // 12. عرض المواد حسب التخصص (المستوى الرابع)
-        // ============================================================
-        function showMaterialsBySpecialty(specialtyId) {
-            const spec = specialties.find(s => s._id === specialtyId);
-            if (!spec) return;
+}// ============================================================
+// 12. عرض المواد حسب التخصص (المستوى الرابع) - النسخة المُصلحة
+// ============================================================
+function showMaterialsBySpecialty(specialtyId) {
+    console.log('🔄 عرض المواد للتخصص:', specialtyId);
+    
+    const spec = specialties.find(s => s._id === specialtyId);
+    if (!spec) {
+        console.error('❌ التخصص غير موجود:', specialtyId);
+        return;
+    }
 
-            const col = colleges.find(c => c._id === spec.collegeId);
-            const uni = universities.find(u => u._id === spec.universityId);
-            currentSpecialty = spec;
+    const col = colleges.find(c => c._id === spec.collegeId);
+    const uni = universities.find(u => u._id === spec.universityId);
+    
+    console.log('📊 التخصص:', spec.name, 'الكلية:', col ? col.name : 'غير محددة');
+    
+    currentSpecialty = spec;
 
-            const filteredMaterials = materials.filter(m => m.specialtyId === specialtyId);
-
-            const grid = document.getElementById('materialsGrid');
-            const countEl = document.getElementById('materialCount');
-            const labelEl = document.getElementById('materialParentLabel');
-
-            document.getElementById('specialtiesSection').classList.remove('active');
-            document.getElementById('specialtiesSection').style.display = 'none';
-            document.getElementById('materialsSection').style.display = 'block';
-            document.getElementById('materialsSection').classList.add('active');
-
-            document.getElementById('btnBackToSpecialties').style.display = 'inline-flex';
-
-            labelEl.textContent = `(تخصص ${spec.name})`;
-
-            if (filteredMaterials.length === 0) {
-                grid.innerHTML = `
-                    <div class="no-results">
-                        <i class="fas fa-book-open"></i>
-                        <h3>لا توجد مواد</h3>
-                        <p>لم يتم إضافة أي مواد لهذا التخصص بعد</p>
-                        <a href="admin-explanations.html" class="btn-admin-link">
-                            <i class="fas fa-plus-circle"></i> أضف مادة الآن
-                        </a>
-                    </div>
-                `;
-                countEl.textContent = '0';
-                return;
-            }
-
-            countEl.textContent = filteredMaterials.length;
-
-            grid.innerHTML = filteredMaterials.map(m => {
-                const videoCount = videos.filter(v => String(v.subjectId) === String(m._id)).length;
-                const price = m.price || 99;
-                const isSubscribed = false; // سيتم التحقق لاحقاً
-
-                return `
-                    <div class="material-card">
-                        ${m.isFeatured ? '<span class="featured-badge"><i class="fas fa-star"></i> مميز</span>' : ''}
-                        <div class="material-header">
-                            <span class="material-code">${m.code}</span>
-                            <span class="material-icon"><i class="fas ${m.icon || 'fa-book'}"></i></span>
-                        </div>
-                        <div class="material-title">${m.title}</div>
-                        <div class="material-instructor">
-                            <i class="fas fa-user-graduate"></i> ${m.instructor}
-                        </div>
-                        <div class="material-desc">${m.description || 'لا يوجد وصف'}</div>
-                        <span class="specialty-tag"><i class="fas fa-tag"></i> ${spec.name}</span>
-                        <div class="material-footer">
-                            <div class="material-stats">
-                                <span><i class="fas fa-video"></i> ${videoCount}</span>
-                                <span><i class="fas fa-users"></i> ${m.studentsCount || 0}</span>
-                                ${!isSubscribed ? `<span class="material-price"><i class="fas fa-tag"></i> ${price} ريال</span>` : ''}
-                            </div>
-                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                                ${isSubscribed ? `
-                                    <button class="btn-open-material" onclick="event.stopPropagation(); openMaterialContent('${m._id}')">
-                                        <i class="fas fa-play"></i> فتح المادة
-                                    </button>
-                                ` : `
-                                    <button class="btn-subscribe" onclick="event.stopPropagation(); openSubscription('${m._id}', 'material')">
-                                        <i class="fas fa-play"></i> اشتراك
-                                    </button>
-                                `}
-                                <button class="btn-detail-material" onclick="event.stopPropagation(); openMaterialDetail('${m._id}')">
-                                    <i class="fas fa-info-circle"></i> تفاصيل
-                                </button>
-                            </div>
-                        </div>
-                        ${isSubscribed ? '<div class="subscribed-badge"><i class="fas fa-check-circle"></i> مشترك</div>' : ''}
-                    </div>
-                `;
-            }).join('');
-
-            document.getElementById('materialsSection').scrollIntoView({ behavior: 'smooth' });
+    // ✅ تصفية المواد بشكل صحيح (مقارنة المعرفات كنصوص)
+    const filteredMaterials = materials.filter(m => {
+        let specId = m.specialtyId;
+        if (typeof specId === 'object' && specId !== null) {
+            specId = specId._id || specId.toString();
         }
+        return String(specId) === String(specialtyId);
+    });
+    
+    console.log(`📊 عدد المواد في التخصص ${spec.name}:`, filteredMaterials.length);
+    console.log('📋 المواد المصفاة:', filteredMaterials);
 
+    const grid = document.getElementById('materialsGrid');
+    const countEl = document.getElementById('materialCount');
+    const labelEl = document.getElementById('materialParentLabel');
+
+    // إظهار/إخفاء الأقسام
+    document.getElementById('specialtiesSection').classList.remove('active');
+    document.getElementById('specialtiesSection').style.display = 'none';
+    document.getElementById('materialsSection').style.display = 'block';
+    document.getElementById('materialsSection').classList.add('active');
+
+    document.getElementById('btnBackToSpecialties').style.display = 'inline-flex';
+    document.getElementById('btnBackToColleges').style.display = 'inline-flex';
+    document.getElementById('btnBackToUniversities').style.display = 'inline-flex';
+
+    labelEl.textContent = `(تخصص ${spec.name} - ${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})`;
+
+    // ✅ عرض رسالة في حالة عدم وجود مواد
+    if (filteredMaterials.length === 0) {
+        grid.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-book-open"></i>
+                <h3>لا توجد مواد</h3>
+                <p>لم يتم إضافة أي مواد لهذا التخصص بعد</p>
+                <a href="admin-explanations.html" class="btn-admin-link">
+                    <i class="fas fa-plus-circle"></i> أضف مادة الآن
+                </a>
+            </div>
+        `;
+        countEl.textContent = '0';
+        return;
+    }
+
+    countEl.textContent = filteredMaterials.length;
+
+    // ✅ عرض المواد مع معالجة المعرفات بشكل صحيح
+    grid.innerHTML = filteredMaterials.map(m => {
+        // ✅ حساب عدد الفيديوهات المرتبطة بالمادة
+        const videoCount = videos.filter(v => {
+            let subId = v.subjectId;
+            if (typeof subId === 'object' && subId !== null) {
+                subId = subId._id || subId.toString();
+            }
+            return String(subId) === String(m._id);
+        }).length;
+        
+        const price = m.price || 99;
+        const isSubscribed = false; // سيتم التحقق لاحقاً
+
+        return `
+            <div class="material-card">
+                ${m.isFeatured ? '<span class="featured-badge"><i class="fas fa-star"></i> مميز</span>' : ''}
+                <div class="material-header">
+                    <span class="material-code">${m.code}</span>
+                    <span class="material-icon"><i class="fas ${m.icon || 'fa-book'}"></i></span>
+                </div>
+                <div class="material-title">${m.title}</div>
+                <div class="material-instructor">
+                    <i class="fas fa-user-graduate"></i> ${m.instructor}
+                </div>
+                <div class="material-desc">${m.description || 'لا يوجد وصف'}</div>
+                <span class="specialty-tag"><i class="fas fa-tag"></i> ${spec.name}</span>
+                <div class="material-footer">
+                    <div class="material-stats">
+                        <span><i class="fas fa-video"></i> ${videoCount}</span>
+                        <span><i class="fas fa-users"></i> ${m.studentsCount || 0}</span>
+                        ${!isSubscribed ? `<span class="material-price"><i class="fas fa-tag"></i> ${price} ريال</span>` : ''}
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        ${isSubscribed ? `
+                            <button class="btn-open-material" onclick="event.stopPropagation(); openMaterialContent('${m._id}')">
+                                <i class="fas fa-play"></i> فتح المادة
+                            </button>
+                        ` : `
+                            <button class="btn-subscribe" onclick="event.stopPropagation(); openSubscription('${m._id}', 'material')">
+                                <i class="fas fa-play"></i> اشتراك
+                            </button>
+                        `}
+                        <button class="btn-detail-material" onclick="event.stopPropagation(); openMaterialDetail('${m._id}')">
+                            <i class="fas fa-info-circle"></i> تفاصيل
+                        </button>
+                    </div>
+                </div>
+                ${isSubscribed ? '<div class="subscribed-badge"><i class="fas fa-check-circle"></i> مشترك</div>' : ''}
+            </div>
+        `;
+    }).join('');
+
+    document.getElementById('materialsSection').scrollIntoView({ behavior: 'smooth' });
+}
         // ============================================================
         // 13. دوال العودة بين المستويات
         // ============================================================
