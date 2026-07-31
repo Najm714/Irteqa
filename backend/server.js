@@ -900,7 +900,456 @@ app.get('/api/business-orders/files/list', protect, authorize('admin'), async (r
     }
 });
 
+// ============================================================
+// 📁 4.6 مسارات طلبات الخدمات الأكاديمية (ACADEMIC ORDERS)
+// ============================================================
 
+// جلب جميع الطلبات الأكاديمية (للمدير)
+app.get('/api/academic-orders', protect, authorize('admin'), async (req, res) => {
+    try {
+        const orders = await Order.find({
+            $or: [
+                { orderType: 'academic' },
+                { department: { $regex: /Academic|Research|Translation|Design/i, $options: 'i' } }
+            ]
+        }).sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: orders.length, data: orders });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الطلبات الأكاديمية:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// جلب طلب أكاديمي محدد
+app.get('/api/academic-orders/:id', protect, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود' });
+        }
+        res.status(200).json({ success: true, data: order });
+    } catch (error) {
+        console.error('❌ خطأ في جلب الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// إنشاء طلب أكاديمي جديد
+app.post('/api/academic-orders', async (req, res) => {
+    try {
+        const { 
+            name, email, phone, department, service, requestType, 
+            title, description, organization, deliveryDate, notes, 
+            termsAgreed, files 
+        } = req.body;
+
+        // التحقق من الحقول المطلوبة
+        const required = { name, email, phone, department, service, requestType, title, description, deliveryDate };
+        const missing = Object.entries(required).filter(([k, v]) => !v || v.trim() === '').map(([k]) => k);
+        if (missing.length > 0) {
+            return res.status(400).json({ 
+                success: false, 
+                message: `الحقول المطلوبة غير مكتملة: ${missing.join('، ')}` 
+            });
+        }
+
+        // حفظ الملفات
+        const savedFiles = [];
+        if (files && Array.isArray(files) && files.length > 0) {
+            for (const file of files) {
+                try {
+                    if (!file.fileData || !file.fileData.includes(';base64,')) continue;
+                    const base64Data = file.fileData.split(';base64,').pop();
+                    const buffer = Buffer.from(base64Data, 'base64');
+                    if (buffer.length === 0) continue;
+                    
+                    const ext = path.extname(file.filename || 'ملف');
+                    const fileName = `academic-${Date.now()}-${Math.round(Math.random() * 10000)}${ext}`;
+                    const filePath = path.join(academicOrdersDir, fileName);
+                    fs.writeFileSync(filePath, buffer);
+                    
+                    savedFiles.push({
+                        filename: file.filename || 'ملف',
+                        filePath: filePath,
+                        fileId: fileName,
+                        fileSize: file.fileSize || buffer.length,
+                        mimeType: file.fileType || file.type || 'application/octet-stream',
+                        uploadDate: new Date()
+                    });
+                } catch (error) {
+                    console.error(`❌ خطأ في حفظ الملف:`, error);
+                }
+            }
+        }
+
+        // تحديد التصنيف بناءً على نوع الخدمة
+        const serviceCategories = {
+            research: '🔬 بحث علمي',
+            statistics: '📊 تحليل إحصائي',
+            translation: '🌐 ترجمة',
+            editing: '✍️ تحرير',
+            design: '🎨 تصميم',
+            publication: '📰 نشر',
+            references: '📚 مراجع'
+        };
+
+        const serviceCategory = serviceCategories[service] || 'خدمات أكاديمية';
+
+        const order = new Order({
+            serviceType: service || 'خدمة أكاديمية',
+            title: title.trim(),
+            description: description.trim(),
+            deadline: new Date(deliveryDate),
+            budget: 0,
+            status: 'pending',
+            orderType: 'academic',
+            serviceCategory: serviceCategory,
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            department: department.trim(),
+            service: service.trim(),
+            requestType: requestType.trim(),
+            organization: organization ? organization.trim() : '',
+            deliveryDate: deliveryDate,
+            notes: notes ? notes.trim() : '',
+            termsAgreed: termsAgreed === true || termsAgreed === 'true',
+            files: savedFiles,
+            timeline: [{ event: 'تم إنشاء الطلب الأكاديمي', time: new Date() }]
+        });
+
+        await order.save();
+        res.status(201).json({ 
+            success: true, 
+            message: 'تم إرسال الطلب الأكاديمي بنجاح ✅', 
+            data: order 
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في إنشاء الطلب الأكاديمي:', error);
+        if (error.name === 'ValidationError') {
+            const errors = Object.values(error.errors).map(e => e.message);
+            return res.status(400).json({ 
+                success: false, 
+                message: `خطأ في البيانات: ${errors.join('، ')}` 
+            });
+        }
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'حدث خطأ في إنشاء الطلب الأكاديمي' 
+        });
+    }
+});
+
+// تحديث حالة طلب أكاديمي
+app.put('/api/academic-orders/:id/status', protect, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'in-progress', 'completed', 'revision', 'cancelled'];
+        if (!status || !validStatuses.includes(status)) {
+            return res.status(400).json({ success: false, message: 'حالة غير صالحة' });
+        }
+        
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        
+        order.status = status;
+        order.timeline = order.timeline || [];
+        order.timeline.push({ 
+            event: `تم تغيير الحالة إلى ${status}`, 
+            time: new Date() 
+        });
+        
+        await order.save();
+        res.status(200).json({ 
+            success: true, 
+            message: `تم تحديث حالة الطلب إلى ${status} ✅`, 
+            data: order 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في تحديث حالة الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// حذف طلب أكاديمي
+app.delete('/api/academic-orders/:id', protect, authorize('admin'), async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'الطلب غير موجود ❌' });
+        }
+        
+        // حذف الملفات المرتبطة
+        if (order.files && order.files.length > 0) {
+            for (const file of order.files) {
+                const filePath = path.join(academicOrdersDir, file.fileId || file.filename);
+                if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+            }
+        }
+        
+        await order.deleteOne();
+        res.status(200).json({ success: true, message: 'تم حذف الطلب الأكاديمي بنجاح 🗑️' });
+    } catch (error) {
+        console.error('❌ خطأ في حذف الطلب:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📁 مسارات الملفات للطلبات الأكاديمية
+// ============================================================
+
+// عرض ملفات الطلبات الأكاديمية (يدعم التخزين المحلي و GridFS)
+app.get('/api/academic-orders/files/:fileId', async (req, res) => {
+    try {
+        const { fileId } = req.params;
+        const ObjectId = require('mongodb').ObjectId;
+
+        // البحث في التخزين المحلي أولاً
+        const localPath = path.join(academicOrdersDir, fileId);
+        if (fs.existsSync(localPath)) {
+            const ext = path.extname(fileId).toLowerCase();
+            const mimeTypes = {
+                '.pdf': 'application/pdf', 
+                '.doc': 'application/msword', 
+                '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                '.xls': 'application/vnd.ms-excel', 
+                '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                '.ppt': 'application/vnd.ms-powerpoint', 
+                '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                '.jpg': 'image/jpeg', 
+                '.jpeg': 'image/jpeg', 
+                '.png': 'image/png', 
+                '.gif': 'image/gif',
+                '.zip': 'application/zip', 
+                '.rar': 'application/x-rar-compressed', 
+                '.txt': 'text/plain',
+                '.csv': 'text/csv',
+                '.xml': 'application/xml',
+                '.json': 'application/json',
+                '.md': 'text/markdown'
+            };
+            const contentType = mimeTypes[ext] || 'application/octet-stream';
+            res.setHeader('Content-Type', contentType);
+            res.setHeader('Content-Disposition', `inline; filename="${fileId}"`);
+            return res.sendFile(localPath);
+        }
+
+        // البحث في GridFS
+        if (ObjectId.isValid(fileId)) {
+            const fileInfo = await getFileInfo(fileId);
+            if (fileInfo) {
+                const bucket = getGridFSBucket();
+                if (bucket) {
+                    res.setHeader('Content-Type', fileInfo.contentType || 'application/octet-stream');
+                    res.setHeader('Content-Length', fileInfo.length);
+                    const downloadStream = bucket.openDownloadStream(new ObjectId(fileId));
+                    downloadStream.pipe(res);
+                    return;
+                }
+            }
+        }
+
+        res.status(404).json({ success: false, message: 'الملف غير موجود', fileId });
+    } catch (error) {
+        console.error('❌ خطأ في عرض الملف الأكاديمي:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// عرض الملفات من التخزين المحلي
+app.get('/uploads/academic-orders/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(academicOrdersDir, filename);
+    
+    if (fs.existsSync(filePath)) {
+        const ext = path.extname(filename).toLowerCase();
+        const mimeTypes = {
+            '.pdf': 'application/pdf', 
+            '.doc': 'application/msword', 
+            '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.xls': 'application/vnd.ms-excel', 
+            '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            '.ppt': 'application/vnd.ms-powerpoint', 
+            '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            '.jpg': 'image/jpeg', 
+            '.jpeg': 'image/jpeg', 
+            '.png': 'image/png', 
+            '.gif': 'image/gif',
+            '.zip': 'application/zip', 
+            '.rar': 'application/x-rar-compressed', 
+            '.txt': 'text/plain',
+            '.csv': 'text/csv',
+            '.xml': 'application/xml',
+            '.json': 'application/json',
+            '.md': 'text/markdown'
+        };
+        const contentType = mimeTypes[ext] || 'application/octet-stream';
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+        res.sendFile(filePath);
+    } else {
+        res.status(404).json({ success: false, message: 'الملف غير موجود', filename });
+    }
+});
+
+// قائمة الملفات الأكاديمية (للمدير)
+app.get('/api/academic-orders/files/list', protect, authorize('admin'), async (req, res) => {
+    try {
+        const files = fs.readdirSync(academicOrdersDir);
+        const fileList = files.map(filename => {
+            const filePath = path.join(academicOrdersDir, filename);
+            const stats = fs.statSync(filePath);
+            return { 
+                filename, 
+                size: stats.size, 
+                created: stats.birthtime, 
+                modified: stats.mtime,
+                sizeKB: (stats.size / 1024).toFixed(2),
+                sizeMB: (stats.size / (1024 * 1024)).toFixed(2)
+            };
+        });
+        res.status(200).json({ 
+            success: true, 
+            count: fileList.length, 
+            data: fileList, 
+            directory: academicOrdersDir 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في قراءة المجلد الأكاديمي:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📊 إحصائيات الطلبات الأكاديمية (للمدير)
+// ============================================================
+
+app.get('/api/academic-orders/stats', protect, authorize('admin'), async (req, res) => {
+    try {
+        const total = await Order.countDocuments({ orderType: 'academic' });
+        const pending = await Order.countDocuments({ orderType: 'academic', status: 'pending' });
+        const inProgress = await Order.countDocuments({ orderType: 'academic', status: 'in-progress' });
+        const completed = await Order.countDocuments({ orderType: 'academic', status: 'completed' });
+        const revision = await Order.countDocuments({ orderType: 'academic', status: 'revision' });
+        const cancelled = await Order.countDocuments({ orderType: 'academic', status: 'cancelled' });
+
+        // إحصائيات حسب التصنيف
+        const categoryStats = await Order.aggregate([
+            { $match: { orderType: 'academic' } },
+            { $group: { _id: '$serviceCategory', count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]);
+
+        // إحصائيات حسب الشهر
+        const monthlyStats = await Order.aggregate([
+            { $match: { orderType: 'academic' } },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: '$createdAt' },
+                        month: { $month: '$createdAt' }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { '_id.year': -1, '_id.month': -1 } },
+            { $limit: 12 }
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                total,
+                pending,
+                inProgress,
+                completed,
+                revision,
+                cancelled,
+                categoryStats,
+                monthlyStats
+            }
+        });
+    } catch (error) {
+        console.error('❌ خطأ في جلب إحصائيات الطلبات الأكاديمية:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 🔍 البحث والتصفية للطلبات الأكاديمية
+// ============================================================
+
+app.get('/api/academic-orders/search', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { q, status, category, fromDate, toDate } = req.query;
+        const query = { orderType: 'academic' };
+
+        // البحث النصي
+        if (q) {
+            query.$or = [
+                { name: { $regex: q, $options: 'i' } },
+                { email: { $regex: q, $options: 'i' } },
+                { title: { $regex: q, $options: 'i' } },
+                { description: { $regex: q, $options: 'i' } },
+                { service: { $regex: q, $options: 'i' } }
+            ];
+        }
+
+        // تصفية حسب الحالة
+        if (status) {
+            query.status = status;
+        }
+
+        // تصفية حسب التصنيف
+        if (category) {
+            query.serviceCategory = { $regex: category, $options: 'i' };
+        }
+
+        // تصفية حسب التاريخ
+        if (fromDate || toDate) {
+            query.createdAt = {};
+            if (fromDate) query.createdAt.$gte = new Date(fromDate);
+            if (toDate) query.createdAt.$lte = new Date(toDate);
+        }
+
+        const orders = await Order.find(query).sort({ createdAt: -1 });
+        res.status(200).json({ 
+            success: true, 
+            count: orders.length, 
+            data: orders 
+        });
+    } catch (error) {
+        console.error('❌ خطأ في البحث عن الطلبات:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ============================================================
+// 📥 تصدير الطلبات الأكاديمية (Excel/CSV)
+// ============================================================
+
+app.get('/api/academic-orders/export/csv', protect, authorize('admin'), async (req, res) => {
+    try {
+        const orders = await Order.find({ orderType: 'academic' }).sort({ createdAt: -1 });
+        
+        // تحويل البيانات إلى CSV
+        let csv = 'الرقم,الاسم,البريد الإلكتروني,الهاتف,الخدمة,نوع الطلب,الحالة,تاريخ التسليم,تاريخ الإنشاء\n';
+        orders.forEach(order => {
+            csv += `${order._id},${order.name},${order.email},${order.phone},${order.service},${order.requestType},${order.status},${order.deliveryDate},${order.createdAt}\n`;
+        });
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=academic-orders-${Date.now()}.csv`);
+        res.send(csv);
+    } catch (error) {
+        console.error('❌ خطأ في تصدير CSV:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 // ============================================================
 // 4.5 مسارات طلبات العلوم الصحية (HEALTH ORDERS)
 // ============================================================
