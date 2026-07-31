@@ -591,13 +591,6 @@
         .btn-view:hover {
             transform: scale(1.05);
         }
-        .btn-download {
-            background: var(--success);
-            color: #fff;
-        }
-        .btn-download:hover {
-            transform: scale(1.05);
-        }
 
         .empty-state {
             text-align: center;
@@ -947,7 +940,6 @@
                                     <option value="fa-laptop">💻 fa-laptop</option>
                                     <option value="fa-building">🏢 fa-building</option>
                                     <option value="fa-globe">🌍 fa-globe</option>
-                                    <option value="fa-leaf">🌿 fa-leaf</option>
                                 </select>
                             </div>
                         </div>
@@ -1385,7 +1377,7 @@
     </div>
 
     <!-- ============================================================
-    ====== جافا سكريبت ======
+    ====== جافا سكريبت - الكود الكامل والمترابط ======
     ============================================================ -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
     </script>
@@ -1444,6 +1436,10 @@
             document.getElementById('tab-videos').style.display = tab === 'videos' ? 'block' : 'none';
 
             if (tab === 'videos') fetchVideos();
+            if (tab === 'materials') fetchMaterials();
+            if (tab === 'specialties') fetchSpecialties();
+            if (tab === 'colleges') fetchColleges();
+            if (tab === 'universities') fetchUniversities();
         }
 
         // ============================================================
@@ -1480,11 +1476,15 @@
                 document.getElementById('dashboardContent').style.display = 'block';
                 document.getElementById('adminHeader').style.display = 'flex';
 
-                fetchUniversities();
-                fetchColleges();
-                fetchSpecialties();
-                fetchMaterials();
-                fetchVideos();
+                // تحميل جميع البيانات
+                Promise.all([
+                    fetchUniversities(),
+                    fetchColleges(),
+                    fetchSpecialties(),
+                    fetchMaterials(),
+                    fetchVideos()
+                ]);
+
                 return true;
             } catch (error) {
                 console.error('❌ خطأ:', error);
@@ -1586,7 +1586,7 @@
                     populateSelects();
                 }
             } catch (error) {
-                console.error('❌ خطأ:', error);
+                console.error('❌ خطأ في جلب الجامعات:', error);
             }
         }
 
@@ -1603,7 +1603,7 @@
                     populateSelects();
                 }
             } catch (error) {
-                console.error('❌ خطأ:', error);
+                console.error('❌ خطأ في جلب الكليات:', error);
             }
         }
 
@@ -1620,7 +1620,7 @@
                     populateSelects();
                 }
             } catch (error) {
-                console.error('❌ خطأ:', error);
+                console.error('❌ خطأ في جلب التخصصات:', error);
             }
         }
 
@@ -1637,7 +1637,7 @@
                     populateSelects();
                 }
             } catch (error) {
-                console.error('❌ خطأ:', error);
+                console.error('❌ خطأ في جلب المواد:', error);
             }
         }
 
@@ -1670,81 +1670,181 @@
         }
 
         // ============================================================
-        // 14. تعبئة القوائم المنسدلة
+        // 14. تعبئة القوائم المنسدلة (ربط جميع المستويات)
         // ============================================================
         function populateSelects() {
-            // ---- نموذج الجامعات ----
-            // (تم التعبئة مباشرة)
-
             // ---- نموذج الكليات ----
             const collegeUniSelect = document.getElementById('collegeUniversity');
-            collegeUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
-            universities.forEach(uni => {
-                collegeUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
-            });
+            if (collegeUniSelect) {
+                collegeUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
+                universities.forEach(uni => {
+                    collegeUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
+                });
+            }
 
             // ---- نموذج التخصصات ----
             const specUniSelect = document.getElementById('specialtyUniversity');
             const specCollegeSelect = document.getElementById('specialtyCollege');
-            specUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
-            universities.forEach(uni => {
-                specUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
-            });
-            specCollegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
-            colleges.forEach(col => {
-                const uni = universities.find(u => u._id === col.universityId);
-                specCollegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
-            });
+            if (specUniSelect) {
+                specUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
+                universities.forEach(uni => {
+                    specUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
+                });
+            }
+            if (specCollegeSelect) {
+                specCollegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
+                colleges.forEach(col => {
+                    const uni = universities.find(u => u._id === col.universityId);
+                    specCollegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
+                });
+            }
 
             // ---- نموذج المواد ----
             const matUniSelect = document.getElementById('matUniversity');
             const matCollegeSelect = document.getElementById('matCollege');
             const matSpecSelect = document.getElementById('matSpecialty');
-            matUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
-            universities.forEach(uni => {
-                matUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
-            });
-            matCollegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
-            colleges.forEach(col => {
-                const uni = universities.find(u => u._id === col.universityId);
-                matCollegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
-            });
-            matSpecSelect.innerHTML = '<option value="">اختر التخصص</option>';
-            specialties.forEach(spec => {
-                const col = colleges.find(c => c._id === spec.collegeId);
-                const uni = universities.find(u => u._id === spec.universityId);
-                matSpecSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
-            });
+            if (matUniSelect) {
+                matUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
+                universities.forEach(uni => {
+                    matUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
+                });
+            }
+            if (matCollegeSelect) {
+                matCollegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
+                colleges.forEach(col => {
+                    const uni = universities.find(u => u._id === col.universityId);
+                    matCollegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
+                });
+            }
+            if (matSpecSelect) {
+                matSpecSelect.innerHTML = '<option value="">اختر التخصص</option>';
+                specialties.forEach(spec => {
+                    const col = colleges.find(c => c._id === spec.collegeId);
+                    const uni = universities.find(u => u._id === spec.universityId);
+                    matSpecSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
+                });
+            }
 
             // ---- نموذج الفيديوهات ----
             const vidUniSelect = document.getElementById('videoUniversity');
             const vidCollegeSelect = document.getElementById('videoCollege');
             const vidSpecSelect = document.getElementById('videoSpecialty');
             const vidMatSelect = document.getElementById('videoMaterial');
-            vidUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
-            universities.forEach(uni => {
-                vidUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
-            });
-            vidCollegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
-            colleges.forEach(col => {
-                const uni = universities.find(u => u._id === col.universityId);
-                vidCollegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
-            });
-            vidSpecSelect.innerHTML = '<option value="">اختر التخصص</option>';
-            specialties.forEach(spec => {
-                const col = colleges.find(c => c._id === spec.collegeId);
-                const uni = universities.find(u => u._id === spec.universityId);
-                vidSpecSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
-            });
-            vidMatSelect.innerHTML = '<option value="">اختر المادة</option>';
-            materials.forEach(mat => {
-                const spec = specialties.find(s => s._id === mat.specialtyId);
-                vidMatSelect.innerHTML += `<option value="${mat._id}">${mat.title} (${spec ? spec.name : ''})</option>`;
-            });
+            
+            if (vidUniSelect) {
+                vidUniSelect.innerHTML = '<option value="">اختر الجامعة</option>';
+                universities.forEach(uni => {
+                    vidUniSelect.innerHTML += `<option value="${uni._id}">${uni.name}</option>`;
+                });
+            }
+            if (vidCollegeSelect) {
+                vidCollegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
+                colleges.forEach(col => {
+                    const uni = universities.find(u => u._id === col.universityId);
+                    vidCollegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
+                });
+            }
+            if (vidSpecSelect) {
+                vidSpecSelect.innerHTML = '<option value="">اختر التخصص</option>';
+                specialties.forEach(spec => {
+                    const col = colleges.find(c => c._id === spec.collegeId);
+                    const uni = universities.find(u => u._id === spec.universityId);
+                    vidSpecSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
+                });
+            }
+            if (vidMatSelect) {
+                vidMatSelect.innerHTML = '<option value="">اختر المادة</option>';
+                materials.forEach(mat => {
+                    const spec = specialties.find(s => s._id === mat.specialtyId);
+                    vidMatSelect.innerHTML += `<option value="${mat._id}">${mat.title} (${spec ? spec.name : ''})</option>`;
+                });
+            }
+
+            // 🔄 تحديث القوائم عند تغيير الجامعة في نموذج الفيديو
+            if (vidUniSelect) {
+                vidUniSelect.addEventListener('change', function() {
+                    updateVideoDependentSelects();
+                });
+            }
+            if (vidCollegeSelect) {
+                vidCollegeSelect.addEventListener('change', function() {
+                    updateVideoDependentSelects();
+                });
+            }
+            if (vidSpecSelect) {
+                vidSpecSelect.addEventListener('change', function() {
+                    updateVideoDependentSelects();
+                });
+            }
+
+            console.log('✅ تم تعبئة جميع القوائم المنسدلة');
         }
 
         // ============================================================
-        // 15. عرض الجامعات
+        // 15. تحديث القوائم المعتمدة في نموذج الفيديو
+        // ============================================================
+        function updateVideoDependentSelects() {
+            const uniId = document.getElementById('videoUniversity').value;
+            const colId = document.getElementById('videoCollege').value;
+            const specId = document.getElementById('videoSpecialty').value;
+
+            // تحديث الكليات حسب الجامعة
+            const collegeSelect = document.getElementById('videoCollege');
+            const currentCol = collegeSelect.value;
+            collegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
+            let filteredColleges = colleges;
+            if (uniId) {
+                filteredColleges = colleges.filter(c => c.universityId === uniId);
+            }
+            filteredColleges.forEach(col => {
+                const uni = universities.find(u => u._id === col.universityId);
+                collegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
+            });
+            if (currentCol && filteredColleges.some(c => c._id === currentCol)) {
+                collegeSelect.value = currentCol;
+            }
+
+            // تحديث التخصصات حسب الكلية
+            const specSelect = document.getElementById('videoSpecialty');
+            const currentSpec = specSelect.value;
+            specSelect.innerHTML = '<option value="">اختر التخصص</option>';
+            let filteredSpecialties = specialties;
+            if (colId) {
+                filteredSpecialties = specialties.filter(s => s.collegeId === colId);
+            } else if (uniId) {
+                filteredSpecialties = specialties.filter(s => s.universityId === uniId);
+            }
+            filteredSpecialties.forEach(spec => {
+                const col = colleges.find(c => c._id === spec.collegeId);
+                specSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''})</option>`;
+            });
+            if (currentSpec && filteredSpecialties.some(s => s._id === currentSpec)) {
+                specSelect.value = currentSpec;
+            }
+
+            // تحديث المواد حسب التخصص
+            const matSelect = document.getElementById('videoMaterial');
+            const currentMat = matSelect.value;
+            matSelect.innerHTML = '<option value="">اختر المادة</option>';
+            let filteredMaterials = materials;
+            if (specId) {
+                filteredMaterials = materials.filter(m => m.specialtyId === specId);
+            } else if (colId) {
+                filteredMaterials = materials.filter(m => m.collegeId === colId);
+            } else if (uniId) {
+                filteredMaterials = materials.filter(m => m.universityId === uniId);
+            }
+            filteredMaterials.forEach(mat => {
+                const spec = specialties.find(s => s._id === mat.specialtyId);
+                matSelect.innerHTML += `<option value="${mat._id}">${mat.title} (${spec ? spec.name : ''})</option>`;
+            });
+            if (currentMat && filteredMaterials.some(m => m._id === currentMat)) {
+                matSelect.value = currentMat;
+            }
+        }
+
+        // ============================================================
+        // 16. عرض الجامعات
         // ============================================================
         function renderUniversities() {
             const container = document.getElementById('universitiesList');
@@ -1788,7 +1888,7 @@
         }
 
         // ============================================================
-        // 16. عرض الكليات
+        // 17. عرض الكليات
         // ============================================================
         function renderColleges() {
             const container = document.getElementById('collegesList');
@@ -1837,7 +1937,7 @@
         }
 
         // ============================================================
-        // 17. عرض التخصصات
+        // 18. عرض التخصصات
         // ============================================================
         function renderSpecialties() {
             const container = document.getElementById('specialtiesList');
@@ -1888,7 +1988,7 @@
         }
 
         // ============================================================
-        // 18. عرض المواد
+        // 19. عرض المواد
         // ============================================================
         function renderMaterials() {
             const container = document.getElementById('materialsList');
@@ -1947,7 +2047,7 @@
         }
 
         // ============================================================
-        // 19. عرض الفيديوهات
+        // 20. عرض الفيديوهات
         // ============================================================
         function renderVideos() {
             const container = document.getElementById('videosList');
@@ -2002,7 +2102,7 @@
         }
 
         // ============================================================
-        // 20. إضافة جامعة
+        // 21. إضافة جامعة
         // ============================================================
         document.getElementById('addUniversityForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -2027,7 +2127,7 @@
                         'Authorization': `Bearer ${currentToken}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ name, icon, count: 0 })
+                    body: JSON.stringify({ name, icon })
                 });
 
                 const data = await response.json();
@@ -2036,7 +2136,7 @@
                     showAlert('✅ تم إضافة الجامعة "' + name + '" بنجاح!', 'success');
                     this.reset();
                     await fetchUniversities();
-                    await populateSelects();
+                    populateSelects();
                 } else {
                     showAlert('❌ خطأ: ' + data.message, 'danger');
                 }
@@ -2050,7 +2150,7 @@
         });
 
         // ============================================================
-        // 21. إضافة كلية
+        // 22. إضافة كلية
         // ============================================================
         document.getElementById('addCollegeForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -2077,7 +2177,7 @@
                         'Authorization': `Bearer ${currentToken}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ name, universityId, icon, count: 0, description })
+                    body: JSON.stringify({ name, universityId, icon, description })
                 });
 
                 const data = await response.json();
@@ -2087,7 +2187,7 @@
                     this.reset();
                     document.getElementById('collegeDescription').value = '';
                     await fetchColleges();
-                    await populateSelects();
+                    populateSelects();
                 } else {
                     showAlert('❌ خطأ: ' + data.message, 'danger');
                 }
@@ -2101,7 +2201,7 @@
         });
 
         // ============================================================
-        // 22. إضافة تخصص
+        // 23. إضافة تخصص
         // ============================================================
         document.getElementById('addSpecialtyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -2129,7 +2229,7 @@
                         'Authorization': `Bearer ${currentToken}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ name, universityId, collegeId, icon, count: 0, description })
+                    body: JSON.stringify({ name, universityId, collegeId, icon, description })
                 });
 
                 const data = await response.json();
@@ -2139,7 +2239,7 @@
                     this.reset();
                     document.getElementById('specialtyDescription').value = '';
                     await fetchSpecialties();
-                    await populateSelects();
+                    populateSelects();
                 } else {
                     showAlert('❌ خطأ: ' + data.message, 'danger');
                 }
@@ -2153,7 +2253,7 @@
         });
 
         // ============================================================
-        // 23. إضافة مادة مع صورة
+        // 24. إضافة مادة مع صورة
         // ============================================================
         // معالجة صورة المادة
         document.getElementById('materialImage').addEventListener('change', function() {
@@ -2226,7 +2326,6 @@
                         collegeId,
                         specialtyId,
                         icon,
-                        videos: 0,
                         description,
                         isFeatured,
                         price,
@@ -2242,7 +2341,7 @@
                     document.getElementById('matPrice').value = 99;
                     removeMaterialImage();
                     await fetchMaterials();
-                    await populateSelects();
+                    populateSelects();
                 } else {
                     showAlert('❌ خطأ: ' + data.message, 'danger');
                 }
@@ -2256,7 +2355,7 @@
         });
 
         // ============================================================
-        // 24. رفع فيديو
+        // 25. رفع فيديو
         // ============================================================
         document.getElementById('videoFile').addEventListener('change', function() {
             if (this.files.length) {
@@ -2328,71 +2427,6 @@
             document.getElementById('videoColor').value = element.dataset.color;
         }
 
-        // تحديث القوائم عند اختيار الجامعة أو الكلية أو التخصص في نموذج الفيديو
-        document.getElementById('videoUniversity').addEventListener('change', updateVideoSelects);
-        document.getElementById('videoCollege').addEventListener('change', updateVideoSelects);
-        document.getElementById('videoSpecialty').addEventListener('change', updateVideoSelects);
-
-        function updateVideoSelects() {
-            const uniId = document.getElementById('videoUniversity').value;
-            const colId = document.getElementById('videoCollege').value;
-            const specId = document.getElementById('videoSpecialty').value;
-
-            // تحديث الكليات حسب الجامعة
-            const collegeSelect = document.getElementById('videoCollege');
-            const currentCol = collegeSelect.value;
-            collegeSelect.innerHTML = '<option value="">اختر الكلية</option>';
-            let filteredColleges = colleges;
-            if (uniId) {
-                filteredColleges = colleges.filter(c => c.universityId === uniId);
-            }
-            filteredColleges.forEach(col => {
-                const uni = universities.find(u => u._id === col.universityId);
-                collegeSelect.innerHTML += `<option value="${col._id}">${col.name} (${uni ? uni.name : ''})</option>`;
-            });
-            if (currentCol && filteredColleges.some(c => c._id === currentCol)) {
-                collegeSelect.value = currentCol;
-            }
-
-            // تحديث التخصصات حسب الكلية
-            const specSelect = document.getElementById('videoSpecialty');
-            const currentSpec = specSelect.value;
-            specSelect.innerHTML = '<option value="">اختر التخصص</option>';
-            let filteredSpecialties = specialties;
-            if (colId) {
-                filteredSpecialties = specialties.filter(s => s.collegeId === colId);
-            } else if (uniId) {
-                filteredSpecialties = specialties.filter(s => s.universityId === uniId);
-            }
-            filteredSpecialties.forEach(spec => {
-                const col = colleges.find(c => c._id === spec.collegeId);
-                specSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''})</option>`;
-            });
-            if (currentSpec && filteredSpecialties.some(s => s._id === currentSpec)) {
-                specSelect.value = currentSpec;
-            }
-
-            // تحديث المواد حسب التخصص
-            const matSelect = document.getElementById('videoMaterial');
-            const currentMat = matSelect.value;
-            matSelect.innerHTML = '<option value="">اختر المادة</option>';
-            let filteredMaterials = materials;
-            if (specId) {
-                filteredMaterials = materials.filter(m => m.specialtyId === specId);
-            } else if (colId) {
-                filteredMaterials = materials.filter(m => m.collegeId === colId);
-            } else if (uniId) {
-                filteredMaterials = materials.filter(m => m.universityId === uniId);
-            }
-            filteredMaterials.forEach(mat => {
-                const spec = specialties.find(s => s._id === mat.specialtyId);
-                matSelect.innerHTML += `<option value="${mat._id}">${mat.title} (${spec ? spec.name : ''})</option>`;
-            });
-            if (currentMat && filteredMaterials.some(m => m._id === currentMat)) {
-                matSelect.value = currentMat;
-            }
-        }
-
         document.getElementById('addVideoForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -2431,6 +2465,11 @@
             formData.append('color', color);
             formData.append('video', file);
 
+            // إضافة معرفات الربط
+            formData.append('universityId', universityId);
+            formData.append('collegeId', collegeId);
+            formData.append('specialtyId', specialtyId);
+
             const btn = this.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
@@ -2468,7 +2507,7 @@
         });
 
         // ============================================================
-        // 25. حذف جامعة
+        // 26. حذف جامعة
         // ============================================================
         async function deleteUniversity(id) {
             if (!confirm('⚠️ هل أنت متأكد من حذف هذه الجامعة؟')) return;
@@ -2486,7 +2525,7 @@
                 if (data.success) {
                     showAlert('🗑️ تم حذف الجامعة بنجاح', 'success');
                     await fetchUniversities();
-                    await populateSelects();
+                    populateSelects();
                 } else {
                     showAlert('❌ خطأ: ' + data.message, 'danger');
                 }
@@ -2497,7 +2536,7 @@
         }
 
         // ============================================================
-        // 26. حذف كلية
+        // 27. حذف كلية
         // ============================================================
         async function deleteCollege(id) {
             if (!confirm('⚠️ هل أنت متأكد من حذف هذه الكلية؟')) return;
@@ -2515,7 +2554,7 @@
                 if (data.success) {
                     showAlert('🗑️ تم حذف الكلية بنجاح', 'success');
                     await fetchColleges();
-                    await populateSelects();
+                    populateSelects();
                 } else {
                     showAlert('❌ خطأ: ' + data.message, 'danger');
                 }
@@ -2526,7 +2565,7 @@
         }
 
         // ============================================================
-        // 27. حذف تخصص
+        // 28. حذف تخصص
         // ============================================================
         async function deleteSpecialty(id) {
             if (!confirm('⚠️ هل أنت متأكد من حذف هذا التخصص؟')) return;
@@ -2544,7 +2583,7 @@
                 if (data.success) {
                     showAlert('🗑️ تم حذف التخصص بنجاح', 'success');
                     await fetchSpecialties();
-                    await populateSelects();
+                    populateSelects();
                 } else {
                     showAlert('❌ خطأ: ' + data.message, 'danger');
                 }
@@ -2555,7 +2594,7 @@
         }
 
         // ============================================================
-        // 28. حذف مادة
+        // 29. حذف مادة
         // ============================================================
         async function deleteMaterial(id) {
             if (!confirm('⚠️ هل أنت متأكد من حذف هذه المادة؟')) return;
@@ -2573,7 +2612,7 @@
                 if (data.success) {
                     showAlert('🗑️ تم حذف المادة بنجاح', 'success');
                     await fetchMaterials();
-                    await populateSelects();
+                    populateSelects();
                 } else {
                     showAlert('❌ خطأ: ' + data.message, 'danger');
                 }
@@ -2584,7 +2623,7 @@
         }
 
         // ============================================================
-        // 29. حذف فيديو
+        // 30. حذف فيديو
         // ============================================================
         async function deleteVideo(id) {
             if (!confirm('⚠️ هل أنت متأكد من حذف هذا الفيديو؟')) return;
@@ -2612,7 +2651,7 @@
         }
 
         // ============================================================
-        // 30. عرض التفاصيل
+        // 31. عرض التفاصيل
         // ============================================================
         function viewCollege(id) {
             const college = colleges.find(c => c._id === id);
@@ -2651,7 +2690,7 @@
         }
 
         // ============================================================
-        // 31. تبديل الوضع
+        // 32. تبديل الوضع
         // ============================================================
         let isDark = false;
 
@@ -2670,7 +2709,7 @@
         }
 
         // ============================================================
-        // 32. زر العودة للأعلى
+        // 33. زر العودة للأعلى
         // ============================================================
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('backToTop');
@@ -2678,7 +2717,7 @@
         });
 
         // ============================================================
-        // 33. التشغيل الابتدائي
+        // 34. التشغيل الابتدائي
         // ============================================================
         checkAuth();
     </script>
