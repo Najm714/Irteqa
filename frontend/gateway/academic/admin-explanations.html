@@ -1557,10 +1557,21 @@ async function fetchSpecialties() {
         console.log('📦 بيانات التخصصات من الخادم:', data);
         
         if (data.success) {
-            specialties = data.data || [];
+            // ✅ تنظيف البيانات قبل التخزين
+            specialties = data.data.map(spec => ({
+                ...spec,
+                // ✅ التأكد من أن collegeId و universityId نصوص
+                collegeId: typeof spec.collegeId === 'object' 
+                    ? (spec.collegeId?._id || spec.collegeId?.toString() || '') 
+                    : spec.collegeId,
+                universityId: typeof spec.universityId === 'object'
+                    ? (spec.universityId?._id || spec.universityId?.toString() || '')
+                    : spec.universityId
+            }));
+            
             console.log('✅ تم جلب التخصصات:', specialties.length);
             
-            // ✅ طباعة التخصصات مع معرفات الكليات للتحقق
+            // طباعة التخصصات مع معرفات الكليات للتحقق
             specialties.forEach(spec => {
                 console.log(`  - ${spec.name} (collegeId: ${spec.collegeId})`);
             });
@@ -1804,7 +1815,7 @@ function updateSpecialtyCollegeOptions() {
             }
         }
 // ============================================================
-// 15.3.1 تحديث التخصصات حسب الكلية - النسخة المصححة
+// 15.3.1 تحديث التخصصات حسب الكلية - النسخة النهائية المصححة
 // ============================================================
 function updateSpecialtiesByCollege() {
     const collegeId = document.getElementById('matCollege').value;
@@ -1818,7 +1829,13 @@ function updateSpecialtiesByCollege() {
     if (!collegeId) {
         // عرض جميع التخصصات
         specialties.forEach(spec => {
-            const col = colleges.find(c => c._id === spec.collegeId);
+            // ✅ استخراج collegeId من الكائن أو النص
+            let specCollegeId = spec.collegeId;
+            if (typeof specCollegeId === 'object' && specCollegeId !== null) {
+                specCollegeId = specCollegeId._id || specCollegeId.toString();
+            }
+            
+            const col = colleges.find(c => String(c._id) === String(specCollegeId));
             const uni = universities.find(u => u._id === spec.universityId);
             specSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
         });
@@ -1826,8 +1843,16 @@ function updateSpecialtiesByCollege() {
         return;
     }
 
-    // تصفية التخصصات حسب الكلية المختارة
-    const filteredSpecialties = specialties.filter(s => String(s.collegeId) === String(collegeId));
+    // ✅ تصفية التخصصات حسب الكلية المختارة
+    const filteredSpecialties = specialties.filter(spec => {
+        // ✅ استخراج collegeId من الكائن أو النص
+        let specCollegeId = spec.collegeId;
+        if (typeof specCollegeId === 'object' && specCollegeId !== null) {
+            specCollegeId = specCollegeId._id || specCollegeId.toString();
+        }
+        return String(specCollegeId) === String(collegeId);
+    });
+    
     console.log(`📊 عدد التخصصات في الكلية ${collegeId}:`, filteredSpecialties.length);
     
     if (filteredSpecialties.length === 0) {
@@ -1837,13 +1862,18 @@ function updateSpecialtiesByCollege() {
     }
     
     filteredSpecialties.forEach(spec => {
-        const col = colleges.find(c => c._id === spec.collegeId);
+        // ✅ استخراج collegeId من الكائن أو النص
+        let specCollegeId = spec.collegeId;
+        if (typeof specCollegeId === 'object' && specCollegeId !== null) {
+            specCollegeId = specCollegeId._id || specCollegeId.toString();
+        }
+        
+        const col = colleges.find(c => String(c._id) === String(specCollegeId));
         const uni = universities.find(u => u._id === spec.universityId);
         specSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
     });
     console.log(`✅ تم عرض ${filteredSpecialties.length} تخصص`);
 }
-
         // ============================================================
         // 15.4 تعبئة قوائم الفيديوهات (مع الربط التلقائي)
         // ============================================================
@@ -1941,70 +1971,105 @@ function updateSpecialtiesByCollege() {
                 };
             }
         }
-
-        // ============================================================
-        // 15.4.1 تحديث التخصصات والمواد في نموذج الفيديوهات
-        // ============================================================
-        function updateVideoSpecialtiesAndMaterials() {
-            const uniId = document.getElementById('videoUniversity').value;
-            const colId = document.getElementById('videoCollege').value;
-            const specSelect = document.getElementById('videoSpecialty');
-            const matSelect = document.getElementById('videoMaterial');
-            
-            // تحديث التخصصات
-            specSelect.innerHTML = '<option value="">اختر التخصص</option>';
-            let filteredSpecialties = specialties;
-            
-            if (colId) {
-                filteredSpecialties = specialties.filter(s => s.collegeId === colId);
-            } else if (uniId) {
-                filteredSpecialties = specialties.filter(s => s.universityId === uniId);
+// ============================================================
+// 15.4.1 تحديث التخصصات والمواد في نموذج الفيديوهات - النسخة المصححة
+// ============================================================
+function updateVideoSpecialtiesAndMaterials() {
+    const uniId = document.getElementById('videoUniversity').value;
+    const colId = document.getElementById('videoCollege').value;
+    const specSelect = document.getElementById('videoSpecialty');
+    const matSelect = document.getElementById('videoMaterial');
+    
+    // تحديث التخصصات
+    specSelect.innerHTML = '<option value="">اختر التخصص</option>';
+    let filteredSpecialties = specialties;
+    
+    if (colId) {
+        filteredSpecialties = specialties.filter(spec => {
+            let specCollegeId = spec.collegeId;
+            if (typeof specCollegeId === 'object' && specCollegeId !== null) {
+                specCollegeId = specCollegeId._id || specCollegeId.toString();
             }
-            
-            if (filteredSpecialties.length === 0) {
-                specSelect.innerHTML = '<option value="">لا توجد تخصصات</option>';
-            } else {
-                filteredSpecialties.forEach(spec => {
-                    const col = colleges.find(c => c._id === spec.collegeId);
-                    const uni = universities.find(u => u._id === spec.universityId);
-                    specSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
-                });
+            return String(specCollegeId) === String(colId);
+        });
+    } else if (uniId) {
+        filteredSpecialties = specialties.filter(spec => {
+            let specUniId = spec.universityId;
+            if (typeof specUniId === 'object' && specUniId !== null) {
+                specUniId = specUniId._id || specUniId.toString();
             }
-            
-            // تحديث المواد
-            updateVideoMaterials();
-        }
-
-        // ============================================================
-        // 15.4.2 تحديث المواد حسب التخصص في نموذج الفيديوهات
-        // ============================================================
-        function updateVideoMaterials() {
-            const specId = document.getElementById('videoSpecialty').value;
-            const colId = document.getElementById('videoCollege').value;
-            const uniId = document.getElementById('videoUniversity').value;
-            const matSelect = document.getElementById('videoMaterial');
-            
-            matSelect.innerHTML = '<option value="">اختر المادة</option>';
-            let filteredMaterials = materials;
-            
-            if (specId) {
-                filteredMaterials = materials.filter(m => m.specialtyId === specId);
-            } else if (colId) {
-                filteredMaterials = materials.filter(m => m.collegeId === colId);
-            } else if (uniId) {
-                filteredMaterials = materials.filter(m => m.universityId === uniId);
+            return String(specUniId) === String(uniId);
+        });
+    }
+    
+    if (filteredSpecialties.length === 0) {
+        specSelect.innerHTML = '<option value="">لا توجد تخصصات</option>';
+    } else {
+        filteredSpecialties.forEach(spec => {
+            let specCollegeId = spec.collegeId;
+            if (typeof specCollegeId === 'object' && specCollegeId !== null) {
+                specCollegeId = specCollegeId._id || specCollegeId.toString();
             }
-            
-            if (filteredMaterials.length === 0) {
-                matSelect.innerHTML = '<option value="">لا توجد مواد</option>';
-            } else {
-                filteredMaterials.forEach(mat => {
-                    const spec = specialties.find(s => s._id === mat.specialtyId);
-                    matSelect.innerHTML += `<option value="${mat._id}">${mat.title} (${spec ? spec.name : ''})</option>`;
-                });
+            const col = colleges.find(c => String(c._id) === String(specCollegeId));
+            const uni = universities.find(u => u._id === spec.universityId);
+            specSelect.innerHTML += `<option value="${spec._id}">${spec.name} (${col ? col.name : ''}${uni ? ' - ' + uni.name : ''})</option>`;
+        });
+    }
+    
+    // تحديث المواد
+    updateVideoMaterials();
+}
+// ============================================================
+// 15.4.2 تحديث المواد حسب التخصص في نموذج الفيديوهات - النسخة المصححة
+// ============================================================
+function updateVideoMaterials() {
+    const specId = document.getElementById('videoSpecialty').value;
+    const colId = document.getElementById('videoCollege').value;
+    const uniId = document.getElementById('videoUniversity').value;
+    const matSelect = document.getElementById('videoMaterial');
+    
+    matSelect.innerHTML = '<option value="">اختر المادة</option>';
+    let filteredMaterials = materials;
+    
+    if (specId) {
+        filteredMaterials = materials.filter(mat => {
+            let matSpecId = mat.specialtyId;
+            if (typeof matSpecId === 'object' && matSpecId !== null) {
+                matSpecId = matSpecId._id || matSpecId.toString();
             }
-        }
-
+            return String(matSpecId) === String(specId);
+        });
+    } else if (colId) {
+        filteredMaterials = materials.filter(mat => {
+            let matColId = mat.collegeId;
+            if (typeof matColId === 'object' && matColId !== null) {
+                matColId = matColId._id || matColId.toString();
+            }
+            return String(matColId) === String(colId);
+        });
+    } else if (uniId) {
+        filteredMaterials = materials.filter(mat => {
+            let matUniId = mat.universityId;
+            if (typeof matUniId === 'object' && matUniId !== null) {
+                matUniId = matUniId._id || matUniId.toString();
+            }
+            return String(matUniId) === String(uniId);
+        });
+    }
+    
+    if (filteredMaterials.length === 0) {
+        matSelect.innerHTML = '<option value="">لا توجد مواد</option>';
+    } else {
+        filteredMaterials.forEach(mat => {
+            let matSpecId = mat.specialtyId;
+            if (typeof matSpecId === 'object' && matSpecId !== null) {
+                matSpecId = matSpecId._id || matSpecId.toString();
+            }
+            const spec = specialties.find(s => String(s._id) === String(matSpecId));
+            matSelect.innerHTML += `<option value="${mat._id}">${mat.title} (${spec ? spec.name : ''})</option>`;
+        });
+    }
+}
         // ============================================================
         // 16. عرض الجامعات
         // ============================================================
@@ -2147,13 +2212,13 @@ function renderSpecialties() {
     `;
 
     specialties.forEach((spec) => {
-        // ✅ التعامل مع collegeId
+        // ✅ استخراج collegeId من الكائن أو النص
         let colId = spec.collegeId;
         if (typeof colId === 'object' && colId !== null) {
             colId = colId._id || colId.toString();
         }
         
-        // ✅ التعامل مع universityId
+        // ✅ استخراج universityId من الكائن أو النص
         let uniId = spec.universityId;
         if (typeof uniId === 'object' && uniId !== null) {
             uniId = uniId._id || uniId.toString();
@@ -2164,7 +2229,13 @@ function renderSpecialties() {
         
         const colName = col ? col.name : '⚠️ غير محددة';
         const uniName = uni ? uni.name : '';
-        const matCount = materials.filter(m => m.specialtyId === spec._id).length;
+        const matCount = materials.filter(m => {
+            let specId = m.specialtyId;
+            if (typeof specId === 'object' && specId !== null) {
+                specId = specId._id || specId.toString();
+            }
+            return String(specId) === String(spec._id);
+        }).length;
         
         html += `
             <div class="content-list-item">
