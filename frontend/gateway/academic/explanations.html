@@ -1270,55 +1270,39 @@
                 `;
             }).join('');
         }
+// ============================================================
+// عرض التخصصات حسب الكلية
+// ============================================================
+function showSpecialtiesByCollege(collegeId) {
+    const col = colleges.find(c => c._id === collegeId);
+    if (!col) return;
 
-        // ============================================================
-        // 10. عرض الكليات حسب الجامعة (المستوى الثاني)
-        // ============================================================
-        function showCollegesByUniversity(universityId) {
-            const uni = universities.find(u => u._id === universityId);
-            if (!uni) return;
+    const uni = universities.find(u => u._id === col.universityId);
+    currentCollege = col;
 
-            currentUniversity = uni;
-            currentCollege = null;
-            currentSpecialty = null;
+    // ✅ تصفية التخصصات حسب الكلية
+    const filteredSpecialties = specialties.filter(s => s.collegeId === collegeId);
 
-            const filteredColleges = colleges.filter(c => c.universityId === universityId);
+    const grid = document.getElementById('specialtiesGrid');
+    const countEl = document.getElementById('specialtyCount');
+    const labelEl = document.getElementById('specialtyParentLabel');
 
-            const grid = document.getElementById('collegesGrid');
-            const countEl = document.getElementById('collegeCount');
-            const labelEl = document.getElementById('collegeParentLabel');
+    // ... عرض التخصصات
 
-            // إخفاء الجامعات وإظهار الكليات
-            document.getElementById('universitiesSection').style.display = 'none';
-            document.getElementById('collegesSection').style.display = 'block';
-            document.getElementById('collegesSection').classList.add('active');
-            document.getElementById('specialtiesSection').classList.remove('active');
-            document.getElementById('specialtiesSection').style.display = 'none';
-            document.getElementById('materialsSection').classList.remove('active');
-            document.getElementById('materialsSection').style.display = 'none';
-
-            // إظهار أزرار العودة
-            document.getElementById('btnBackToUniversities').style.display = 'inline-flex';
-            document.getElementById('btnBackToColleges').style.display = 'none';
-            document.getElementById('btnBackToSpecialties').style.display = 'none';
-
-            labelEl.textContent = `(جامعة ${uni.name})`;
-
-            if (filteredColleges.length === 0) {
-                grid.innerHTML = `
-                    <div class="no-results">
-                        <i class="fas fa-school"></i>
-                        <h3>لا توجد كليات</h3>
-                        <p>لم يتم إضافة أي كلية لهذه الجامعة بعد</p>
-                        <a href="admin-explanations.html" class="btn-admin-link">
-                            <i class="fas fa-plus-circle"></i> أضف كلية الآن
-                        </a>
-                    </div>
-                `;
-                countEl.textContent = '0';
-                return;
-            }
-
+    if (filteredSpecialties.length === 0) {
+        grid.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-tag"></i>
+                <h3>لا توجد تخصصات</h3>
+                <p>لم يتم إضافة أي تخصص لهذه الكلية بعد</p>
+                <a href="admin-explanations.html" class="btn-admin-link">
+                    <i class="fas fa-plus-circle"></i> أضف تخصص الآن
+                </a>
+            </div>
+        `;
+        countEl.textContent = '0';
+        return;
+    }
             countEl.textContent = filteredColleges.length;
 
             grid.innerHTML = filteredColleges.map(col => {
